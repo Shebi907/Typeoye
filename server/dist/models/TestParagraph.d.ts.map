@@ -1,0 +1,1 @@
+{"version":3,"file":"TestParagraph.d.ts","sourceRoot":"","sources":["../../src/models/TestParagraph.ts"],"names":[],"mappings":"AAAA,OAAO,QAAQ,EAAE,EAAE,QAAQ,EAAU,MAAM,UAAU,CAAC;AAEtD,MAAM,WAAW,cAAe,SAAQ,QAAQ;IAC9C,OAAO,EAAE,MAAM,CAAC;IAChB,UAAU,EAAE,UAAU,GAAG,cAAc,GAAG,UAAU,CAAC;IACrD,KAAK,EAAE,MAAM,CAAC;IACd,SAAS,CAAC,EAAE,QAAQ,CAAC,KAAK,CAAC,QAAQ,CAAC;CACrC;;;;;;AAUD,wBAAoF"}

@@ -1,0 +1,1153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design System Tokens ───────────────────────────────────────── */
+:root {
+  color-scheme: light;
+  --color-page: #fafafb;
+  --color-canvas: #f0f1f5;
+  --color-card: #ffffff;
+  --color-border: #ececf0;
+  --color-accent: #4361ee;
+  --color-accent-hover: #3451d1;
+  --color-accent-light: #eef1fd;
+  --color-accent-text: #4361ee;
+  --color-text-primary: #17171f;
+  --color-text-secondary: #6b6b76;
+  --color-text-muted: #8a8a94;
+  --color-correct: #22c55e;
+  --color-error: #ef4444;
+  --color-pending: #8a8a94;
+  --color-sidebar: #ffffff;
+  --shadow-card: 0 1px 2px rgba(23, 23, 31, 0.04), 0 12px 30px -10px rgba(23, 23, 31, 0.12);
+  --shadow-card-hover: 0 2px 4px rgba(23, 23, 31, 0.05), 0 18px 40px -14px rgba(23, 23, 31, 0.2);
+}
+
+.dark {
+  color-scheme: dark;
+  --color-page: #0f0f13;
+  --color-card: #1c1c25;
+  --color-border: #333340;
+  --color-accent: #5667ee;
+  --color-accent-hover: #4a5bda;
+  --color-accent-light: #1e2250;
+  --color-accent-text: #a5b0ff;
+  --color-text-primary: #f2f2f5;
+  --color-text-secondary: #b6b6c4;
+  --color-text-muted: #9fa0b1;
+  --color-correct: #34d399;
+  --color-error: #f87171;
+  --color-pending: #8b8c9c;
+  --color-sidebar: #151520;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.45), 0 10px 26px -12px rgba(0, 0, 0, 0.6);
+  --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.5), 0 16px 36px -14px rgba(0, 0, 0, 0.72);
+}
+
+/* ── Reset ──────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+/* Prevent the browser from scroll-anchoring across route changes: without
+   this, swapping one page for another can yank the viewport to a stale
+   offset for the first painted frame of the destination page. */
+html, body {
+  overflow-anchor: none;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-page);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100dvh;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ── Focus ──────────────────────────────────────────────────────── */
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Typography helpers ─────────────────────────────────────────── */
+.text-primary   { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-muted     { color: var(--color-text-muted); }
+
+/* ── Typing display classes ─────────────────────────────────────── */
+.char-pending { color: var(--color-pending); }
+.char-correct { color: var(--color-correct); }
+.char-error   {
+  color: var(--color-error);
+  text-decoration: underline;
+  text-decoration-color: var(--color-error);
+  text-underline-offset: 3px;
+}
+.char-current { color: var(--color-text-primary); }
+.word-error-bg { background-color: rgba(239, 68, 68, 0.07); border-radius: 4px; }
+
+/* Sudden Death — slightly darker/lighter pending text so untyped words
+   stay clearly readable against the card surface. */
+.sd-typing .char-pending { color: #62626e; }
+.dark .sd-typing .char-pending { color: #9aa1b8; }
+
+/* ── Caret ──────────────────────────────────────────────────────── */
+.typing-caret {
+  display: inline-block;
+  width: 3px;
+  height: 1.4em;
+  background-color: #4F46E5;
+  border-radius: 1px;
+  vertical-align: text-bottom;
+  animation: caretBlink 1s step-end infinite;
+  margin-right: 2px;
+  position: relative;
+  top: 1px;
+}
+
+@keyframes caretBlink {
+  0%, 20% { opacity: 1; }
+  50% { opacity: 0; }
+  80%, 100% { opacity: 1; }
+}
+
+/* Absolutely-positioned caret (typing display) — position is computed from the
+   active character's rendered box each keystroke so it stays aligned with the
+   text's vertical center on every line, including wrapped lines. Rendered in
+   front of the glyphs (z-index) as a solid bar sitting before the next key.
+
+   The caret is SOLID and fully visible by default. It must never disappear
+   while the user is actively typing, so no blink animation is applied here —
+   it is only added via the `.blinking` modifier when the component detects the
+   user has paused (see TypingDisplay.tsx). The smooth fade is a deliberate
+   idle indicator, not a re-render artifact. */
+.typing-caret-abs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  background-color: #4F46E5;
+  border-radius: 1px;
+  box-shadow: 0 0 4px rgba(79, 70, 229, 0.55);
+  pointer-events: none;
+  opacity: 1;
+  z-index: 30;
+}
+.typing-caret-abs.blinking {
+  animation: caretBlink 1.2s ease-in-out infinite;
+}
+/* Standalone glowing caret (e.g. game input bars) with the same pulse. */
+.caret-blink {
+  animation: caretBlink 1s ease-in-out infinite;
+}
+
+/* ── Card base ──────────────────────────────────────────────────── */
+.card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+}
+.card-hover {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* ── Button base ────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-primary {
+  background-color: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(67, 97, 238, 0.28);
+}
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  box-shadow: 0 6px 18px rgba(67, 97, 238, 0.38);
+}
+.btn-lg.btn-primary {
+  box-shadow: 0 8px 22px -6px rgba(67, 97, 238, 0.4);
+}
+.btn-lg.btn-primary:hover:not(:disabled) {
+  box-shadow: 0 12px 30px -8px rgba(67, 97, 238, 0.5);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-accent);
+  border: 1.5px solid var(--color-accent);
+}
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-accent-light);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border: 1.5px solid var(--color-border);
+}
+.btn-ghost:hover:not(:disabled) {
+  background-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.btn-sm  { padding: 6px 14px; font-size: 0.8rem; }
+.btn-md  { padding: 10px 20px; }
+.btn-lg  { padding: 14px 28px; font-size: 1rem; }
+
+/* ── Input base ─────────────────────────────────────────────────── */
+.input-base {
+  width: 100%;
+  background-color: var(--color-card);
+  border: 1.5px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 10px 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  outline: none;
+}
+.input-base::placeholder { color: var(--color-text-muted); }
+.input-base:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.12);
+}
+.input-base.input-error { border-color: var(--color-error); }
+
+/* ── Underline-style input (used by the Contact form) ───────────── */
+.input-underline {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1.5px solid var(--color-border);
+  border-radius: 0;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 8px 2px;
+  transition: border-color 0.15s ease;
+  outline: none;
+}
+.input-underline::placeholder { color: var(--color-text-muted); }
+.input-underline:focus { border-bottom-color: var(--color-accent); }
+.input-underline.input-error { border-bottom-color: var(--color-error); }
+
+/* ── Native form controls (dark-mode safety net) ────────────────── */
+/* Themes every <input>/<select>/<textarea> that isn't explicitly
+   styled, and keeps native UI (dropdown popups, date pickers,
+   autofill) consistent with the active theme via color-scheme. */
+input,
+select,
+textarea {
+  background-color: var(--color-card);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+select option,
+select optgroup {
+  background-color: var(--color-card);
+  color: var(--color-text-primary);
+}
+.dark input[type="date"]::-webkit-calendar-picker-indicator,
+.dark input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+.dark input[type="time"]::-webkit-calendar-picker-indicator,
+.dark input[type="month"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.85);
+}
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-text-primary);
+  -webkit-box-shadow: 0 0 0 1000px var(--color-card) inset;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* ── Skeleton shimmer ───────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-border) 25%,
+    rgba(200, 200, 220, 0.08) 50%,
+    var(--color-border) 75%
+  );
+  background-size: 600px 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 8px;
+}
+
+/* ── Toast slide-in ─────────────────────────────────────────────── */
+@keyframes toastSlideIn {
+  from { transform: translateX(110%); opacity: 0; }
+  to   { transform: translateX(0);   opacity: 1; }
+}
+.toast-enter { animation: toastSlideIn 0.3s ease forwards; }
+
+/* ── Contact form success card ──────────────────────────────────── */
+@keyframes contactSuccessIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.contact-success-card {
+  background-color: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.28);
+  animation: contactSuccessIn 0.35s ease-out forwards;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.contact-success-leave {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+.dark .contact-success-card { border-color: rgba(52, 211, 153, 0.3); }
+
+/* ── Level-up pop-in ────────────────────────────────────────────── */
+@keyframes levelUpPop {
+  0%   { opacity: 0; transform: scale(0.85) translateY(12px); }
+  60%  { opacity: 1; transform: scale(1.04) translateY(0); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.levelup-pop { animation: levelUpPop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2) forwards; }
+
+/* ── Start-typing hint (speech-bubble tooltip) ───────────────────── */
+@keyframes hintIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hint-in { animation: hintIn 0.22s ease-out; }
+
+/* ── Keyboard key ───────────────────────────────────────────────── */
+.key-base {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  transition: all 0.1s ease;
+  border-bottom: 2px solid;
+  user-select: none;
+}
+
+/* ── Utility ─────────────────────────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── Icon badge (gradient chip for section/page icons) ───────────── */
+.icon-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4361ee, #6c63f5);
+  color: #fff;
+  box-shadow: 0 6px 16px -6px rgba(67, 97, 238, 0.55);
+}
+
+/* ── Long-form legal content ─────────────────────────────────────── */
+.legal-body > div {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 20px;
+}
+.legal-body > p {
+  padding-left: 23px;
+}
+.legal-list {
+  list-style: none;
+}
+.legal-list li {
+  position: relative;
+  padding-left: 18px;
+}
+.legal-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--color-accent);
+}
+
+/* ── Soft background glow blobs (marketing/content pages only) ───── */
+.glow-blob {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  filter: blur(70px);
+  background: radial-gradient(circle, rgba(67, 97, 238, 0.14) 0%, rgba(67, 97, 238, 0) 70%);
+}
+.dark .glow-blob {
+  background: radial-gradient(circle, rgba(108, 99, 245, 0.12) 0%, rgba(108, 99, 245, 0) 70%);
+}
+
+/* ── Decorative corner dot grids (hero/header areas only) ────────── */
+.dot-grid {
+  position: absolute;
+  width: 150px;
+  height: 110px;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(67, 97, 238, 0.28) 1.5px, transparent 1.6px);
+  background-size: 15px 15px;
+  opacity: 0.55;
+}
+.dark .dot-grid {
+  background-image: radial-gradient(rgba(122, 142, 255, 0.3) 1.5px, transparent 1.6px);
+  opacity: 0.4;
+}
+.dot-grid-tl { top: 18px; left: 22px; }
+.dot-grid-tr { top: 18px; right: 22px; }
+.dot-grid-bl { bottom: 18px; left: 22px; }
+.dot-grid-br { bottom: 18px; right: 22px; }
+
+/* ── Navbar (light bar) utilities ────────────────────────────────── */
+.navbar-link:hover {
+  background-color: rgba(23, 23, 31, 0.06) !important;
+}
+.navbar-link-active:hover {
+  background-color: var(--color-accent-light) !important;
+}
+
+.navbar-icon-btn:hover {
+  background-color: rgba(23, 23, 31, 0.06);
+}
+
+/* "Sign in" — outlined indigo */
+.navbar-signin-btn {
+  background-color: transparent;
+  color: var(--color-accent);
+  border: 1.5px solid rgba(67, 97, 238, 0.55);
+}
+.navbar-signin-btn:hover:not(:disabled) {
+  background-color: var(--color-accent-light);
+  border-color: var(--color-accent);
+}
+
+/* "Get Started" — solid indigo with white text */
+.navbar-getstarted-btn {
+  background-color: #4361EE;
+  color: white;
+  font-weight: 700;
+  border: none;
+  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.35);
+}
+.navbar-getstarted-btn:hover:not(:disabled) {
+  background-color: #3451d1;
+}
+
+/* ── Dark-mode navbar (light mode navbar is untouched) ───────────── */
+/* Glow shapes behind the navbar content — dark mode only */
+.navbar-glow {
+  display: none;
+}
+.dark .navbar-glow {
+  display: block;
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  filter: blur(42px);
+}
+.dark .navbar-glow-a {
+  width: 260px;
+  height: 120px;
+  left: 24px;
+  top: -30px;
+  background: rgba(67, 97, 238, 0.35);
+}
+.dark .navbar-glow-b {
+  width: 220px;
+  height: 110px;
+  left: 340px;
+  top: -20px;
+  background: rgba(255, 110, 199, 0.2);
+}
+
+.dark .app-navbar {
+  background-color: #0f0e1a !important;
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Logo badge → indigo-to-purple gradient with soft shadow; icon white */
+.dark .navbar-logo-badge {
+  background: linear-gradient(135deg, #4361ee, #7c6ff0) !important;
+  box-shadow: 0 4px 14px rgba(67, 97, 238, 0.45);
+}
+.dark .navbar-logo-badge svg {
+  color: white !important;
+}
+
+/* Wordmark: "Type" white, "oye" indigo→pink gradient text */
+.dark .logo-word-type {
+  color: #ffffff !important;
+}
+.dark .logo-word-oye {
+  background-image: linear-gradient(90deg, #7c6ff0, #ff6ec7) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* Nav items: muted light gray; active = translucent pill + faint border */
+.dark .navbar-link {
+  color: rgba(255, 255, 255, 0.55) !important;
+  background-color: transparent !important;
+}
+.dark .navbar-link:hover {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+.dark .navbar-link-active,
+.dark .navbar-link-active:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+/* Gradient navbar (guest bar): high-contrast solid white active pill in BOTH
+   themes. Selectors are prefixed with `.dark` variants at matching/higher
+   specificity so the legacy dark rules above can never bleed through —
+   including on hover, where white-on-white text was previously possible. */
+.navbar-gradient .navbar-link,
+.dark .navbar-gradient .navbar-link {
+  color: #ffffff !important;
+  background-color: transparent !important;
+}
+.navbar-gradient .navbar-link:hover,
+.dark .navbar-gradient .navbar-link:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.12) !important;
+}
+.navbar-gradient .navbar-link-active,
+.dark .navbar-gradient .navbar-link-active,
+.navbar-gradient .navbar-link-active:hover,
+.dark .navbar-gradient .navbar-link-active:hover {
+  color: #1B2340 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(27, 35, 64, 0.25), 0 6px 18px rgba(15, 23, 42, 0.18) !important;
+}
+
+/* Certificate icon pops pink in dark mode */
+.dark .cert-nav-icon {
+  color: #ff6ec7 !important;
+}
+
+/* Theme toggle + username in muted/white */
+.dark .navbar-icon-btn {
+  color: rgba(255, 255, 255, 0.55);
+}
+.dark .navbar-icon-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+.dark .navbar-username {
+  color: #ffffff !important;
+}
+
+/* Buttons: outlined Sign in, gradient Get Started with glow */
+.dark .navbar-signin-btn {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+}
+.dark .navbar-signin-btn:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+.dark .navbar-getstarted-btn {
+  background: linear-gradient(135deg, #4361ee, #7c6ff0);
+  color: #ffffff;
+  box-shadow: 0 4px 18px rgba(124, 111, 240, 0.45);
+}
+.dark .navbar-getstarted-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #3451d1, #6a5ce6);
+}
+
+
+/* Profile dropdown open animation */
+@keyframes navbar-dropdown-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.navbar-dropdown {
+  animation: navbar-dropdown-in 0.16s ease-out;
+  transform-origin: top right;
+}
+
+/* -- Guest landing page CTAs — indigo→purple gradient (matches Typeoye palette).
+     Regular <a>/<Link> elements styled like the brand buttons. ----------------- */
+.landing-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  background: linear-gradient(135deg, #4361ee 0%, #7c3aed 100%);
+  box-shadow: 0 8px 22px -6px rgba(67, 97, 238, 0.45);
+  transition: filter 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+.landing-cta:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px -8px rgba(67, 97, 238, 0.55);
+}
+.landing-cta:active {
+  transform: scale(0.98);
+}
+.landing-cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  background-color: var(--color-card);
+  border: 1.5px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+  transition: color 0.18s ease, border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+}
+.landing-cta-ghost:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-light);
+  transform: translateY(-1px);
+}
+.landing-cta-ghost:active {
+  transform: scale(0.98);
+}
+
+/* -- Guest/public blue-purple gradient navbar -------------------------------
+   Flush with the very top of the viewport; depth comes from rounded bottom
+   corners + a soft drop shadow. Fully OPAQUE so page content scrolls
+   underneath without ever showing through. */
+.navbar-gradient {
+  background: linear-gradient(135deg, #3730A3 0%, #4361EE 52%, #8B5CF6 100%);
+  border-radius: 0 0 22px 22px;
+  margin-top: -1px; /* cover the page shell's top border → perfectly flush */
+  box-shadow: 0 14px 34px -10px rgba(67, 97, 238, 0.5), 0 3px 10px rgba(27, 35, 64, 0.14);
+}
+.navbar-gradient-circle {
+  position: absolute;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+}
+
+/* Ghost circular icon buttons on the gradient bar (theme toggle, hamburger) */
+.ng-icon-btn {
+  color: #ffffff;
+  transition: background-color 0.18s ease, transform 0.18s ease;
+}
+.ng-icon-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+.ng-icon-btn:active {
+  transform: scale(0.94);
+}
+
+/* Mobile dropdown panel — same gradient language, slides out under the bar */
+@keyframes navbar-mobile-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.navbar-mobile-panel {
+  background: linear-gradient(165deg, #312E81 0%, #4338CA 48%, #7C3AED 100%);
+  border-radius: 0 0 22px 22px;
+  box-shadow: 0 22px 44px -12px rgba(67, 97, 238, 0.55), 0 4px 12px rgba(27, 35, 64, 0.16);
+  animation: navbar-mobile-in 0.2s ease-out;
+  transform-origin: top center;
+}
+.navbar-mobile-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 16px;
+  border-radius: 14px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background-color 0.16s ease, color 0.16s ease;
+}
+.navbar-mobile-link:hover {
+  background-color: rgba(255, 255, 255, 0.13);
+}
+.navbar-mobile-link-active,
+.navbar-mobile-link-active:hover {
+  background-color: #ffffff;
+  color: #1B2340;
+  box-shadow: 0 2px 8px rgba(27, 35, 64, 0.22);
+}
+/* Gradient-bar link hover/active rules live next to the legacy dark block
+   (see .navbar-gradient section above) so all !important tiers stay in sync. */
+.gpill-signin.btn {
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  color: #ffffff;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.gpill-signin.btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+.gpill-start.btn {
+  background: #ffffff;
+  border: none;
+  color: #000000;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(27, 35, 64, 0.22);
+  transition: background-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+.gpill-start.btn:hover {
+  background: #f2f3f7;
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 6px 18px rgba(27, 35, 64, 0.28);
+}
+/* Subtle logo hover */
+.navbar-logo-hover {
+  transition: opacity 0.15s ease;
+}
+.navbar-logo-hover:hover {
+  opacity: 0.88;
+}
+
+/* -- Typing Test page (redesigned) — page-scoped, no shared impact ---------- */
+.tt-header-icon {
+  background: linear-gradient(135deg, rgba(67, 97, 238, 0.14), rgba(139, 92, 246, 0.14));
+  color: var(--color-accent);
+}
+
+/* Difficulty segmented pills */
+.tt-diff-group {
+  background-color: var(--color-page);
+  border: 1px solid var(--color-border);
+}
+.tt-diff-pill {
+  padding: 6px 16px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  transition: all 0.18s ease;
+}
+.tt-diff-pill:hover:not(:disabled) {
+  color: var(--color-accent);
+  background-color: rgba(67, 97, 238, 0.08);
+}
+.tt-diff-pill:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.tt-diff-pill-active,
+.tt-diff-pill-active:hover:not(:disabled) {
+  background: linear-gradient(135deg, #4361EE, #7C3AED);
+  color: #ffffff !important;
+  box-shadow: 0 3px 10px rgba(67, 97, 238, 0.35);
+}
+
+/* Compact duration select */
+.tt-duration-select {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background-color: var(--color-page);
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: border-color 0.18s ease;
+}
+.tt-duration-select:hover:not(:disabled) { border-color: var(--color-accent); }
+.tt-duration-select:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* Premium typing text shell */
+.tt-text-shell {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -12px rgba(15, 23, 42, 0.12);
+  padding: 20px 22px;
+  min-height: 150px;
+}
+
+/* Prominent start button */
+.tt-start-btn {
+  background: linear-gradient(135deg, #4361EE, #7C3AED);
+  box-shadow: 0 6px 18px rgba(67, 97, 238, 0.4);
+  transition: filter 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+.tt-start-btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 9px 24px rgba(67, 97, 238, 0.48);
+}
+
+/* Practice hub cards — hover treatment (border, shadow, lift, indigo tint) */
+.tt-practice-card {
+  transition: all 0.2s ease;
+}
+.tt-practice-card:hover {
+  border: 1.5px solid #4f46e5;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.15);
+  transform: translateY(-3px);
+  background: linear-gradient(180deg, #ffffff, #fafaff);
+}
+/* Dark-mode hover: keep the card dark, just slightly lighter, with indigo glow */
+.dark .tt-practice-card:hover {
+  border: 1.5px solid #4f46e5;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);
+  background: linear-gradient(180deg, #1c1e2e, #20233a);
+}
+.tt-restart-btn { color: var(--color-text-secondary); }
+
+/* Stats + tips cards */
+.tt-stats-card { box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -12px rgba(15, 23, 42, 0.1); }
+.tt-tips-card { box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -12px rgba(15, 23, 42, 0.1); }
+.tt-tip-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: var(--color-text-secondary);
+  padding: 5px 8px;
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
+}
+.tt-tip-row:hover { background-color: rgba(67, 97, 238, 0.05); }
+.tt-tip-check {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background-color: rgba(34, 197, 94, 0.14);
+  color: #16a34a;
+  font-size: 0.6rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Premium keyboard compacts on small screens (inline stagger/gap yield) */
+@media (max-width: 520px) {
+  .kbd-premium > div {
+    padding-left: 0 !important;
+    gap: 3px !important;
+    margin-bottom: 3px !important;
+  }
+}
+
+/* Lesson card highlight pulse (auto-scroll target) */
+@keyframes lesson-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0); }
+  15%, 50% { box-shadow: 0 0 0 6px rgba(67, 97, 238, 0.22); }
+  30%, 70% { box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.12); }
+}
+.lesson-highlight-pulse {
+  animation: lesson-glow 2s ease-out;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Footer (gradient) ─────────────────────────────────────────────── */
+.site-footer {
+  background: linear-gradient(135deg, #3730A3 0%, #4361EE 52%, #8B5CF6 100%);
+  border-radius: 24px;
+  color: #ffffff;
+  box-shadow: 0 -14px 34px -12px rgba(67, 97, 238, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+.dark .site-footer {
+  background: linear-gradient(135deg, #15163E 0%, #221E54 52%, #371D66 100%);
+  box-shadow: 0 -14px 34px -12px rgba(20, 22, 60, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.site-footer-dots {
+  opacity: 0.35;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.35) 1.5px, transparent 1.6px);
+}
+.dark .site-footer-dots {
+  opacity: 0.28;
+  background-image: radial-gradient(rgba(199, 184, 255, 0.4) 1.5px, transparent 1.6px);
+}
+
+.site-footer-blob {
+  position: absolute;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.09);
+  filter: blur(64px);
+  pointer-events: none;
+}
+.dark .site-footer-blob {
+  background: rgba(124, 140, 248, 0.1);
+}
+
+.site-footer-heading {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-bottom: 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.site-footer-heading::after {
+  content: '';
+  width: 22px;
+  height: 3px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #FDE047, rgba(253, 224, 71, 0));
+}
+
+.site-footer-link {
+  display: inline-flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.9rem;
+  line-height: 1.85;
+  width: fit-content;
+  transition: color 0.18s ease, transform 0.18s ease, padding-left 0.18s ease;
+}
+.site-footer-link:hover {
+  color: #ffffff;
+  transform: translateX(4px);
+}
+.site-footer-link-active,
+.site-footer-link-active:hover {
+  color: #ffffff;
+  font-weight: 700;
+}
+.site-footer-link-active::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 8px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #4361ee, #8b5cf6);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.25);
+}
+.dark .site-footer-link-active,
+.dark .site-footer-link-active:hover {
+  color: #ffffff;
+}
+.dark .site-footer-link {
+  color: rgba(226, 228, 245, 0.72);
+}
+.dark .site-footer-link:hover {
+  color: #ffffff;
+}
+
+.site-footer-desc {
+  margin-top: 0.65rem;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.dark .site-footer-desc {
+  color: rgba(226, 228, 245, 0.72);
+}
+
+.site-footer-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+.site-footer-social:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #FDE047;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.45);
+}
+.dark .site-footer-social {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.dark .site-footer-social:hover {
+  background: rgba(184, 173, 246, 0.2);
+}
+
+.site-footer-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.68);
+}
+.dark .site-footer-divider {
+  border-top-color: rgba(255, 255, 255, 0.12);
+  color: rgba(226, 228, 245, 0.66);
+}
+
+/* ── Certificate CTA banner (guest landing) ────────────────────────── */
+.cert-cta {
+  background: linear-gradient(135deg, #EEF1FD 0%, #F3EDFD 55%, #FBEEFF 100%);
+  border: 1px solid rgba(139, 92, 246, 0.18);
+}
+.dark .cert-cta {
+  background: linear-gradient(135deg, #14163E 0%, #211E53 55%, #38206A 100%);
+  border: 1px solid rgba(139, 92, 246, 0.38);
+  box-shadow: 0 18px 50px -20px rgba(67, 97, 238, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* ── Dark-mode contrast helpers ───────────────────────────────────── */
+.dark .tt-tip-check {
+  color: #4ade80;
+}
+
+.dark .logo-wordmark-oye {
+  color: #e2d9ff !important;
+}
+
+.auth-panel {
+  background: var(--color-accent);
+}
+.dark .auth-panel {
+  background: linear-gradient(160deg, #1e2250 0%, #181a3d 100%);
+}
+
+/* Typing-test result stat accents */
+.rs-wpm {
+  color: #2563eb;
+}
+.rs-acc {
+  color: #db2777;
+}
+.rs-time {
+  color: #16a34a;
+}
+.rs-cert {
+  color: #7c3aed;
+}
+.dark .rs-wpm {
+  color: #7aa5ff;
+}
+.dark .rs-acc {
+  color: #fb8cc6;
+}
+.dark .rs-time {
+  color: #5ae095;
+}
+.dark .rs-cert {
+  color: #c7a5ff;
+}
+
+/* Result cards (test, practice, certificate, game-over) get a crisp white
+   border in dark mode only. Light mode is untouched. */
+.dark .result-card {
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Landing feature/benefit icon chips */
+.land-feature-icon {
+  background: linear-gradient(135deg, #EEF1FD 0%, #F1EAFE 100%);
+  color: #6D28D9;
+}
+.dark .land-feature-icon {
+  background: linear-gradient(135deg, #1e2250 0%, #251e52 100%);
+  color: #b795ff;
+}
+.land-benefit-icon {
+  color: #6D28D9;
+}
+.dark .land-benefit-icon {
+  color: #b795ff;
+}
+
+/* Games page — Play Now button */
+.games-play-btn {
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+}
+.dark .games-play-btn {
+  background: linear-gradient(135deg, #4361ee, #7c3aed);
+  color: #ffffff;
+}
+
+/* Games page — per-game difficulty/icon tints */
+.games-diff-typingRace {
+  color: #4361ee;
+}
+.games-diff-fallingWords {
+  color: #7c3aed;
+}
+.games-diff-suddenDeath {
+  color: #d97706;
+}
+.dark .games-diff-typingRace {
+  color: #8faef2;
+}
+.dark .games-diff-fallingWords {
+  color: #c9a6ff;
+}
+.dark .games-diff-suddenDeath {
+  color: #ffc85c;
+}

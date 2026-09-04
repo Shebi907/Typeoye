@@ -1,0 +1,1 @@
+{"version":3,"file":"PlatformSetting.d.ts","sourceRoot":"","sources":["../../src/models/PlatformSetting.ts"],"names":[],"mappings":"AAAA,OAAO,QAAQ,EAAE,EAAE,QAAQ,EAAU,MAAM,UAAU,CAAC;AAEtD,MAAM,WAAW,gBAAiB,SAAQ,QAAQ;IAChD,GAAG,EAAE,MAAM,CAAC;IACZ,KAAK,EAAE,OAAO,CAAC;IACf,KAAK,CAAC,EAAE,MAAM,CAAC;IACf,SAAS,CAAC,EAAE,QAAQ,CAAC,KAAK,CAAC,QAAQ,CAAC;CACrC;;;;;;AAYD,wBAA0F"}

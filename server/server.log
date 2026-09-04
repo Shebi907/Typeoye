@@ -1,0 +1,787 @@
+
+> typeflow-server@1.0.0 dev
+> nodemon --exec ts-node src/index.ts
+
+[33m[nodemon] 3.1.14[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): src\**\*[39m
+[33m[nodemon] watching extensions: ts,json[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[0mGET /api/health [32m200[0m 12.941 ms - 54[0m
+[0mGET /api/leaderboard?period=global&limit=50 [32m200[0m 237.349 ms - 6263[0m
+[0mGET /api/auth/google [36m302[0m 6.032 ms - 398[0m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/config/env.ts(35,7): error TS2448: Block-scoped variable 'parsed' used before its declaration.
+src/config/env.ts(35,7): error TS2454: Variable 'parsed' is used before being assigned.
+src/config/env.ts(35,7): error TS18048: 'parsed.data' is possibly 'undefined'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2448, 2454, 18048 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/config/env.ts(35,7): error TS2448: Block-scoped variable 'parsed' used before its declaration.
+src/config/env.ts(35,7): error TS2454: Variable 'parsed' is used before being assigned.
+src/config/env.ts(35,7): error TS18048: 'parsed.data' is possibly 'undefined'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2448, 2454, 18048 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/config/env.ts(35,7): error TS2448: Block-scoped variable 'parsed' used before its declaration.
+src/config/env.ts(35,7): error TS2454: Variable 'parsed' is used before being assigned.
+src/config/env.ts(35,7): error TS18048: 'parsed.data' is possibly 'undefined'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2448, 2454, 18048 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/config/env.ts(35,7): error TS2448: Block-scoped variable 'parsed' used before its declaration.
+src/config/env.ts(35,7): error TS2454: Variable 'parsed' is used before being assigned.
+src/config/env.ts(35,7): error TS18048: 'parsed.data' is possibly 'undefined'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2448, 2454, 18048 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/config/env.ts(35,7): error TS2448: Block-scoped variable 'parsed' used before its declaration.
+src/config/env.ts(35,7): error TS2454: Variable 'parsed' is used before being assigned.
+src/config/env.ts(35,7): error TS18048: 'parsed.data' is possibly 'undefined'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2448, 2454, 18048 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/config/env.ts(35,7): error TS2448: Block-scoped variable 'parsed' used before its declaration.
+src/config/env.ts(35,7): error TS2454: Variable 'parsed' is used before being assigned.
+src/config/env.ts(35,7): error TS18048: 'parsed.data' is possibly 'undefined'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2448, 2454, 18048 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/config/env.ts(35,7): error TS2448: Block-scoped variable 'parsed' used before its declaration.
+src/config/env.ts(35,7): error TS2454: Variable 'parsed' is used before being assigned.
+src/config/env.ts(35,7): error TS18048: 'parsed.data' is possibly 'undefined'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2448, 2454, 18048 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/config/env.ts(35,7): error TS2448: Block-scoped variable 'parsed' used before its declaration.
+src/config/env.ts(35,7): error TS2454: Variable 'parsed' is used before being assigned.
+src/config/env.ts(35,7): error TS18048: 'parsed.data' is possibly 'undefined'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2448, 2454, 18048 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[mail] SMTP not configured — contact message persisted to DB only (topic="Feature request" from testuser@example.com)
+[0mPOST /api/contact/messages [32m201[0m 22.521 ms - 70[0m
+[0mPOST /api/contact/messages [33m400[0m 3.499 ms - 159[0m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[0mGET /api/health [32m200[0m 7.387 ms - 54[0m
+[mail] SMTP not configured — contact message persisted to DB only (topic="Bug report" from finalcheck@example.com)
+[0mPOST /api/contact/messages [32m201[0m 34.809 ms - 70[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 26.889 ms - 381[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.913 ms - 378[0m
+[0mPOST /api/typing/sessions [32m200[0m 140.099 ms - 488[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 10.499 ms - 329[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [32m200[0m 14.717 ms - 367[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 7.921 ms - -[0m
+[0mGET /api/leaderboard?period=weekly&limit=50 [32m200[0m 8.839 ms - 1038[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 12.206 ms - -[0m
+[mail] SMTP not configured — contact message persisted to DB only (topic="General question" from sabazulfiqar926@gmail.com)
+[0mPOST /api/contact/messages [32m201[0m 6.239 ms - 70[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.215 ms - 386[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 2.683 ms - 327[0m
+[0mGET /api/practice/generate?type=character&difficulty=beginner&duration=300&wordCount=200&rotation=18&session=1 [32m200[0m 10.052 ms - 1408[0m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/config/env.ts(51,11): error TS2339: Property 'SUPPORT_EMAIL' does not exist on type '{ PORT: string; MONGODB_URI: string; JWT_SECRET: string; JWT_EXPIRES_IN: string; CLIENT_URL: string; NODE_ENV: "development" | "production" | "test"; EMAIL_TO: string; GOOGLE_CLIENT_ID?: string | undefined; GOOGLE_CLIENT_SECRET?: string | undefined; EMAIL_USER?: string | undefined; EMAIL_PASS?: string | undefined; }'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2339 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/services/mail.service.ts(2,10): error TS2305: Module '"../config/env"' has no exported member 'smtp'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2305 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/services/mail.service.ts(2,10): error TS2305: Module '"../config/env"' has no exported member 'smtp'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2305 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[0mPOST /api/contact/messages [32m201[0m 3759.548 ms - 103[0m
+[0mGET /api/health [32m200[0m 2.519 ms - 54[0m
+[0mPOST /api/contact/messages [32m201[0m 2114.658 ms - 103[0m
+[0mPOST /api/contact/messages [33m400[0m 1.278 ms - 159[0m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/controllers/leaderboard.controller.ts(135,11): error TS2304: Cannot find name 'entry'.
+src/controllers/leaderboard.controller.ts(136,25): error TS2304: Cannot find name 'entry'.
+src/controllers/leaderboard.controller.ts(137,18): error TS2304: Cannot find name 'entry'.
+src/controllers/leaderboard.controller.ts(137,48): error TS2304: Cannot find name 'entry'.
+src/controllers/leaderboard.controller.ts(138,36): error TS2304: Cannot find name 'entry'.
+src/controllers/leaderboard.controller.ts(138,76): error TS2304: Cannot find name 'entry'.
+src/controllers/leaderboard.controller.ts(141,7): error TS2322: Type '{ rank: any; userId: any; isGuest: boolean; username: string; displayName: string; level: number; wpm: any; accuracy: any; isMe: boolean; }' is not assignable to type 'void'.
+src/controllers/leaderboard.controller.ts(142,9): error TS18004: No value exists in scope for the shorthand property 'rank'. Either declare one or provide an initializer.
+src/controllers/leaderboard.controller.ts(143,17): error TS2304: Cannot find name 'entry'.
+src/controllers/leaderboard.controller.ts(148,14): error TS2304: Cannot find name 'entry'.
+src/controllers/leaderboard.controller.ts(149,19): error TS2304: Cannot find name 'entry'.
+src/controllers/leaderboard.controller.ts(157,9): error TS2304: Cannot find name 'currentUserId'.
+src/controllers/leaderboard.controller.ts(158,23): error TS2304: Cannot find name 'ranked'.
+src/controllers/leaderboard.controller.ts(158,36): error TS7006: Parameter 'entry' implicitly has an 'any' type.
+src/controllers/leaderboard.controller.ts(158,71): error TS2304: Cannot find name 'currentUserId'.
+src/controllers/leaderboard.controller.ts(174,24): error TS18004: No value exists in scope for the shorthand property 'leaderboard'. Either declare one or provide an initializer.
+src/controllers/leaderboard.controller.ts(174,37): error TS18004: No value exists in scope for the shorthand property 'period'. Either declare one or provide an initializer.
+src/controllers/leaderboard.controller.ts(177,15): error TS2304: Cannot find name 'res'.
+src/controllers/leaderboard.controller.ts(135,9): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
+src/controllers/leaderboard.controller.ts(135,11): error TS1005: ',' expected.
+src/controllers/leaderboard.controller.ts(135,16): error TS1005: ')' expected.
+src/controllers/leaderboard.controller.ts(152,6): error TS1472: 'catch' or 'finally' expected.
+src/controllers/leaderboard.controller.ts(175,5): error TS1005: 'try' expected.
+src/controllers/leaderboard.controller.ts(179,1): error TS1128: Declaration or statement expected.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [
+     2304, 2304, 2304,  2304,
+     2304, 2304, 2322, 18004,
+     2304, 2304, 2304,  2304,
+     2304, 7006, 2304, 18004,
+    18004, 2304, 2809,  1005,
+     1005, 1472, 1005,  1128
+  ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[0mGET /api/leaderboard?period=daily&limit=50 [32m200[0m 37.756 ms - 423[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 16.953 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 13.291 ms - -[0m
+[0mGET /api/health [32m200[0m 1.258 ms - 54[0m
+[0mPOST /api/typing/sessions [32m200[0m 37.209 ms - 461[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [32m200[0m 5.992 ms - 423[0m
+[0mPOST /api/auth/login [32m200[0m 505.292 ms - 966[0m
+[0mPOST /api/auth/claim-guest [32m200[0m 11.392 ms - 64[0m
+[0mGET /api/leaderboard?period=global&limit=5 [32m200[0m 7.200 ms - 945[0m
+[0mGET /api/leaderboard?period=global&limit=50 [32m200[0m 7.751 ms - 6459[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 9.909 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 10.946 ms - -[0m
+[0mGET /api/leaderboard?period=weekly&limit=50 [32m200[0m 7.351 ms - 1094[0m
+[0mGET /api/leaderboard?period=monthly&limit=50 [32m200[0m 14.461 ms - 6460[0m
+[0mGET /api/leaderboard?period=weekly&limit=50 [36m304[0m 12.804 ms - -[0m
+[0mPOST /api/auth/login [32m200[0m 529.528 ms - 969[0m
+[0mPOST /api/auth/claim-guest [32m200[0m 9.329 ms - 64[0m
+[0mGET /api/auth/me [32m200[0m 8.131 ms - 782[0m
+[0mGET /api/auth/me [36m304[0m 6.457 ms - -[0m
+[0mGET /api/analytics/accuracy-trend [32m200[0m 19.948 ms - 306[0m
+[0mGET /api/analytics/accuracy-trend [36m304[0m 7.027 ms - -[0m
+[0mGET /api/analytics/progress [32m200[0m 121.749 ms - 4061[0m
+[0mGET /api/analytics/progress [36m304[0m 11.917 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [32m200[0m 12.143 ms - 548[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 14.227 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 1.930 ms - 337[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 2.242 ms - 394[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [32m200[0m 9.865 ms - 423[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 6.351 ms - -[0m
+[0mGET /api/leaderboard?period=weekly&limit=50 [32m200[0m 13.674 ms - 1094[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 12.350 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.748 ms - 409[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 1.994 ms - 379[0m
+[0mPOST /api/typing/sessions [32m200[0m 22.789 ms - 464[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 5.113 ms - 402[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 9.467 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 6.883 ms - -[0m
+[0mGET /api/auth/me [36m304[0m 19.098 ms - -[0m
+[0mGET /api/auth/me [36m304[0m 16.978 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 29.380 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 55.073 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.218 ms - 328[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [36m304[0m 2.692 ms - -[0m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/models/TypingSession.ts(36,5): error TS2353: Object literal may only specify known properties, and 'guestId' does not exist in type '{ id?: SchemaDefinitionProperty<any, ITypingSession, Document<unknown, {}, FlatRecord<ITypingSession>, {}, DefaultSchemaOptions> & FlatRecord<...> & Required<...> & { ...; }> | undefined; ... 10 more ...; clientAccuracy?: SchemaDefinitionProperty<...> | undefined; }'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2353 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/controllers/typing.controller.ts(82,7): error TS2554: Expected 4 arguments, but got 5.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2554 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/controllers/typing.controller.ts(60,27): error TS2339: Property 'guestId' does not exist on type '{ mode: "test" | "practice" | "lesson" | "game"; startTime: string; endTime: string; typedWords: { word: string; typed: string; correct: boolean; timeTakenMs: number; }[]; textSource: "lesson" | "generated" | "custom"; ... 5 more ...; practiceDifficulty?: number | undefined; }'.
+src/controllers/typing.controller.ts(60,44): error TS2339: Property 'guestId' does not exist on type '{ mode: "test" | "practice" | "lesson" | "game"; startTime: string; endTime: string; typedWords: { word: string; typed: string; correct: boolean; timeTakenMs: number; }[]; textSource: "lesson" | "generated" | "custom"; ... 5 more ...; practiceDifficulty?: number | undefined; }'.
+src/controllers/typing.controller.ts(81,7): error TS2554: Expected 4 arguments, but got 5.
+src/controllers/typing.controller.ts(81,12): error TS2339: Property 'guestId' does not exist on type '{ mode: "test" | "practice" | "lesson" | "game"; startTime: string; endTime: string; typedWords: { word: string; typed: string; correct: boolean; timeTakenMs: number; }[]; textSource: "lesson" | "generated" | "custom"; ... 5 more ...; practiceDifficulty?: number | undefined; }'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2339, 2339, 2554, 2339 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/routes/auth.routes.ts(2,39): error TS2305: Module '"../controllers/auth.controller"' has no exported member 'claimGuest'.
+src/routes/auth.routes.ts(2,80): error TS2305: Module '"../controllers/auth.controller"' has no exported member 'claimGuestSchema'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2305, 2305 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+D:\Typing Website\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/controllers/leaderboard.controller.ts(127,31): error TS2339: Property 'isGuest' does not exist on type 'RankedEntry'.
+src/controllers/leaderboard.controller.ts(129,42): error TS2339: Property 'guestId' does not exist on type 'RankedEntry'.
+src/controllers/leaderboard.controller.ts(129,52): error TS2304: Cannot find name 'guestDisplayName'.
+src/controllers/leaderboard.controller.ts(129,82): error TS2339: Property 'guestId' does not exist on type 'RankedEntry'.
+
+    at createTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\Typing Website\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:2002:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Typing Website\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  diagnosticCodes: [ 2339, 2339, 2304, 2339 ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 32.865 ms - 386[0m
+[0mGET /api/auth/me [36m304[0m 87.417 ms - -[0m
+[0mGET /api/auth/me [36m304[0m 21.439 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 6.618 ms - 360[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 5.001 ms - 340[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 4.768 ms - 339[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 4.028 ms - 402[0m
+[0mGET /api/health [32m200[0m 1.103 ms - 54[0m
+[0mPOST /api/typing/sessions [33m401[0m 0.730 ms - 45[0m
+[0mGET /api/leaderboard [32m200[0m 24.079 ms - 5671[0m
+[0mPOST /api/auth/claim-guest [33m404[0m 1.744 ms - 160[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [32m200[0m 33.774 ms - 337[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 25.151 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [36m304[0m 4.055 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 4.299 ms - 368[0m
+[0mGET /api/practice/overview [32m200[0m 169.235 ms - 441[0m
+[0mGET /api/practice/overview [36m304[0m 11.431 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.714 ms - 328[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.500 ms - 381[0m
+[0mPOST /api/typing/sessions [32m200[0m 723.781 ms - 547[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 7.666 ms - 378[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 4.164 ms - 430[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.179 ms - 373[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 5.267 ms - 416[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 4.389 ms - 354[0m
+[0mGET /api/practice/overview [32m200[0m 14.176 ms - 441[0m
+[0mGET /api/practice/overview [36m304[0m 12.366 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.443 ms - 371[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 15.952 ms - 402[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.971 ms - 327[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.980 ms - 321[0m
+[0mGET /api/practice/overview [36m304[0m 13.317 ms - -[0m
+[0mGET /api/practice/overview [36m304[0m 11.244 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.970 ms - 395[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.996 ms - 379[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.896 ms - 416[0m
+[0mGET /api/practice/overview [36m304[0m 14.836 ms - -[0m
+[0mGET /api/practice/overview [36m304[0m 11.365 ms - -[0m
+[0mGET /api/practice/generate?type=character&difficulty=beginner&duration=300&wordCount=200&rotation=10&session=1 [32m200[0m 24.847 ms - 1403[0m
+[0mGET /api/practice/generate?type=character&difficulty=beginner&duration=60&wordCount=200&rotation=10&session=1 [32m200[0m 17.919 ms - 703[0m
+[0mGET /api/practice/generate?type=character&difficulty=beginner&duration=60&wordCount=200&rotation=12&session=1 [32m200[0m 13.848 ms - 701[0m
+[0mGET /api/lessons [32m200[0m 98.484 ms - 7345[0m
+[0mGET /api/lessons [36m304[0m 18.575 ms - -[0m
+[0mGET /api/practice/overview [36m304[0m 10.390 ms - -[0m
+[0mGET /api/practice/overview [36m304[0m 10.011 ms - -[0m
+[0mGET /api/lessons [36m304[0m 13.878 ms - -[0m
+[0mGET /api/lessons [36m304[0m 17.367 ms - -[0m
+[0mGET /api/games/history [32m200[0m 72.272 ms - 1237[0m
+[0mGET /api/games/history?game=typingRace [32m200[0m 66.445 ms - 560[0m
+[0mGET /api/games/history [36m304[0m 11.745 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 10.596 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.254 ms - 309[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.171 ms - 321[0m
+[0mGET /api/games/history [36m304[0m 11.463 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 11.022 ms - -[0m
+[0mGET /api/games/history [36m304[0m 14.431 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 11.866 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.623 ms - 407[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 2.778 ms - 329[0m
+[0mGET /api/practice/overview [36m304[0m 14.167 ms - -[0m
+[0mGET /api/practice/overview [36m304[0m 11.098 ms - -[0m
+[0mGET /api/practice/generate?type=character&difficulty=beginner&duration=300&wordCount=200&rotation=14&session=1 [32m200[0m 23.768 ms - 1404[0m
+[0mGET /api/practice/generate?type=character&difficulty=beginner&duration=300&wordCount=200&rotation=19&session=1 [32m200[0m 11.995 ms - 1391[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.418 ms - 416[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.558 ms - 395[0m
+[0mPOST /api/typing/sessions [32m200[0m 214.361 ms - 511[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 4.353 ms - 340[0m
+[0mGET /api/analytics/accuracy-trend [32m200[0m 23.189 ms - 306[0m
+[0mGET /api/analytics/progress [32m200[0m 36.724 ms - 4216[0m
+[0mGET /api/analytics/accuracy-trend [36m304[0m 21.427 ms - -[0m
+[0mGET /api/analytics/progress [36m304[0m 28.308 ms - -[0m
+[0mGET /api/games/history [36m304[0m 10.849 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 11.811 ms - -[0m
+[0mGET /api/games/history [36m304[0m 14.615 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 11.501 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.928 ms - 350[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 4.610 ms - 337[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 23.971 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 20.965 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 4.450 ms - 365[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 2.833 ms - 402[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 2.988 ms - 348[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.765 ms - 371[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 2.828 ms - 348[0m
+[0mGET /api/practice/overview [32m200[0m 14.146 ms - 443[0m
+[0mGET /api/practice/overview [36m304[0m 12.347 ms - -[0m
+[0mGET /api/practice/generate?type=character&difficulty=beginner&duration=300&wordCount=200&rotation=24&session=1 [32m200[0m 25.009 ms - 1387[0m
+[0mGET /api/practice/generate?type=character&difficulty=beginner&duration=300&wordCount=200&rotation=29&session=1 [32m200[0m 12.904 ms - 1401[0m
+[0mGET /api/practice/generate?type=character&difficulty=beginner&duration=300&wordCount=200&rotation=34&session=1 [32m200[0m 22.032 ms - 1403[0m
+[0mGET /api/practice/overview [36m304[0m 9.267 ms - -[0m
+[0mGET /api/practice/overview [36m304[0m 8.903 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.732 ms - 408[0m
+[0mGET /api/typing/paragraphs/random?difficulty=simple [32m200[0m 3.539 ms - 379[0m
+[0mGET /api/practice/overview [36m304[0m 14.044 ms - -[0m
+[0mGET /api/practice/overview [36m304[0m 12.810 ms - -[0m
+[0mGET /api/practice/generate?type=character&difficulty=beginner&duration=300&wordCount=200&rotation=34&session=1 [36m304[0m 22.822 ms - -[0m
+[0mGET /api/practice/generate?type=character&difficulty=beginner&duration=300&wordCount=200&rotation=39&session=1 [32m200[0m 13.038 ms - 1402[0m
+[0mGET /api/lessons [36m304[0m 43.697 ms - -[0m
+[0mGET /api/lessons [36m304[0m 16.743 ms - -[0m
+[0mGET /api/games/history [36m304[0m 9.380 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 8.977 ms - -[0m
+[0mGET /api/games/history [36m304[0m 15.463 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 12.995 ms - -[0m
+[0mGET /api/lessons [36m304[0m 16.252 ms - -[0m
+[0mGET /api/lessons [36m304[0m 18.392 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 19.848 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 20.913 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 28.410 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 22.472 ms - -[0m
+[0mGET /api/practice/overview [36m304[0m 14.169 ms - -[0m
+[0mGET /api/practice/overview [36m304[0m 10.065 ms - -[0m
+[0mGET /api/practice/generate?type=character&difficulty=beginner&duration=300&wordCount=200&rotation=44&session=1 [32m200[0m 21.156 ms - 1396[0m
+[0mGET /api/games/history [36m304[0m 21.660 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 19.709 ms - -[0m
+[0mGET /api/games/history [36m304[0m 18.023 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 14.439 ms - -[0m
+[0mGET /api/lessons [36m304[0m 16.640 ms - -[0m
+[0mGET /api/lessons [36m304[0m 17.424 ms - -[0m
+[0mGET /api/games/history [36m304[0m 9.727 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 7.641 ms - -[0m
+[0mGET /api/games/history [36m304[0m 12.276 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 9.770 ms - -[0m
+[0mGET /api/lessons [36m304[0m 19.240 ms - -[0m
+[0mGET /api/lessons [36m304[0m 20.886 ms - -[0m
+[0mGET /api/games/history [36m304[0m 9.626 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 8.579 ms - -[0m
+[0mGET /api/games/history [36m304[0m 13.650 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 11.143 ms - -[0m
+[0mGET /api/lessons [36m304[0m 14.915 ms - -[0m
+[0mGET /api/lessons [36m304[0m 14.942 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 23.034 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 23.333 ms - -[0m
+[0mGET /api/lessons [36m304[0m 16.495 ms - -[0m
+[0mGET /api/lessons [36m304[0m 16.091 ms - -[0m
+[0mGET /api/games/history [36m304[0m 10.041 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 9.465 ms - -[0m
+[0mGET /api/games/history [36m304[0m 12.501 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 9.944 ms - -[0m
+[0mGET /api/lessons [36m304[0m 16.530 ms - -[0m
+[0mGET /api/lessons [36m304[0m 14.478 ms - -[0m
+[0mGET /api/lessons/6a91122cd230e187b8aa12d2 [32m200[0m 54.773 ms - 5772[0m
+[0mGET /api/lessons/6a91122cd230e187b8aa12d2 [32m200[0m 18.889 ms - 5785[0m
+[0mPOST /api/lessons/6a91122cd230e187b8aa12d2/exercises/6a91122cd230e187b8aa12e7/complete [32m200[0m 222.787 ms - 903[0m
+[0mPOST /api/lessons/6a91122cd230e187b8aa12d2/exercises/6a91122cd230e187b8aa12e8/complete [32m200[0m 63.355 ms - 1094[0m
+[0mPOST /api/lessons/6a91122cd230e187b8aa12d2/exercises/6a91122cd230e187b8aa12e9/complete [32m200[0m 93.978 ms - 1713[0m
+[0mGET /api/lessons [32m200[0m 35.547 ms - 7346[0m
+[0mGET /api/lessons [36m304[0m 30.341 ms - -[0m
+[0mGET /api/lessons/6a91122cd230e187b8aa12d3 [32m200[0m 17.150 ms - 6010[0m
+[0mGET /api/lessons/6a91122cd230e187b8aa12d3 [32m200[0m 24.741 ms - 6006[0m
+[0mPOST /api/lessons/6a91122cd230e187b8aa12d3/exercises/6a91122cd230e187b8aa12ea/complete [32m200[0m 54.259 ms - 900[0m
+[0mPOST /api/lessons/6a91122cd230e187b8aa12d3/exercises/6a91122cd230e187b8aa12eb/complete [32m200[0m 50.667 ms - 1027[0m
+[0mGET /api/lessons [32m200[0m 35.190 ms - 7348[0m
+[0mGET /api/lessons [36m304[0m 22.997 ms - -[0m
+[0mGET /api/lessons/6a91122cd230e187b8aa12d0 [32m200[0m 20.188 ms - 6424[0m
+[0mGET /api/lessons/6a91122cd230e187b8aa12d0 [32m200[0m 16.549 ms - 6423[0m
+[0mGET /api/lessons [36m304[0m 13.209 ms - -[0m
+[0mGET /api/lessons [36m304[0m 17.822 ms - -[0m
+[0mGET /api/lessons/6a91122cd230e187b8aa12d3 [32m200[0m 45.525 ms - 6854[0m
+[0mGET /api/lessons/6a91122cd230e187b8aa12d3 [32m200[0m 51.611 ms - 6851[0m
+[0mGET /api/lessons [36m304[0m 20.001 ms - -[0m
+[0mGET /api/lessons [36m304[0m 19.424 ms - -[0m
+[0mGET /api/lessons/6a91122cd230e187b8aa12d3 [32m200[0m 22.343 ms - 6870[0m
+[0mGET /api/lessons/6a91122cd230e187b8aa12d3 [32m200[0m 24.729 ms - 6869[0m
+[0mPOST /api/lessons/6a91122cd230e187b8aa12d3/exercises/6a91122cd230e187b8aa12ec/complete [32m200[0m 55.899 ms - 1276[0m
+[0mGET /api/lessons [32m200[0m 27.899 ms - 7348[0m
+[0mGET /api/lessons [36m304[0m 28.957 ms - -[0m
+[0mGET /api/lessons/6a91122cd230e187b8aa12d3 [32m200[0m 19.962 ms - 6917[0m
+[0mGET /api/lessons/6a91122cd230e187b8aa12d3 [32m200[0m 26.162 ms - 6909[0m
+[0mGET /api/practice/overview [36m304[0m 26.152 ms - -[0m
+[0mGET /api/practice/overview [36m304[0m 20.768 ms - -[0m
+[0mGET /api/lessons [36m304[0m 16.405 ms - -[0m
+[0mGET /api/lessons [36m304[0m 15.763 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 32.270 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 17.993 ms - -[0m
+[0mGET /api/lessons [36m304[0m 14.476 ms - -[0m
+[0mGET /api/lessons [36m304[0m 16.465 ms - -[0m
+[0mGET /api/games/history [36m304[0m 23.909 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 27.874 ms - -[0m
+[0mGET /api/games/history [36m304[0m 9.072 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 8.000 ms - -[0m
+[0mGET /api/lessons [36m304[0m 11.587 ms - -[0m
+[0mGET /api/lessons [36m304[0m 15.323 ms - -[0m
+[0mGET /api/games/history [36m304[0m 9.318 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 8.108 ms - -[0m
+[0mGET /api/games/history [36m304[0m 11.548 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 9.178 ms - -[0m
+[0mGET /api/lessons [36m304[0m 13.731 ms - -[0m
+[0mGET /api/lessons [36m304[0m 15.111 ms - -[0m
+[0mGET /api/games/history [36m304[0m 17.545 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 13.850 ms - -[0m
+[0mGET /api/games/history [36m304[0m 15.732 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 14.474 ms - -[0m
+[0mGET /api/lessons [36m304[0m 11.967 ms - -[0m
+[0mGET /api/lessons [36m304[0m 14.492 ms - -[0m

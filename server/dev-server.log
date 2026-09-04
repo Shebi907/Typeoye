@@ -1,0 +1,212 @@
+
+> typeflow-server@1.0.0 dev
+> nodemon --exec ts-node src/index.ts
+
+[33m[nodemon] 3.1.14[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: ts,json[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[0mGET /api/health [32m200[0m 5.952 ms - 54[0m
+[0mPOST /api/auth/register [32m201[0m 643.709 ms - 978[0m
+[0mPOST /api/auth/register [32m201[0m 420.798 ms - 978[0m
+[0mPOST /api/auth/login [32m200[0m 438.989 ms - 978[0m
+[0mPOST /api/auth/login [32m200[0m 592.490 ms - 1044[0m
+[0mGET /api/auth/me [32m200[0m 21.166 ms - 857[0m
+[0mGET /api/auth/me [36m304[0m 15.427 ms - -[0m
+[0mGET /uploads/avatars/6a832f1b36b3ce00036e9725-1787223326771.jpg [36m304[0m 2.442 ms - -[0m
+[0mGET /api/analytics/dashboard [36m304[0m 151.329 ms - -[0m
+[0mGET /api/analytics/dashboard [36m304[0m 10.646 ms - -[0m
+[0mGET /api/practice/overview [36m304[0m 18.251 ms - -[0m
+[0mGET /api/practice/overview [36m304[0m 6.565 ms - -[0m
+[0mGET /api/analytics/dashboard [36m304[0m 14.155 ms - -[0m
+[0mGET /api/analytics/dashboard [36m304[0m 16.044 ms - -[0m
+[0mPOST /api/auth/register [33m400[0m 0.951 ms - 111[0m
+[0mPOST /api/auth/register [33m400[0m 0.643 ms - 91[0m
+[0mPOST /api/auth/register [33m400[0m 0.421 ms - 111[0m
+[0mPOST /api/auth/register [33m400[0m 0.806 ms - 126[0m
+[0mPOST /api/auth/register [32m201[0m 443.154 ms - 955[0m
+[0mPOST /api/auth/register [33m409[0m 5.264 ms - 53[0m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+✅ MongoDB connected: mongodb://localhost:27017/typeflow
+🚀 Typeoye server running at http://localhost:3001
+   Environment: development
+[0mGET /api/health [32m200[0m 4.378 ms - 54[0m
+[0mGET /api/auth/me [36m304[0m 38.492 ms - -[0m
+[0mGET /api/auth/me [36m304[0m 11.633 ms - -[0m
+[0mGET /uploads/avatars/6a832f1b36b3ce00036e9725-1787223326771.jpg [36m304[0m 1.790 ms - -[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 14.769 ms - 315[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 3.236 ms - 409[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 2.170 ms - 389[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 4.835 ms - 394[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 4.752 ms - 340[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 5.661 ms - 410[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 4.835 ms - 378[0m
+[0mGET /api/practice/generate?type=combination&difficulty=beginner&duration=300&wordCount=200&session=1 [32m200[0m 6.210 ms - 1526[0m
+getLesson error: CastError: Cast to ObjectId failed for value "service" (type string) at path "_id" for model "Lesson"
+    at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:253:11)
+    at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
+    at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
+    at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
+    at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
+    at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
+    at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
+    at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async getLesson (D:\Typing Website\server\src\controllers\lesson.controller.ts:42:20) {
+  stringValue: '"service"',
+  messageFormat: undefined,
+  kind: 'ObjectId',
+  value: 'service',
+  path: '_id',
+  reason: BSONError: input must be a 24 character hex string, 12 byte Uint8Array, or an integer
+      at new ObjectId (D:\Typing Website\server\node_modules\bson\src\objectid.ts:120:15)
+      at castObjectId (D:\Typing Website\server\node_modules\mongoose\lib\cast\objectid.js:25:12)
+      at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:251:12)
+      at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
+      at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
+      at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
+      at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
+      at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
+      at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
+      at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80),
+  valueType: 'string'
+}
+[0mGET /api/lessons/service [31m500[0m 27.752 ms - 50[0m
+getLesson error: CastError: Cast to ObjectId failed for value "service" (type string) at path "_id" for model "Lesson"
+    at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:253:11)
+    at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
+    at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
+    at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
+    at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
+    at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
+    at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
+    at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async getLesson (D:\Typing Website\server\src\controllers\lesson.controller.ts:42:20) {
+  stringValue: '"service"',
+  messageFormat: undefined,
+  kind: 'ObjectId',
+  value: 'service',
+  path: '_id',
+  reason: BSONError: input must be a 24 character hex string, 12 byte Uint8Array, or an integer
+      at new ObjectId (D:\Typing Website\server\node_modules\bson\src\objectid.ts:120:15)
+      at castObjectId (D:\Typing Website\server\node_modules\mongoose\lib\cast\objectid.js:25:12)
+      at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:251:12)
+      at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
+      at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
+      at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
+      at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
+      at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
+      at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
+      at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80),
+  valueType: 'string'
+}
+[0mGET /api/lessons/service [31m500[0m 2.861 ms - 50[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 1.949 ms - 330[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 2.932 ms - 379[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 4.845 ms - 372[0m
+[0mGET /api/practice/generate?type=combination&difficulty=beginner&duration=300&wordCount=200&session=1 [32m200[0m 5.156 ms - 1514[0m
+[0mGET /api/lessons [32m200[0m 43.190 ms - 4553[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 4.558 ms - 365[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 1.940 ms - 329[0m
+[0mGET /api/practice/generate?type=combination&difficulty=beginner&duration=300&wordCount=200&session=1 [32m200[0m 3.415 ms - 1509[0m
+[0mGET /api/lessons [32m200[0m 7.499 ms - 4553[0m
+getLesson error: CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Lesson"
+    at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:253:11)
+    at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
+    at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
+    at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
+    at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
+    at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
+    at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
+    at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async getLesson (D:\Typing Website\server\src\controllers\lesson.controller.ts:42:20) {
+  stringValue: '"undefined"',
+  messageFormat: undefined,
+  kind: 'ObjectId',
+  value: 'undefined',
+  path: '_id',
+  reason: BSONError: input must be a 24 character hex string, 12 byte Uint8Array, or an integer
+      at new ObjectId (D:\Typing Website\server\node_modules\bson\src\objectid.ts:120:15)
+      at castObjectId (D:\Typing Website\server\node_modules\mongoose\lib\cast\objectid.js:25:12)
+      at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:251:12)
+      at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
+      at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
+      at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
+      at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
+      at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
+      at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
+      at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80),
+  valueType: 'string'
+}
+[0mGET /api/lessons/undefined [31m500[0m 5.111 ms - 50[0m
+getLesson error: CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Lesson"
+    at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:253:11)
+    at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
+    at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
+    at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
+    at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
+    at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
+    at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
+    at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async getLesson (D:\Typing Website\server\src\controllers\lesson.controller.ts:42:20) {
+  stringValue: '"undefined"',
+  messageFormat: undefined,
+  kind: 'ObjectId',
+  value: 'undefined',
+  path: '_id',
+  reason: BSONError: input must be a 24 character hex string, 12 byte Uint8Array, or an integer
+      at new ObjectId (D:\Typing Website\server\node_modules\bson\src\objectid.ts:120:15)
+      at castObjectId (D:\Typing Website\server\node_modules\mongoose\lib\cast\objectid.js:25:12)
+      at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:251:12)
+      at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
+      at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
+      at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
+      at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
+      at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
+      at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
+      at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80),
+  valueType: 'string'
+}
+[0mGET /api/lessons/undefined [31m500[0m 9.234 ms - 50[0m
+[0mGET /api/lessons [32m200[0m 13.245 ms - 4553[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 2.246 ms - 361[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 3.087 ms - 330[0m
+[0mGET /api/lessons [32m200[0m 20.999 ms - 4553[0m
+[0mGET /api/lessons/6a84324167b996941c91533b [32m200[0m 104.602 ms - 1226[0m
+[0mGET /api/lessons/6a84324167b996941c91533b [36m304[0m 13.565 ms - -[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 2.613 ms - 327[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 3.919 ms - 321[0m
+[0mGET /api/practice/generate?type=combination&difficulty=beginner&duration=300&wordCount=200&session=1 [32m200[0m 2.453 ms - 1518[0m
+[0mGET /api/lessons [32m200[0m 8.383 ms - 4553[0m
+[0mGET /api/lessons/6a84324167b996941c91533b [32m200[0m 9.543 ms - 1226[0m
+[0mGET /api/lessons/6a84324167b996941c91533b [36m304[0m 8.996 ms - -[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 2.515 ms - 340[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 3.035 ms - 389[0m
+[0mPOST /api/typing/sessions [32m200[0m 476.309 ms - 511[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 3.062 ms - 407[0m
+[0mGET /api/practice/overview [32m200[0m 21.238 ms - 134[0m
+[0mGET /api/practice/overview [36m304[0m 27.018 ms - -[0m
+[0mGET /api/practice/generate?type=character&difficulty=intermediate&duration=120&wordCount=200&session=1 [32m200[0m 19.653 ms - 1808[0m
+[0mPOST /api/typing/sessions [32m200[0m 226.811 ms - 519[0m
+[0mGET /api/practice/generate?type=word&difficulty=intermediate&duration=120&wordCount=200&session=1 [32m200[0m 68.886 ms - 2540[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 11.343 ms - 340[0m
+[0mGET /api/typing/paragraphs/random [32m200[0m 10.511 ms - 365[0m
+[0mGET /api/lessons [36m304[0m 13.385 ms - -[0m
+[0mGET /api/lessons [36m304[0m 12.851 ms - -[0m
+[0mGET /api/practice/overview [36m304[0m 8.826 ms - -[0m
+[0mGET /api/practice/overview [36m304[0m 6.867 ms - -[0m
+[0mGET /api/lessons [36m304[0m 13.455 ms - -[0m
+[0mGET /api/lessons [36m304[0m 11.260 ms - -[0m
+[0mGET /api/lessons/6a84324167b996941c91533b [36m304[0m 12.966 ms - -[0m
+[0mGET /api/lessons/6a84324167b996941c91533b [36m304[0m 12.251 ms - -[0m
+[0mPOST /api/lessons/6a84324167b996941c91533b/exercises/6a84324167b996941c915346/complete [32m200[0m 109.504 ms - 1081[0m
+[0mPOST /api/auth/logout [32m200[0m 1.958 ms - 61[0m

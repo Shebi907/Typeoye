@@ -1,0 +1,46 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tbar" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#9B8FF7"/>
+      <stop offset="100%" stop-color="#4F46E5"/>
+    </linearGradient>
+    <linearGradient id="tstem" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#241E5C"/>
+    </linearGradient>
+    <linearGradient id="w1" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#241E5C"/>
+      <stop offset="50%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#8B7EF5"/>
+    </linearGradient>
+    <linearGradient id="w2" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="60%" stop-color="#7C6EF2"/>
+      <stop offset="100%" stop-color="#B3A8FA"/>
+    </linearGradient>
+    <linearGradient id="w3" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7C6EF2"/>
+      <stop offset="100%" stop-color="#D4CCFF"/>
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#241E5C" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <!-- T top bar styled as a keyboard row: rounded bar with 4 key notches -->
+    <rect x="38" y="30" width="90" height="34" rx="9" fill="url(#tbar)" stroke="#C7B8FF" stroke-width="2"/>
+    <rect x="47" y="39" width="15" height="16" rx="3" fill="none" stroke="#E8E4FF" stroke-width="2"/>
+    <rect x="66" y="39" width="15" height="16" rx="3" fill="none" stroke="#E8E4FF" stroke-width="2"/>
+    <rect x="85" y="39" width="15" height="16" rx="3" fill="none" stroke="#E8E4FF" stroke-width="2"/>
+    <rect x="104" y="39" width="15" height="16" rx="3" fill="none" stroke="#E8E4FF" stroke-width="2"/>
+
+    <!-- T stem, centered under the bar, tapering slightly -->
+    <path d="M74 64 L92 64 L90 148 Q83 152 76 148 Z" fill="url(#tstem)"/>
+
+    <!-- Wing, growing from stem's upper-right, 3 layered feather strokes -->
+    <path d="M96 72 C 122 70, 145 48, 155 14 C 140 42, 118 58, 96 72 Z" fill="url(#w1)"/>
+    <path d="M95 90 C 122 89, 143 70, 154 40 C 139 62, 116 78, 95 90 Z" fill="url(#w2)"/>
+    <path d="M94 108 C 116 107, 134 91, 143 66 C 130 84, 112 98, 94 108 Z" fill="url(#w3)"/>
+  </g>
+</svg>
