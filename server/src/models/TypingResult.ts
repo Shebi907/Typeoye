@@ -10,6 +10,8 @@ export interface ITypingResult extends Document {
   errorsCount: number;
   mode: string;
   createdAt: Date;
+  certificateParagraphId?: mongoose.Types.ObjectId;
+  certificateParagraphText?: string;
 }
 
 const typingResultSchema = new Schema<ITypingResult>(
@@ -22,6 +24,8 @@ const typingResultSchema = new Schema<ITypingResult>(
     attemptedWords: { type: Number, required: true },
     errorsCount: { type: Number, required: true },
     mode: { type: String, required: true },
+    certificateParagraphId: { type: Schema.Types.ObjectId, ref: 'CertificateParagraph' },
+    certificateParagraphText: { type: String, maxlength: 4000 },
   },
   { timestamps: true }
 );

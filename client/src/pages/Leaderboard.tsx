@@ -4,6 +4,7 @@ import { leaderboardService } from '../services/leaderboard.service';
 import type { LeaderboardEntry, LeaderboardPeriod, LeaderboardResponse } from '../types';
 import { Trophy, Flame, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Skeleton } from '../components/ui/Skeleton';
+import { Avatar } from '../components/ui/Avatar';
 import { cn } from '../utils/cn';
 
 const PERIODS: { key: LeaderboardPeriod; label: string }[] = [
@@ -38,15 +39,7 @@ function TopThreePodium({ entries }: { entries: LeaderboardEntry[] }) {
           return (
             <div key={entry.userId ?? entry.rank} className="flex flex-col items-center" style={{ flex: '0 0 auto' }}>
               {/* Avatar */}
-              <div
-                className={cn(
-                  'rounded-full flex items-center justify-center text-white font-bold mb-2',
-                  isFirst ? 'w-16 h-16 text-xl' : 'w-12 h-12 text-sm',
-                )}
-                style={{ background: isFirst ? 'linear-gradient(135deg, #4361EE, #8B5CF6)' : 'var(--color-accent)' }}
-              >
-                {entry.displayName[0].toUpperCase()}
-              </div>
+              <Avatar name={entry.displayName} size={isFirst ? 64 : 48} className="mb-2" />
               <span className="text-xs font-semibold text-center mb-1 truncate max-w-[80px]" style={{ color: 'var(--color-text-primary)' }}>
                 {entry.displayName}
               </span>
@@ -79,12 +72,7 @@ function YourRankCard({ me }: { me: Omit<LeaderboardEntry, 'isMe'> | null }) {
     <div className="card p-5">
       <h3 className="text-sm font-bold uppercase tracking-wider mb-3" style={{ color: 'var(--color-text-secondary)' }}>Your Rank</h3>
       <div className="flex items-center gap-4">
-        <div
-          className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
-          style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)' }}
-        >
-          {me.displayName[0].toUpperCase()}
-        </div>
+        <Avatar name={me.displayName} size={48} className="flex-shrink-0" />
         <div className="flex-1 min-w-0">
           <div className="font-bold text-lg" style={{ color: 'var(--color-text-primary)' }}>
             #{me.rank}
@@ -328,12 +316,7 @@ export default function Leaderboard() {
                             </td>
                             <td className="px-4 py-3">
                               <div className="flex items-center gap-2.5">
-                                <div
-                                  className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                                  style={{ background: entry.rank <= 3 ? 'linear-gradient(135deg, #4361EE, #8B5CF6)' : 'var(--color-accent)' }}
-                                >
-                                  {entry.displayName[0].toUpperCase()}
-                                </div>
+                                <Avatar name={entry.displayName} size={32} className="flex-shrink-0" />
                                 <div className="min-w-0">
                                   <div className="font-semibold text-sm truncate flex items-center gap-1.5" style={{ color: 'var(--color-text-primary)' }}>
                                     {entry.displayName}

@@ -18,6 +18,8 @@ export interface ITypingSession extends Document {
   exerciseId?: mongoose.Types.ObjectId;
   clientWpm: number;
   clientAccuracy: number;
+  certificateParagraphId?: mongoose.Types.ObjectId;
+  certificateParagraphText?: string;
 }
 
 const typedWordSchema = new Schema<ITypedWord>(
@@ -42,6 +44,8 @@ const typingSessionSchema = new Schema<ITypingSession>(
     exerciseId: { type: Schema.Types.ObjectId, ref: 'Exercise' },
     clientWpm: { type: Number, default: 0 },
     clientAccuracy: { type: Number, default: 0 },
+    certificateParagraphId: { type: Schema.Types.ObjectId, ref: 'CertificateParagraph' },
+    certificateParagraphText: { type: String, maxlength: 4000 },
   },
   { timestamps: true }
 );

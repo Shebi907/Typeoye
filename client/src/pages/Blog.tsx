@@ -1,18 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowRight, Keyboard, PenLine } from 'lucide-react';
+import { Keyboard, PenLine } from 'lucide-react';
 import { BlogCard } from '../components/blog/BlogCard';
 import { CategoryFilter } from '../components/blog/CategoryFilter';
 import { BlogSidebar } from '../components/blog/BlogSidebar';
 import { POSTS } from '../data/blog';
 import type { BlogCategory, BlogSort } from '../data/blog';
-import { cn } from '../utils/cn';
-
-const PAGES: Array<number | 'dots'> = [1, 2, 3, 'dots', 10];
 
 export default function Blog() {
   const [category, setCategory] = useState<'All Posts' | BlogCategory>('All Posts');
   const [sort, setSort] = useState<BlogSort>('latest');
-  const [page, setPage] = useState(1);
 
   useEffect(() => {
     document.title = 'Typeoye Blog — Typeoye';
@@ -26,8 +22,6 @@ export default function Blog() {
       return Number(b.popular) - Number(a.popular) || +new Date(b.publishedAt) - +new Date(a.publishedAt);
     });
   }, [category, sort]);
-
-  const nextPage = () => setPage((p) => (p >= 10 ? 10 : p + 1));
 
   return (
     <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6">
@@ -109,50 +103,6 @@ export default function Blog() {
               ))}
             </div>
           )}
-
-          {/* Pagination (visual groundwork for future posts) */}
-          <nav className="mt-10 flex items-center justify-center gap-2" aria-label="Blog pagination" data-testid="blog-pagination">
-            {PAGES.map((p, index) =>
-              p === 'dots' ? (
-                <span key={`dots-${index}`} className="px-1 text-sm font-bold" style={{ color: 'var(--color-text-muted)' }}>
-                  …
-                </span>
-              ) : (
-                <button
-                  key={p}
-                  type="button"
-                  onClick={() => setPage(p)}
-                  aria-current={page === p ? 'page' : undefined}
-                  className={cn(
-                    'h-10 min-w-10 rounded-xl px-3 text-sm font-bold transition-all duration-150',
-                    page === p
-                      ? 'text-white'
-                      : 'border text-[var(--color-text-secondary)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]'
-                  )}
-                  style={
-                    page === p
-                      ? {
-                          background: 'linear-gradient(135deg, #4361EE 0%, #7C3AED 100%)',
-                          boxShadow: '0 6px 16px -4px rgba(67, 97, 238, 0.5)',
-                          borderColor: 'transparent',
-                        }
-                      : { borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }
-                  }
-                >
-                  {p}
-                </button>
-              )
-            )}
-            <button
-              type="button"
-              onClick={nextPage}
-              aria-label="Next page"
-              className="flex h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-[var(--color-text-secondary)] transition-all duration-150 hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }}
-            >
-              <ArrowRight size={16} />
-            </button>
-          </nav>
         </div>
 
         {/* Sidebar */}

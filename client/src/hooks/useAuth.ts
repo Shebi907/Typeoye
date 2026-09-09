@@ -24,10 +24,16 @@ export function useAuth() {
   );
 
   const register = useCallback(
-    async (username: string, email: string, password: string) => {
+    async (username: string, email: string, password: string, securityQuestion?: string, securityAnswer?: string) => {
       store.setLoading(true);
       try {
-        const { user, profile, settings, token } = await authService.register(username, email, password);
+        const { user, profile, settings, token } = await authService.register(
+          username,
+          email,
+          password,
+          securityQuestion ?? '',
+          securityAnswer ?? '',
+        );
         store.setAuth(user, profile, settings, token);
       } finally {
         store.setLoading(false);

@@ -4,8 +4,6 @@ import { ArrowLeft, ArrowRight, LineChart, RefreshCw, Target } from 'lucide-reac
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { PRACTICE_TYPE_BY_SLUG } from '../data/practiceTypes';
 import { practiceService } from '../services/practice.service';
-import { useAuthStore } from '../store/authStore';
-import type { WeakKey } from '../types';
 
 const durationOptions = [
   { label: '1 Minute', value: 60 },
@@ -31,24 +29,16 @@ export default function PracticeSetup() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const meta = slug ? PRACTICE_TYPE_BY_SLUG[slug] : undefined;
-  const { isAuthenticated } = useAuthStore();
 
   const [time, setTime] = useState(300);
   const [difficulty, setDifficulty] = useState<'beginner' | 'intermediate' | 'advanced'>('beginner');
   const [customText, setCustomText] = useState('');
-  const [weakKeys, setWeakKeys] = useState<WeakKey[]>([]);
   const [message, setMessage] = useState('');
+  const [starting, setStarting] = useState(false);
 
   useEffect(() => {
     setMessage('');
   }, [time, difficulty, customText]);
-
-  useEffect(() => {
-    if (!isAuthenticated || meta?.key !== 'weak') return;
-    practiceService.getOverview()
-      .then(({ weakKeys: found }) => setWeakKeys(found))
-      .catch(() => undefined);
-  }, [isAuthenticated, meta?.key]);
 
   useEffect(() => {
     if (!meta || (isCustom && !customText.trim())) return;
@@ -70,21 +60,44 @@ export default function PracticeSetup() {
 
   const isCustom = meta.key === 'custom';
 
-  const start = () => {
+  const start = async () => {
+    if (starting) return;
     if (isCustom && !customText.trim()) {
       setMessage('Add some text to practice first.');
       return;
     }
     const trimmedText = customText.trim();
-    const exercise = practiceService.getPreloaded({
-      type: meta.key,
-      difficulty,
-      duration: time,
-      customText: isCustom ? trimmedText : undefined,
-    });
-    navigate(`/practice/${meta.slug}/session`, {
-      state: { duration: time, difficulty, customText: trimmedText, exercise },
-    });
+    // Prepare the content BEFORE navigating so the typing screen opens with the
+    // text already visible (never an empty typing area). Reuse the preload if
+    // it matches; otherwise wait for a fresh generation before transitioning.
+    setStarting(true);
+    try {
+      const preloaded = practiceService.getPreloaded({
+        type: meta.key,
+        difficulty,
+        duration: time,
+        customText: isCustom ? trimmedText : undefined,
+      });
+      const exercise = preloaded ?? await practiceService.generate({
+        type: meta.key,
+        difficulty,
+        duration: time,
+        wordCount: 200,
+        customText: isCustom ? trimmedText : undefined,
+        session: true,
+      });
+      // Advance the no-repeat rotation exactly here — once, on the user's Start
+      // click (an event handler, never double-invoked). The session screen no
+      // longer commits it for seeded runs, so the rotation can't advance twice.
+      practiceService.commitRotation(exercise);
+      navigate(`/practice/${meta.slug}/session`, {
+        state: { duration: time, difficulty, customText: trimmedText, exercise },
+      });
+    } catch {
+      setMessage('Unable to prepare practice content. Please try again.');
+    } finally {
+      setStarting(false);
+    }
   };
 
   return (
@@ -120,14 +133,6 @@ export default function PracticeSetup() {
                 <span className="dot-grid dot-grid-tl" aria-hidden="true" />
                 <h1 className="text-[32px] font-bold leading-tight mb-2">{meta.heroTitle}</h1>
                 <p className="text-[15px] text-secondary mb-[26px]">{meta.heroDesc}</p>
-
-                {meta.key === 'weak' && (
-                  <p className="text-xs mb-[22px]" style={{ color: 'var(--color-text-muted)' }}>
-                    {weakKeys.length
-                      ? `Auto-detected weak keys: ${weakKeys.map((k) => k.key.toUpperCase()).join(', ')} — these will be the focus.`
-                      : 'Your weak keys will be auto-detected from your recent sessions.'}
-                  </p>
-                )}
 
                 <label className="block text-left text-sm font-bold mb-[22px]">
                   Duration
@@ -179,10 +184,11 @@ export default function PracticeSetup() {
                   type="button"
                   data-testid="start-practice"
                   onClick={start}
+                  disabled={starting}
                   className="tt-start-btn btn w-full justify-center px-6 py-[15px] rounded-full"
-                  style={{ fontSize: 15, fontWeight: 700, color: '#fff' }}
+                  style={{ fontSize: 15, fontWeight: 700, color: '#fff', opacity: starting ? 0.75 : 1 }}
                 >
-                  Start Practice <ArrowRight size={19} />
+                  {starting ? 'Preparing practice…' : 'Start Practice'} {!starting && <ArrowRight size={19} />}
                 </button>
               </div>
             </div>

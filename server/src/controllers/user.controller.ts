@@ -6,9 +6,8 @@ import path from 'path';
 import User from '../models/User';
 import Profile from '../models/Profile';
 import Settings from '../models/Settings';
-import UserProgress from '../models/UserProgress';
 import { getUserAchievements } from '../services/achievement.service';
-import { getTestBestWpm } from '../services/session.service';
+import { getProfileStats } from '../services/session.service';
 import { syncProfileLevel } from '../services/gamification.service';
 import { AVATARS_DIR } from '../config/uploads';
 import { sendSuccess, sendError } from '../utils/response';
@@ -28,6 +27,23 @@ export const updateSettingsSchema = z.object({
 export const changePasswordSchema = z.object({
   currentPassword: z.string().min(1, 'Current password is required'),
   newPassword: z.string().min(8, 'New password must be at least 8 characters'),
+});
+
+export const setPasswordSchema = z.object({
+  newPassword: z.string().min(8, 'New password must be at least 8 characters'),
+});
+
+const SECURITY_QUESTIONS = [
+  'What is your favorite color?',
+  'What is your favorite food?',
+  'What was your childhood nickname?',
+  "What was your first school's name?",
+  'What is your favorite hobby?',
+] as const;
+
+export const setSecurityQuestionSchema = z.object({
+  question: z.enum(SECURITY_QUESTIONS, { errorMap: () => ({ message: 'Please select a valid security question' }) }),
+  answer: z.string().min(1, 'Security answer is required').max(100),
 });
 
 const AVATAR_PATTERN = /^data:image\/(png|jpe?g|webp|gif);base64,([A-Za-z0-9+/=]+)$/;
@@ -53,22 +69,47 @@ function matchesImageSignature(ext: string, buffer: Buffer): boolean {
   }
 }
 
+/**
+ * Shared profile payload used by both the public per-account profile endpoint
+ * (viewing another user) and the authenticated own-profile endpoint. Stats are
+ * always derived server-side for the given userId — never from a client-supplied
+ * stat value.
+ */
+async function buildProfilePayload(userId: Parameters<typeof getProfileStats>[0]) {
+  const [synced, profileProgress] = await Promise.all([
+    syncProfileLevel(userId),
+    getProfileStats(userId),
+  ]);
+  if (!synced) return null;
+  return { profile: synced, progress: profileProgress };
+}
+
 export async function getProfile(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
-    const synced = await syncProfileLevel(id);
-    if (!synced) {
+    const payload = await buildProfilePayload(req.params.id);
+    if (!payload) {
       sendError(res, 'Profile not found', 404);
       return;
     }
-    const [progress, bestWpm] = await Promise.all([
-      UserProgress.findOne({ userId: id }),
-      getTestBestWpm(id),
-    ]);
-    const profileProgress = progress ? { ...progress.toObject(), bestWpm } : null;
-    sendSuccess(res, { profile: synced, progress: profileProgress });
+    sendSuccess(res, payload);
   } catch (err) {
     console.error('getProfile error:', err);
+    sendError(res, 'Failed to fetch profile', 500);
+  }
+}
+
+/** Authenticated own-profile: stats always belong to the JWT user, never to a
+ *  userId taken from the URL/body/query. */
+export async function getMyProfile(req: Request, res: Response): Promise<void> {
+  try {
+    const payload = await buildProfilePayload(req.user!._id);
+    if (!payload) {
+      sendError(res, 'Profile not found', 404);
+      return;
+    }
+    sendSuccess(res, payload);
+  } catch (err) {
+    console.error('getMyProfile error:', err);
     sendError(res, 'Failed to fetch profile', 500);
   }
 }
@@ -215,5 +256,77 @@ export async function changePassword(req: Request, res: Response): Promise<void>
   } catch (err) {
     console.error('changePassword error:', err);
     sendError(res, 'Failed to update password', 500);
+  }
+}
+
+/** First-time password for a Google-only account. Flips the provider to
+ *  'local' so the user can then sign in with email + password too. */
+export async function setPassword(req: Request, res: Response): Promise<void> {
+  try {
+    const { newPassword } = req.body as z.infer<typeof setPasswordSchema>;
+
+    const user = await User.findById(req.user!._id);
+    if (!user) {
+      sendError(res, 'User not found', 404);
+      return;
+    }
+    if (user.authProvider !== 'google') {
+      sendError(res, 'This account already has a password', 400);
+      return;
+    }
+
+    user.passwordHash = await bcrypt.hash(newPassword, 12);
+    user.authProvider = 'both';
+    await user.save();
+
+    sendSuccess(res, {
+      message: 'Password set successfully. You can now sign in with your email address too.',
+      user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        authProvider: user.authProvider,
+        emailVerified: user.emailVerified,
+        createdAt: user.createdAt,
+      },
+    });
+  } catch (err) {
+    console.error('setPassword error:', err);
+    sendError(res, 'Failed to set password', 500);
+  }
+}
+
+/** Returns whether the user has a security question configured (never the answer). */
+export async function getSecurityQuestionStatus(req: Request, res: Response): Promise<void> {
+  try {
+    const user = await User.findById(req.user!._id);
+    const configured = !!(user && user.securityQuestion && user.securityAnswerHash);
+    sendSuccess(res, { configured });
+  } catch (err) {
+    console.error('getSecurityQuestionStatus error:', err);
+    sendError(res, 'Failed to load security question status', 500);
+  }
+}
+
+/** Set or update the user's security question (answer stored only as a bcrypt hash). */
+export async function setSecurityQuestion(req: Request, res: Response): Promise<void> {
+  try {
+    const { question, answer } = req.body as z.infer<typeof setSecurityQuestionSchema>;
+    const user = await User.findById(req.user!._id);
+    if (!user) {
+      sendError(res, 'User not found', 404);
+      return;
+    }
+
+    const securityAnswerHash = await bcrypt.hash(answer.toLowerCase().trim(), 12);
+    user.securityQuestion = question;
+    user.securityAnswerHash = securityAnswerHash;
+    await user.save();
+
+    sendSuccess(res, { message: 'Security question saved' });
+  } catch (err) {
+    console.error('setSecurityQuestion error:', err);
+    sendError(res, 'Failed to save security question', 500);
   }
 }

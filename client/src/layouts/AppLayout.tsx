@@ -1,6 +1,5 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuthStore } from '../store/authStore';
+import { Outlet } from 'react-router-dom';
 import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
 import { AchievementToast } from '../components/gamification/AchievementToast';
@@ -8,18 +7,13 @@ import { LevelUpToast } from '../components/gamification/LevelUpToast';
 import { useTypingStore } from '../store/typingStore';
 
 interface AppLayoutProps {
-  // When true, unauthenticated visitors are sent straight to Sign In and
-  // returned to the page they wanted after a successful login.
-  requireAuth?: boolean;
   // Optional inline content — when provided it replaces the routed <Outlet />,
   // letting standalone routes (e.g. the personalized home at "/") reuse the
   // navbar/footer shell without a nested route definition.
   children?: React.ReactNode;
 }
 
-export function AppLayout({ requireAuth = false, children }: AppLayoutProps) {
-  const location = useLocation();
-  const { isAuthenticated } = useAuthStore();
+export function AppLayout({ children }: AppLayoutProps) {
   const { newAchievements, clearResult } = useTypingStore();
   const [showToast, setShowToast] = useState(false);
 
@@ -29,30 +23,32 @@ export function AppLayout({ requireAuth = false, children }: AppLayoutProps) {
     }
   }, [newAchievements]);
 
-  // Auth state is settled synchronously from the persisted token (see
-  // authStore); <AuthProvider /> refines the profile in the background without
-  // ever blocking route rendering. Guests are redirected instantly and no
-  // loader is ever shown in between.
-  if (requireAuth && !isAuthenticated) {
-    // Send guests straight to Sign In; AuthLayout sends them back here after
-    // a successful login via the redirect parameter.
-    const returnTo = encodeURIComponent(location.pathname + location.search);
-    return <Navigate to={`/login?redirect=${returnTo}`} replace />;
-  }
-
   /* Site-wide page shell: the whole app (navbar + content) sits inside a
      rounded sheet with a small margin from the browser edges. Overflow stays
      visible so navbar popovers (profile menu) are never clipped; each element
-     clips its own decorations instead. */
+     clips its own decorations instead.
+
+     This shell mounts ONCE for the entire app (see App.tsx — there is a single
+     AppLayout instance wrapping every route). React Router therefore never
+     unmounts the navbar/sheet/footer while navigating between pages; only the
+     <Outlet /> content below is swapped. That is what makes navigation feel
+     instant with no full-screen white flash.
+
+     FOOTER PINNING: the outer wrapper is a full-viewport flex column (min-h
+     screen, bulletproof 100vh). The sheet is a flex-1 child of it, so it is
+     ALWAYS at least viewport-tall and stretches to fill — even if a browser
+     rejects the modern dvh unit used by .app-sheet's min-height. Inside the
+     sheet, the content column (flex-1) expands between the Navbar and the
+     Footer (mt-auto), so a short loading frame can never pull the footer up
+     into view; it is pinned to the bottom from the very first paint. */
   return (
-    <div className="min-h-screen px-2 pb-2 sm:px-3 sm:pb-3" style={{ backgroundColor: 'var(--color-canvas)' }}>
+    <div className="flex min-h-screen flex-col px-2 pb-2 sm:px-3 sm:pb-3" style={{ backgroundColor: 'var(--color-canvas)' }}>
       <div
-        className="rounded-[24px] border shadow-sm flex flex-col"
+        className="app-sheet flex flex-1 flex-col rounded-[24px] border shadow-sm"
         style={{
           backgroundColor: 'var(--color-page)',
           borderColor: 'var(--color-border)',
           boxShadow: 'var(--shadow-card)',
-          minHeight: 'calc(100dvh - 24px)',
         }}
       >
         <Navbar />

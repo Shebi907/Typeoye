@@ -1,2 +1,2 @@
 // Single point of change for the support contact address.
-export const SUPPORT_EMAIL = 'shahzaibakbar874@gmail.com';
+export const SUPPORT_EMAIL = 'contact.typeoye@gmail.com';

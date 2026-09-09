@@ -18,7 +18,7 @@ const envSchema = z.object({
   EMAIL_USER: z.string().optional(),
   EMAIL_PASS: z.string().optional(),
   // Delivery address for contact-form submissions.
-  EMAIL_TO: z.string().default('shahzaibakbar874@gmail.com'),
+  EMAIL_TO: z.string().default('contact.typeoye@gmail.com'),
   RESEND_API_KEY: z.string().optional(),
   RESEND_FROM_EMAIL: z.string().default('onboarding@resend.dev'),
 });

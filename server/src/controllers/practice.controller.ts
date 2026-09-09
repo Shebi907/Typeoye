@@ -13,14 +13,9 @@ const TYPES = ['character', 'combination', 'word', 'sentence', 'paragraph', 'wea
 const DIFFICULTIES = ['beginner', 'intermediate', 'advanced'] as const;
 type Difficulty = (typeof DIFFICULTIES)[number];
 
-// ── Character set selection (deterministic per difficulty + rotation) ──────
-const characterSets = [
-  ['a', 's', 'd', 'f'], ['j', 'k', 'l', ';'], ['q', 'w', 'e', 'r'], ['t', 'y', 'u', 'i'],
-  ['z', 'x', 'c', 'v'], ['b', 'n', 'm'],
-];
+// ── Helpers ────────────────────────────────────────────────────────────────
 const letterKeys = (chars: string): string[] => [...new Set(chars.replace(/[^a-z]/gi, '').split(''))];
 
-// ── Helpers ────────────────────────────────────────────────────────────────
 export const generatePracticeSchema = z.object({
   type: z.enum(TYPES),
   difficulty: z.enum(DIFFICULTIES).default('beginner'),
@@ -88,9 +83,6 @@ export async function generatePractice(req: Request, res: Response): Promise<voi
     if (type === 'weak' && !focusKeys.length) {
       focusKeys = weakKeys.map((key) => key.key);
       if (!focusKeys.length) focusKeys = ['t', 'h'];
-    }
-    if (type === 'character' && !focusKeys.length) {
-      focusKeys = characterSets[hashSeed(`${difficulty}|${rotation}`) % characterSets.length];
     }
 
     if (type === 'custom') {

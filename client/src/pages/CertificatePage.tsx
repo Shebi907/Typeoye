@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Award, ArrowRight, Check } from 'lucide-react';
+import { Award, ArrowRight, Check, Loader2 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
+import { useAuthStore } from '../store/authStore';
+import { preloadCertificateParagraph } from '../services/certificate.service';
 
 const DURATIONS = [
   { seconds: 60, label: '1 min' },
@@ -26,25 +28,33 @@ const INCLUDED = [
  * Certificate landing page: collects the recipient name + duration, then
  * hands off to the existing timed test flow (?cert=1). The certificate PDF
  * itself is only generated after the test completes (from the Test page's
- * result modal) � never before.
+ * result modal) — never before.
  */
 export default function CertificatePage() {
   const navigate = useNavigate();
-  const [name, setName] = useState('');
+  const profile = useAuthStore((s) => s.profile);
+  const user = useAuthStore((s) => s.user);
+  const [name, setName] = useState(() => (profile?.displayName || user?.username || '').trim());
   const [duration, setDuration] = useState(60);
   const [touched, setTouched] = useState(false);
+  const [preparing, setPreparing] = useState(false);
 
   useEffect(() => {
-    document.title = 'Certificate � TypeOye';
+    document.title = 'Certificate — TypeOye';
   }, []);
 
-  const start = () => {
+  const start = async () => {
     const trimmed = name.trim();
-    if (!trimmed) {
-      setTouched(true);
+    if (!trimmed || preparing) {
+      if (!trimmed) setTouched(true);
       return;
     }
     sessionStorage.setItem('typeoye_cert_name', trimmed);
+    // Fetch the passage *before* the test screen mounts so the typing area is
+    // rendered already filled — the Certificate test never shows a blank flash.
+    setPreparing(true);
+    await preloadCertificateParagraph();
+    setPreparing(false);
     navigate(`/test?cert=1&duration=${duration}`);
   };
 
@@ -107,9 +117,11 @@ export default function CertificatePage() {
           <button
             data-testid="cert-page-start"
             onClick={start}
+            disabled={preparing}
             className="btn btn-primary w-full justify-center px-6 py-4 rounded-full text-lg"
           >
-            Start Certificate Test <ArrowRight size={20} />
+            {preparing ? <Loader2 size={20} className="animate-spin" /> : <ArrowRight size={20} />}
+            {preparing ? 'Preparing test…' : 'Start Certificate Test'}
           </button>
         </div>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Facebook, Instagram, Twitter, Youtube, ShieldCheck } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, ShieldCheck } from 'lucide-react';
 import { Logo } from './Logo';
 
 interface FooterLinkItem {
@@ -35,10 +35,9 @@ const COMPANY_LINKS: FooterLinkItem[] = [
 ];
 
 const SOCIAL_LINKS = [
-  { href: 'https://www.facebook.com', label: 'Facebook', icon: Facebook },
-  { href: 'https://x.com', label: 'Twitter / X', icon: Twitter },
-  { href: 'https://www.instagram.com', label: 'Instagram', icon: Instagram },
-  { href: 'https://www.youtube.com', label: 'YouTube', icon: Youtube },
+  { href: 'https://www.facebook.com/profile.php?id=61594240830114', label: 'Facebook', icon: Facebook },
+  { href: 'https://www.linkedin.com/company/typeoye/', label: 'LinkedIn', icon: Linkedin },
+  { href: 'https://www.instagram.com/typeoye.official/', label: 'Instagram', icon: Instagram },
 ];
 
 function FooterLink({ item }: { item: FooterLinkItem }) {

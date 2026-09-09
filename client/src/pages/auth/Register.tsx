@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Mail, Lock, User as UserIcon, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
+import { Mail, Lock, User as UserIcon, Eye, EyeOff, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { GoogleSignInButton, GoogleDivider } from '../../components/auth/GoogleSignInButton';
 import { useAuth } from '../../hooks/useAuth';
 import { getApiErrorMessage } from '../../services/api';
+
+const SECURITY_QUESTIONS = [
+  'What is your favorite color?',
+  'What is your favorite food?',
+  'What was your childhood nickname?',
+  "What was your first school's name?",
+  'What is your favorite hobby?',
+];
 
 export default function Register() {
   const location = useLocation();
@@ -15,13 +23,15 @@ export default function Register() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [securityQuestion, setSecurityQuestion] = useState(SECURITY_QUESTIONS[0]);
+  const [securityAnswer, setSecurityAnswer] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState('');
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     try {
-      await register(username, email, password);
+      await register(username, email, password, securityQuestion, securityAnswer);
     } catch (err: unknown) {
       setError(getApiErrorMessage(err, 'Registration failed'));
     }
@@ -83,6 +93,45 @@ export default function Register() {
           }
           required
           autoComplete="new-password"
+        />
+
+        <div>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--color-text-primary)' }}>
+            Security Question
+          </label>
+          <div
+            className="flex items-center gap-2 px-3 rounded-input"
+            style={{ border: '1px solid var(--color-border)', background: 'var(--color-card)' }}
+          >
+            <ShieldCheck size={16} style={{ color: 'var(--color-text-muted)' }} />
+            <select
+              value={securityQuestion}
+              onChange={(e) => setSecurityQuestion(e.target.value)}
+              required
+              className="w-full bg-transparent py-2.5 text-sm outline-none"
+              style={{ color: 'var(--color-text-primary)' }}
+            >
+              {SECURITY_QUESTIONS.map((q) => (
+                <option key={q} value={q}>
+                  {q}
+                </option>
+              ))}
+            </select>
+          </div>
+          <p className="text-xs mt-1.5" style={{ color: 'var(--color-text-muted)' }}>
+            Used to recover your account if you forget your password.
+          </p>
+        </div>
+
+        <Input
+          label="Security Answer"
+          type="text"
+          value={securityAnswer}
+          onChange={(e) => setSecurityAnswer(e.target.value)}
+          placeholder="Your answer"
+          prefixIcon={<ShieldCheck size={16} />}
+          autoComplete="off"
+          required
         />
 
         <Button type="submit" variant="primary" size="lg" loading={isLoading} className="w-full">

@@ -29,6 +29,7 @@ import {
   updateSettings,
   testEmail,
 } from '../controllers/admin.controller';
+import { adminCertificateParagraphs } from '../controllers/certificateParagraph.controller';
 import { authenticate, requireAdmin } from '../middleware/auth.middleware';
 import { validate } from '../middleware/validate.middleware';
 
@@ -102,6 +103,12 @@ const sentenceSchema = z.object({
   tags: z.array(z.string().trim().min(1).max(30)).max(10).optional(),
 });
 
+const certificateParagraphSchema = z.object({
+  content: z.string().trim().min(10).max(5000),
+  difficulty: z.enum(['easy', 'medium', 'hard']),
+  isActive: z.boolean().optional(),
+});
+
 const roleSchema = z.object({ role: z.enum(['user', 'admin']) });
 const reorderSchema = z.object({ orderedIds: z.array(z.string().min(1)).min(1) });
 const settingsSchema = z.object({
@@ -158,6 +165,12 @@ router.get('/sentences', adminSentences.list);
 router.post('/sentences', validate(sentenceSchema), adminSentences.create);
 router.patch('/sentences/:id', validate(sentenceSchema.partial()), adminSentences.update);
 router.delete('/sentences/:id', adminSentences.remove);
+
+// Certificate paragraph library (Certificate Test mode)
+router.get('/certificate-paragraphs', adminCertificateParagraphs.list);
+router.post('/certificate-paragraphs', validate(certificateParagraphSchema), adminCertificateParagraphs.create);
+router.patch('/certificate-paragraphs/:id', validate(certificateParagraphSchema.partial()), adminCertificateParagraphs.update);
+router.delete('/certificate-paragraphs/:id', adminCertificateParagraphs.remove);
 
 // ── Platform Settings ──────────────────────────────────────────────────────────
 router.get('/settings', getSettings);

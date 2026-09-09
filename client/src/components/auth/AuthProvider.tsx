@@ -55,6 +55,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     void rehydrate();
   }, [token, setAuth, logout]);
 
+  // ── Global 401 watchdog ────────────────────────────────────────────────
+  // The axios interceptor cannot import this store (would create a circular
+  // dependency with the api services), so it broadcasts a window event when a
+  // stale/expired session token is rejected by any protected API call. Listening
+  // here — at the very root — lets us clear the session and let RequireAuth
+  // perform its plain client-side redirect. No window.location navigation, so
+  // the browser NEVER does a full document reload because of an auth failure.
+  useEffect(() => {
+    const onUnauthorized = () => logout();
+    window.addEventListener('typeoye:unauthorized', onUnauthorized);
+    return () => window.removeEventListener('typeoye:unauthorized', onUnauthorized);
+  }, [logout]);
+
   // ── Background prefetch ─────────────────────────────────────────────────
   // Warm the module-level caches used by the Learn, Progress, and Leaderboard
   // pages so they render immediately from cache when the user navigates there,

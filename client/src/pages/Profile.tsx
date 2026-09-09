@@ -1,14 +1,26 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
-  Activity, Award, CalendarClock, Camera, Eye, EyeOff, Gauge,
-  Mail, Target, Trash2, Trophy, User,
+  Activity, Award, CalendarClock, Camera, CheckCircle2, Eye, EyeOff, Gauge,
+  Mail, ShieldCheck, Target, Trash2, Trophy, User,
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { StatCard } from '../components/ui/StatCard';
+import { Avatar } from '../components/ui/Avatar';
+import { Skeleton } from '../components/ui/Skeleton';
+import { GoogleSignature } from '../components/auth/GoogleSignInButton';
 import { useAuthStore } from '../store/authStore';
 import { userService } from '../services/user.service';
-import type { Profile, UserProgress } from '../types';
+import { authService } from '../services/auth.service';
+import type { Profile, ProfileProgress } from '../types';
+
+const SECURITY_QUESTIONS = [
+  'What is your favorite color?',
+  'What is your favorite food?',
+  'What was your childhood nickname?',
+  "What was your first school's name?",
+  'What is your favorite hobby?',
+];
 
 const AVATAR_MAX_SIZE = 256;
 
@@ -50,10 +62,10 @@ function formatMemberSince(iso?: string): string {
 
 export default function ProfilePage() {
   const { id = '' } = useParams();
-  const { user, profile: myProfile, setProfile } = useAuthStore();
+  const { user, profile: myProfile, setProfile, setUser } = useAuthStore();
   const isOwner = !!user && id === user._id;
 
-  const [data, setData] = useState<{ profile: Profile; progress: UserProgress } | null>(null);
+  const [data, setData] = useState<{ profile: Profile; progress: ProfileProgress | null } | null>(null);
   const [error, setError] = useState('');
   const [photoMsg, setPhotoMsg] = useState<{ type: 'ok' | 'err'; text: string } | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -63,19 +75,62 @@ export default function ProfilePage() {
   const [showPw, setShowPw] = useState<{ current: boolean; next: boolean; confirm: boolean }>({
     current: false, next: false, confirm: false,
   });
+  const [spFields, setSpFields] = useState({ newPassword: '', confirmPassword: '' });
+  const [spMsg, setSpMsg] = useState<{ type: 'ok' | 'err'; text: string } | null>(null);
+  const [spBusy, setSpBusy] = useState(false);
+  const [showSp, setShowSp] = useState<{ next: boolean; confirm: boolean }>({ next: false, confirm: false });
+  const [secConfigured, setSecConfigured] = useState<boolean | null>(null);
+  const [secEditing, setSecEditing] = useState(false);
+  const [secQuestion, setSecQuestion] = useState(SECURITY_QUESTIONS[0]);
+  const [secAnswer, setSecAnswer] = useState('');
+  const [secMsg, setSecMsg] = useState<{ type: 'ok' | 'err'; text: string } | null>(null);
+  const [secBusy, setSecBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const load = () =>
-    userService.getProfile(id)
-      .then(setData)
-      .catch(() => setError('Profile unavailable.'));
+    (isOwner ? userService.getMyProfile() : userService.getProfile(id))
+      .then((result) => setData(result))
+      .catch(() => {
+        // For the signed-in user's own profile we already hold a live copy in
+        // the auth store — keep it on screen instead of an error/blank page.
+        if (isOwner && myProfile) setData({ profile: myProfile, progress: null });
+        else setError('Profile unavailable.');
+      });
 
   useEffect(() => {
-    setData(null);
     setError('');
     void load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  useEffect(() => {
+    if (!isOwner) return;
+    authService
+      .getSecurityQuestionStatus()
+      .then(({ configured }) => { setSecConfigured(configured); setSecEditing(false); })
+      .catch(() => setSecConfigured(false));
+  }, [isOwner]);
+
+  const submitSecurityQuestion = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!secAnswer.trim()) {
+      setSecMsg({ type: 'err', text: 'Please enter an answer.' });
+      return;
+    }
+    setSecBusy(true);
+    setSecMsg(null);
+    try {
+      await authService.setSecurityQuestion(secQuestion, secAnswer.trim());
+      setSecAnswer('');
+      setSecConfigured(true);
+      setSecEditing(false);
+      setSecMsg({ type: 'ok', text: 'Security question saved.' });
+    } catch {
+      setSecMsg({ type: 'err', text: 'Could not save the security question. Try again.' });
+    } finally {
+      setSecBusy(false);
+    }
+  };
 
   const onPickPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -132,13 +187,47 @@ export default function ProfilePage() {
     }
   };
 
-  if (error) return <PageWrapper title="Profile"><div className="card p-6 max-w-2xl">{error}</div></PageWrapper>;
-  if (!data) return <PageWrapper title="Profile"><div className="card p-6 max-w-2xl animate-pulse">Loading profile…</div></PageWrapper>;
+  const submitSetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (spFields.newPassword.length < 8) { setSpMsg({ type: 'err', text: 'Password must be at least 8 characters.' }); return; }
+    if (spFields.newPassword !== spFields.confirmPassword) { setSpMsg({ type: 'err', text: 'Passwords do not match.' }); return; }
+    setSpBusy(true);
+    setSpMsg(null);
+    try {
+      const { user: updated } = await userService.setPassword(spFields.newPassword);
+      setUser(updated);
+      setSpFields({ newPassword: '', confirmPassword: '' });
+      setPwMsg({ type: 'ok', text: 'Password set — you can now sign in with your email address too.' });
+    } catch (err: any) {
+      setSpMsg({ type: 'err', text: err?.response?.data?.error ?? 'Could not set password.' });
+    } finally {
+      setSpBusy(false);
+    }
+  };
 
-  const { profile, progress } = data;
+  // Reuse the authenticated user's profile already in the auth store when this
+  // is their own page, so the layout renders instantly while the server copy
+  // (with fresh progress stats) loads in — no blank frame, no full-page flash.
+  const cachedOwn = isOwner && myProfile ? { profile: myProfile, progress: null } : null;
+  // `data` is only shown for the id it was fetched for — stale data from a
+  // previously viewed profile never flashes on screen during navigation.
+  const fresh = data && data.profile.userId === id ? data : null;
+  const view = fresh ?? cachedOwn;
+
+  if (error) return <PageWrapper title="Profile"><div className="card p-6 max-w-2xl">{error}</div></PageWrapper>;
+  if (!view) return (
+    <PageWrapper title="" description="Typing profile and progress." noHeader className="py-8 px-4 sm:px-6">
+      <ProfileSkeleton />
+    </PageWrapper>
+  );
+
+  const { profile, progress } = view;
 
   const togglePw = (field: 'current' | 'next' | 'confirm') =>
     setShowPw((s) => ({ ...s, [field]: !s[field] }));
+
+  const toggleSp = (field: 'next' | 'confirm') =>
+    setShowSp((s) => ({ ...s, [field]: !s[field] }));
 
   const pwInputStyle: React.CSSProperties = {
     backgroundColor: 'rgba(127, 127, 127, 0.06)',
@@ -162,23 +251,13 @@ export default function ProfilePage() {
             {/* Left — avatar + identity */}
             <div className="flex items-center gap-4 min-w-0">
               <div className="relative shrink-0">
-                <div
-                  className={`rounded-full grid place-items-center font-bold text-white overflow-hidden ${profile.avatarUrl ? '' : 'border border-white/40'}`}
-                  style={{
-                    width: 64,
-                    height: 64,
-                    fontSize: 26,
-                    backgroundColor: undefined,
-                    background: profile.avatarUrl ? undefined : 'linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.12))',
-                  }}
+                <Avatar
+                  src={profile.avatarUrl}
+                  name={profile.displayName}
+                  size={64}
+                  className={profile.avatarUrl ? '' : 'border border-white/40'}
                   data-testid="profile-avatar"
-                >
-                  {profile.avatarUrl ? (
-                    <img src={profile.avatarUrl} alt={profile.displayName} className="w-full h-full object-cover" />
-                  ) : (
-                    (profile.displayName || 'U')[0].toUpperCase()
-                  )}
-                </div>
+                />
                 {isOwner && (
                   <button
                     onClick={() => fileRef.current?.click()}
@@ -195,7 +274,7 @@ export default function ProfilePage() {
                 <p className="text-xl sm:text-2xl font-bold leading-tight truncate drop-shadow-sm">{profile.displayName}</p>
                 <p className="text-sm text-white/85 mt-1">
                   <span className="inline-flex items-center gap-1.5">
-                    <Award size={13} /> Level {profile.level} · {profile.levelTitle} · {profile.totalXP} XP earned
+                    <Award size={13} /> Level {progress?.learnLevel ?? '—'} · {progress ? `${progress.completedLessons} of ${progress.totalLessons} lessons` : '—'} · {profile.totalXP} XP earned
                   </span>
                 </p>
               </div>
@@ -219,9 +298,23 @@ export default function ProfilePage() {
 
         {/* ── Performance stats ── */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4" data-testid="profile-stats">
-          <StatCard label="Total Sessions" value={progress?.totalSessions ?? 0} icon={Activity} tone="indigo" />
-          <StatCard label="Best WPM" value={progress?.bestWpm ?? '—'} icon={Gauge} tone="amber" />
-          <StatCard label="Accuracy" value={progress ? `${progress.avgAccuracy}%` : '—'} icon={Target} tone="green" />
+          {progress ? (
+            <>
+              <StatCard label="Total Sessions" value={progress.totalSessions} icon={Activity} tone="indigo" />
+              <StatCard label="Best WPM" value={progress.bestWpm ?? 0} icon={Gauge} tone="amber" />
+              <StatCard label="Accuracy" value={`${progress.avgAccuracy}%`} icon={Target} tone="green" />
+            </>
+          ) : (
+            <>
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="card p-5 space-y-3">
+                  <Skeleton width="26px" height="26px" />
+                  <Skeleton width="55%" height="0.7rem" />
+                  <Skeleton width="40%" height="1.5rem" />
+                </div>
+              ))}
+            </>
+          )}
         </div>
 
         {/* Photo controls + bio (owner only for photo) */}
@@ -246,8 +339,9 @@ export default function ProfilePage() {
 
         {/* ── Account section (two-column) ── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-          {/* Left — account information */}
-          <div className="card p-6" data-testid="account-info-card">
+          {/* Left — account information + security question */}
+          <div className="flex flex-col gap-6">
+            <div className="card p-6" data-testid="account-info-card">
             <h2 className="text-[15px] font-bold text-[var(--color-text-primary)]">Account Information</h2>
             <p className="text-sm mt-0.5 mb-5" style={{ color: 'var(--color-text-secondary)' }}>
               Manage your profile and account details
@@ -261,62 +355,282 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Right — change password */}
-          {isOwner && (
-            <div className="card p-6" data-testid="change-password-card">
-              <h2 className="text-[15px] font-bold text-[var(--color-text-primary)]">Change Password</h2>
+          {/* Security question — below account information */}
+          {(user?.authProvider === 'google' || user?.authProvider === 'both') && !secConfigured && (
+            <div className="card p-6" data-testid="security-question-card">
+              <h2 className="text-[15px] font-bold text-[var(--color-text-primary)]">Security Question</h2>
               <p className="text-sm mt-0.5 mb-5" style={{ color: 'var(--color-text-secondary)' }}>
-                Keep your account secure
+                Used for account recovery if you forget your password
               </p>
-              <form onSubmit={submitPassword} className="space-y-4">
-                <PasswordField
-                  label="Current Password"
-                  value={pwFields.currentPassword}
-                  onChange={(v) => setPwFields((f) => ({ ...f, currentPassword: v }))}
-                  testid="pw-current"
-                  autoComplete="current-password"
-                  inputStyle={pwInputStyle}
-                  visible={showPw.current}
-                  onToggle={() => togglePw('current')}
-                />
-                <PasswordField
-                  label="New Password"
-                  value={pwFields.newPassword}
-                  onChange={(v) => setPwFields((f) => ({ ...f, newPassword: v }))}
-                  testid="pw-new"
-                  autoComplete="new-password"
-                  inputStyle={pwInputStyle}
-                  visible={showPw.next}
-                  onToggle={() => togglePw('next')}
-                />
-                <PasswordField
-                  label="Confirm New Password"
-                  value={pwFields.confirmPassword}
-                  onChange={(v) => setPwFields((f) => ({ ...f, confirmPassword: v }))}
-                  testid="pw-confirm"
-                  autoComplete="new-password"
-                  inputStyle={pwInputStyle}
-                  visible={showPw.confirm}
-                  onToggle={() => togglePw('confirm')}
-                />
-                {pwMsg && (
-                  <p className={`text-sm ${pwMsg.type === 'ok' ? 'text-[var(--color-accent-text)]' : 'text-[var(--color-error)]'}`}>{pwMsg.text}</p>
-                )}
-                <button
-                  type="submit"
-                  disabled={pwBusy}
-                  data-testid="pw-submit"
-                  className="btn w-full justify-center px-5 py-2.5 rounded-full"
-                  style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff', boxShadow: '0 6px 18px rgba(67, 97, 238, 0.35)' }}
-                >
-                  {pwBusy ? 'Saving…' : 'Update password'}
-                </button>
-              </form>
+              {!secConfigured || secEditing ? (
+                <form onSubmit={submitSecurityQuestion} className="space-y-4">
+                  <label className="block text-sm font-medium" style={{ color: 'var(--color-text-primary)' }}>
+                    Security Question
+                    <span className="relative flex items-center gap-2 mt-1 rounded-lg border px-3" style={{ borderColor: 'var(--color-border)', background: 'rgba(127,127,127,0.06)' }}>
+                      <ShieldCheck size={16} style={{ color: 'var(--color-text-muted)' }} />
+                      <select
+                        value={secQuestion}
+                        onChange={(e) => setSecQuestion(e.target.value)}
+                        className="w-full bg-transparent py-2 pr-2 text-sm outline-none"
+                        style={{ color: 'var(--color-text-primary)' }}
+                      >
+                        {SECURITY_QUESTIONS.map((q) => (
+                          <option key={q} value={q}>{q}</option>
+                        ))}
+                      </select>
+                    </span>
+                  </label>
+                  <label className="block text-sm font-medium" style={{ color: 'var(--color-text-primary)' }}>
+                    Answer
+                    <input
+                      type="text"
+                      value={secAnswer}
+                      onChange={(e) => setSecAnswer(e.target.value)}
+                      autoComplete="off"
+                      data-testid="sec-answer"
+                      className="block w-full mt-1 p-2 border rounded-lg"
+                      style={pwInputStyle}
+                      required
+                    />
+                  </label>
+                  {secMsg && (
+                    <p className={`text-sm ${secMsg.type === 'ok' ? 'text-[var(--color-accent-text)]' : 'text-[var(--color-error)]'}`}>{secMsg.text}</p>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={secBusy}
+                    data-testid="sec-submit"
+                    className="btn w-full justify-center px-5 py-2.5 rounded-full"
+                    style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff', boxShadow: '0 6px 18px rgba(67, 97, 238, 0.35)' }}
+                  >
+                    {secBusy ? 'Saving…' : secConfigured ? 'Update Security Question' : 'Set Security Question'}
+                  </button>
+                </form>
+              ) : (
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                  <div className="flex items-center gap-2 text-sm font-medium" style={{ color: 'var(--color-text-primary)' }}>
+                    <CheckCircle2 size={18} style={{ color: '#16a34a' }} />
+                    Configured
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSecEditing(true)}
+                    data-testid="sec-change"
+                    className="btn btn-ghost btn-sm px-3 py-1.5"
+                  >
+                    Change Security Question
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+          </div>
+
+          {/* Right — sign-in method + password */}
+          {isOwner && (
+            <div className="flex flex-col gap-6">
+              {user?.authProvider === 'google' ? (
+                <>
+                  <div className="card p-6" data-testid="signin-method-card">
+                    <h2 className="text-[15px] font-bold text-[var(--color-text-primary)]">Sign-in Method</h2>
+                    <p className="text-sm mt-0.5 mb-5" style={{ color: 'var(--color-text-secondary)' }}>
+                      How you access your Typeoye account
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl grid place-items-center shrink-0" style={{ backgroundColor: 'rgba(67, 97, 238, 0.10)' }}>
+                        <GoogleSignature />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Signed in with Google</p>
+                        <p className="text-sm font-semibold truncate" style={{ color: 'var(--color-text-primary)' }}>{user?.email ?? '—'}</p>
+                      </div>
+                    </div>
+                    <p className="text-sm mt-4" style={{ color: 'var(--color-text-secondary)' }}>
+                      This account uses "Continue with Google" to sign in and has no password to change.
+                    </p>
+                  </div>
+
+                  <div className="card p-6" data-testid="set-password-card">
+                    <h2 className="text-[15px] font-bold text-[var(--color-text-primary)]">Set Password</h2>
+                    <p className="text-sm mt-0.5 mb-5" style={{ color: 'var(--color-text-secondary)' }}>
+                      Add a password to also sign in with your email address
+                    </p>
+                    <form onSubmit={submitSetPassword} className="space-y-4">
+                      <PasswordField
+                        label="New Password"
+                        value={spFields.newPassword}
+                        onChange={(v) => setSpFields((f) => ({ ...f, newPassword: v }))}
+                        testid="sp-new"
+                        autoComplete="new-password"
+                        inputStyle={pwInputStyle}
+                        visible={showSp.next}
+                        onToggle={() => toggleSp('next')}
+                      />
+                      <PasswordField
+                        label="Confirm New Password"
+                        value={spFields.confirmPassword}
+                        onChange={(v) => setSpFields((f) => ({ ...f, confirmPassword: v }))}
+                        testid="sp-confirm"
+                        autoComplete="new-password"
+                        inputStyle={pwInputStyle}
+                        visible={showSp.confirm}
+                        onToggle={() => toggleSp('confirm')}
+                      />
+                      {spMsg && (
+                        <p className={`text-sm ${spMsg.type === 'ok' ? 'text-[var(--color-accent-text)]' : 'text-[var(--color-error)]'}`}>{spMsg.text}</p>
+                      )}
+                      <button
+                        type="submit"
+                        disabled={spBusy}
+                        data-testid="sp-submit"
+                        className="btn w-full justify-center px-5 py-2.5 rounded-full"
+                        style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff', boxShadow: '0 6px 18px rgba(67, 97, 238, 0.35)' }}
+                      >
+                        {spBusy ? 'Saving…' : 'Set Password'}
+                      </button>
+                    </form>
+                  </div>
+                </>
+              ) : (
+                <div className="card p-6" data-testid="change-password-card">
+                  <h2 className="text-[15px] font-bold text-[var(--color-text-primary)]">Change Password</h2>
+                  <p className="text-sm mt-0.5 mb-5" style={{ color: 'var(--color-text-secondary)' }}>
+                    Keep your account secure
+                  </p>
+                <form onSubmit={submitPassword} className="space-y-4">
+                  <PasswordField
+                    label="Current Password"
+                    value={pwFields.currentPassword}
+                    onChange={(v) => setPwFields((f) => ({ ...f, currentPassword: v }))}
+                    testid="pw-current"
+                    autoComplete="current-password"
+                    inputStyle={pwInputStyle}
+                    visible={showPw.current}
+                    onToggle={() => togglePw('current')}
+                  />
+                  <PasswordField
+                    label="New Password"
+                    value={pwFields.newPassword}
+                    onChange={(v) => setPwFields((f) => ({ ...f, newPassword: v }))}
+                    testid="pw-new"
+                    autoComplete="new-password"
+                    inputStyle={pwInputStyle}
+                    visible={showPw.next}
+                    onToggle={() => togglePw('next')}
+                  />
+                  <PasswordField
+                    label="Confirm New Password"
+                    value={pwFields.confirmPassword}
+                    onChange={(v) => setPwFields((f) => ({ ...f, confirmPassword: v }))}
+                    testid="pw-confirm"
+                    autoComplete="new-password"
+                    inputStyle={pwInputStyle}
+                    visible={showPw.confirm}
+                    onToggle={() => togglePw('confirm')}
+                  />
+                  {pwMsg && (
+                    <p className={`text-sm ${pwMsg.type === 'ok' ? 'text-[var(--color-accent-text)]' : 'text-[var(--color-error)]'}`}>{pwMsg.text}</p>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={pwBusy}
+                    data-testid="pw-submit"
+                    className="btn w-full justify-center px-5 py-2.5 rounded-full"
+                    style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff', boxShadow: '0 6px 18px rgba(67, 97, 238, 0.35)' }}
+                  >
+                    {pwBusy ? 'Saving…' : 'Update password'}
+                  </button>
+                </form>
+              </div>
+              )}
             </div>
           )}
         </div>
       </div>
     </PageWrapper>
+  );
+}
+
+/** Full-height skeleton that mirrors the loaded profile layout (banner, stats,
+ *  account cards). Because it reserves roughly the same vertical space the real
+ *  content will, the footer stays at exactly the same position while the data
+ *  loads in — it never pops into view or shifts during the fetch. */
+function ProfileSkeleton() {
+  return (
+    <div className="max-w-6xl mx-auto w-full space-y-6" aria-busy="true" data-testid="profile-loading">
+      {/* Banner */}
+      <div className="rounded-2xl px-6 py-6 sm:px-8 sm:py-7" style={{ backgroundColor: 'rgba(127, 127, 127, 0.08)' }}>
+        <div className="flex items-center gap-4">
+          <Skeleton width="64px" height="64px" rounded="full" className="shrink-0" />
+          <div className="flex-1 min-w-0 space-y-2.5">
+            <Skeleton width="35%" height="1.3rem" />
+            <Skeleton width="55%" height="0.8rem" />
+          </div>
+          <div className="hidden sm:flex items-center gap-3 shrink-0">
+            <Skeleton width="48px" height="48px" rounded="full" />
+            <div className="space-y-2">
+              <Skeleton width="95px" height="0.8rem" />
+              <Skeleton width="150px" height="0.7rem" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Performance stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="card p-5 space-y-3">
+            <Skeleton width="26px" height="26px" />
+            <Skeleton width="55%" height="0.7rem" />
+            <Skeleton width="40%" height="1.5rem" />
+          </div>
+        ))}
+      </div>
+
+      {/* Two-column account section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        <div className="card p-6 space-y-4">
+          <div className="space-y-1.5">
+            <Skeleton width="45%" height="1rem" />
+            <Skeleton width="60%" height="0.7rem" />
+          </div>
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="flex items-center gap-3">
+              <Skeleton width="36px" height="36px" rounded className="shrink-0" />
+              <div className="flex-1 min-w-0 space-y-1.5">
+                <Skeleton width="50%" height="0.65rem" />
+                <Skeleton width="70%" height="0.9rem" />
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-col gap-6">
+          <div className="card p-6">
+            <div className="space-y-1.5 mb-4">
+              <Skeleton width="45%" height="1rem" />
+              <Skeleton width="60%" height="0.7rem" />
+            </div>
+            <div className="space-y-3">
+              <Skeleton width="100%" height="2.7rem" />
+              <Skeleton width="100%" height="2.7rem" />
+              <Skeleton width="100%" height="2.7rem" />
+              <Skeleton width="100%" height="2.9rem" />
+            </div>
+          </div>
+          <div className="card p-6">
+            <div className="space-y-1.5 mb-4">
+              <Skeleton width="45%" height="1rem" />
+              <Skeleton width="60%" height="0.7rem" />
+            </div>
+            <div className="space-y-3">
+              <Skeleton width="100%" height="2.7rem" />
+              <Skeleton width="100%" height="2.7rem" />
+              <Skeleton width="100%" height="2.9rem" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

@@ -6,6 +6,8 @@ import type {
   AdminLessonInput,
   AdminStats,
   AdminUser,
+  CertificateParagraph,
+  CertificateParagraphDifficulty,
   ContentDifficulty,
   ContentItem,
   PlatformSettings,
@@ -85,6 +87,29 @@ export const updatePoolItem = (key: ContentPoolKey, id: string, data: Partial<Co
 
 export const deletePoolItem = (key: ContentPoolKey, id: string) =>
   unwrap<{ message: string }>(api.delete(`${poolPaths[key]}/${id}`));
+
+// ── Certificate paragraph library ─────────────────────────────────────────
+export type AdminCertificateParagraph = CertificateParagraph & { isActive: boolean };
+
+export interface CertificateParagraphInput {
+  content: string;
+  difficulty: CertificateParagraphDifficulty;
+  isActive?: boolean;
+}
+
+export const listCertificateParagraphs = (params: { search?: string; difficulty?: CertificateParagraphDifficulty } = {}) =>
+  unwrap<{ items: AdminCertificateParagraph[] }>(
+    api.get('/admin/certificate-paragraphs', { params })
+  );
+
+export const createCertificateParagraph = (data: CertificateParagraphInput) =>
+  unwrap<{ item: AdminCertificateParagraph }>(api.post('/admin/certificate-paragraphs', data));
+
+export const updateCertificateParagraph = (id: string, data: Partial<CertificateParagraphInput>) =>
+  unwrap<{ item: AdminCertificateParagraph }>(api.patch(`/admin/certificate-paragraphs/${id}`, data));
+
+export const deleteCertificateParagraph = (id: string) =>
+  unwrap<{ message: string }>(api.delete(`/admin/certificate-paragraphs/${id}`));
 
 // ── Platform settings ────────────────────────────────────────────────────
 export const getPlatformSettings = () =>

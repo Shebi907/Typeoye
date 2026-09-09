@@ -14,6 +14,7 @@ interface AuthState {
   isLoading: boolean;
 
   setAuth: (user: User, profile: Profile, settings: Settings, token: string) => void;
+  setUser: (user: User) => void;
   setProfile: (profile: Profile) => void;
   setSettings: (settings: Settings) => void;
   setLoading: (loading: boolean) => void;
@@ -51,6 +52,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     localStorage.setItem(TOKEN_KEY, token);
     set({ user, profile, settings, token, isAuthenticated: true, isLoading: false });
   },
+
+  setUser: (user) => set({ user }),
 
   setProfile: (profile) => set({ profile }),
 

@@ -38,22 +38,25 @@ export default function PracticeSession() {
   const difficulty = setup.difficulty ?? 'beginner';
   const customText = setup.customText ?? '';
 
-  const [exercise, setExercise] = useState<PracticeExercise | null>(null);
+  const [exercise, setExercise] = useState<PracticeExercise | null>(() => setup.exercise ?? null);
   const [lastResult, setLastResult] = useState<EngineResult | null>(null);
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'error' | 'guest'>('idle');
   const [loadError, setLoadError] = useState<string | null>(null);
   const [runId, setRunId] = useState(0);
   const appending = useRef(false);
-  const queueRef = useRef<string[]>([]);
-  const seenRef = useRef(new Set<string>());
-  const seedRef = useRef<PracticeExercise | null>(setup.exercise ?? null);
+  // First value wins: seeded from the setup payload for the initial run; the
+  // fetch handler replaces them on restart/direct-URL runs.
+  const queueRef = useRef<string[]>([...(setup.exercise?.queue ?? [])]);
+  const seenRef = useRef<Set<string>>(setup.exercise ? new Set([setup.exercise.content]) : new Set());
+  const hasSeedRef = useRef(!!setup.exercise);
+  const fetchRef = useRef<Promise<PracticeExercise> | null>(null);
+  const fetchRunRef = useRef<number>(-1);
 
   /* ── Practice generation on mount ─────────────────────────────────────── */
 
   useEffect(() => {
     if (!meta) return;
     let mounted = true;
-    setExercise(null);
     setLastResult(null);
     setSaveState('idle');
     setLoadError(null);
@@ -61,24 +64,31 @@ export default function PracticeSession() {
       setLoadError('Add some text to practice first.');
       return;
     }
-    const seed = seedRef.current;
-    if (seed) {
-      // Preloaded on the setup page — render instantly instead of re-fetching.
-      seedRef.current = null;
-      setExercise(seed);
-      queueRef.current = [...(seed.queue ?? [])];
-      seenRef.current = new Set([seed.content]);
-      practiceService.commitRotation(seed);
+
+    // The initial render already holds the prepared content, seeded from the
+    // setup page BEFORE navigation (see PracticeSetup.start). Doing nothing
+    // here keeps the typing screen a single stable render — StrictMode
+    // re-invoking this effect is a safe no-op for the seeded flow.
+    if (hasSeedRef.current && runId === 0) {
       return;
     }
-    practiceService.generate({
-      type: meta.key,
-      difficulty,
-      duration,
-      wordCount: 200,
-      customText: meta.key === 'custom' ? customText : undefined,
-      session: true,
-    })
+
+    // No seed (direct URL) or "Practice again": clear and fetch fresh content.
+    // The in-flight promise is shared across StrictMode's double invocation so
+    // a session never issues duplicate requests or double-advances rotation.
+    setExercise(null);
+    if (fetchRunRef.current !== runId) {
+      fetchRunRef.current = runId;
+      fetchRef.current = practiceService.generate({
+        type: meta.key,
+        difficulty,
+        duration,
+        wordCount: 200,
+        customText: meta.key === 'custom' ? customText : undefined,
+        session: true,
+      });
+    }
+    fetchRef.current!
       .then((generated) => {
         if (!mounted) return;
         setExercise(generated);
@@ -357,7 +367,7 @@ export default function PracticeSession() {
     );
   }
 
-  if (!exercise) {
+  if (!exercise || engine.wordStates.length === 0) {
     const keyBlock = { width: 'clamp(17px, 5.4vw, 34px)', height: 'clamp(17px, 5.4vw, 34px)' } as const;
     return (
       <PageWrapper fullWidth className="tt-page py-6 px-4 sm:px-6" title={undefined}>

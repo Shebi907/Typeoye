@@ -1,4 +1,4 @@
-import { Type, Keyboard, AlignLeft, MessageSquare, FileText, Target, Zap, PenLine } from 'lucide-react';
+import { Type, Keyboard, AlignLeft, MessageSquare, FileText, Zap, PenLine } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { PracticeType } from '../types';
 
@@ -19,7 +19,6 @@ export const PRACTICE_TYPES: PracticeTypeMeta[] = [
   { key: 'word', slug: 'words', label: 'Words', desc: 'Practice typing common words', heroTitle: 'Words Practice', heroDesc: 'Practice typing common words and improve your speed and accuracy.', icon: AlignLeft },
   { key: 'sentence', slug: 'sentences', label: 'Sentences', desc: 'Practice typing real sentences', heroTitle: 'Sentences Practice', heroDesc: 'Practice typing real sentences for natural rhythm and flow.', icon: MessageSquare },
   { key: 'paragraph', slug: 'paragraphs', label: 'Paragraphs', desc: 'Practice longer paragraphs', heroTitle: 'Paragraphs Practice', heroDesc: 'Practice typing longer paragraphs and build sustained speed.', icon: FileText },
-  { key: 'weak', slug: 'weak-keys', label: 'Weak Keys', desc: 'Improve your weak keys', heroTitle: 'Weak Keys Practice', heroDesc: 'Target your weak keys and turn errors into accuracy.', icon: Target, badge: 'Smart' },
   { key: 'quick', slug: 'quick', label: 'Quick Practice', desc: 'Personalized practice based on your recent performance', heroTitle: 'Quick Practice', heroDesc: 'A personalized practice session based on your recent performance.', icon: Zap, badge: 'Recommended' },
   { key: 'custom', slug: 'custom', label: 'Custom Text', desc: 'Practice with your own text', heroTitle: 'Custom Text Practice', heroDesc: 'Practice with your own text — paste anything you want to type faster.', icon: PenLine },
 ];

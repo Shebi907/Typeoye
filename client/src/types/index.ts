@@ -5,6 +5,7 @@ export interface User {
   username: string;
   email: string;
   role: 'user' | 'admin';
+  authProvider?: 'local' | 'google' | 'both';
   createdAt: string;
 }
 
@@ -141,6 +142,15 @@ export interface UserProgress {
   avgWpm: number;
   avgAccuracy: number;
   totalMinutesPracticed: number;
+}
+
+/** Live stats returned by GET /users/:id/profile (server-derived, never cached
+ *  aggregates). `learnLevel` is the current Learn level (first unlocked lesson
+ *  that is not yet completed), matching the level shown on the Learn page. */
+export interface ProfileProgress extends UserProgress {
+  learnLevel: number;
+  completedLessons: number;
+  totalLessons: number;
 }
 
 export interface Streak {
@@ -334,6 +344,14 @@ export interface TestParagraph {
   topic: string;
 }
 
+export type CertificateParagraphDifficulty = 'easy' | 'medium' | 'hard';
+
+export interface CertificateParagraph {
+  _id: string;
+  content: string;
+  difficulty: CertificateParagraphDifficulty;
+}
+
 export interface SessionSubmitPayload {
   mode: 'test' | 'practice' | 'lesson' | 'game';
   startTime: string;
@@ -346,4 +364,6 @@ export interface SessionSubmitPayload {
   practiceType?: string;
   practiceDifficulty?: number;
   focusKeys?: string[];
+  certificateParagraphId?: string;
+  certificateParagraphText?: string;
 }

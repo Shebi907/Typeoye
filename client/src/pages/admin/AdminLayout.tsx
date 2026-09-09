@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Users, BookOpen, Layers, Trophy, Settings, ShieldAlert } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, Layers, Trophy, Settings, ShieldAlert, FileText } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 
 const tabs = [
@@ -8,6 +8,7 @@ const tabs = [
   { to: '/admin/users', label: 'Users', icon: Users },
   { to: '/admin/lessons', label: 'Lessons', icon: BookOpen },
   { to: '/admin/content', label: 'Content', icon: Layers },
+  { to: '/admin/certificate-paragraphs', label: 'Cert Paragraphs', icon: FileText },
   { to: '/admin/achievements', label: 'Achievements', icon: Trophy },
   { to: '/admin/settings', label: 'Settings', icon: Settings },
 ];

@@ -75,6 +75,21 @@ body {
   min-height: 100dvh;
 }
 
+/* The app's rounded shell inside AppLayout. Its min-height pins the footer to
+   the bottom of the viewport even when a page still renders almost no content
+   (while data loads). 100vh is the universally-supported fallback; browsers
+   that understand the dynamic viewport unit get the more accurate 100dvh. The
+   flex-1 stretch on the shell provides a second, independent guarantee, so a
+   short loading frame can never let the footer ride up into the page. */
+.app-sheet {
+  min-height: calc(100vh - 24px);
+}
+@supports (height: 100dvh) {
+  .app-sheet {
+    min-height: calc(100dvh - 24px);
+  }
+}
+
 /* ── Scrollbar ──────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;

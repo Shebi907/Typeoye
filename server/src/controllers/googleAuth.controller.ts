@@ -189,6 +189,7 @@ export async function googleOAuthCallback(req: Request, res: Response): Promise<
         username,
         email: info.email.toLowerCase(),
         passwordHash,
+        authProvider: 'google',
         emailVerified: true,
       });
     }

@@ -2,10 +2,12 @@ import React from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AppLayout } from './layouts/AppLayout';
 import { AuthLayout } from './layouts/AuthLayout';
+import { RequireAuth } from './components/auth/RequireAuth';
 
 import Landing from './pages/Landing';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import ForgotPassword from './pages/auth/ForgotPassword';
 import VerifyEmail from './pages/auth/VerifyEmail';
 import OAuthCallback from './pages/OAuthCallback';
 import Privacy from './pages/Privacy';
@@ -40,6 +42,7 @@ import AdminLessons from './pages/admin/AdminLessons';
 import AdminContent from './pages/admin/AdminContent';
 import AdminAchievements from './pages/admin/AdminAchievements';
 import AdminSettings from './pages/admin/AdminSettings';
+import AdminCertificateParagraphs from './pages/admin/AdminCertificateParagraphs';
 
 /**
  * The Test page doubles as the certificate timed-test flow, distinguished only
@@ -74,15 +77,21 @@ export default function App() {
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
       </Route>
 
       {/* Google OAuth round-trip — standalone (no login layout, no app shell). */}
       <Route path="/oauth/callback" element={<OAuthCallback />} />
 
-      {/* Open pages — no sign-in required. Guests can use Test, Practice, Learn,
-          the Certificate flow, and see the Leaderboard; results are shown but
-          not saved for guests. */}
+      {/* Website shell — ONE persistent AppLayout for the entire app (navbar,
+          background sheet, footer). Sign-in-independent pages live directly in
+          it; account pages are nested behind the <RequireAuth /> guard.
+
+          Because there is a single shell instance, React Router NEVER unmounts
+          the navbar/sheet/footer when moving between pages (e.g. Test → My
+          Profile) — it only swaps the <Outlet /> content. That is what prevents
+          a full-screen white flash: no layout teardown + instant data. */}
       <Route element={<AppLayout />}>
         <Route index element={<Home />} />
         <Route path="/test" element={<TestRoute />} />
@@ -104,32 +113,35 @@ export default function App() {
         <Route path="/games" element={<Games />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
-      </Route>
 
-      {/* Account pages — sign-in required. Guests get a clear prompt. */}
-      <Route element={<AppLayout requireAuth />}>
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/progress" element={<ProgressPage />} />
-        <Route path="/progress/test" element={<ProgressPage />} />
-        <Route path="/progress/practice" element={<ProgressPage />} />
-        <Route path="/progress/learn" element={<ProgressPage />} />
-        <Route path="/progress/achievements" element={<AchievementsPage />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/certificates" element={<MyCertificates />} />
-        <Route path="/profile/:id" element={<ProfilePage />} />
+        {/* Account pages — sign-in required. The guard is nested INSIDE the
+            shared shell, so entering these routes (e.g. My Profile) swaps only
+            the page content and never remounts the layout. */}
+        <Route element={<RequireAuth />}>
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/progress" element={<ProgressPage />} />
+          <Route path="/progress/test" element={<ProgressPage />} />
+          <Route path="/progress/practice" element={<ProgressPage />} />
+          <Route path="/progress/learn" element={<ProgressPage />} />
+          <Route path="/progress/achievements" element={<AchievementsPage />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/certificates" element={<MyCertificates />} />
+          <Route path="/profile/:id" element={<ProfilePage />} />
 
-        {/* Admin Panel — route is guarded inside AdminLayout (admin role only). */}
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="users" element={<AdminUsers />} />
-          <Route path="lessons" element={<AdminLessons />} />
-          <Route path="content" element={<AdminContent />} />
-          <Route path="achievements" element={<AdminAchievements />} />
-          <Route path="settings" element={<AdminSettings />} />
+          {/* Admin Panel — route is guarded inside AdminLayout (admin role only). */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="lessons" element={<AdminLessons />} />
+            <Route path="content" element={<AdminContent />} />
+            <Route path="achievements" element={<AdminAchievements />} />
+            <Route path="certificate-paragraphs" element={<AdminCertificateParagraphs />} />
+            <Route path="settings" element={<AdminSettings />} />
+          </Route>
+
+          {/* Redirect unknown protected paths to My Progress */}
+          <Route path="*" element={<Navigate to="/progress" replace />} />
         </Route>
-
-        {/* Redirect unknown protected routes to My Progress */}
-        <Route path="*" element={<Navigate to="/progress" replace />} />
       </Route>
     </Routes>
   );

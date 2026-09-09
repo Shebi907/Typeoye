@@ -3,9 +3,10 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowLeft, ArrowRight, CheckCircle2, ChevronRight, LockKeyhole,
   RotateCcw, XCircle, Clock, Target, AlertCircle, Pause, Play,
-  SkipForward, Trophy, Zap, BookOpen,
+  SkipForward, Trophy, BookOpen,
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
+import { Modal } from '../components/ui/Modal';
 import { TypingDisplay } from '../components/typing/TypingDisplay';
 import { StartTypingHint } from '../components/typing/StartTypingHint';
 import { VirtualKeyboard } from '../components/typing/VirtualKeyboard';
@@ -27,12 +28,15 @@ export default function LessonPlayer() {
   const [progress, setProgress] = useState<LessonProgress | null>(cached?.progress || null);
   const [nextLesson, setNextLesson] = useState<CourseLesson | null>(null);
   const [guestDone, setGuestDone] = useState<string[]>([]);
+  // Guests can finish Level 1 but may not advance — tapping "Continue to Next
+  // Level" opens this sign-in prompt instead of navigating/unlocking anything.
+  const [showGuestNextPrompt, setShowGuestNextPrompt] = useState(false);
   const [activeExerciseIndex, setActiveExerciseIndex] = useState(0);
   const [feedback, setFeedback] = useState<ExerciseCompletion | null>(null);
-  const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [isPaused, setIsPaused] = useState(false);
   const pausedElapsedRef = useRef(0);
+  const completingRef = useRef(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -43,10 +47,10 @@ export default function LessonPlayer() {
         setExercises([]);
         setProgress(null);
         setFeedback(null);
-        setSaving(false);
         setIsPaused(false);
         setNextLesson(null);
         pausedElapsedRef.current = 0;
+        completingRef.current = false;
 
         const { lesson: l, exercises: exs, progress: saved } = await lessonService.getLesson(id);
         if (!isMounted) return;
@@ -105,34 +109,40 @@ export default function LessonPlayer() {
 
   const onComplete = useCallback(async (result: EngineResult) => {
     if (!currentExercise || !result.typedWords.length) return;
-    setSaving(true); setError('');
+    if (completingRef.current) return;
+    completingRef.current = true;
+    setError('');
+
+    const attemptedWords = result.typedWords.length;
+    const correctWords = result.typedWords.filter((word) => word.word === word.typed).length;
+    const accuracy = computeAccuracy(correctWords, attemptedWords);
+    const wpm = computeWpm(correctWords, result.durationSeconds);
+    const expectedWords = currentExercise.content.trim().split(/\s+/).length;
+    const passed = attemptedWords === expectedWords && accuracy >= (lesson?.accuracyThreshold ?? 90);
+
+    setFeedback({
+      stats: { wpm, accuracy, correctWords, attemptedWords, errorsCount: attemptedWords - correctWords },
+      passed,
+      lessonCompleted: false,
+      progress: progress ?? ({} as LessonProgress),
+      nextLessonUnlocked: false,
+      xpEarned: 0,
+      xpBreakdown: [],
+      newAchievements: [],
+      leveledUp: false,
+      prevXP: 0,
+      newXP: 0,
+      level: 1,
+      levelTitle: '',
+      prevLevel: 1,
+    });
+
+    if (!isAuthenticated) {
+      if (passed) setGuestDone((prev) => (prev.includes(currentExercise._id) ? prev : [...prev, currentExercise._id]));
+      return;
+    }
+
     try {
-      if (!isAuthenticated) {
-        const attemptedWords = result.typedWords.length;
-        const correctWords = result.typedWords.filter((word) => word.word === word.typed).length;
-        const accuracy = computeAccuracy(correctWords, attemptedWords);
-        const wpm = computeWpm(correctWords, result.durationSeconds);
-        const expectedWords = currentExercise.content.trim().split(/\s+/).length;
-        const passed = attemptedWords === expectedWords && accuracy >= (lesson?.accuracyThreshold ?? 90);
-        if (passed) setGuestDone((prev) => (prev.includes(currentExercise._id) ? prev : [...prev, currentExercise._id]));
-        setFeedback({
-          stats: { wpm, accuracy, correctWords, attemptedWords, errorsCount: attemptedWords - correctWords },
-          passed,
-          lessonCompleted: false,
-          progress: progress ?? ({} as LessonProgress),
-          nextLessonUnlocked: false,
-          xpEarned: 0,
-          xpBreakdown: [],
-          newAchievements: [],
-          leveledUp: false,
-          prevXP: 0,
-          newXP: 0,
-          level: 1,
-          levelTitle: '',
-          prevLevel: 1,
-        });
-        return;
-      }
       const response = await lessonService.completeExercise(lesson!._id, currentExercise._id, {
         startTime: result.startTime,
         endTime: result.endTime,
@@ -144,8 +154,6 @@ export default function LessonPlayer() {
       setFeedback(response);
     } catch (err: any) {
       setError(err.response?.data?.error || 'Unable to save your progress. Please try again.');
-    } finally {
-      setSaving(false);
     }
   }, [lesson, currentExercise, isAuthenticated]);
 
@@ -158,6 +166,7 @@ export default function LessonPlayer() {
     setError('');
     setIsPaused(false);
     pausedElapsedRef.current = 0;
+    completingRef.current = false;
     const current = exercises[activeExerciseIndex];
     if (current?.variants?.length) {
       const others = current.variants
@@ -185,6 +194,7 @@ export default function LessonPlayer() {
     setError('');
     setIsPaused(false);
     pausedElapsedRef.current = 0;
+    completingRef.current = false;
     if (activeExerciseIndex + 1 < exercises.length) {
       setActiveExerciseIndex(activeExerciseIndex + 1);
     } else {
@@ -196,6 +206,7 @@ export default function LessonPlayer() {
     setFeedback(null);
     setIsPaused(false);
     pausedElapsedRef.current = 0;
+    completingRef.current = false;
     if (activeExerciseIndex + 1 < exercises.length) {
       setActiveExerciseIndex(activeExerciseIndex + 1);
     } else {
@@ -465,19 +476,9 @@ export default function LessonPlayer() {
               )}
 
               {/* Exercise completion overlay */}
-              {engine.phase === 'finished' && (saving || feedback) && (
+              {engine.phase === 'finished' && feedback && (
                 <div className="absolute inset-0 grid place-items-center p-5 bg-[var(--color-page)]/95 rounded-2xl z-10">
                   <div className="w-full max-w-md card result-card p-6 text-center shadow-xl border border-[var(--color-border)]">
-                    {saving ? (
-                      <>
-                        <div className="w-12 h-12 rounded-full mx-auto flex items-center justify-center animate-pulse" style={{ backgroundColor: 'var(--color-accent-light)' }}>
-                          <Zap size={22} style={{ color: 'var(--color-accent-text)' }} />
-                        </div>
-                        <h2 className="text-xl font-bold mt-4">Saving your results…</h2>
-                        <p className="text-sm text-secondary mt-1">Applying accuracy and progress.</p>
-                      </>
-                    ) : feedback ? (
-                      <>
                         {feedback.passed ? (
                           <div className="w-14 h-14 rounded-full mx-auto flex items-center justify-center" style={{ backgroundColor: 'rgba(34, 197, 94, 0.12)' }}>
                             <CheckCircle2 size={28} style={{ color: '#16a34a' }} />
@@ -544,6 +545,13 @@ export default function LessonPlayer() {
                                 {nextLesson ? (
                                   <Link to={`/lessons/${nextLesson._id}`} onClick={async (e) => {
                                     e.preventDefault();
+                                    // Guests must not advance past the open level. The next
+                                    // level would reject them server-side (403), so instead of
+                                    // silently failing we surface the sign-in prompt.
+                                    if (!isAuthenticated) {
+                                      setShowGuestNextPrompt(true);
+                                      return;
+                                    }
                                     document.body.style.cursor = 'wait';
                                     try {
                                       await lessonService.getLesson(nextLesson._id);
@@ -581,8 +589,6 @@ export default function LessonPlayer() {
                             </>
                           )}
                         </div>
-                      </>
-                    ) : null}
                   </div>
                 </div>
               )}
@@ -621,6 +627,33 @@ export default function LessonPlayer() {
             </div>
           </aside>
         </div>
+
+        {/* Guest sign-in prompt — next level requires an account */}
+        {!isAuthenticated && (
+          <Modal isOpen={showGuestNextPrompt} onClose={() => setShowGuestNextPrompt(false)} title="Sign in to Continue" size="sm">
+            <div className="text-center">
+              <div className="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center" style={{ backgroundColor: 'var(--color-accent-light)', color: 'var(--color-accent-text)' }}>
+                <LockKeyhole size={26} />
+              </div>
+              <p className="text-sm text-secondary mt-4 leading-relaxed">
+                You've completed this level! Sign in to unlock and continue to the next level.
+              </p>
+              <div className="flex flex-col gap-2.5 mt-6">
+                <Link to="/login" className="btn btn-primary px-5 py-2.5 w-full justify-center">Sign In</Link>
+                <button
+                  type="button"
+                  className="btn btn-ghost px-5 py-2 w-full justify-center"
+                  onClick={() => {
+                    setShowGuestNextPrompt(false);
+                    navigate('/lessons');
+                  }}
+                >
+                  <ArrowLeft size={16} /> Back to Learn
+                </button>
+              </div>
+            </div>
+          </Modal>
+        )}
       </div>
     </PageWrapper>
   );

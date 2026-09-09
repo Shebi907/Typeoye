@@ -7,14 +7,14 @@ import { useTypingEngine } from '../hooks/useTypingEngine';
 import { TypingDisplay } from '../components/typing/TypingDisplay';
 import { StartTypingHint } from '../components/typing/StartTypingHint';
 import { VirtualKeyboard } from '../components/typing/VirtualKeyboard';
-import { generateWordList } from '../data/wordLists';
+import { generateTestChunk } from '../data/testContent';
 import { computeWpm, computeAccuracy } from '../utils/wpm';
 import { useAuthStore } from '../store/authStore';
 import { typingService } from '../services/typing.service';
-import { downloadGuestCertificate } from '../services/certificate.service';
+import { downloadGuestCertificate, getCertificateParagraph, CERT_TO_PARAGRAPH_DIFFICULTY, readCertHistory, recordCertUsed, peekCertificateParagraphPreload, takeCertificateParagraphPreload, type GuestCertificatePayload } from '../services/certificate.service';
 import { getApiErrorMessage } from '../services/api';
 import { applySessionRewards } from '../utils/rewards';
-import type { EngineResult, TypingResult } from '../types';
+import type { CertificateParagraph, EngineResult, Settings, TypingResult } from '../types';
 
 const VALID_DURATIONS = [60, 120, 300, 600, 900];
 
@@ -68,16 +68,57 @@ function readDifficultyParam(searchParams: URLSearchParams): 'simple' | 'medium'
 /** Last text shown per difficulty — each new test must differ from it. */
 const lastTextByDifficulty = new Map<string, string>();
 
+/** Test difficulty values map onto the server paragraph collection's values. */
+const TEST_TO_PARAGRAPH_DIFFICULTY = { simple: 'beginner', medium: 'intermediate', hard: 'advanced' } as const;
+const testRotationKey = (difficulty: string) => `typeoye.test.rotation.${difficulty}`;
+const readTestRotation = (difficulty: string): number => {
+  try {
+    const n = Number(localStorage.getItem(testRotationKey(difficulty)));
+    return Number.isFinite(n) && n >= 0 ? n : 0;
+  } catch {
+    return 0;
+  }
+};
+
+/** Build a fresh appended sentence chunk for the rest of a long run. */
+const buildNextChunk = (
+  difficulty: 'simple' | 'medium' | 'hard',
+  settings?: Settings | null
+): string => {
+  const rotation = readTestRotation(difficulty);
+  try {
+    localStorage.setItem(testRotationKey(difficulty), String(rotation + 1));
+  } catch {
+    // no-op
+  }
+  return generateTestChunk({
+    difficulty,
+    wordCount: 300,
+    includeNumbers: settings?.includeNumbers,
+    includePunctuation: settings?.includePunctuation,
+    rotation,
+  });
+};
+
 export default function TestMode() {
   const { settings, isAuthenticated, profile, user } = useAuthStore();
   const [searchParams] = useSearchParams();
   const certificateMode = searchParams.get('cert') === '1';
   // Certificate links preselect everything via URL and skip straight to typing;
   // plain "Test" always shows the setup screen first.
-  const [view, setView] = useState<'setup' | 'typing'>(() => (certificateMode ? 'typing' : 'setup'));
+const [view, setView] = useState<'setup' | 'typing'>(() => (certificateMode ? 'typing' : 'setup'));
 
-  const [text, setText] = useState('');
-  const [loading, setLoading] = useState(true);
+  // The passage for a certificate run is staged by the Certificate page (before
+  // navigation) and consumed here on the very first render — the typing screen
+  // appears with the passage already present, never a blank/loading flash.
+  const certParagraphRef = useRef<CertificateParagraph | null>(null);
+  const [text, setText] = useState<string>(() => {
+    if (!certificateMode) return '';
+    const paragraph = peekCertificateParagraphPreload();
+    if (!paragraph) return '';
+    return `${paragraph.content} ${buildNextChunk(readDifficultyParam(searchParams), settings)}`;
+  });
+  const [loading, setLoading] = useState(() => (certificateMode ? !peekCertificateParagraphPreload() : true));
   const [duration, setDuration] = useState<number>(() => readDurationParam(searchParams));
   const [difficulty, setDifficulty] = useState<'simple' | 'medium' | 'hard'>(() =>
     readDifficultyParam(searchParams)
@@ -89,6 +130,7 @@ export default function TestMode() {
   const [summary, setSummary] = useState<ReturnType<typeof localResult> | null>(null);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   // The recipient name was already collected earlier (Certificate page input,
   // or the signed-in profile) — never ask for it again on the results screen.
@@ -97,23 +139,32 @@ export default function TestMode() {
     profile?.displayName ||
     user?.username ||
     'Guest';
-  const [downloading, setDownloading] = useState(false);
+const [downloading, setDownloading] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   const [certError, setCertError] = useState<string | null>(null);
-  const resultRef = useRef<EngineResult | null>(null);
+const resultRef = useRef<EngineResult | null>(null);
   const appending = useRef(false);
+  // True once any staged certificate passage has been consumed by this mount.
+  const preloadHandled = useRef(false);
 
-  const newChunk = useCallback(
-    () => generateWordList(300, settings?.includeNumbers, settings?.includePunctuation, difficulty),
-    [settings, difficulty]
-  );
+  const newChunk = useCallback((): string => buildNextChunk(difficulty, settings), [difficulty, settings]);
 
-  /** Fresh text for this difficulty, guaranteed different from the last one shown. */
+/** Fresh text for this difficulty, guaranteed different from the last one shown. */
   const loadFreshText = useCallback(async (): Promise<string> => {
+    if (certificateMode) {
+      // Certificate runs use the server library so paragraphs never repeat
+      // (server-side history for signed-in users, client `exclude` for guests).
+      const excluded = readCertHistory(difficulty);
+      const paragraph = await getCertificateParagraph(CERT_TO_PARAGRAPH_DIFFICULTY[difficulty], excluded);
+      certParagraphRef.current = paragraph;
+      recordCertUsed(difficulty, paragraph._id);
+      return `${paragraph.content} ${newChunk()}`;
+    }
+
     let candidate = '';
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
-        const paragraph = await typingService.getRandomParagraph(difficulty);
+        const paragraph = await typingService.getRandomParagraph(TEST_TO_PARAGRAPH_DIFFICULTY[difficulty]);
         candidate = `${paragraph.content} ${newChunk()}`;
       } catch {
         candidate = newChunk();
@@ -122,23 +173,44 @@ export default function TestMode() {
     }
     lastTextByDifficulty.set(difficulty, candidate);
     return candidate;
-  }, [newChunk, difficulty]);
+  }, [newChunk, difficulty, certificateMode]);
 
-  useEffect(() => {
+useEffect(() => {
+    // A passage staged by the Certificate page is already in `text` from the
+    // initializer — just finalize refs/history, no fetch, no visual gap.
+    if (!preloadHandled.current) {
+      const paragraph = certificateMode ? takeCertificateParagraphPreload() : null;
+      if (paragraph) {
+        preloadHandled.current = true;
+        certParagraphRef.current = paragraph;
+        recordCertUsed(readDifficultyParam(searchParams), paragraph._id);
+        setLoading(false);
+        return;
+      }
+    }
+    // Already consumed a staged passage on this mount — never refetch.
+    if (preloadHandled.current) return;
+    // No staged passage — load fresh text normally (also covers plain tests).
     let mounted = true;
     setLoading(true);
     void loadFreshText().then((next) => {
       if (mounted) {
         setSummary(null);
         setSaveError(null);
+        setLoadError(null);
         setText(next);
         setLoading(false);
+      }
+    }).catch((err) => {
+      if (mounted) {
+        setLoading(false);
+        setLoadError(err instanceof Error ? err.message : 'Could not load test content. Please try again.');
       }
     });
     return () => {
       mounted = false;
     };
-  }, [loadFreshText]);
+  }, [loadFreshText, certificateMode, searchParams]);
 
   // Remember selections for later runs this session (and certificate links).
   useEffect(() => {
@@ -152,9 +224,9 @@ export default function TestMode() {
     async (result: EngineResult) => {
       resultRef.current = result;
       setSummary(localResult(result));
-      // A fresh result must never inherit a stale "downloaded" state from a
+// A fresh result must never inherit a stale "downloaded" state from a
       // previous run (prevents the false success message on unearned cards).
-      setDownloaded(false);
+setDownloaded(false);
       setCertError(null);
       if (!result.typedWords.length) return;
 
@@ -167,7 +239,7 @@ export default function TestMode() {
       setSaving(true);
       setSaveError(null);
       try {
-        const response = await typingService.submitSession({
+const response = await typingService.submitSession({
           mode: 'test',
           startTime: result.startTime,
           endTime: result.endTime,
@@ -175,6 +247,8 @@ export default function TestMode() {
           textSource: 'generated',
           clientWpm: result.clientWpm,
           clientAccuracy: result.clientAccuracy,
+          certificateParagraphId: certificateMode ? certParagraphRef.current?._id : undefined,
+          certificateParagraphText: certificateMode ? certParagraphRef.current?.content : undefined,
         });
         setSummary(response.result);
         applySessionRewards(response.result, response);
@@ -184,7 +258,7 @@ export default function TestMode() {
         setSaving(false);
       }
     },
-    [isAuthenticated]
+[isAuthenticated, certificateMode]
   );
 
   const engine = useTypingEngine({
@@ -217,32 +291,44 @@ export default function TestMode() {
     }
   }, [engine.phase, summary]);
 
-  const restart = useCallback(() => {
+const restart = useCallback(() => {
     setSummary(null);
     setSaveError(null);
+    setLoadError(null);
     setDownloaded(false);
     setCertError(null);
     resultRef.current = null;
-    void loadFreshText().then((next) => setText(next));
+    void loadFreshText().then((next) => {
+      setLoadError(null);
+      setText(next);
+    }).catch((err) => {
+      setLoadError(err instanceof Error ? err.message : 'Could not load test content.');
+    });
   }, [loadFreshText]);
 
   // "Back to Test" returns to the setup screen. We are already on /test, so a
   // <Link to="/test"> pushes the same route and React never remounts us — the
   // results modal must be closed via local state instead (same pattern as Retry).
   // Also abandons any in-progress run so a stale timer/completion can't fire.
-  const backToTest = useCallback(() => {
+const backToTest = useCallback(() => {
     setSummary(null);
     setSaveError(null);
+    setLoadError(null);
     setDownloaded(false);
     setCertError(null);
     resultRef.current = null;
     engine.resetEngine();
-    void loadFreshText().then((next) => setText(next));
+    void loadFreshText().then((next) => {
+      setLoadError(null);
+      setText(next);
+    }).catch((err) => {
+      setLoadError(err instanceof Error ? err.message : 'Could not load test content.');
+    });
     setView('setup');
   }, [engine, loadFreshText]);
 
   // Apply the setup-screen choices and enter the typing view.
-  const startTest = useCallback(() => {
+const startTest = useCallback(() => {
     setDuration(pendingDuration);
     setDifficulty(pendingDifficulty);
     sessionStorage.setItem('typeoye_duration', String(pendingDuration));
@@ -256,7 +342,7 @@ export default function TestMode() {
     setView('typing');
   }, [engine, pendingDuration, pendingDifficulty]);
 
-  const downloadCertificate = async () => {
+const downloadCertificate = async () => {
     const result = resultRef.current;
     const recipientName = certificateName.trim();
     if (!result || !recipientName || !summary) return;
@@ -266,15 +352,22 @@ export default function TestMode() {
     setDownloading(true);
     setCertError(null);
     try {
+      // The server re-verifies stats from the raw keystrokes, renders the
+      // official certificate design as a real PDF and streams it back; the
+      // browser saves it as Typeoye-Typing-Certificate-<name>.pdf.
       await downloadGuestCertificate({
         startTime: result.startTime,
         endTime: result.endTime,
         recipientName,
         typedWords: result.typedWords,
-      });
+      } satisfies GuestCertificatePayload);
       setDownloaded(true);
     } catch (err) {
-      setCertError(getApiErrorMessage(err, 'Could not generate your certificate. Please try again.'));
+      const message =
+        err instanceof Error
+          ? err.message
+          : getApiErrorMessage(err, 'Could not generate your certificate. Please try again.');
+      setCertError(message);
     } finally {
       setDownloading(false);
     }
@@ -304,7 +397,7 @@ export default function TestMode() {
     return count;
   })();
   const difficultyLabel = difficulty === 'simple' ? 'Easy' : difficulty === 'medium' ? 'Medium' : 'Hard';
-  const certEarned =
+const certEarned =
     certificateMode && finished && summary
       ? summary.wpm >= CERT_MIN_WPM && summary.accuracy >= CERT_MIN_ACCURACY
       : false;
@@ -506,6 +599,11 @@ export default function TestMode() {
                       fontSize={settings?.fontSize || 22}
                     />
                   </div>
+                ) : loadError ? (
+                  <div className="h-24 flex flex-col items-center justify-center gap-2 text-center p-4">
+                    <p className="text-sm font-semibold text-[var(--color-error)]">{loadError}</p>
+                    <button onClick={restart} className="btn btn-secondary text-xs px-3 py-1.5">Try Again</button>
+                  </div>
                 ) : (
                   <div className="h-24 flex items-center justify-center text-muted">Loading test…</div>
                 )}
@@ -569,8 +667,8 @@ export default function TestMode() {
           <div className="fixed inset-0 z-20 backdrop-blur-md bg-black/40" aria-hidden="true" />
           <div className="fixed inset-0 z-30 overflow-y-auto" style={{ paddingTop: 'calc(var(--navbar-h, 64px) + 1.5rem)', paddingBottom: '1.5rem' }}>
             <div className="grid place-items-center min-h-full px-4">
-            <div
-              className="result-card w-full max-w-md text-center overflow-hidden"
+<div
+              className="result-card w-full text-center overflow-hidden max-w-md"
               data-testid="result-card"
               style={{ borderRadius: 20, background: 'var(--color-card)', boxShadow: '0 20px 50px -12px rgba(0,0,0,0.25), 0 8px 20px -6px rgba(0,0,0,0.12)' }}
             >
@@ -706,7 +804,7 @@ export default function TestMode() {
               )}
 
               {/* Certificate download */}
-              {certificateMode && !saveError && (
+{certificateMode && !saveError && (
                 <div className="px-6 pt-3" data-testid="cert-section">
                   {certError && <p className="text-sm mb-2" style={{ color: 'var(--color-error)' }}>{certError}</p>}
                   {certEarned && downloaded && (

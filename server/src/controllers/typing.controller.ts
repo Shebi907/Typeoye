@@ -26,6 +26,10 @@ export const sessionSchema = z.object({
   practiceType: z.string().optional(),
   practiceDifficulty: z.number().int().min(1).max(3).optional(),
   focusKeys: z.array(z.string().min(1).max(1)).max(8).optional(),
+  // Certificate runs: record which paragraph was used. The text is snapshotted
+  // at submit time so later edits to the library never change past history.
+  certificateParagraphId: z.string().optional(),
+  certificateParagraphText: z.string().max(4000).optional(),
 });
 
 export async function getRandomParagraph(req: Request, res: Response): Promise<void> {

@@ -6,12 +6,12 @@ export const WORD_BANKS: Record<PracticeDifficulty, string[]> = {
     'only', 'over', 'new', 'work', 'back', 'most', 'just', 'then', 'them', 'take', 'come', 'make', 'look', 'give', 'find', 'like', 'made', 'word', 'were', 'said',
     'each', 'many', 'also', 'into', 'her', 'him', 'his', 'she', 'our', 'day', 'way', 'may', 'say', 'get', 'got', 'run', 'cut', 'sit', 'see', 'two',
     'use', 'put', 'old', 'big', 'far', 'few', 'yes', 'red', 'sun', 'sky', 'boy', 'girl', 'tree', 'fish', 'bird', 'book', 'door', 'hand', 'head', 'home',
-    'house', 'kind', 'land', 'life', 'line', 'name', 'next', 'night', 'open', 'play', 'read', 'room', 'school', 'sound', 'space', 'star', 'stay', 'story', 'town', 'walk',
-    'water', 'white', 'whole', 'world', 'year', 'young', 'after', 'again', 'begin', 'bring', 'clean', 'close', 'drive', 'early', 'every', 'field', 'front', 'green', 'ground', 'light',
+    'house', 'kind', 'land', 'life', 'line', 'name', 'next', 'night', 'open', 'play', 'read', 'room', 'sound', 'space', 'star', 'stay', 'story', 'town', 'walk',
+    'water', 'white', 'whole', 'world', 'year', 'young', 'after', 'again', 'begin', 'bring', 'clean', 'close', 'drive', 'early', 'every', 'field', 'front', 'green', 'light',
     'might', 'never', 'often', 'paper', 'piece', 'place', 'plant', 'point', 'river', 'round', 'small', 'start', 'still', 'stone', 'sweet', 'think', 'thank', 'under', 'until', 'voice',
-    'write', 'apple', 'bread', 'cloud', 'mouse', 'sleep', 'happy', 'jump', 'laugh', 'smile', 'puppy', 'flower', 'safe', 'soft', 'warm', 'cold', 'hot', 'bright', 'dark', 'quiet',
+    'write', 'apple', 'bread', 'cloud', 'mouse', 'sleep', 'happy', 'jump', 'laugh', 'smile', 'puppy', 'safe', 'soft', 'warm', 'cold', 'hot', 'bright', 'dark', 'quiet',
     'near', 'hard', 'easy', 'path', 'hill', 'lake', 'park', 'shop', 'boat', 'egg', 'pie', 'dog', 'cat', 'cow', 'hen', 'pen', 'moon', 'sand', 'rain', 'snow',
-    'wind', 'fire', 'food', 'milk', 'salt', 'soup', 'tea', 'corn', 'bean', 'rice', 'wood', 'glass', 'sour', 'tall', 'thick', 'heavy', 'kite', 'toy', 'game', 'bell',
+    'wind', 'fire', 'food', 'milk', 'salt', 'soup', 'tea', 'corn', 'bean', 'rice', 'wood', 'glass', 'tall', 'thick', 'heavy', 'kite', 'toy', 'game', 'bell',
   ],
   intermediate: [
     'agree', 'allow', 'always', 'amount', 'answer', 'appear', 'around', 'arrive', 'asleep', 'attack', 'attend', 'autumn', 'aware', 'awkward', 'balance', 'barely', 'basket', 'battle', 'become', 'behind',
@@ -25,6 +25,7 @@ export const WORD_BANKS: Record<PracticeDifficulty, string[]> = {
     'ground', 'growth', 'handle', 'happen', 'healthy', 'height', 'helpful', 'history', 'holiday', 'honest', 'huge', 'humble', 'hungry', 'imagine', 'improve', 'include', 'income', 'inform', 'inside', 'invent',
     'journey', 'judge', 'junior', 'keeper', 'kernel', 'kitchen', 'ladder', 'laptop', 'launch', 'lawyer', 'leader', 'lesson', 'letter', 'library', 'likely', 'liquid', 'listen', 'little', 'living', 'locate',
     'lonely', 'manner', 'market', 'master', 'matter', 'measure', 'member', 'memory', 'method', 'middle', 'mighty', 'mirror', 'moment', 'monitor', 'mother', 'motion', 'mountain', 'muscle', 'museum', 'native',
+    'improve', 'practice', 'computer', 'learning', 'continue', 'remember', 'important', 'example', 'develop', 'explain', 'include', 'trouble', 'ticket',
   ],
   advanced: [
     'abandon', 'ability', 'absence', 'abstract', 'academic', 'access', 'accompany', 'accurate', 'achieve', 'acknowledge', 'acquire', 'adequate', 'adjust', 'admir', 'advance', 'advantage', 'advocate', 'aesthetic', 'agency', 'agenda',
@@ -39,6 +40,7 @@ export const WORD_BANKS: Record<PracticeDifficulty, string[]> = {
     'precise', 'proficiency', 'profound', 'qualitative', 'quantitative', 'recession', 'redundancy', 'reflection', 'regardless', 'reinforcement', 'relativity', 'relevant', 'reliable', 'resilience', 'resource', 'restoration', 'revolutionary', 'rhetorical', 'scenario', 'scholarship',
     'sensitivity', 'sequential', 'significant', 'sophisticated', 'stability', 'statistical', 'strategic', 'subsequent', 'substitute', 'substantial', 'sufficient', 'synthesis', 'systematic', 'tangible', 'theoretical', 'transformation', 'translation', 'ultimate', 'underlying', 'unprecedented',
     'utilization', 'validation', 'variability', 'versatility', 'viability', 'vigorous', 'vocabulary', 'vulnerability',
+    'concentration', 'coordination', 'extraordinary', 'responsibility', 'consciousness', 'implementation',
   ],
 };
 
@@ -245,10 +247,118 @@ function keyedTokenStream(difficulty: PracticeDifficulty, keys: string[], count:
 }
 
 const COMBINATION_SETS: Record<PracticeDifficulty, string[][]> = {
-  beginner: [['th', 'he', 'er', 're', 'te'], ['in', 'an', 'on', 'en', 'nd'], ['at', 'ou', 'ea', 'ou', 'st'], ['or', 'ar', 'es', 'st', 'le'], ['se', 'hi', 'ha', 'li', 'lo'], ['wh', 'er', 're', 'or', 'nd']],
-  intermediate: [['ing', 'tion', 'ment', 'able', 'ness'], ['th', 'he', 'er', 'in', 'an'], ['pr', 'pl', 'gl', 'gr', 'cr'], ['br', 'st', 'nt', 'nd', 'ng'], ['tr', 'ty', 'ry', 'rt', 'yr'], ['ch', 'ck', 'sh', 'ou', 'ea']],
-  advanced: [['str', 'ght', 'ough', 'eigh'], ['tion', 'sion', 'ment', 'ence'], ['ex', 'pre', 'pro', 'con'], ['qu', 'ph', 'gh', 'x'], ['sh', 'ci', 'si', 'ti'], ['age', 'ible', 'ous', 'ive']],
+  beginner: [
+    ['th', 'he', 'in', 'er', 'an'],
+    ['re', 'on', 'at', 'en', 'nd'],
+    ['st', 'le', 'ea', 'ou', 'or'],
+    ['ar', 'es', 'se', 'hi', 'lo'],
+    ['ay', 'oi', 'ey', 'ow', 'ew'],
+    ['wh', 'qu', 'ck', 'sh', 'ch'],
+  ],
+  intermediate: [
+    ['the', 'ing', 'ion', 'ment', 'tion'],
+    ['ight', 'ound', 'eigh', 'ient', 'ight'],
+    ['able', 'ness', 'ence', 'ance', 'less'],
+    ['pre', 'pro', 'con', 'com', 'dis'],
+    ['tive', 'sion', 'ture', 'ious', 'able'],
+    ['str', 'spr', 'scr', 'squ', 'chr'],
+  ],
+  advanced: [
+    ['ought', 'aught', 'eight', 'though', 'enough'],
+    ['tion', 'sion', 'ssion', 'ment', 'ture'],
+    ['qu', 'ph', 'gh', 'tch', 'gn'],
+    ['xer', 'xce', 'xqu', 'xhi', 'xai'],
+    ['thr', 'str', 'phl', 'spl', 'sph'],
+    ['cious', 'tious', 'gence', 'sure', 'able'],
+  ],
 };
+
+// ── Character drills (intentional, difficulty-tiered key work) ────────────
+// Each difficulty targets genuinely different movements:
+//   Beginner — home-row letters only (asdf jkl), short, easy, beginner-friendly.
+//   Intermediate — spans both top and bottom rows with longer, mixed-run tokens.
+//   Advanced — awkward cross-row transitions, no trivial repeating patterns.
+const CHARACTER_PATTERNS: Record<PracticeDifficulty, readonly string[]> = {
+  beginner: ['as', 'df', 'jk', 'kl', 'sad', 'ask', 'lad', 'alf', 'all', 'dad', 'fall', 'flag', 'asdk', 'jdsa', 'asdf', 'jkl'],
+  intermediate: ['qwer', 'tyui', 'zxcv', 'bnm', 'poiu', 'fdsa', 'lkjh', 'mnbv', 'qazx', 'edcrf', 'werty', 'cvbn', 'azxc', 'qsdf', 'jkla', 'poik'],
+  advanced: ['qazwsx', 'edcrfv', 'tgbnhy', 'ujmik', 'poiuyt', 'zaqxsw', 'wsxedc', 'rfvtgb', 'pokmn', 'wint', 'creme', 'qaz', 'xsw', 'po.', 'qkp', 'plmok'],
+};
+
+// Beginner-friendly short home-row drills (spec style: as df jk asdf jkl sad ask).
+const BEGINNER_CHARACTER_TOKENS = [
+  'as', 'df', 'jk', 'kl', 'fj', 'dk', 'sl', 'aj', 'fl', 'sa', 'ad',
+  'asdf', 'jkl', 'asdf', 'sad', 'ask', 'all', 'lad', 'alf', 'dad', 'fall', 'flag', 'salad',
+  'a', 's', 'd', 'f', 'j', 'k', 'l',
+];
+
+function characterVariation(difficulty: PracticeDifficulty, keys: string[], rand: () => number): string {
+  const tokenCount = difficulty === 'beginner' ? 60 : difficulty === 'intermediate' ? 70 : 80;
+  const symbols = difficulty === 'advanced' ? [',', '.', ';'] : [];
+  const focus = [...new Set(keys.map((key) => key.toLowerCase()).filter((key) => /^[a-z]$/.test(key)))];
+  if (focus.length) {
+    const pool: string[] = [];
+    for (const key of focus) pool.push(key, key.repeat(2), key.repeat(3));
+    for (let i = 0; i < focus.length - 1; i++) pool.push(focus[i] + focus[i + 1], focus[i + 1] + focus[i]);
+    const seq = seededShuffle(pool, rand);
+    const offset = Math.floor(rand() * seq.length);
+    const tokens: string[] = [];
+    for (let i = 0; i < tokenCount; i++) {
+      let token = seq[(offset + i) % seq.length];
+      if (symbols.length && rand() < 0.05) token += symbols[Math.floor(rand() * symbols.length)];
+      tokens.push(token);
+    }
+    return tokens.join(' ');
+  }
+  const offset = Math.floor(rand() * CHARACTER_PATTERNS[difficulty].length);
+  const patterns = CHARACTER_PATTERNS[difficulty];
+  const tokens: string[] = [];
+  for (let i = 0; i < tokenCount; i++) {
+    let token: string;
+    if (difficulty === 'beginner') {
+      token = BEGINNER_CHARACTER_TOKENS[(offset + i) % BEGINNER_CHARACTER_TOKENS.length];
+    } else {
+      const pattern = patterns[(offset + Math.floor(i / 2)) % patterns.length];
+      token = i % 2 === 1 ? [...pattern].reverse().join('') : pattern;
+    }
+    if (symbols.length && rand() < 0.06) token += symbols[Math.floor(rand() * symbols.length)];
+    tokens.push(token);
+  }
+  return tokens.join(' ');
+}
+
+// ── Weak-key drills (performance-driven focus with difficulty tiers) ───────
+function weakVariation(difficulty: PracticeDifficulty, keys: string[], rand: () => number): string {
+  const focus = keys.length ? [...new Set(keys.map((key) => key.toLowerCase()).filter((key) => /^[a-z]$/.test(key)))] : ['t', 'h'];
+  const tokenCount = difficulty === 'beginner' ? 70 : difficulty === 'intermediate' ? 80 : 90;
+  const symbols = difficulty === 'advanced' ? [',', '.', ';', "'"] : [];
+  const companions =
+    difficulty === 'beginner'
+      ? ['a', 's', 'd', 'f', 'j', 'k', 'l']
+      : difficulty === 'intermediate'
+        ? ['a', 's', 'd', 'f', 'j', 'k', 'l', 'q', 'w', 'e', 'r', 'u', 'i', 'o', 'p', 'n', 'm']
+        : [...'abcdefghijklmnopqrstuvwxyz'];
+  const focusRate = difficulty === 'beginner' ? 0.4 : difficulty === 'intermediate' ? 0.55 : 0.7;
+  const minLen = difficulty === 'beginner' ? 2 : difficulty === 'intermediate' ? 3 : 4;
+  const maxLen = difficulty === 'beginner' ? 3 : difficulty === 'intermediate' ? 4 : 6;
+  const tokens: string[] = [];
+  for (let i = 0; i < tokenCount; i++) {
+    const len = minLen + Math.floor(rand() * (maxLen - minLen + 1));
+    let token = '';
+    let usesFocus = false;
+    for (let j = 0; j < len; j++) {
+      if (rand() < focusRate) {
+        token += focus[Math.floor(rand() * focus.length)];
+        usesFocus = true;
+      } else {
+        token += companions[Math.floor(rand() * companions.length)];
+      }
+    }
+    if (!usesFocus) token = token.slice(0, len - 1) + focus[Math.floor(rand() * focus.length)];
+    if (symbols.length && rand() < 0.08) token += symbols[Math.floor(rand() * symbols.length)];
+    tokens.push(token);
+  }
+  return tokens.join(' ');
+}
 
 function combinationVariation(difficulty: PracticeDifficulty, keys: string[], rand: () => number): string {
   let units: string[];
@@ -287,6 +397,10 @@ export function variationAt(type: string, difficulty: PracticeDifficulty, focusK
     }
     case 'combination':
       return combinationVariation(difficulty, focusKeys, rand);
+    case 'character':
+      return characterVariation(difficulty, focusKeys, rand);
+    case 'weak':
+      return weakVariation(difficulty, focusKeys, rand);
     default:
       return keyedTokenStream(difficulty, focusKeys.length ? focusKeys : ['a', 's', 'd', 'f'], 110, rand).join(' ');
   }
