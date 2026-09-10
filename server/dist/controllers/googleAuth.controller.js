@@ -168,6 +168,7 @@ async function googleOAuthCallback(req, res) {
                 username,
                 email: info.email.toLowerCase(),
                 passwordHash,
+                authProvider: 'google',
                 emailVerified: true,
             });
         }

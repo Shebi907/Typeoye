@@ -6,10 +6,14 @@ import { z } from 'zod';
  */
 export declare function getCertificateConfig(_req: Request, res: Response): Promise<void>;
 /**
- * One-shot guest certificate generation. The raw keystroke data is verified
- * here — stats are recomputed from typedWords exactly like every other saved
- * session, and NOTHING is persisted (no user, no session record). The PDF is
- * streamed straight back to the browser.
+ * One-shot guest certificate validation + PDF generation. The raw keystroke
+ * data is verified here — stats are recomputed from typedWords exactly like
+ * every other saved session, and NOTHING is persisted (no user, no session
+ * record). The response streams back the official vector PDF certificate
+ * (real .pdf, A4 landscape design) and the browser saves it as
+ * `Typeoye-Typing-Certificate-<name>.pdf`.
+ *
+ * Response headers carry the deterministic certificate metadata.
  */
 export declare const guestCertificateSchema: z.ZodObject<{
     startTime: z.ZodString;

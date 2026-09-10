@@ -9,6 +9,8 @@ export interface ITypingResult extends Document {
     errorsCount: number;
     mode: string;
     createdAt: Date;
+    certificateParagraphId?: mongoose.Types.ObjectId;
+    certificateParagraphText?: string;
 }
 declare const _default: mongoose.Model<ITypingResult, {}, {}, {}, mongoose.Document<unknown, {}, ITypingResult, {}, {}> & ITypingResult & Required<{
     _id: mongoose.Types.ObjectId;

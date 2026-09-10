@@ -32,6 +32,10 @@ exports.sessionSchema = zod_1.z.object({
     practiceType: zod_1.z.string().optional(),
     practiceDifficulty: zod_1.z.number().int().min(1).max(3).optional(),
     focusKeys: zod_1.z.array(zod_1.z.string().min(1).max(1)).max(8).optional(),
+    // Certificate runs: record which paragraph was used. The text is snapshotted
+    // at submit time so later edits to the library never change past history.
+    certificateParagraphId: zod_1.z.string().optional(),
+    certificateParagraphText: zod_1.z.string().max(4000).optional(),
 });
 async function getRandomParagraph(req, res) {
     try {

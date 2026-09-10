@@ -22,10 +22,14 @@ async function getCertificateConfig(_req, res) {
     }
 }
 /**
- * One-shot guest certificate generation. The raw keystroke data is verified
- * here — stats are recomputed from typedWords exactly like every other saved
- * session, and NOTHING is persisted (no user, no session record). The PDF is
- * streamed straight back to the browser.
+ * One-shot guest certificate validation + PDF generation. The raw keystroke
+ * data is verified here — stats are recomputed from typedWords exactly like
+ * every other saved session, and NOTHING is persisted (no user, no session
+ * record). The response streams back the official vector PDF certificate
+ * (real .pdf, A4 landscape design) and the browser saves it as
+ * `Typeoye-Typing-Certificate-<name>.pdf`.
+ *
+ * Response headers carry the deterministic certificate metadata.
  */
 exports.guestCertificateSchema = zod_1.z.object({
     startTime: zod_1.z.string().datetime(),
@@ -56,26 +60,44 @@ async function generateGuestCertificate(req, res) {
             (0, response_1.sendError)(res, 'No typing data found in this attempt', 400);
             return;
         }
-        // Qualification gate: BOTH thresholds must be met by the same test, or the
-        // certificate is NOT issued (the client cannot bypass this — the PDF is
-        // only ever produced here, recomputed from the raw keystrokes).
+        // Qualification gate: BOTH thresholds must be met by the same test.
         const wpm = Math.round(stats.wpm * 10) / 10;
         const earned = wpm >= certificate_service_1.CERT_MIN_WPM && stats.accuracy >= certificate_service_1.CERT_MIN_ACCURACY;
         if (!earned) {
             (0, response_1.sendError)(res, `Certificate not earned — you need at least ${certificate_service_1.CERT_MIN_WPM} WPM and ${certificate_service_1.CERT_MIN_ACCURACY}% accuracy in a single test (got ${wpm} WPM and ${stats.accuracy}% accuracy).`, 400);
             return;
         }
-        const pdf = await (0, certificate_service_1.renderCertificatePdf)({
+        // Deterministic ID: same test+name always produces the same cert ID.
+        const certificateId = (0, certificate_service_1.certificateCodeFor)(body.endTime, body.recipientName.trim());
+        const keystrokes = (0, certificate_service_1.computeKeystrokes)(body.typedWords);
+        const perf = (0, certificate_service_1.performanceLevel)(wpm);
+        const cert = {
             recipientName: body.recipientName.trim(),
             wpm,
             accuracy: stats.accuracy,
+            keystrokes,
+            performance: perf,
             durationSeconds,
-            certificateId: (0, certificate_service_1.newCertificateCode)(),
-        });
+            certificateId,
+            completionDate: endTime.toISOString(),
+        };
+        // Return certificate metadata in headers.
+        const testDate = (0, certificate_service_1.formatCertificateDate)(endTime);
+        res.setHeader('X-Certificate-Id', certificateId);
+        res.setHeader('X-Certificate-Wpm', String(cert.wpm));
+        res.setHeader('X-Certificate-Accuracy', String(cert.accuracy));
+        res.setHeader('X-Certificate-Keystrokes', String(keystrokes));
+        res.setHeader('X-Certificate-Performance', perf);
+        res.setHeader('X-Certificate-Date', testDate);
+        res.setHeader('X-Certificate-Duration', (0, certificate_service_1.formatTestDuration)(durationSeconds));
+        // Render the official certificate as a vector PDF and stream it down.
+        const pdf = await (0, certificate_service_1.renderCertificatePdf)(cert);
+        const filename = `Typeoye-Typing-Certificate-${(0, certificate_service_1.sanitizeCertificateFileName)(cert.recipientName)}.pdf`;
         res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Length', String(pdf.length));
-        res.setHeader('Content-Disposition', 'attachment; filename="Typeoye-Certificate.pdf"');
-        res.status(200).send(pdf);
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.setHeader('Content-Length', pdf.length);
+        res.status(200);
+        res.end(pdf);
     }
     catch (err) {
         console.error('generateGuestCertificate error:', err);

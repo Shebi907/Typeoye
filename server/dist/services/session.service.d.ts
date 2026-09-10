@@ -17,6 +17,8 @@ export interface SessionInput {
     practiceType?: string;
     practiceDifficulty?: number;
     focusKeys?: string[];
+    certificateParagraphId?: string;
+    certificateParagraphText?: string;
 }
 export interface ProcessedSession {
     session: any;
@@ -45,6 +47,36 @@ export interface ProcessedSession {
  * no test/certificate results at all.
  */
 export declare function getTestBestWpm(userId: Types.ObjectId | string): Promise<number | null>;
+export interface ProfileProgressStats {
+    totalSessions: number;
+    bestWpm: number | null;
+    avgWpm: number;
+    avgAccuracy: number;
+    totalMinutesPracticed: number;
+    learnLevel: number;
+    completedLessons: number;
+    totalLessons: number;
+}
+/**
+ * Live profile statistics derived directly from stored records every time they
+ * are requested — the database is the source of truth, so the profile always
+ * reflects the latest activity even when a user has no UserProgress document.
+ *
+ *  - totalSessions     completed Test + Practice + Game sessions (TypingResult
+ *                      rows; a certificate run is a Test, and each game is one
+ *                      TypingResult row, so no double counting) plus completed
+ *                      Learn exercises (each passed exercise is one learn
+ *                      session).
+ *  - bestWpm           highest Test/Certificate WPM only (see getTestBestWpm).
+ *  - avgAccuracy       overall (total correct / total typed) × 100. Test,
+ *                      Practice and Game use the stored word-level
+ *                      correct/attempted aggregates; Learn uses each completed
+ *                      exercise's content word count as the typed basis with
+ *                      its stored best accuracy, so nothing is invented.
+ *  - learnLevel        the lesson currently unlocked but not yet completed
+ *                      (the same "current level" the Learn page shows).
+ */
+export declare function getProfileStats(userId: Types.ObjectId | string): Promise<ProfileProgressStats>;
 /**
  * Single source of truth for a verified typing session.
  * All stats are computed server-side - client values are never trusted.

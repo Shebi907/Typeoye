@@ -51,6 +51,8 @@ const typingSessionSchema = new mongoose_1.Schema({
     exerciseId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Exercise' },
     clientWpm: { type: Number, default: 0 },
     clientAccuracy: { type: Number, default: 0 },
+    certificateParagraphId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'CertificateParagraph' },
+    certificateParagraphText: { type: String, maxlength: 4000 },
 }, { timestamps: true });
 typingSessionSchema.index({ userId: 1, createdAt: -1 });
 exports.default = mongoose_1.default.model('TypingSession', typingSessionSchema);

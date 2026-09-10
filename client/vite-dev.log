@@ -1,0 +1,30 @@
+
+  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m981[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[2m2:52:20 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Learn.tsx, /src/styles/index.css[22m
+[2m2:52:20 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Learn.tsx, /src/styles/index.css[22m
+[2m2:52:20 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m2:52:20 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m2:52:20 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/auth/AuthProvider.tsx, /src/styles/index.css, /src/pages/LessonPlayer.tsx, /src/components/auth/RequireAuth.tsx, /src/pages/OAuthCallback.tsx, /src/layouts/AuthLayout.tsx, /src/pages/Practice.tsx, /src/pages/admin/AdminLayout.tsx, /src/pages/Profile.tsx, /src/pages/Games.tsx, /src/pages/CertificatePage.tsx, /src/pages/Learn.tsx, /src/pages/Settings.tsx, /src/pages/TestMode.tsx, /src/pages/PracticeSession.tsx, /src/pages/PracticeSetup.tsx, /src/components/layout/Navbar.tsx, /src/pages/auth/Register.tsx, /src/pages/auth/Login.tsx, /src/components/games/SuddenDeath.tsx, /src/components/games/TypingRace.tsx, /src/components/games/FallingWords.tsx[22m
+[2m2:52:20 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/auth/AuthProvider.tsx, /src/styles/index.css, /src/pages/LessonPlayer.tsx, /src/components/auth/RequireAuth.tsx, /src/pages/OAuthCallback.tsx, /src/layouts/AuthLayout.tsx, /src/pages/Practice.tsx, /src/pages/admin/AdminLayout.tsx, /src/pages/Profile.tsx, /src/pages/Games.tsx, /src/pages/CertificatePage.tsx, /src/pages/Learn.tsx, /src/pages/Settings.tsx, /src/pages/TestMode.tsx, /src/pages/PracticeSession.tsx, /src/pages/PracticeSetup.tsx, /src/components/layout/Navbar.tsx, /src/pages/auth/Register.tsx, /src/pages/auth/Login.tsx, /src/components/games/SuddenDeath.tsx, /src/components/games/TypingRace.tsx, /src/components/games/FallingWords.tsx[22m
+[2m2:52:22 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles/index.css, /src/pages/LessonPlayer.tsx, /src/pages/Learn.tsx[22m
+[2m2:52:51 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/types/index.ts[22m
+[2m2:52:51 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/types/index.ts[22m
+[2m3:12:13 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:12:26 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:13:32 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:14:08 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:14:50 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:15:02 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:16:07 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:16:20 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:16:33 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:17:20 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:32:01 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:32:18 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:32:30 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:32:43 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:32:56 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m
+[2m3:33:09 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LessonPlayer.tsx, /src/styles/index.css[22m

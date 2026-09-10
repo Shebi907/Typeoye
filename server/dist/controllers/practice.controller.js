@@ -17,13 +17,8 @@ const response_1 = require("../utils/response");
 const practiceContent_1 = require("../data/practiceContent");
 const TYPES = ['character', 'combination', 'word', 'sentence', 'paragraph', 'weak', 'quick', 'custom'];
 const DIFFICULTIES = ['beginner', 'intermediate', 'advanced'];
-// ── Character set selection (deterministic per difficulty + rotation) ──────
-const characterSets = [
-    ['a', 's', 'd', 'f'], ['j', 'k', 'l', ';'], ['q', 'w', 'e', 'r'], ['t', 'y', 'u', 'i'],
-    ['z', 'x', 'c', 'v'], ['b', 'n', 'm'],
-];
-const letterKeys = (chars) => [...new Set(chars.replace(/[^a-z]/gi, '').split(''))];
 // ── Helpers ────────────────────────────────────────────────────────────────
+const letterKeys = (chars) => [...new Set(chars.replace(/[^a-z]/gi, '').split(''))];
 exports.generatePracticeSchema = zod_1.z.object({
     type: zod_1.z.enum(TYPES),
     difficulty: zod_1.z.enum(DIFFICULTIES).default('beginner'),
@@ -88,9 +83,6 @@ async function generatePractice(req, res) {
             focusKeys = weakKeys.map((key) => key.key);
             if (!focusKeys.length)
                 focusKeys = ['t', 'h'];
-        }
-        if (type === 'character' && !focusKeys.length) {
-            focusKeys = characterSets[(0, practiceContent_1.hashSeed)(`${difficulty}|${rotation}`) % characterSets.length];
         }
         if (type === 'custom') {
             const content = parsed.customText?.trim() ? normal(parsed.customText) : '';

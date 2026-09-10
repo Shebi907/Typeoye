@@ -11,8 +11,8 @@ export declare const generatePracticeSchema: z.ZodObject<{
     session: z.ZodOptional<z.ZodEnum<["0", "1", "true", "false"]>>;
 }, "strip", z.ZodTypeAny, {
     type: "word" | "custom" | "paragraph" | "sentence" | "character" | "combination" | "weak" | "quick";
-    wordCount: number;
     difficulty: "beginner" | "intermediate" | "advanced";
+    wordCount: number;
     targetKeys: string[];
     duration: 60 | 120 | 300 | 15 | 600 | 900 | 30;
     rotation: number;
@@ -21,8 +21,8 @@ export declare const generatePracticeSchema: z.ZodObject<{
 }, {
     type: "word" | "custom" | "paragraph" | "sentence" | "character" | "combination" | "weak" | "quick";
     session?: "0" | "1" | "true" | "false" | undefined;
-    wordCount?: number | undefined;
     difficulty?: "beginner" | "intermediate" | "advanced" | undefined;
+    wordCount?: number | undefined;
     targetKeys?: string[] | undefined;
     duration?: 60 | 120 | 300 | 15 | 600 | 900 | 30 | undefined;
     rotation?: number | undefined;

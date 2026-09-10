@@ -43,6 +43,8 @@ const typingResultSchema = new mongoose_1.Schema({
     attemptedWords: { type: Number, required: true },
     errorsCount: { type: Number, required: true },
     mode: { type: String, required: true },
+    certificateParagraphId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'CertificateParagraph' },
+    certificateParagraphText: { type: String, maxlength: 4000 },
 }, { timestamps: true });
 typingResultSchema.index({ userId: 1, createdAt: -1 });
 exports.default = mongoose_1.default.model('TypingResult', typingResultSchema);

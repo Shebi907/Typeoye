@@ -55,6 +55,11 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    authProvider: {
+        type: String,
+        enum: ['local', 'google', 'both'],
+        default: 'local',
+    },
     role: {
         type: String,
         enum: ['user', 'admin'],
@@ -71,6 +76,44 @@ const userSchema = new mongoose_1.Schema({
     verificationTokenExpires: {
         type: Date,
         default: null,
+    },
+    securityQuestion: {
+        type: String,
+        default: null,
+    },
+    securityAnswerHash: {
+        type: String,
+        default: null,
+    },
+    recoveryToken: {
+        type: String,
+        default: null,
+    },
+    recoveryTokenExpires: {
+        type: Date,
+        default: null,
+    },
+    recoveryFailedAttempts: {
+        type: Number,
+        default: 0,
+    },
+    recoveryLockedUntil: {
+        type: Date,
+        default: null,
+    },
+    certificateParagraphHistory: {
+        type: [
+            new mongoose_1.Schema({
+                difficulty: { type: String, enum: ['easy', 'medium', 'hard'], required: true },
+                paragraphId: {
+                    type: mongoose_1.Schema.Types.ObjectId,
+                    ref: 'CertificateParagraph',
+                    required: true,
+                },
+                usedAt: { type: Date, required: true },
+            }, { _id: false }),
+        ],
+        default: [],
     },
 }, { timestamps: true });
 exports.default = mongoose_1.default.model('User', userSchema);

@@ -27,6 +27,8 @@ export declare const gameSchema: z.ZodObject<{
     practiceType: z.ZodOptional<z.ZodString>;
     practiceDifficulty: z.ZodOptional<z.ZodNumber>;
     focusKeys: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    certificateParagraphId: z.ZodOptional<z.ZodString>;
+    certificateParagraphText: z.ZodOptional<z.ZodString>;
 } & {
     game: z.ZodEnum<["typingRace", "fallingWords", "suddenDeath"]>;
     score: z.ZodOptional<z.ZodNumber>;
@@ -43,9 +45,11 @@ export declare const gameSchema: z.ZodObject<{
         correct: boolean;
         timeTakenMs: number;
     }[];
-    textSource: "lesson" | "generated" | "custom";
+    textSource: "lesson" | "custom" | "generated";
     clientWpm: number;
     clientAccuracy: number;
+    certificateParagraphId?: string | undefined;
+    certificateParagraphText?: string | undefined;
     exerciseId?: string | undefined;
     focusKeys?: string[] | undefined;
     practiceType?: string | undefined;
@@ -64,7 +68,9 @@ export declare const gameSchema: z.ZodObject<{
         correct: boolean;
         timeTakenMs: number;
     }[];
-    textSource: "lesson" | "generated" | "custom";
+    textSource: "lesson" | "custom" | "generated";
+    certificateParagraphId?: string | undefined;
+    certificateParagraphText?: string | undefined;
     exerciseId?: string | undefined;
     clientWpm?: number | undefined;
     clientAccuracy?: number | undefined;

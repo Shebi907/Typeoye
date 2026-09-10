@@ -16,6 +16,8 @@ export interface ITypingSession extends Document {
     exerciseId?: mongoose.Types.ObjectId;
     clientWpm: number;
     clientAccuracy: number;
+    certificateParagraphId?: mongoose.Types.ObjectId;
+    certificateParagraphText?: string;
 }
 declare const _default: mongoose.Model<ITypingSession, {}, {}, {}, mongoose.Document<unknown, {}, ITypingSession, {}, {}> & ITypingSession & Required<{
     _id: mongoose.Types.ObjectId;

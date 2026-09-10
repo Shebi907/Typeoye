@@ -1,212 +1,109 @@
-
-> typeflow-server@1.0.0 dev
-> nodemon --exec ts-node src/index.ts
-
-[33m[nodemon] 3.1.14[39m
-[33m[nodemon] to restart at any time, enter `rs`[39m
-[33m[nodemon] watching path(s): *.*[39m
-[33m[nodemon] watching extensions: ts,json[39m
-[32m[nodemon] starting `ts-node src/index.ts`[39m
-✅ MongoDB connected: mongodb://localhost:27017/typeflow
+✅ MongoDB connected: mongodb+srv://***:***@cluster0.q0ms6yt.mongodb.net/typeoye?retryWrites=true&w=majority&appName=Cluster0
 🚀 Typeoye server running at http://localhost:3001
    Environment: development
-[0mGET /api/health [32m200[0m 5.952 ms - 54[0m
-[0mPOST /api/auth/register [32m201[0m 643.709 ms - 978[0m
-[0mPOST /api/auth/register [32m201[0m 420.798 ms - 978[0m
-[0mPOST /api/auth/login [32m200[0m 438.989 ms - 978[0m
-[0mPOST /api/auth/login [32m200[0m 592.490 ms - 1044[0m
-[0mGET /api/auth/me [32m200[0m 21.166 ms - 857[0m
-[0mGET /api/auth/me [36m304[0m 15.427 ms - -[0m
-[0mGET /uploads/avatars/6a832f1b36b3ce00036e9725-1787223326771.jpg [36m304[0m 2.442 ms - -[0m
-[0mGET /api/analytics/dashboard [36m304[0m 151.329 ms - -[0m
-[0mGET /api/analytics/dashboard [36m304[0m 10.646 ms - -[0m
-[0mGET /api/practice/overview [36m304[0m 18.251 ms - -[0m
-[0mGET /api/practice/overview [36m304[0m 6.565 ms - -[0m
-[0mGET /api/analytics/dashboard [36m304[0m 14.155 ms - -[0m
-[0mGET /api/analytics/dashboard [36m304[0m 16.044 ms - -[0m
-[0mPOST /api/auth/register [33m400[0m 0.951 ms - 111[0m
-[0mPOST /api/auth/register [33m400[0m 0.643 ms - 91[0m
-[0mPOST /api/auth/register [33m400[0m 0.421 ms - 111[0m
-[0mPOST /api/auth/register [33m400[0m 0.806 ms - 126[0m
-[0mPOST /api/auth/register [32m201[0m 443.154 ms - 955[0m
-[0mPOST /api/auth/register [33m409[0m 5.264 ms - 53[0m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `ts-node src/index.ts`[39m
-✅ MongoDB connected: mongodb://localhost:27017/typeflow
-🚀 Typeoye server running at http://localhost:3001
-   Environment: development
-[0mGET /api/health [32m200[0m 4.378 ms - 54[0m
-[0mGET /api/auth/me [36m304[0m 38.492 ms - -[0m
-[0mGET /api/auth/me [36m304[0m 11.633 ms - -[0m
-[0mGET /uploads/avatars/6a832f1b36b3ce00036e9725-1787223326771.jpg [36m304[0m 1.790 ms - -[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 14.769 ms - 315[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 3.236 ms - 409[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 2.170 ms - 389[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 4.835 ms - 394[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 4.752 ms - 340[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 5.661 ms - 410[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 4.835 ms - 378[0m
-[0mGET /api/practice/generate?type=combination&difficulty=beginner&duration=300&wordCount=200&session=1 [32m200[0m 6.210 ms - 1526[0m
-getLesson error: CastError: Cast to ObjectId failed for value "service" (type string) at path "_id" for model "Lesson"
-    at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:253:11)
-    at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
-    at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
-    at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
-    at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
-    at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
-    at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
-    at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80)
-    at processTicksAndRejections (node:internal/process/task_queues:104:5)
-    at async getLesson (D:\Typing Website\server\src\controllers\lesson.controller.ts:42:20) {
-  stringValue: '"service"',
-  messageFormat: undefined,
-  kind: 'ObjectId',
-  value: 'service',
-  path: '_id',
-  reason: BSONError: input must be a 24 character hex string, 12 byte Uint8Array, or an integer
-      at new ObjectId (D:\Typing Website\server\node_modules\bson\src\objectid.ts:120:15)
-      at castObjectId (D:\Typing Website\server\node_modules\mongoose\lib\cast\objectid.js:25:12)
-      at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:251:12)
-      at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
-      at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
-      at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
-      at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
-      at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
-      at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
-      at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80),
-  valueType: 'string'
-}
-[0mGET /api/lessons/service [31m500[0m 27.752 ms - 50[0m
-getLesson error: CastError: Cast to ObjectId failed for value "service" (type string) at path "_id" for model "Lesson"
-    at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:253:11)
-    at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
-    at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
-    at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
-    at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
-    at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
-    at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
-    at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80)
-    at processTicksAndRejections (node:internal/process/task_queues:104:5)
-    at async getLesson (D:\Typing Website\server\src\controllers\lesson.controller.ts:42:20) {
-  stringValue: '"service"',
-  messageFormat: undefined,
-  kind: 'ObjectId',
-  value: 'service',
-  path: '_id',
-  reason: BSONError: input must be a 24 character hex string, 12 byte Uint8Array, or an integer
-      at new ObjectId (D:\Typing Website\server\node_modules\bson\src\objectid.ts:120:15)
-      at castObjectId (D:\Typing Website\server\node_modules\mongoose\lib\cast\objectid.js:25:12)
-      at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:251:12)
-      at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
-      at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
-      at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
-      at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
-      at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
-      at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
-      at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80),
-  valueType: 'string'
-}
-[0mGET /api/lessons/service [31m500[0m 2.861 ms - 50[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 1.949 ms - 330[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 2.932 ms - 379[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 4.845 ms - 372[0m
-[0mGET /api/practice/generate?type=combination&difficulty=beginner&duration=300&wordCount=200&session=1 [32m200[0m 5.156 ms - 1514[0m
-[0mGET /api/lessons [32m200[0m 43.190 ms - 4553[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 4.558 ms - 365[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 1.940 ms - 329[0m
-[0mGET /api/practice/generate?type=combination&difficulty=beginner&duration=300&wordCount=200&session=1 [32m200[0m 3.415 ms - 1509[0m
-[0mGET /api/lessons [32m200[0m 7.499 ms - 4553[0m
-getLesson error: CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Lesson"
-    at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:253:11)
-    at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
-    at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
-    at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
-    at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
-    at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
-    at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
-    at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80)
-    at processTicksAndRejections (node:internal/process/task_queues:104:5)
-    at async getLesson (D:\Typing Website\server\src\controllers\lesson.controller.ts:42:20) {
-  stringValue: '"undefined"',
-  messageFormat: undefined,
-  kind: 'ObjectId',
-  value: 'undefined',
-  path: '_id',
-  reason: BSONError: input must be a 24 character hex string, 12 byte Uint8Array, or an integer
-      at new ObjectId (D:\Typing Website\server\node_modules\bson\src\objectid.ts:120:15)
-      at castObjectId (D:\Typing Website\server\node_modules\mongoose\lib\cast\objectid.js:25:12)
-      at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:251:12)
-      at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
-      at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
-      at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
-      at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
-      at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
-      at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
-      at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80),
-  valueType: 'string'
-}
-[0mGET /api/lessons/undefined [31m500[0m 5.111 ms - 50[0m
-getLesson error: CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Lesson"
-    at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:253:11)
-    at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
-    at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
-    at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
-    at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
-    at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
-    at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
-    at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80)
-    at processTicksAndRejections (node:internal/process/task_queues:104:5)
-    at async getLesson (D:\Typing Website\server\src\controllers\lesson.controller.ts:42:20) {
-  stringValue: '"undefined"',
-  messageFormat: undefined,
-  kind: 'ObjectId',
-  value: 'undefined',
-  path: '_id',
-  reason: BSONError: input must be a 24 character hex string, 12 byte Uint8Array, or an integer
-      at new ObjectId (D:\Typing Website\server\node_modules\bson\src\objectid.ts:120:15)
-      at castObjectId (D:\Typing Website\server\node_modules\mongoose\lib\cast\objectid.js:25:12)
-      at SchemaObjectId.cast (D:\Typing Website\server\node_modules\mongoose\lib\schema\objectId.js:251:12)
-      at SchemaObjectId.SchemaType.applySetters (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1288:12)
-      at SchemaObjectId.SchemaType.castForQuery (D:\Typing Website\server\node_modules\mongoose\lib\schemaType.js:1718:17)
-      at cast (D:\Typing Website\server\node_modules\mongoose\lib\cast.js:390:32)
-      at model.Query.Query.cast (D:\Typing Website\server\node_modules\mongoose\lib\query.js:5055:12)
-      at model.Query.Query._castConditions (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2374:10)
-      at model.Query._findOne (D:\Typing Website\server\node_modules\mongoose\lib\query.js:2697:8)
-      at model.Query.exec (D:\Typing Website\server\node_modules\mongoose\lib\query.js:4622:80),
-  valueType: 'string'
-}
-[0mGET /api/lessons/undefined [31m500[0m 9.234 ms - 50[0m
-[0mGET /api/lessons [32m200[0m 13.245 ms - 4553[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 2.246 ms - 361[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 3.087 ms - 330[0m
-[0mGET /api/lessons [32m200[0m 20.999 ms - 4553[0m
-[0mGET /api/lessons/6a84324167b996941c91533b [32m200[0m 104.602 ms - 1226[0m
-[0mGET /api/lessons/6a84324167b996941c91533b [36m304[0m 13.565 ms - -[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 2.613 ms - 327[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 3.919 ms - 321[0m
-[0mGET /api/practice/generate?type=combination&difficulty=beginner&duration=300&wordCount=200&session=1 [32m200[0m 2.453 ms - 1518[0m
-[0mGET /api/lessons [32m200[0m 8.383 ms - 4553[0m
-[0mGET /api/lessons/6a84324167b996941c91533b [32m200[0m 9.543 ms - 1226[0m
-[0mGET /api/lessons/6a84324167b996941c91533b [36m304[0m 8.996 ms - -[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 2.515 ms - 340[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 3.035 ms - 389[0m
-[0mPOST /api/typing/sessions [32m200[0m 476.309 ms - 511[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 3.062 ms - 407[0m
-[0mGET /api/practice/overview [32m200[0m 21.238 ms - 134[0m
-[0mGET /api/practice/overview [36m304[0m 27.018 ms - -[0m
-[0mGET /api/practice/generate?type=character&difficulty=intermediate&duration=120&wordCount=200&session=1 [32m200[0m 19.653 ms - 1808[0m
-[0mPOST /api/typing/sessions [32m200[0m 226.811 ms - 519[0m
-[0mGET /api/practice/generate?type=word&difficulty=intermediate&duration=120&wordCount=200&session=1 [32m200[0m 68.886 ms - 2540[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 11.343 ms - 340[0m
-[0mGET /api/typing/paragraphs/random [32m200[0m 10.511 ms - 365[0m
-[0mGET /api/lessons [36m304[0m 13.385 ms - -[0m
-[0mGET /api/lessons [36m304[0m 12.851 ms - -[0m
-[0mGET /api/practice/overview [36m304[0m 8.826 ms - -[0m
-[0mGET /api/practice/overview [36m304[0m 6.867 ms - -[0m
-[0mGET /api/lessons [36m304[0m 13.455 ms - -[0m
-[0mGET /api/lessons [36m304[0m 11.260 ms - -[0m
-[0mGET /api/lessons/6a84324167b996941c91533b [36m304[0m 12.966 ms - -[0m
-[0mGET /api/lessons/6a84324167b996941c91533b [36m304[0m 12.251 ms - -[0m
-[0mPOST /api/lessons/6a84324167b996941c91533b/exercises/6a84324167b996941c915346/complete [32m200[0m 109.504 ms - 1081[0m
-[0mPOST /api/auth/logout [32m200[0m 1.958 ms - 61[0m
+[0mGET /api/health [32m200[0m 11.578 ms - 54[0m
+[0mGET /api/lessons [32m200[0m 167.742 ms - 7345[0m
+[0mPOST /api/lessons/1/exercises/fake/start [33m404[0m 4.157 ms - 174[0m
+[0mGET /api/users/6a9fa9d805b50b0be8145ddf/profile [32m200[0m 283.019 ms - 560[0m
+[0mGET /api/users/6a9fa9d805b50b0be8145ddf/profile [32m200[0m 264.262 ms - 560[0m
+[0mGET /api/lessons [32m200[0m 133.463 ms - 7345[0m
+[0mGET /api/typing/paragraphs/random?difficulty=beginner [32m200[0m 1362.706 ms - 304[0m
+[0mGET /api/typing/paragraphs/random?difficulty=beginner [32m200[0m 178.025 ms - 322[0m
+[0mGET /api/practice/generate?type=character&difficulty=beginner&duration=300&wordCount=200&rotation=18&session=1 [32m200[0m 22.610 ms - 2102[0m
+[0mGET /api/practice/generate?type=character&difficulty=beginner&duration=300&wordCount=200&rotation=27&session=1 [32m200[0m 10.654 ms - 2102[0m
+[0mGET /api/practice/generate?type=combination&difficulty=beginner&duration=300&wordCount=200&rotation=0&session=1 [32m200[0m 12.682 ms - 1939[0m
+[0mGET /api/practice/generate?type=combination&difficulty=beginner&duration=300&wordCount=200&rotation=10&session=1 [32m200[0m 8.794 ms - 1940[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 2987.226 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 599.526 ms - -[0m
+[0mGET /api/certificates/paragraph?difficulty=easy&exclude=6aa06d9f18b90b863189e341,6aa06d9b18b90b863189e329,6aa06d9f18b90b863189e342 [32m200[0m 179.090 ms - 236[0m
+[0mPOST /api/auth/login [32m200[0m 1273.399 ms - 1129[0m
+[0mGET /api/analytics/progress [32m200[0m 857.135 ms - 2395[0m
+[0mGET /api/analytics/accuracy-trend [32m200[0m 1577.163 ms - 125[0m
+[0mGET /api/analytics/accuracy-trend [36m304[0m 254.772 ms - -[0m
+[0mGET /api/analytics/progress [36m304[0m 1192.193 ms - -[0m
+[0mGET /api/analytics/accuracy-trend [36m304[0m 313.461 ms - -[0m
+[0mGET /api/auth/me [32m200[0m 2481.184 ms - 942[0m
+[0mGET /api/analytics/progress [36m304[0m 1580.629 ms - -[0m
+[0mGET /api/users/me/achievements [32m200[0m 810.321 ms - 6013[0m
+[0mGET /api/users/me/achievements [36m304[0m 1046.500 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [32m200[0m 805.128 ms - 345[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 1211.240 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=beginner [32m200[0m 179.575 ms - 319[0m
+[0mGET /api/typing/paragraphs/random?difficulty=beginner [32m200[0m 170.975 ms - 309[0m
+[0mGET /api/users/me/security-question-status [36m304[0m 334.071 ms - -[0m
+[0mGET /api/users/me/profile [32m200[0m 538.795 ms - 560[0m
+[0mGET /api/users/me/security-question-status [36m304[0m 300.779 ms - -[0m
+[0mGET /api/users/me/profile [36m304[0m 581.684 ms - -[0m
+[0mGET /api/lessons [32m200[0m 285.322 ms - 7347[0m
+[0mGET /api/practice/overview [32m200[0m 413.086 ms - 166[0m
+[0mGET /api/practice/overview [36m304[0m 414.214 ms - -[0m
+[0mGET /api/lessons/6a9fdaecb0e6ae208eaf7712 [32m200[0m 1153.778 ms - 6874[0m
+[0mPOST /api/lessons/6a9fdaecb0e6ae208eaf7712/exercises/6a9fdaecb0e6ae208eaf772b/complete [32m200[0m 3525.692 ms - 1312[0m
+[0mPOST /api/auth/logout [32m200[0m 1.185 ms - 61[0m
+[0mGET /api/lessons [32m200[0m 128.457 ms - 7345[0m
+[0mGET /api/lessons/6a9fdaecb0e6ae208eaf770e [32m200[0m 247.858 ms - 5493[0m
+[0mGET /api/lessons [32m200[0m 144.007 ms - 7345[0m
+[0mGET /api/lessons/6a9fdaecb0e6ae208eaf770f [33m403[0m 140.209 ms - 78[0m
+[0mGET /api/lessons/6a9fdaecb0e6ae208eaf770f [33m403[0m 545.300 ms - 78[0m
+[0mPOST /api/auth/login [32m200[0m 1404.965 ms - 1129[0m
+[0mGET /api/analytics/accuracy-trend [36m304[0m 350.357 ms - -[0m
+[0mGET /api/auth/me [32m200[0m 395.006 ms - 942[0m
+[0mGET /api/analytics/accuracy-trend [36m304[0m 256.593 ms - -[0m
+[0mGET /api/analytics/accuracy-trend [36m304[0m 342.813 ms - -[0m
+[0mGET /api/lessons [32m200[0m 972.255 ms - 7347[0m
+[0mGET /api/analytics/progress [32m200[0m 5216.361 ms - 2395[0m
+[0mGET /api/analytics/progress [36m304[0m 357.453 ms - -[0m
+[0mGET /api/analytics/progress [36m304[0m 267.786 ms - -[0m
+[0mGET /api/users/me/security-question-status [36m304[0m 253.168 ms - -[0m
+[0mGET /api/users/me/profile [32m200[0m 385.394 ms - 560[0m
+[0mGET /api/users/me/security-question-status [36m304[0m 277.164 ms - -[0m
+[0mGET /api/users/me/profile [36m304[0m 482.588 ms - -[0m
+[0mPOST /api/lessons/6a9fdaecb0e6ae208eaf7712/exercises/6a9fdaecb0e6ae208eaf772b/complete [32m200[0m 3809.157 ms - 1312[0m
+[0mPOST /api/lessons/6a9fdaecb0e6ae208eaf7712/exercises/6a9fdaecb0e6ae208eaf772c/complete [32m200[0m 2526.292 ms - 1313[0m
+[0mPOST /api/lessons/6a9fdaecb0e6ae208eaf7712/exercises/6a9fdaecb0e6ae208eaf772d/complete [32m200[0m 2688.541 ms - 1422[0m
+[0mGET /api/lessons/6a9fdaecb0e6ae208eaf7713 [32m200[0m 870.347 ms - 9914[0m
+[0mGET /api/lessons [32m200[0m 255.758 ms - 7345[0m
+[0mGET /api/users/me/security-question-status [36m304[0m 278.544 ms - -[0m
+[0mGET /api/users/me/profile [32m200[0m 412.401 ms - 563[0m
+[0mGET /api/users/me/security-question-status [36m304[0m 260.980 ms - -[0m
+[0mGET /api/users/me/profile [36m304[0m 407.914 ms - -[0m
+[0mGET /api/typing/paragraphs/random?difficulty=beginner [32m200[0m 127.052 ms - 326[0m
+[0mGET /api/typing/paragraphs/random?difficulty=beginner [32m200[0m 129.892 ms - 311[0m
+[0mGET /api/certificates/paragraph?difficulty=easy&exclude=6aa06d9f18b90b863189e341,6aa06d9b18b90b863189e329,6aa06d9f18b90b863189e342,6aa06d9b18b90b863189e325 [32m200[0m 592.931 ms - 249[0m
+[0mPOST /api/certificates/guest [32m200[0m 701.952 ms - 109179[0m
+[0mPOST /api/typing/sessions [32m200[0m 3763.186 ms - 774[0m
+[0mGET /api/typing/paragraphs/random?difficulty=beginner [32m200[0m 147.373 ms - 334[0m
+[0mGET /api/typing/paragraphs/random?difficulty=beginner [32m200[0m 137.068 ms - 340[0m
+[0mGET /api/games/history [32m200[0m 282.971 ms - 38[0m
+[0mGET /api/games/history?game=typingRace [32m200[0m 288.922 ms - 38[0m
+[0mGET /api/games/history [36m304[0m 345.659 ms - -[0m
+[0mGET /api/games/history?game=typingRace [36m304[0m 341.482 ms - -[0m
+[0mPOST /api/lessons/6a9fdaecb0e6ae208eaf7713/exercises/6a9fdaecb0e6ae208eaf772e/complete [32m200[0m 2625.272 ms - 901[0m
+[0mPOST /api/lessons/6a9fdaecb0e6ae208eaf7713/exercises/6a9fdaecb0e6ae208eaf772f/complete [32m200[0m 3254.170 ms - 1092[0m
+[0mPOST /api/lessons/6a9fdaecb0e6ae208eaf7713/exercises/6a9fdaecb0e6ae208eaf7730/complete [32m200[0m 2847.948 ms - 1283[0m
+[0mPOST /api/lessons/6a9fdaecb0e6ae208eaf7713/exercises/6a9fdaecb0e6ae208eaf7731/complete [32m200[0m 2441.575 ms - 1551[0m
+[0mGET /api/lessons/6a9fdaecb0e6ae208eaf7714 [32m200[0m 870.536 ms - 10290[0m
+[0mGET /api/lessons [32m200[0m 396.655 ms - 7345[0m
+[0mGET /api/users/me/security-question-status [36m304[0m 280.998 ms - -[0m
+[0mGET /api/users/me/profile [32m200[0m 424.184 ms - 563[0m
+[0mGET /api/users/me/security-question-status [36m304[0m 256.411 ms - -[0m
+[0mGET /api/users/me/profile [36m304[0m 447.003 ms - -[0m
+[0mPOST /api/auth/logout [32m200[0m 1.942 ms - 61[0m
+[0mGET /api/auth/google [36m302[0m 6.075 ms - 398[0m
+[0mGET /api/auth/google [36m302[0m 3.802 ms - 398[0m
+[0mGET /api/auth/google/callback?state=9373d191627796222fe4d316ad5442d2453ed0642893e459&iss=https://accounts.google.com&code=4/0ATsMZqC3uvdO4vB3KE89-D_27eoK_Oe3L1LVLuST_HEOBptzNjfdxei8q1jQYZu4Ci9Yvg&scope=email+profile+https://www.googleapis.com/auth/userinfo.profile+openid+https://www.googleapis.com/auth/userinfo.email&authuser=0&prompt=none [36m302[0m 1816.635 ms - 264[0m
+[0mGET /api/lessons [32m200[0m 323.418 ms - 7345[0m
+[0mGET /api/auth/me [32m200[0m 487.562 ms - 945[0m
+[0mGET /api/analytics/accuracy-trend [32m200[0m 248.069 ms - 125[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [32m200[0m 816.038 ms - 345[0m
+[0mGET /api/analytics/progress [32m200[0m 366.824 ms - 2927[0m
+[0mGET /api/auth/me [36m304[0m 419.856 ms - -[0m
+[0mGET /api/analytics/accuracy-trend [36m304[0m 261.019 ms - -[0m
+[0mGET /api/analytics/progress [36m304[0m 277.234 ms - -[0m
+[0mGET /api/analytics/accuracy-trend [36m304[0m 302.466 ms - -[0m
+[0mGET /api/analytics/progress [36m304[0m 402.556 ms - -[0m
+[0mGET /api/leaderboard?period=daily&limit=50 [36m304[0m 991.865 ms - -[0m
+[0mGET /api/users/me/security-question-status [32m200[0m 249.527 ms - 44[0m
+[0mGET /api/users/me/profile [32m200[0m 432.082 ms - 563[0m
+[0mGET /api/users/me/security-question-status [36m304[0m 247.731 ms - -[0m
+[0mGET /api/users/me/profile [36m304[0m 513.440 ms - -[0m

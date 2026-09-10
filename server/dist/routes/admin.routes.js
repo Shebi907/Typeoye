@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const zod_1 = require("zod");
 const admin_controller_1 = require("../controllers/admin.controller");
+const certificateParagraph_controller_1 = require("../controllers/certificateParagraph.controller");
 const auth_middleware_1 = require("../middleware/auth.middleware");
 const validate_middleware_1 = require("../middleware/validate.middleware");
 const router = (0, express_1.Router)();
@@ -65,6 +66,11 @@ const sentenceSchema = zod_1.z.object({
     difficulty: zod_1.z.enum(DIFFICULTY),
     tags: zod_1.z.array(zod_1.z.string().trim().min(1).max(30)).max(10).optional(),
 });
+const certificateParagraphSchema = zod_1.z.object({
+    content: zod_1.z.string().trim().min(10).max(5000),
+    difficulty: zod_1.z.enum(['easy', 'medium', 'hard']),
+    isActive: zod_1.z.boolean().optional(),
+});
 const roleSchema = zod_1.z.object({ role: zod_1.z.enum(['user', 'admin']) });
 const reorderSchema = zod_1.z.object({ orderedIds: zod_1.z.array(zod_1.z.string().min(1)).min(1) });
 const settingsSchema = zod_1.z.object({
@@ -112,6 +118,11 @@ router.get('/sentences', admin_controller_1.adminSentences.list);
 router.post('/sentences', (0, validate_middleware_1.validate)(sentenceSchema), admin_controller_1.adminSentences.create);
 router.patch('/sentences/:id', (0, validate_middleware_1.validate)(sentenceSchema.partial()), admin_controller_1.adminSentences.update);
 router.delete('/sentences/:id', admin_controller_1.adminSentences.remove);
+// Certificate paragraph library (Certificate Test mode)
+router.get('/certificate-paragraphs', certificateParagraph_controller_1.adminCertificateParagraphs.list);
+router.post('/certificate-paragraphs', (0, validate_middleware_1.validate)(certificateParagraphSchema), certificateParagraph_controller_1.adminCertificateParagraphs.create);
+router.patch('/certificate-paragraphs/:id', (0, validate_middleware_1.validate)(certificateParagraphSchema.partial()), certificateParagraph_controller_1.adminCertificateParagraphs.update);
+router.delete('/certificate-paragraphs/:id', certificateParagraph_controller_1.adminCertificateParagraphs.remove);
 // ── Platform Settings ──────────────────────────────────────────────────────────
 router.get('/settings', admin_controller_1.getSettings);
 router.patch('/settings', (0, validate_middleware_1.validate)(settingsSchema), admin_controller_1.updateSettings);

@@ -22,7 +22,7 @@ const envSchema = zod_1.z.object({
     EMAIL_USER: zod_1.z.string().optional(),
     EMAIL_PASS: zod_1.z.string().optional(),
     // Delivery address for contact-form submissions.
-    EMAIL_TO: zod_1.z.string().default('shahzaibakbar874@gmail.com'),
+    EMAIL_TO: zod_1.z.string().default('contact.typeoye@gmail.com'),
     RESEND_API_KEY: zod_1.z.string().optional(),
     RESEND_FROM_EMAIL: zod_1.z.string().default('onboarding@resend.dev'),
 });

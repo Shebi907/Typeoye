@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verificationLimiter = exports.contactLimiter = exports.changePasswordLimiter = exports.certificateLimiter = exports.apiLimiter = exports.authLimiter = void 0;
+exports.recoveryLimiter = exports.verificationLimiter = exports.contactLimiter = exports.changePasswordLimiter = exports.certificateLimiter = exports.apiLimiter = exports.authLimiter = void 0;
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const env_1 = require("../config/env");
 const isProduction = env_1.env.NODE_ENV === 'production';
@@ -54,6 +54,13 @@ exports.verificationLimiter = (0, express_rate_limit_1.default)({
     windowMs: 10 * 60 * 1000, // 10 minutes
     max: 5,
     message: { success: false, error: 'Too many verification requests. Please try again in a few minutes.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+exports.recoveryLimiter = (0, express_rate_limit_1.default)({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    message: { success: false, error: 'Too many recovery attempts. Please try again later.' },
     standardHeaders: true,
     legacyHeaders: false,
 });
