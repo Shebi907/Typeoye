@@ -33,14 +33,16 @@ export const googleOAuth = {
   },
 };
 
-const parsed = envSchema.safeParse(process.env);
-
-if (!parsed.success) {
-  console.error('❌ Invalid environment variables:', parsed.error.flatten().fieldErrors);
-  process.exit(1);
+function validateEnv(): z.infer<typeof envSchema> {
+  const parsed = envSchema.safeParse(process.env);
+  if (!parsed.success) {
+    console.error('❌ Invalid environment variables:', parsed.error.flatten().fieldErrors);
+    process.exit(1);
+  }
+  return parsed.data;
 }
 
-export const env = parsed.data;
+export const env = validateEnv();
 
 // Gmail SMTP config for sending mail. `isConfigured` is true only when both the
 // address and app password are present, so sending guard-rails gate on intent.
