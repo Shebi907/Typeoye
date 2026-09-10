@@ -25,6 +25,11 @@ import contactRoutes from './routes/contact.routes';
 export function createApp() {
   const app = express();
 
+  // Render (and most PaaS hosts) sit behind a reverse proxy that sets
+  // X-Forwarded-For. Trust exactly one hop so express-rate-limit and any
+  // req.ip usage correctly identify the real client instead of Render's proxy.
+  app.set('trust proxy', 1);
+
   ensureUploadDirs();
 
   app.use(helmet());
