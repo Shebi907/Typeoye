@@ -82,7 +82,7 @@ export default function HowItWorks() {
         {STEPS.map((step) => {
           const Icon = step.icon;
           return (
-            <div key={step.label} className="card relative p-7" data-testid="how-step">
+            <div key={step.label} className="card relative p-5 sm:p-7" data-testid="how-step">
               <div
                 className="flex h-12 w-12 items-center justify-center rounded-xl"
                 style={{ background: step.gradient, boxShadow: '0 6px 14px -6px rgba(15, 23, 42, 0.15)' }}

@@ -108,7 +108,7 @@ export default function SupportCenter() {
         {/* Main column */}
         <div className="min-w-0">
           {filtered.length === 0 ? (
-            <div className="card flex flex-col items-center justify-center px-6 py-16 text-center">
+            <div className="card flex flex-col items-center justify-center px-4 py-16 text-center sm:px-6">
               <span className="flex h-14 w-14 items-center justify-center rounded-2xl" style={{ backgroundColor: 'var(--color-accent-light)', color: 'var(--color-accent-text)' }}>
                 <SearchX size={26} strokeWidth={2} />
               </span>

@@ -218,15 +218,15 @@ export default function LessonPlayer() {
   const displayRemaining = Math.max(0, 999999 - displayElapsed);
 
   if (!lesson && error) {
-    return <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6">
-      <div className="max-w-6xl mx-auto w-full">
+    return <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6 overflow-hidden">
+      <div className="max-w-6xl mx-auto w-full overflow-hidden">
         <nav className="flex items-center justify-between mb-5">
           <Link to="/lessons" className="flex items-center gap-1.5 text-sm font-semibold transition-colors hover:opacity-80" style={{ color: 'var(--color-accent-text)' }}>
             <ArrowLeft size={15} />
             Back to Learn
           </Link>
         </nav>
-        <div className="card p-8 text-center max-w-md mx-auto">
+        <div className="card p-4 sm:p-6 lg:p-8 text-center max-w-md mx-auto overflow-hidden">
           {!isAuthenticated ? (
             <>
               <div className="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center" style={{ backgroundColor: 'var(--color-accent-light)', color: 'var(--color-accent-text)' }}>
@@ -254,8 +254,8 @@ export default function LessonPlayer() {
 
   if (!lesson) {
     return (
-      <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto w-full">
+      <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6 overflow-hidden">
+        <div className="max-w-6xl mx-auto w-full overflow-hidden">
           <nav className="flex items-center justify-between mb-5">
             <Link to="/lessons" className="flex items-center gap-1.5 text-sm font-semibold transition-colors hover:opacity-80" style={{ color: 'var(--color-accent-text)' }}>
               <ArrowLeft size={15} />
@@ -278,8 +278,8 @@ export default function LessonPlayer() {
   const errorKey = lastChar?.status === 'error' || lastChar?.status === 'extra' ? active?.typed[active.typed.length - 1] : undefined;
 
   return (
-    <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6">
-      <div className="max-w-6xl mx-auto w-full">
+    <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6 overflow-hidden">
+      <div className="max-w-6xl mx-auto w-full overflow-hidden">
 
         {/* ── Top Navigation ── */}
         <nav className="flex items-center justify-between mb-5">
@@ -351,7 +351,7 @@ export default function LessonPlayer() {
 
           {/* LEFT: Main exercise card */}
           <div className="flex-1 min-w-0 w-full">
-            <div className="card tt-main-card p-5 sm:p-7 w-full">
+            <div className="card tt-main-card p-5 sm:p-7 w-full overflow-hidden">
               {/* Exercise header */}
               {currentExercise && (
                 <div className="mb-5">
@@ -477,8 +477,8 @@ export default function LessonPlayer() {
 
               {/* Exercise completion overlay */}
               {engine.phase === 'finished' && feedback && (
-                <div className="absolute inset-0 grid place-items-center p-5 bg-[var(--color-page)]/95 rounded-2xl z-10">
-                  <div className="w-full max-w-md card result-card p-6 text-center shadow-xl border border-[var(--color-border)]">
+                <div className="absolute inset-0 grid place-items-center p-3 sm:p-5 bg-[var(--color-page)]/95 rounded-2xl z-10 overflow-hidden">
+                  <div className="w-full max-w-md card result-card p-4 sm:p-6 text-center shadow-xl border border-[var(--color-border)] overflow-hidden">
                         {feedback.passed ? (
                           <div className="w-14 h-14 rounded-full mx-auto flex items-center justify-center" style={{ backgroundColor: 'rgba(34, 197, 94, 0.12)' }}>
                             <CheckCircle2 size={28} style={{ color: '#16a34a' }} />

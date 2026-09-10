@@ -33,21 +33,21 @@ function TopThreePodium({ entries }: { entries: LeaderboardEntry[] }) {
   return (
     <div className="card p-5 mb-4">
       <h3 className="text-sm font-bold uppercase tracking-wider mb-4" style={{ color: 'var(--color-text-secondary)' }}>Top 3 Typists</h3>
-      <div className="flex items-end justify-center gap-4 pt-4">
+      <div className="flex items-end justify-center gap-2 sm:gap-4 pt-4">
         {podiumOrder.map((entry, i) => {
           const isFirst = entry.rank === 1;
           const podiumIdx = isFirst ? 1 : entry.rank === 2 ? 0 : 2;
           return (
             <div key={entry.userId ?? entry.rank} className="flex flex-col items-center" style={{ flex: '0 0 auto' }}>
               {/* Avatar */}
-              <Avatar name={entry.displayName} size={isFirst ? 64 : 48} className="mb-2" />
-              <span className="text-xs font-semibold text-center mb-1 truncate max-w-[80px]" style={{ color: 'var(--color-text-primary)' }}>
+              <Avatar name={entry.displayName} size={isFirst ? 56 : 44} className="mb-2" />
+              <span className="text-xs font-semibold text-center mb-1 truncate max-w-[70px] sm:max-w-[80px]" style={{ color: 'var(--color-text-primary)' }}>
                 {entry.displayName}
               </span>
               <span className="text-[11px] font-bold tabular-nums mb-2" style={{ color: 'var(--color-accent-text)' }}>{entry.wpm} WPM</span>
               {/* Podium bar */}
               <div
-                className={cn('w-20 rounded-t-xl flex items-center justify-center')}
+                className={cn('w-16 sm:w-20 rounded-t-xl flex items-center justify-center')}
                 style={{
                   height: heights[podiumIdx],
                   background: isFirst ? 'linear-gradient(180deg, rgba(67,97,238,0.15) 0%, rgba(139,92,246,0.08) 100%)' : 'var(--color-card)',
@@ -114,7 +114,7 @@ function LeaderboardSkeleton() {
       <aside className="w-full lg:w-[320px] shrink-0 flex flex-col">
         <div className="card p-5 mb-4">
           <Skeleton width="90px" height="0.8rem" className="mb-4" />
-          <div className="flex items-end justify-center gap-4 pt-4">
+      <div className="flex items-end justify-center gap-2 sm:gap-4 pt-4">
             {podiumHeights.map((h, i) => (
               <div key={i} className="flex flex-col items-center" style={{ flex: '0 0 auto' }}>
                 <Skeleton width={i === 1 ? '64px' : '48px'} height={i === 1 ? '64px' : '48px'} rounded="full" className="mb-2" />
@@ -216,7 +216,7 @@ export default function Leaderboard() {
   const inTop = me ? entries.some((e) => e.userId === me.userId) : false;
 
   return (
-    <PageWrapper title="" fullWidth className="py-6 px-4 sm:px-6">
+        <PageWrapper title="" fullWidth className="py-6 px-3 sm:px-4 md:px-6">
       <div className="max-w-6xl mx-auto w-full">
 
         {/* ── Header ── */}
@@ -242,14 +242,14 @@ export default function Leaderboard() {
         </div>
 
         {/* ── Period filter ── */}
-        <div className="flex justify-center mb-6">
-          <div className="inline-flex rounded-xl p-1" style={{ backgroundColor: 'var(--color-card)', border: '1px solid var(--color-border)' }}>
+        <div className="flex justify-center mb-6 overflow-x-auto">
+          <div className="inline-flex rounded-xl p-1 min-w-max" style={{ backgroundColor: 'var(--color-card)', border: '1px solid var(--color-border)' }}>
             {PERIODS.map(({ key, label }) => (
               <button
                 key={key}
                 onClick={() => setPeriod(key)}
                 className={cn(
-                  'px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200',
+                  'px-3 sm:px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap',
                   period === key ? 'text-white shadow-md' : 'hover:bg-[var(--color-border)]',
                 )}
                 style={period === key ? { background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff' } : { color: 'var(--color-text-secondary)' }}

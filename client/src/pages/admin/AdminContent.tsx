@@ -222,7 +222,7 @@ function PoolManager({ config }: { config: PoolConfig }) {
       ) : items.length === 0 ? (
         <EmptyState message="Nothing here yet — add some content." />
       ) : (
-        <div className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--color-border)' }}>
+        <div className="rounded-xl overflow-x-auto" style={{ border: '1px solid var(--color-border)' }}>
           <table className="w-full text-sm">
             <thead>
               <tr style={{ color: 'var(--color-text-muted)', backgroundColor: 'var(--color-page)' }}>

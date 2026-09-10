@@ -63,7 +63,7 @@ export default function UserHome() {
   ];
 
   return (
-    <PageWrapper fullWidth className="py-6 px-4 sm:px-6" title={undefined}>
+    <PageWrapper fullWidth className="py-6 px-3 sm:px-4 md:px-6" title={undefined}>
       <div className="max-w-6xl mx-auto w-full flex flex-col gap-6">
         {/* ── Hero ─────────────────────────────────────────────────────── */}
         <section
@@ -166,7 +166,7 @@ export default function UserHome() {
           </div>
 
           {/* Quick actions */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {quickActions.map(({ icon: Icon, title, description, cta, to, tone }) => (
               <div key={title} className="card p-4 flex items-center gap-3">
                 <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={tone}>

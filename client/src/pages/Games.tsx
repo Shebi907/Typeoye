@@ -349,17 +349,21 @@ export default function Games() {
               <Clock size={15} style={{ color: 'var(--color-accent-text)' }} />
               Recent Races
             </div>
-            <div className="divide-y" style={{ borderColor: 'var(--color-border)' }}>
-              {recent.map((race) => (
-                <div key={race._id} className="flex items-center justify-between px-4 py-3 text-sm">
-                  <span className={race.winner === 'user' ? 'font-semibold' : ''} style={{ color: race.winner === 'user' ? 'var(--color-correct)' : 'var(--color-text-secondary)' }}>
-                    {race.winner === 'user' ? 'Win' : 'Loss'}
-                  </span>
-                  <span style={{ color: 'var(--color-text-primary)' }}>{race.wpm} WPM</span>
-                  <span style={{ color: 'var(--color-text-primary)' }}>{race.accuracy}%</span>
-                  <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{formatDate(race.createdAt)}</span>
+            <div className="overflow-x-auto">
+              <div className="min-w-[400px]">
+                <div className="divide-y" style={{ borderColor: 'var(--color-border)' }}>
+                  {recent.map((race) => (
+                    <div key={race._id} className="flex items-center justify-between px-4 py-3 text-sm">
+                      <span className={race.winner === 'user' ? 'font-semibold' : ''} style={{ color: race.winner === 'user' ? 'var(--color-correct)' : 'var(--color-text-secondary)' }}>
+                        {race.winner === 'user' ? 'Win' : 'Loss'}
+                      </span>
+                      <span style={{ color: 'var(--color-text-primary)' }}>{race.wpm} WPM</span>
+                      <span style={{ color: 'var(--color-text-primary)' }}>{race.accuracy}%</span>
+                      <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{formatDate(race.createdAt)}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         )}

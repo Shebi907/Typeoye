@@ -93,7 +93,7 @@ export default function Blog() {
         {/* Main column */}
         <div className="min-w-0">
           {filtered.length === 0 ? (
-            <div className="card p-10 text-center text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+            <div className="card p-6 text-center text-sm sm:p-10" style={{ color: 'var(--color-text-secondary)' }}>
               No posts in this category yet.
             </div>
           ) : (

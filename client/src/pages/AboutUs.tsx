@@ -106,7 +106,7 @@ export default function AboutUs() {
           {VALUES.map((value) => {
             const Icon = value.icon;
             return (
-              <div key={value.title} className="card flex flex-col p-6" data-testid="about-value">
+              <div key={value.title} className="card flex flex-col p-5 sm:p-6" data-testid="about-value">
                 <span className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ backgroundColor: value.bg, color: value.color }}>
                   <Icon size={24} strokeWidth={1.8} />
                 </span>

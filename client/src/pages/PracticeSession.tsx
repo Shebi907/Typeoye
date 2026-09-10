@@ -207,9 +207,9 @@ export default function PracticeSession() {
 
   if (loadError) {
     return (
-      <PageWrapper fullWidth className="py-8 px-4 sm:px-6" title={undefined}>
+      <PageWrapper fullWidth className="py-6 px-3 sm:px-4 md:px-6" title={undefined}>
         <div className="max-w-md mx-auto text-center">
-          <div className="card p-8">
+          <div className="card p-4 sm:p-6 lg:p-8">
             <p className="text-sm font-semibold mb-4" style={{ color: 'var(--color-text-primary)' }}>
               {loadError}
             </p>
@@ -242,12 +242,12 @@ export default function PracticeSession() {
       { value: `${Math.round(engine.elapsed)}s`, label: 'TIME', background: 'linear-gradient(135deg, rgba(74,222,128,0.12) 0%, rgba(34,197,94,0.08) 100%)', color: '#16A34A', labelColor: '#4ADE80' },
     ];
     return (
-      <PageWrapper fullWidth className="tt-page py-6 px-4 sm:px-6" title={undefined}>
+      <PageWrapper fullWidth className="tt-page py-6 px-3 sm:px-4 md:px-6" title={undefined}>
         <div className="max-w-6xl mx-auto w-full">
           <div className="flex flex-col lg:flex-row gap-5 w-full items-start">
             {/* ── Result card ── */}
             <div className="flex-1 min-w-0 w-full">
-              <div className="card result-card tt-main-card p-5 sm:p-7 w-full" data-testid="practice-result">
+              <div className="card result-card tt-main-card p-4 sm:p-5 lg:p-7 w-full" data-testid="practice-result">
                 <div className="text-center">
                   <div className="text-3xl mb-1">🎉</div>
                   <h2 className="text-2xl font-extrabold" style={{ color: 'var(--color-text-primary)' }}>
@@ -370,8 +370,8 @@ export default function PracticeSession() {
   if (!exercise || engine.wordStates.length === 0) {
     const keyBlock = { width: 'clamp(17px, 5.4vw, 34px)', height: 'clamp(17px, 5.4vw, 34px)' } as const;
     return (
-      <PageWrapper fullWidth className="tt-page py-6 px-4 sm:px-6" title={undefined}>
-        <div className="max-w-6xl mx-auto w-full" data-testid="session-loading">
+      <PageWrapper fullWidth className="tt-page py-6 px-3 sm:px-4 md:px-6" title={undefined}>
+        <div className="max-w-6xl mx-auto w-full">
           <div className="mb-4">
             <button
               type="button"
@@ -391,7 +391,7 @@ export default function PracticeSession() {
           <div className="flex flex-col lg:flex-row gap-5 w-full items-start">
             {/* Main card skeleton — mirrors the real typing card so the footer stays put */}
             <div className="flex-1 min-w-0 w-full">
-              <div className="card tt-main-card p-5 sm:p-7 w-full" aria-busy="true">
+              <div className="card tt-main-card p-4 sm:p-5 lg:p-7 w-full" aria-busy="true">
                 <span className="sr-only">Preparing your practice…</span>
                 <div className="flex items-start gap-3.5 mb-5">
                   <Skeleton rounded="full" width="44px" height="44px" className="flex-shrink-0" />
@@ -460,7 +460,7 @@ export default function PracticeSession() {
   /* ── ACTIVE EXERCISE VIEW ────────────────────────────────────────────── */
 
   return (
-    <PageWrapper fullWidth className="tt-page py-6 px-4 sm:px-6" title={undefined}>
+    <PageWrapper fullWidth className="tt-page py-6 px-3 sm:px-4 md:px-6" title={undefined}>
       <div className="max-w-6xl mx-auto w-full">
         <div className="mb-4">
           <button
@@ -493,7 +493,7 @@ export default function PracticeSession() {
         <div className="flex flex-col lg:flex-row gap-5 w-full items-start">
           {/* ── Main column ── */}
           <div className="flex-1 min-w-0 w-full">
-            <div className="card tt-main-card p-5 sm:p-7 w-full" data-testid="typing-card">
+            <div className="card tt-main-card p-4 sm:p-5 lg:p-7 w-full" data-testid="typing-card">
               {/* Header */}
               <div className="flex items-start gap-3.5 mb-5">
                 <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 tt-header-icon">

@@ -73,7 +73,7 @@ export default function Landing() {
   return (
     <>
       {/* Hero */}
-      <section className="relative max-w-5xl mx-auto px-6 pt-16 sm:pt-20 pb-20 text-center overflow-hidden">
+      <section className="relative max-w-5xl mx-auto px-4 sm:px-6 pt-12 sm:pt-20 pb-16 sm:pb-20 text-center overflow-hidden">
         <span className="dot-grid dot-grid-tl" aria-hidden="true" />
         <span className="dot-grid dot-grid-br" aria-hidden="true" />
         <div
@@ -88,7 +88,7 @@ export default function Landing() {
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 h-56 w-[36rem] rounded-full"
+          className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 h-56 w-full max-w-[36rem] rounded-full"
           style={{ background: 'radial-gradient(circle, rgba(67, 97, 238, 0.1) 0%, transparent 70%)', filter: 'blur(48px)' }}
         />
         <div className="relative z-10">
@@ -101,7 +101,7 @@ export default function Landing() {
           </div>
 
           <h1
-            className="text-6xl sm:text-7xl font-extrabold tracking-tight leading-[1.05] mb-6"
+            className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] mb-6"
             style={{ color: 'var(--color-text-primary)' }}
           >
             Master the Keyboard.
@@ -114,12 +114,12 @@ export default function Landing() {
             </span>
           </h1>
 
-          <p className="text-lg max-w-2xl mx-auto mb-10" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="text-base sm:text-lg max-w-2xl mx-auto mb-10 px-2" style={{ color: 'var(--color-text-secondary)' }}>
             Typeoye combines structured lessons, real-time feedback, and adaptive practice
             to make you a faster, more accurate typist — starting today.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16">
             <Link to="/test">
               <Button size="lg" variant="primary" icon={<Keyboard size={18} />}>
                 Start Typing Test <ArrowRight size={18} />
@@ -134,7 +134,7 @@ export default function Landing() {
 
           {/* Demo typing preview */}
           <div
-            className="card p-8 max-w-2xl mx-auto text-left"
+            className="card p-5 sm:p-8 max-w-2xl mx-auto text-left overflow-hidden"
             style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '20px', lineHeight: 2 }}
           >
             <div className="text-xs font-semibold uppercase tracking-widest mb-4"
@@ -166,9 +166,9 @@ export default function Landing() {
       </section>
 
       {/* FEATURES */}
-      <section className="max-w-5xl mx-auto px-6 py-16 sm:py-20">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-20">
         <h2
-          className="text-3xl sm:text-4xl font-bold text-center mb-3"
+          className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-3"
           style={{ color: 'var(--color-text-primary)' }}
         >
           Everything You Need to Improve
@@ -176,7 +176,7 @@ export default function Landing() {
         <p className="text-center max-w-2xl mx-auto mb-12 sm:mb-14" style={{ color: 'var(--color-text-secondary)' }}>
           Powerful tools and fun games to make typing practice enjoyable and effective.
         </p>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {features.map(({ icon: Icon, title, description, cta, to }) => (
             <div key={title} className="card card-hover p-6 flex flex-col">
               <div className="land-feature-icon w-11 h-11 rounded-xl flex items-center justify-center mb-4">
@@ -202,10 +202,10 @@ export default function Landing() {
       </section>
 
       {/* WHY CHOOSE TYPEOYE */}
-      <section className="max-w-5xl mx-auto px-6 pb-8">
-        <div className="rounded-[28px] px-6 py-16 sm:py-20" style={{ backgroundColor: 'var(--color-accent-light)' }}>
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
+        <div className="rounded-[20px] sm:rounded-[28px] px-4 sm:px-6 py-12 sm:py-16 lg:py-20" style={{ backgroundColor: 'var(--color-accent-light)' }}>
           <h2
-            className="text-3xl sm:text-4xl font-bold text-center mb-2"
+            className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-2"
             style={{ color: 'var(--color-text-primary)' }}
           >
             Why Choose TypeOye?
@@ -213,7 +213,7 @@ export default function Landing() {
           <p className="text-lg text-center mb-12 sm:mb-14" style={{ color: 'var(--color-text-secondary)' }}>
             Simple. Effective. Free.
           </p>
-          <div className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto">
             {benefits.map(({ icon: Icon, title, description }) => (
               <div key={title} className="card card-hover p-8 text-center">
                 <div className="land-benefit-icon w-14 h-14 rounded-2xl mx-auto flex items-center justify-center mb-5"
@@ -236,9 +236,9 @@ export default function Landing() {
       </section>
 
       {/* CERTIFICATE CTA */}
-      <section className="max-w-5xl mx-auto px-6 py-16 sm:py-20">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-20">
         <div
-          className="cert-cta relative overflow-hidden rounded-[28px] px-6 py-16 sm:py-20 text-center"
+          className="cert-cta relative overflow-hidden rounded-[20px] sm:rounded-[28px] px-4 sm:px-6 py-12 sm:py-16 lg:py-20 text-center"
         >
           <span className="dot-grid dot-grid-tl" aria-hidden="true" />
           <span className="dot-grid dot-grid-br" aria-hidden="true" />
@@ -260,7 +260,7 @@ export default function Landing() {
           </div>
 
           <h2
-            className="text-3xl sm:text-4xl font-bold mb-3"
+            className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3"
             style={{ color: 'var(--color-text-primary)' }}
           >
             Get Your Typing Certificate

@@ -59,17 +59,17 @@ export default function CertificatePage() {
   };
 
   return (
-    <PageWrapper fullWidth className="py-8 px-4 sm:px-6">
-      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 items-start">
+    <PageWrapper fullWidth className="py-6 sm:py-8 px-3 sm:px-4 md:px-6">
+      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 sm:gap-8 items-start">
         {/* Main form card */}
-        <div className="w-full lg:flex-1 card p-8 sm:p-10">
+        <div className="w-full lg:flex-1 card p-6 sm:p-8 lg:p-10">
           <div
             className="w-12 h-12 rounded-xl grid place-items-center mb-5"
             style={{ backgroundColor: 'var(--color-accent-light)' }}
           >
             <Award size={24} style={{ color: 'var(--color-accent-text)' }} />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-2">Get Your Typing Certificate</h1>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2">Get Your Typing Certificate</h1>
           <p className="text-secondary mb-8">Reach at least 30 WPM and 90% accuracy in one test to earn your TypeOye certificate.</p>
 
           <label htmlFor="cert-name" className="block text-left text-base font-semibold mb-5">

@@ -213,8 +213,8 @@ export default function Learn() {
   const doneCount = sectionLessons.filter(l => l.completed).length;
 
   return (
-    <PageWrapper title="Learn to Type" noHeader fullWidth className="py-6 sm:py-10 px-4 sm:px-6">
-      <div className="max-w-5xl mx-auto w-full">
+    <PageWrapper title="Learn to Type" noHeader fullWidth className="py-6 sm:py-10 px-4 sm:px-6 overflow-hidden">
+      <div className="max-w-5xl mx-auto w-full overflow-hidden">
         
         {/* ── 1. Page Header ────────────────────────────────────────────── */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
@@ -336,7 +336,7 @@ export default function Learn() {
               return (
                 <div key={section.category} className="mb-10" data-testid={`stage-section-${section.category}`}>
                   {/* Stage Header Card */}
-                  <div className="card p-6 md:p-8 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden bg-[var(--color-card)] border border-[var(--color-border)]">
+                  <div className="card p-4 sm:p-6 md:p-8 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden bg-[var(--color-card)] border border-[var(--color-border)]">
                     <div className="absolute -right-8 -bottom-10 opacity-[0.03] pointer-events-none text-[var(--color-text-primary)]">
                        <StageIconComponent size={160} />
                     </div>
@@ -393,7 +393,7 @@ export default function Learn() {
         ) : activeSectionInfo && (
           <div className="mb-10">
             {/* Stage Header Card */}
-            <div className="card p-6 md:p-8 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden bg-[var(--color-card)] border border-[var(--color-border)]">
+            <div className="card p-4 sm:p-6 md:p-8 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden bg-[var(--color-card)] border border-[var(--color-border)]">
               <div className="absolute -right-8 -bottom-10 opacity-[0.03] pointer-events-none text-[var(--color-text-primary)]">
                  <activeSectionInfo.icon size={160} />
               </div>

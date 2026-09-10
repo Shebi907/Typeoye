@@ -101,7 +101,7 @@ export default function PracticeSetup() {
   };
 
   return (
-    <PageWrapper title={meta.label} noHeader fullWidth className="py-8 px-4 sm:px-6">
+    <PageWrapper title={meta.label} noHeader fullWidth className="py-6 sm:py-8 px-3 sm:px-4 md:px-6">
         <div className="max-w-6xl mx-auto w-full">
 
         {/* ── Back to Practice — standalone, above the setup card (page header area) ── */}
@@ -124,12 +124,11 @@ export default function PracticeSetup() {
         {/* ── Two-column setup (matches Test setup page) ── */}
         <div
           className="max-w-6xl mx-auto flex items-center justify-center"
-          style={{ minHeight: 'calc(100dvh - 200px)' }}
         >
-          <div className="flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-10 w-full">
+          <div className="flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-6 lg:gap-10 w-full">
             {/* Center — setup card */}
             <div className="w-full max-w-[540px]">
-              <div className="card relative p-6 sm:p-[34px_38px] text-center" data-testid="practice-setup">
+              <div className="card relative p-5 sm:p-[34px_38px] text-center" data-testid="practice-setup">
                 <span className="dot-grid dot-grid-tl" aria-hidden="true" />
                 <h1 className="text-[32px] font-bold leading-tight mb-2">{meta.heroTitle}</h1>
                 <p className="text-[15px] text-secondary mb-[26px]">{meta.heroDesc}</p>
@@ -194,7 +193,7 @@ export default function PracticeSetup() {
             </div>
 
             {/* Right — Practice highlights (stretch to match the card's height) */}
-            <aside className="w-full max-w-[270px] shrink-0 self-stretch flex flex-col gap-[14px]">
+            <aside className="w-full lg:w-[270px] shrink-0 self-stretch flex flex-col gap-[14px]">
               {perks.map(({ icon: Icon, tone, title, description }) => (
                 <div key={title} className="card p-5 flex-1 flex flex-col items-center justify-center gap-1.5 text-center">
                   <div

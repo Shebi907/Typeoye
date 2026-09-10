@@ -46,7 +46,7 @@ export function ProgressDropdown() {
           <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} />
           <div
             data-testid="progress-dropdown"
-            className="navbar-dropdown absolute right-0 top-full mt-2 w-60 card p-1.5 z-50 shadow-xl border border-[var(--color-border)]"
+            className="navbar-dropdown absolute right-0 top-full mt-2 w-60 max-w-[calc(100vw-2rem)] card p-1.5 z-50 shadow-xl border border-[var(--color-border)]"
           >
             <Link
               to="/progress"

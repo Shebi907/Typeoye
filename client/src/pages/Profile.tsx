@@ -240,7 +240,7 @@ export default function ProfilePage() {
       <div className="max-w-6xl mx-auto w-full space-y-6">
         {/* ── Profile header banner ── */}
         <section
-          className="relative overflow-hidden rounded-2xl px-6 py-6 sm:px-8 sm:py-7"
+          className="relative overflow-hidden rounded-2xl px-4 py-6 sm:px-6 sm:py-7 md:px-8"
           style={{ background: 'linear-gradient(135deg, #3730A3 0%, #4361EE 52%, #8B5CF6 100%)', boxShadow: '0 14px 34px -10px rgba(67, 97, 238, 0.5), 0 3px 10px rgba(27, 35, 64, 0.14)' }}
           data-testid="profile-hero"
         >
@@ -559,7 +559,7 @@ function ProfileSkeleton() {
   return (
     <div className="max-w-6xl mx-auto w-full space-y-6" aria-busy="true" data-testid="profile-loading">
       {/* Banner */}
-      <div className="rounded-2xl px-6 py-6 sm:px-8 sm:py-7" style={{ backgroundColor: 'rgba(127, 127, 127, 0.08)' }}>
+      <div className="rounded-2xl px-4 py-6 sm:px-6 sm:py-7 md:px-8" style={{ backgroundColor: 'rgba(127, 127, 127, 0.08)' }}>
         <div className="flex items-center gap-4">
           <Skeleton width="64px" height="64px" rounded="full" className="shrink-0" />
           <div className="flex-1 min-w-0 space-y-2.5">

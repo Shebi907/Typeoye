@@ -53,13 +53,13 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
       {/* Panel */}
       <div
         className={cn(
-          'relative w-full card p-0 animate-slide-up overflow-hidden',
+          'relative w-full card p-0 animate-slide-up overflow-hidden max-w-[calc(100vw-2rem)] max-h-[calc(100vh-2rem)] overflow-y-auto',
           sizeClass[size]
         )}
       >
         {title && (
           <div
-            className="flex items-center justify-between px-6 py-4 border-b"
+            className="flex items-center justify-between px-4 sm:px-6 py-4 border-b"
             style={{ borderColor: 'var(--color-border)' }}
           >
             <h2
@@ -78,7 +78,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
             </button>
           </div>
         )}
-        <div className="p-6">{children}</div>
+        <div className="p-4 sm:p-6">{children}</div>
       </div>
     </div>,
     document.body

@@ -42,9 +42,9 @@ export function AppLayout({ children }: AppLayoutProps) {
      Footer (mt-auto), so a short loading frame can never pull the footer up
      into view; it is pinned to the bottom from the very first paint. */
   return (
-    <div className="flex min-h-screen flex-col px-2 pb-2 sm:px-3 sm:pb-3" style={{ backgroundColor: 'var(--color-canvas)' }}>
+    <div className="flex min-h-screen flex-col px-1.5 pb-1.5 sm:px-2 sm:pb-2 md:px-3 md:pb-3" style={{ backgroundColor: 'var(--color-canvas)' }}>
       <div
-        className="app-sheet flex flex-1 flex-col rounded-[24px] border shadow-sm"
+        className="app-sheet flex flex-1 flex-col rounded-[16px] sm:rounded-[24px] border shadow-sm overflow-hidden"
         style={{
           backgroundColor: 'var(--color-page)',
           borderColor: 'var(--color-border)',

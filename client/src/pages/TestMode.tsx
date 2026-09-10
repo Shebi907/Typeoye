@@ -418,12 +418,12 @@ const certEarned =
     const durationOptions = VALID_DURATIONS.map((sec) => ({ value: sec, label: sec === 60 ? '1 Minute' : `${sec / 60} Minutes` }));
 
     return (
-      <PageWrapper fullWidth noHeader title="Typing Test" className="py-8 px-4 sm:px-6">
+      <PageWrapper fullWidth noHeader title="Typing Test" className="py-6 sm:py-8 px-3 sm:px-4 md:px-6">
         <div className="max-w-6xl mx-auto w-full">
-          <div className="flex flex-col lg:flex-row items-stretch justify-center gap-5 w-full" style={{ minHeight: 'calc(100dvh - 240px)' }}>
+          <div className="flex flex-col lg:flex-row items-stretch justify-center gap-5 w-full">
             {/* Left — setup card */}
             <section className="w-full max-w-[540px] flex">
-              <div className="card w-full p-8 sm:p-10 flex flex-col" data-testid="test-setup">
+              <div className="card w-full p-6 sm:p-8 lg:p-10 flex flex-col" data-testid="test-setup">
                 <div className="text-center">
                   <h1 className="text-3xl font-extrabold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>Test Your Typing Speed</h1>
                   <p className="text-sm mt-2" style={{ color: 'var(--color-text-secondary)' }}>Check your WPM and accuracy instantly.</p>
@@ -556,7 +556,7 @@ const certEarned =
         <div className="flex flex-col lg:flex-row gap-5 w-full items-start">
           {/* ── Main column ─────────────────────────────────────────────── */}
           <div className="flex-1 min-w-0 w-full">
-            <div className="card tt-main-card p-5 sm:p-7 w-full" data-testid="typing-card">
+            <div className="card tt-main-card p-4 sm:p-5 lg:p-7 w-full" data-testid="typing-card">
               {/* Header */}
               <div className="flex items-start gap-3.5 mb-5">
                 <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 tt-header-icon">
@@ -671,10 +671,10 @@ const certEarned =
       {finished && (
         <>
           <div className="fixed inset-0 z-20 backdrop-blur-md bg-black/40" aria-hidden="true" />
-          <div className="fixed inset-0 z-30 overflow-y-auto" style={{ paddingTop: 'calc(var(--navbar-h, 64px) + 1.5rem)', paddingBottom: '1.5rem' }}>
-            <div className="grid place-items-center min-h-full px-4">
+          <div className="fixed inset-0 z-30 overflow-y-auto" style={{ paddingTop: 'calc(var(--navbar-h, 64px) + 1rem)', paddingBottom: '1rem' }}>
+            <div className="grid place-items-center min-h-full px-3 sm:px-4">
 <div
-              className="result-card w-full text-center overflow-hidden max-w-md"
+              className="result-card w-full text-center overflow-hidden max-w-[calc(100vw-1.5rem)] sm:max-w-md"
               data-testid="result-card"
               style={{ borderRadius: 20, background: 'var(--color-card)', boxShadow: '0 20px 50px -12px rgba(0,0,0,0.25), 0 8px 20px -6px rgba(0,0,0,0.12)' }}
             >

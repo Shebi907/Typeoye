@@ -713,7 +713,7 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
 
   // ── Game content (shared for playing + blurred background during done) ──
   const gameContent = (
-    <div className="relative overflow-hidden" style={{ width: '100vw', marginLeft: 'calc((100vw - 100%) / -2)' }}>
+    <div className="relative overflow-hidden" style={{ width: '100%' }}>
       {/* Ambient background accents */}
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <div className="absolute rounded-full" style={{ top: -120, left: -100, width: 460, height: 460, background: 'radial-gradient(circle, rgba(99,102,241,0.08), transparent 70%)' }} />

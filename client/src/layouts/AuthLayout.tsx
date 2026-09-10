@@ -101,10 +101,10 @@ export function AuthLayout() {
       </div>
 
       {/* Right: form */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12">
-        <div className="w-full max-w-md">
+      <div className="flex-1 flex items-center justify-center px-4 py-8 sm:px-6 sm:py-12">
+        <div className="w-full max-w-md min-w-0">
           {/* Mobile wordmark */}
-          <Link to="/" className="inline-flex rounded-xl px-3 py-2 mb-8 lg:hidden" style={{ backgroundColor: '#0B1740' }}>
+          <Link to="/" className="inline-flex rounded-xl px-3 py-2 mb-6 lg:hidden" style={{ backgroundColor: '#0B1740' }}>
             <Logo size={22} />
           </Link>
           <Outlet />
