@@ -13,6 +13,7 @@ function safeRedirect(raw: string | null): string {
 export function AuthLayout() {
   const location = useLocation();
   const { isAuthenticated } = useAuthStore();
+  const isRegister = location.pathname === '/register';
 
   if (isAuthenticated) {
     const params = new URLSearchParams(location.search);
@@ -42,9 +43,11 @@ export function AuthLayout() {
       className="min-h-screen flex"
       style={{ backgroundColor: 'var(--color-page)' }}
     >
-      {/* Left branding panel — desktop only */}
+      {/* Left branding panel — desktop only. Stretches to match whichever
+          form (login or register) sits in the right column, so the gradient
+          fills the full column height with no gap below it. */}
       <div
-        className="auth-panel hidden lg:flex lg:w-[45%] flex-col justify-between p-10 xl:p-14 relative overflow-hidden"
+        className="auth-panel hidden lg:flex lg:w-[45%] lg:self-stretch flex-col justify-between p-10 xl:p-14 relative overflow-hidden"
         style={{
           background: 'linear-gradient(150deg, #4B3FE0, #6C5CF0 55%, #8A6BF5)',
         }}
@@ -70,7 +73,13 @@ export function AuthLayout() {
         </div>
 
         {/* Middle: Headline, description, and feature list */}
-        <div className="relative z-10 my-auto py-8">
+        <div
+          className={
+            isRegister
+              ? 'relative z-10 mb-auto py-8'
+              : 'relative z-10 my-auto py-8'
+          }
+        >
           <h1 className="text-3xl xl:text-4xl font-bold text-white leading-tight mb-4">
             Master the keyboard,<br />one word at a time.
           </h1>
