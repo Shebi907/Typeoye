@@ -93,8 +93,8 @@ if (require.main === module) {
       }
 
       const app = createApp();
-      const server = app.listen(env.PORT, () => {
-        console.log(`🚀 Typeoye server running at http://localhost:${env.PORT}`);
+      const server = app.listen(env.PORT, "0.0.0.0", () => {
+        console.log(`🚀 Typeoye server running on port ${env.PORT}`);
         console.log(`   Environment: ${env.NODE_ENV}`);
       });
       server.on('error', (err) => {
