@@ -405,21 +405,21 @@ export default function PracticeSession() {
                     <SkeletonText lines={6} />
                   </div>
                 </div>
-                {/* Keyboard placeholder — same clamp sizing as VirtualKeyboard 'premium' */}
-                <div className="w-full mx-auto mt-4 px-2 max-w-3xl" aria-hidden="true">
+                {/* Keyboard placeholder — same sizing as VirtualKeyboard 'premium' */}
+                <div className="w-full mx-auto mt-4 px-2" aria-hidden="true">
                   {[13, 13, 11, 10].map((count, rowIdx) => (
                     <div key={rowIdx} className="flex justify-center gap-[5px] mb-[5px]" style={{ paddingLeft: `${rowIdx * 14}px` }}>
                       {Array.from({ length: count }).map((_, i) => (
-                        <Skeleton key={i} width={keyBlock.width} height={keyBlock.height} rounded />
+                        <Skeleton key={i} className="flex-1 min-w-[17px]" height={keyBlock.height} rounded />
                       ))}
                     </div>
                   ))}
                   <div className="flex justify-center gap-[5px] mt-[5px]">
-                    <Skeleton width="clamp(24px, 6vw, 40px)" height="28px" rounded />
-                    <Skeleton width="clamp(24px, 6vw, 40px)" height="28px" rounded />
-                    <Skeleton width="clamp(110px, 42vw, 200px)" height="28px" rounded />
-                    <Skeleton width="clamp(24px, 6vw, 40px)" height="28px" rounded />
-                    <Skeleton width="clamp(24px, 6vw, 40px)" height="28px" rounded />
+                    <Skeleton className="flex-1 min-w-[24px]" height="28px" rounded />
+                    <Skeleton className="flex-1 min-w-[24px]" height="28px" rounded />
+                    <Skeleton className="flex-[3_1_0%] min-w-[110px]" height="28px" rounded />
+                    <Skeleton className="flex-1 min-w-[24px]" height="28px" rounded />
+                    <Skeleton className="flex-1 min-w-[24px]" height="28px" rounded />
                   </div>
                 </div>
               </div>

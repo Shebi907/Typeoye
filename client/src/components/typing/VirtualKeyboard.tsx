@@ -47,7 +47,6 @@ const PREMIUM_KEY_BORDER = 'var(--color-border)';
 const PREMIUM_KEY_SHADOW =
   '0 1px 0 rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.08), inset 0 -2px 0 rgba(15, 23, 42, 0.05)';
 const PREMIUM_KEY_SIZE = 'clamp(17px, 5.4vw, 34px)';
-const PREMIUM_SIDE_KEY_SIZE = 'clamp(22px, 6vw, 40px)';
 
 export function VirtualKeyboard({ currentKey, errorKey, highlightKeys = [], variant = 'default' }: VirtualKeyboardProps) {
   const premium = variant === 'premium';
@@ -58,7 +57,7 @@ export function VirtualKeyboard({ currentKey, errorKey, highlightKeys = [], vari
 
   return (
     <div
-      className={`w-full mx-auto mt-4 px-2 ${premium ? 'max-w-3xl kbd-premium' : 'max-w-2xl'}`}
+      className={`w-full mx-auto mt-4 px-2 ${premium ? 'kbd-premium' : ''}`}
       aria-label="Virtual keyboard"
       aria-hidden="true"
     >
@@ -83,7 +82,8 @@ export function VirtualKeyboard({ currentKey, errorKey, highlightKeys = [], vari
                   premium && !keyRadius && 'rounded-lg'
                 )}
                 style={{
-                  width: keySize,
+                  flexGrow: 1,
+                  flexBasis: '0%',
                   height: keySize,
                   fontSize: keyFont,
                   fontWeight: 600,
@@ -135,7 +135,8 @@ export function VirtualKeyboard({ currentKey, errorKey, highlightKeys = [], vari
             key={i}
             className="key-base"
             style={{
-              width: k === 'Space' ? (premium ? 'clamp(110px, 42vw, 200px)' : 'clamp(100px, 32vw, 180px)') : premium ? PREMIUM_SIDE_KEY_SIZE : 'clamp(18px, 7vw, 36px)',
+              flexGrow: k === 'Space' ? 3 : 1,
+              flexBasis: '0%',
               height: premium ? '28px' : '28px',
               fontSize: '0.55rem',
               borderRadius: premium ? '8px' : undefined,
