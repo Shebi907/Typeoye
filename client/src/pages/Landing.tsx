@@ -5,6 +5,7 @@ import {
   ArrowRight, ChevronRight,
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { useSeo } from '../hooks/useSeo';
 
 const features = [
   {
@@ -61,6 +62,11 @@ const benefits = [
  * page wrapper, header, or footer (the shared layout provides those).
  */
 export default function Landing() {
+  useSeo({
+    title: 'Free Typing Test & Learn Touch Typing Online | Typeoye',
+    description: 'Take a free typing test, measure your WPM and accuracy, and learn touch typing online with structured lessons and real-time feedback.',
+    canonicalPath: '/',
+  });
   const [demoText] = useState('the quick brown fox jumps over');
   const [demoTyped] = useState('the quick brown ');
 

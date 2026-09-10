@@ -5,6 +5,7 @@ import {
   Keyboard, Blocks, Waves, Rocket, ArrowRight, Lightbulb 
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
+import { useSeo } from '../hooks/useSeo';
 import { Modal } from '../components/ui/Modal';
 import { Skeleton } from '../components/ui/Skeleton';
 import { lessonService } from '../services/lesson.service';
@@ -68,6 +69,11 @@ function LearnSkeleton() {
 }
 
 export default function Learn() {
+  useSeo({
+    title: 'Learn Touch Typing — Free Lessons for Beginners | Typeoye',
+    description: 'Learn touch typing from the ground up with free structured lessons designed for beginners. Master the keyboard and build lasting typing skills.',
+    canonicalPath: '/lessons',
+  });
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [lessons, setLessons] = useState<CourseLesson[]>(lessonService.getLessonsCached() ?? []);
   const [loading, setLoading] = useState(false);

@@ -10,6 +10,7 @@ import { VirtualKeyboard } from '../components/typing/VirtualKeyboard';
 import { generateTestChunk } from '../data/testContent';
 import { computeWpm, computeAccuracy } from '../utils/wpm';
 import { useAuthStore } from '../store/authStore';
+import { useSeo } from '../hooks/useSeo';
 import { typingService } from '../services/typing.service';
 import { downloadGuestCertificate, getCertificateParagraph, CERT_TO_PARAGRAPH_DIFFICULTY, readCertHistory, recordCertUsed, peekCertificateParagraphPreload, takeCertificateParagraphPreload, type GuestCertificatePayload } from '../services/certificate.service';
 import { getApiErrorMessage } from '../services/api';
@@ -101,6 +102,11 @@ const buildNextChunk = (
 };
 
 export default function TestMode() {
+  useSeo({
+    title: 'Typing Speed Test & WPM Accuracy Check | Typeoye',
+    description: 'Take a free typing speed test to measure your WPM and accuracy. Get instant results and see exactly how fast you can type.',
+    canonicalPath: '/test',
+  });
   const { settings, isAuthenticated, profile, user } = useAuthStore();
   const [searchParams] = useSearchParams();
   const certificateMode = searchParams.get('cert') === '1';

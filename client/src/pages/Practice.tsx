@@ -6,6 +6,7 @@ import { practiceService } from '../services/practice.service';
 import { useAuthStore } from '../store/authStore';
 import { PRACTICE_TYPES } from '../data/practiceTypes';
 import type { PracticeRecommendation } from '../types';
+import { useSeo } from '../hooks/useSeo';
 
 /* ── Helpers used by the recommended-session band ───────────────────────── */
 
@@ -24,6 +25,11 @@ const DIFF_LABEL: Record<string, string> = {
 /* ════════════════════════════════════════════════════════════════════════ */
 
 export default function Practice() {
+  useSeo({
+    title: 'Typing Practice Online — Improve Speed & Accuracy',
+    description: 'Practice typing online with focused drills, custom text, and real-time feedback to improve your typing speed and accuracy over time.',
+    canonicalPath: '/practice',
+  });
   const { isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
   const [recommendation, setRecommendation] = useState<PracticeRecommendation | null>(null);

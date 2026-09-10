@@ -6,6 +6,7 @@ import { Trophy, Flame, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Skeleton } from '../components/ui/Skeleton';
 import { Avatar } from '../components/ui/Avatar';
 import { cn } from '../utils/cn';
+import { useSeo } from '../hooks/useSeo';
 
 const PERIODS: { key: LeaderboardPeriod; label: string }[] = [
   { key: 'daily', label: 'Today' },
@@ -176,6 +177,11 @@ function LeaderboardSkeleton() {
 }
 
 export default function Leaderboard() {
+  useSeo({
+    title: 'Typing Speed Leaderboard — Fastest Typists | Typeoye',
+    description: 'Compare your typing speed against the fastest typists on Typeoye. Explore daily, weekly, monthly, and all-time typing leaderboards.',
+    canonicalPath: '/leaderboard',
+  });
   const [period, setPeriod] = useState<LeaderboardPeriod>('daily');
   
   // Seed from the module cache (if any) so returning to Leaderboard renders the full

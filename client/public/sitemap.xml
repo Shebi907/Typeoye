@@ -1,127 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://typeoye.com/</loc>
+    <loc>https://www.typeoye.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/test</loc>
+    <loc>https://www.typeoye.com/test</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/practice</loc>
+    <loc>https://www.typeoye.com/practice</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/lessons</loc>
+    <loc>https://www.typeoye.com/lessons</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/games</loc>
+    <loc>https://www.typeoye.com/games</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/leaderboard</loc>
+    <loc>https://www.typeoye.com/leaderboard</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/blog</loc>
+    <loc>https://www.typeoye.com/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/support</loc>
+    <loc>https://www.typeoye.com/support</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/how-it-works</loc>
+    <loc>https://www.typeoye.com/how-it-works</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/faq</loc>
+    <loc>https://www.typeoye.com/faq</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/about</loc>
+    <loc>https://www.typeoye.com/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/contact</loc>
+    <loc>https://www.typeoye.com/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/blog/typing-speed-tips</loc>
+    <loc>https://www.typeoye.com/blog/typing-speed-tips</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/blog/home-row-technique</loc>
+    <loc>https://www.typeoye.com/blog/home-row-technique</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/blog/typing-accuracy-exercises</loc>
+    <loc>https://www.typeoye.com/blog/typing-accuracy-exercises</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/blog/typing-productivity</loc>
+    <loc>https://www.typeoye.com/blog/typing-productivity</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/blog/typeoye-updates</loc>
+    <loc>https://www.typeoye.com/blog/typeoye-updates</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/support/create-account</loc>
+    <loc>https://www.typeoye.com/support/create-account</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/support/reset-password</loc>
+    <loc>https://www.typeoye.com/support/reset-password</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/support/typing-test-not-saving</loc>
+    <loc>https://www.typeoye.com/support/typing-test-not-saving</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/support/skip-learn-course</loc>
+    <loc>https://www.typeoye.com/support/skip-learn-course</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/support/certificate-not-earned</loc>
+    <loc>https://www.typeoye.com/support/certificate-not-earned</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/support/site-not-loading</loc>
+    <loc>https://www.typeoye.com/support/site-not-loading</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/privacy</loc>
+    <loc>https://www.typeoye.com/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://typeoye.com/terms</loc>
+    <loc>https://www.typeoye.com/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

@@ -8,6 +8,7 @@ import GameErrorBoundary from '../components/games/GameErrorBoundary';
 import { gamesService } from '../services/games.service';
 import { useAuthStore } from '../store/authStore';
 import type { GameResult, GameType } from '../types';
+import { useSeo } from '../hooks/useSeo';
 import {
   Gamepad2, CloudLightning, Zap, LogIn,
   ArrowRight, Trophy, Play, Clock, Star, Sparkles,
@@ -92,6 +93,11 @@ function formatDate(iso: string): string {
 /* ════════════════════════════════════════════════════════════════════════ */
 
 export default function Games() {
+  useSeo({
+    title: 'Free Typing Games Online — Play & Improve Speed | Typeoye',
+    description: 'Play free typing games online and improve your speed and accuracy while having fun. Race, dodge, and challenge yourself in interactive games.',
+    canonicalPath: '/games',
+  });
   const [active, setActive] = useState<'hub' | GameKey>('hub');
   const [category, setCategory] = useState('all');
   const [recent, setRecent] = useState<GameResult[]>([]);

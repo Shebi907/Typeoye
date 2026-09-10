@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://typeoye.com/sitemap.xml
+Sitemap: https://www.typeoye.com/sitemap.xml
