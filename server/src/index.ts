@@ -92,13 +92,14 @@ if (require.main === module) {
         console.error('[db] User emailVerified migration error:', err);
       }
 
+      const PORT = Number(process.env.PORT) || 5000;
       const app = createApp();
-      const server = app.listen(env.PORT, "0.0.0.0", () => {
-        console.log(`🚀 Typeoye server running on port ${env.PORT}`);
+      const server = app.listen(PORT, "0.0.0.0", () => {
+        console.log(`🚀 Typeoye server running on port ${PORT}`);
         console.log(`   Environment: ${env.NODE_ENV}`);
       });
       server.on('error', (err) => {
-        console.error(`[server] FAILED to listen on port ${env.PORT}:`, err);
+        console.error(`[server] FAILED to listen on port ${PORT}:`, err);
         process.exit(1);
       });
     })
