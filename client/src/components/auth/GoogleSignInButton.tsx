@@ -18,7 +18,12 @@ export function GoogleSignature() {
 
 export function GoogleSignInButton() {
   const start = () => {
-    window.location.href = '/api/auth/google';
+    // This is a full-page navigation (not an axios call), so it needs the
+    // absolute backend URL in production — a relative path would hit this
+    // static site's own domain instead of the API server. Reuses the same
+    // VITE_API_URL env var api.ts falls back to.
+    const apiBase = import.meta.env.VITE_API_URL || '/api';
+    window.location.href = `${apiBase}/auth/google`;
   };
 
   return (
