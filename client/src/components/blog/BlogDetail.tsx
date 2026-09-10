@@ -97,7 +97,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
 
         {/* Closing CTA */}
         <div
-          className="mt-9 rounded-2xl p-6 text-center sm:p-7"
+          className="mt-9 mx-auto max-w-md rounded-2xl px-6 pt-6 pb-16 text-center sm:px-7 sm:pt-7 sm:pb-[72px]"
           style={{ backgroundColor: 'var(--color-accent-light)' }}
         >
           <h3 className="text-lg font-extrabold sm:text-xl" style={{ color: 'var(--color-text-primary)' }}>
@@ -109,7 +109,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
           <Link
             to="/test"
             data-testid="article-cta"
-            className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 active:scale-[0.98]"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 active:scale-[0.98]"
             style={{
               background: 'linear-gradient(135deg, #4361EE 0%, #7C3AED 100%)',
               boxShadow: '0 8px 22px -6px rgba(67, 97, 238, 0.5)',
