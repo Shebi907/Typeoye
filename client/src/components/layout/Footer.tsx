@@ -23,7 +23,7 @@ const RESOURCE_LINKS: FooterLinkItem[] = [
   { to: '/blog', label: 'Blog' },
   { to: '/blog/typing-speed-tips', label: 'Typing Tips' },
   { to: '/how-it-works', label: 'How It Works' },
-  { to: '/faq', label: 'FAQ' },
+  { to: '/faq', label: 'FAQs' },
   { to: '/support', label: 'Support Center' },
   { to: '/contact', label: 'Contact Us' },
 ];

@@ -97,7 +97,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
 
         {/* Closing CTA */}
         <div
-          className="mt-9 mx-auto max-w-md rounded-2xl px-6 pt-6 pb-16 text-center sm:px-7 sm:pt-7 sm:pb-[72px]"
+          className="mt-9 mx-auto max-w-3xl rounded-2xl px-6 pt-6 pb-16 text-center sm:px-7 sm:pt-7 sm:pb-[72px]"
           style={{ backgroundColor: 'var(--color-accent-light)' }}
         >
           <h3 className="text-lg font-extrabold sm:text-xl" style={{ color: 'var(--color-text-primary)' }}>
