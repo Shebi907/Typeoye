@@ -47,7 +47,7 @@ export default function Practice() {
 
   return (
     <PageWrapper title="Practice" description="Build your speed, accuracy, and confidence with focused practice." icon={Target} dotGrid fullWidth className="py-8">
-      <div className="max-w-6xl mx-auto w-full">
+      <div className="max-w-[1700px] mx-auto w-full">
 
         {/* ── Practice modes ───────────────────────────────────────────── */}
         <section className="mb-8">

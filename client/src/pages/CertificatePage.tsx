@@ -60,7 +60,7 @@ export default function CertificatePage() {
 
   return (
     <PageWrapper fullWidth className="py-6 sm:py-8 px-3 sm:px-4 md:px-6">
-      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 sm:gap-8 items-start">
+      <div className="max-w-[1700px] mx-auto flex flex-col lg:flex-row gap-6 sm:gap-8 items-start">
         {/* Main form card */}
         <div className="w-full lg:flex-1 card p-6 sm:p-8 lg:p-10">
           <div

@@ -102,7 +102,7 @@ export default function PracticeSetup() {
 
   return (
     <PageWrapper title={meta.label} noHeader fullWidth className="py-6 sm:py-8 px-3 sm:px-4 md:px-6">
-        <div className="max-w-6xl mx-auto w-full">
+        <div className="max-w-[1700px] mx-auto w-full">
 
         {/* ── Back to Practice — standalone, above the setup card (page header area) ── */}
         <div className="mb-6">
@@ -123,7 +123,7 @@ export default function PracticeSetup() {
 
         {/* ── Two-column setup (matches Test setup page) ── */}
         <div
-          className="max-w-6xl mx-auto flex items-center justify-center"
+          className="max-w-[1700px] mx-auto flex items-center justify-center"
         >
           <div className="flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-6 lg:gap-10 w-full">
             {/* Center — setup card */}

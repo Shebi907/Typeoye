@@ -156,7 +156,7 @@ export default function Games() {
     const goBack = () => setActive('hub');
     return (
       <PageWrapper title="Games" noHeader fullWidth className="py-6 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto w-full">
+        <div className="max-w-[1700px] mx-auto w-full">
           <GameErrorBoundary onBack={goBack}>
             <GameComponent onBack={goBack} />
           </GameErrorBoundary>
@@ -169,7 +169,7 @@ export default function Games() {
 
   return (
     <PageWrapper title="" fullWidth className="py-6 px-4 sm:px-6">
-      <div className="max-w-6xl mx-auto w-full">
+      <div className="max-w-[1700px] mx-auto w-full">
 
         {/* ── Header ── */}
         <div className="relative mb-6">

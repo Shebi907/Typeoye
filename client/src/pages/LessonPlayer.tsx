@@ -219,7 +219,7 @@ export default function LessonPlayer() {
 
   if (!lesson && error) {
     return <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6 overflow-hidden">
-      <div className="max-w-6xl mx-auto w-full overflow-hidden">
+      <div className="max-w-[1700px] mx-auto w-full overflow-hidden">
         <nav className="flex items-center justify-between mb-5">
           <Link to="/lessons" className="flex items-center gap-1.5 text-sm font-semibold transition-colors hover:opacity-80" style={{ color: 'var(--color-accent-text)' }}>
             <ArrowLeft size={15} />
@@ -255,7 +255,7 @@ export default function LessonPlayer() {
   if (!lesson) {
     return (
       <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6 overflow-hidden">
-        <div className="max-w-6xl mx-auto w-full overflow-hidden">
+        <div className="max-w-[1700px] mx-auto w-full overflow-hidden">
           <nav className="flex items-center justify-between mb-5">
             <Link to="/lessons" className="flex items-center gap-1.5 text-sm font-semibold transition-colors hover:opacity-80" style={{ color: 'var(--color-accent-text)' }}>
               <ArrowLeft size={15} />
@@ -279,7 +279,7 @@ export default function LessonPlayer() {
 
   return (
     <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6 overflow-hidden">
-      <div className="max-w-6xl mx-auto w-full overflow-hidden">
+      <div className="max-w-[1700px] mx-auto w-full overflow-hidden">
 
         {/* ── Top Navigation ── */}
         <nav className="flex items-center justify-between mb-5">

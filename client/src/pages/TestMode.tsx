@@ -419,7 +419,7 @@ const certEarned =
 
     return (
       <PageWrapper fullWidth noHeader title="Typing Test" className="py-6 sm:py-8 px-3 sm:px-4 md:px-6">
-        <div className="max-w-6xl mx-auto w-full">
+        <div className="max-w-[1700px] mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-stretch justify-center gap-5 w-full">
             {/* Left — setup card */}
             <section className="w-full max-w-[540px] flex">
@@ -499,7 +499,7 @@ const certEarned =
 
   return (
     <PageWrapper fullWidth className="tt-page py-6 px-4 sm:px-6" title={undefined}>
-      <div className="max-w-6xl mx-auto w-full">
+      <div className="max-w-[1700px] mx-auto w-full">
         {certificateMode ? (
           <div className="mb-4">
             <Link

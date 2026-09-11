@@ -11,6 +11,7 @@ import { getProfileStats } from '../services/session.service';
 import { syncProfileLevel } from '../services/gamification.service';
 import { AVATARS_DIR } from '../config/uploads';
 import { sendSuccess, sendError } from '../utils/response';
+import { strongPassword } from '../utils/password';
 
 export const updateSettingsSchema = z.object({
   theme: z.enum(['light', 'dark', 'system']).optional(),
@@ -30,7 +31,7 @@ export const changePasswordSchema = z.object({
 });
 
 export const setPasswordSchema = z.object({
-  newPassword: z.string().min(8, 'New password must be at least 8 characters'),
+  newPassword: strongPassword,
 });
 
 const SECURITY_QUESTIONS = [

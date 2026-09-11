@@ -243,7 +243,7 @@ export default function PracticeSession() {
     ];
     return (
       <PageWrapper fullWidth className="tt-page py-6 px-3 sm:px-4 md:px-6" title={undefined}>
-        <div className="max-w-6xl mx-auto w-full">
+        <div className="max-w-[1700px] mx-auto w-full">
           <div className="flex flex-col lg:flex-row gap-5 w-full items-start">
             {/* ── Result card ── */}
             <div className="flex-1 min-w-0 w-full">
@@ -371,7 +371,7 @@ export default function PracticeSession() {
     const keyBlock = { width: 'clamp(17px, 5.4vw, 34px)', height: 'clamp(17px, 5.4vw, 34px)' } as const;
     return (
       <PageWrapper fullWidth className="tt-page py-6 px-3 sm:px-4 md:px-6" title={undefined}>
-        <div className="max-w-6xl mx-auto w-full">
+        <div className="max-w-[1700px] mx-auto w-full">
           <div className="mb-4">
             <button
               type="button"
@@ -461,7 +461,7 @@ export default function PracticeSession() {
 
   return (
     <PageWrapper fullWidth className="tt-page py-6 px-3 sm:px-4 md:px-6" title={undefined}>
-      <div className="max-w-6xl mx-auto w-full">
+      <div className="max-w-[1700px] mx-auto w-full">
         <div className="mb-4">
           <button
             type="button"

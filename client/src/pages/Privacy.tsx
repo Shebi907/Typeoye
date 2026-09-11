@@ -218,7 +218,7 @@ export default function Privacy() {
               'radial-gradient(600px 320px at 12% -10%, rgba(67,97,238,0.10), transparent 60%), radial-gradient(520px 300px at 95% 0%, rgba(139,92,246,0.12), transparent 60%)',
           }}
         />
-        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 pt-12 pb-10 sm:pt-16 sm:pb-12">
+        <div className="relative mx-auto max-w-[1700px] px-4 sm:px-6 pt-12 pb-10 sm:pt-16 sm:pb-12">
           <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-12 items-center">
             {/* Left — copy */}
             <div>
@@ -322,7 +322,7 @@ export default function Privacy() {
       </section>
 
       {/* ── MAIN CONTENT ────────────────────────────────────────────── */}
-      <section className="mx-auto max-w-6xl px-4 sm:px-6 pb-16">
+      <section className="mx-auto max-w-[1700px] px-4 sm:px-6 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 lg:gap-10">
           {/* LEFT SIDEBAR */}
           <aside>

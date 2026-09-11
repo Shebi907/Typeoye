@@ -64,7 +64,7 @@ export default function UserHome() {
 
   return (
     <PageWrapper fullWidth className="py-6 px-3 sm:px-4 md:px-6" title={undefined}>
-      <div className="max-w-6xl mx-auto w-full flex flex-col gap-6">
+      <div className="max-w-[1700px] mx-auto w-full flex flex-col gap-6">
         {/* ── Hero ─────────────────────────────────────────────────────── */}
         <section
           className="rounded-2xl p-6 sm:p-8 relative overflow-hidden"

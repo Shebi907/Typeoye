@@ -151,7 +151,7 @@ export default function Contact() {
 
       {/* Main two-column layout */}
       <section
-        className="mx-auto grid max-w-6xl items-start gap-8 md:grid-cols-2"
+        className="mx-auto grid max-w-[1700px] items-start gap-8 md:grid-cols-2"
         data-testid="contact-layout"
       >
         {/* Left — Get in Touch */}

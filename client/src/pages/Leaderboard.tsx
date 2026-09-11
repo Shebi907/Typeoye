@@ -217,7 +217,7 @@ export default function Leaderboard() {
 
   return (
         <PageWrapper title="" fullWidth className="py-6 px-3 sm:px-4 md:px-6">
-      <div className="max-w-6xl mx-auto w-full">
+      <div className="max-w-[1700px] mx-auto w-full">
 
         {/* ── Header ── */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">

@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
-  Activity, Award, CalendarClock, Camera, CheckCircle2, Eye, EyeOff, Gauge,
+  Activity, Award, CalendarClock, Camera, CheckCircle2, Circle, Eye, EyeOff, Gauge,
   Mail, ShieldCheck, Target, Trash2, Trophy, User,
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
@@ -20,6 +20,14 @@ const SECURITY_QUESTIONS = [
   'What was your childhood nickname?',
   "What was your first school's name?",
   'What is your favorite hobby?',
+];
+
+const PASSWORD_RULES: Array<{ label: string; test: (v: string) => boolean }> = [
+  { label: 'At least 8 characters', test: (v) => v.length >= 8 },
+  { label: 'At least one uppercase letter (A–Z)', test: (v) => /[A-Z]/.test(v) },
+  { label: 'At least one lowercase letter (a–z)', test: (v) => /[a-z]/.test(v) },
+  { label: 'At least one number (0–9)', test: (v) => /[0-9]/.test(v) },
+  { label: 'At least one special character (!@#$%…)', test: (v) => /[^A-Za-z0-9]/.test(v) },
 ];
 
 const AVATAR_MAX_SIZE = 256;
@@ -189,8 +197,14 @@ export default function ProfilePage() {
 
   const submitSetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (spFields.newPassword.length < 8) { setSpMsg({ type: 'err', text: 'Password must be at least 8 characters.' }); return; }
-    if (spFields.newPassword !== spFields.confirmPassword) { setSpMsg({ type: 'err', text: 'Passwords do not match.' }); return; }
+    if (!PASSWORD_RULES.every((r) => r.test(spFields.newPassword))) {
+      setSpMsg({ type: 'err', text: 'Password does not meet the requirements below.' });
+      return;
+    }
+    if (spFields.newPassword !== spFields.confirmPassword) {
+      setSpMsg({ type: 'err', text: 'Passwords do not match.' });
+      return;
+    }
     setSpBusy(true);
     setSpMsg(null);
     try {
@@ -229,6 +243,11 @@ export default function ProfilePage() {
   const toggleSp = (field: 'next' | 'confirm') =>
     setShowSp((s) => ({ ...s, [field]: !s[field] }));
 
+  const spValid =
+    PASSWORD_RULES.every((r) => r.test(spFields.newPassword)) &&
+    spFields.confirmPassword.length > 0 &&
+    spFields.confirmPassword === spFields.newPassword;
+
   const pwInputStyle: React.CSSProperties = {
     backgroundColor: 'rgba(127, 127, 127, 0.06)',
     borderColor: 'var(--color-border)',
@@ -237,7 +256,7 @@ export default function ProfilePage() {
 
   return (
     <PageWrapper title={profile.displayName} description="Typing profile and progress." noHeader className="py-8 px-4 sm:px-6">
-      <div className="max-w-6xl mx-auto w-full space-y-6">
+      <div className="max-w-[1700px] mx-auto w-full space-y-6">
         {/* ── Profile header banner ── */}
         <section
           className="relative overflow-hidden rounded-2xl px-4 py-6 sm:px-6 sm:py-7 md:px-8"
@@ -466,6 +485,23 @@ export default function ProfilePage() {
                         visible={showSp.next}
                         onToggle={() => toggleSp('next')}
                       />
+                      <ul className="space-y-1.5 text-xs" data-testid="sp-requirements">
+                        {PASSWORD_RULES.map((rule) => {
+                          const ok = rule.test(spFields.newPassword);
+                          return (
+                            <li
+                              key={rule.label}
+                              className="flex items-start gap-1.5"
+                              style={{ color: ok ? '#16a34a' : 'var(--color-text-muted)' }}
+                            >
+                              {ok
+                                ? <CheckCircle2 size={13} className="mt-[2px] shrink-0" />
+                                : <Circle size={13} className="mt-[2px] shrink-0" />}
+                              <span>{rule.label}</span>
+                            </li>
+                          );
+                        })}
+                      </ul>
                       <PasswordField
                         label="Confirm New Password"
                         value={spFields.confirmPassword}
@@ -481,9 +517,9 @@ export default function ProfilePage() {
                       )}
                       <button
                         type="submit"
-                        disabled={spBusy}
+                        disabled={spBusy || !spValid}
                         data-testid="sp-submit"
-                        className="btn w-full justify-center px-5 py-2.5 rounded-full"
+                        className="btn w-full justify-center px-5 py-2.5 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
                         style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff', boxShadow: '0 6px 18px rgba(67, 97, 238, 0.35)' }}
                       >
                         {spBusy ? 'Saving…' : 'Set Password'}
@@ -557,7 +593,7 @@ export default function ProfilePage() {
  *  loads in — it never pops into view or shifts during the fetch. */
 function ProfileSkeleton() {
   return (
-    <div className="max-w-6xl mx-auto w-full space-y-6" aria-busy="true" data-testid="profile-loading">
+    <div className="max-w-[1700px] mx-auto w-full space-y-6" aria-busy="true" data-testid="profile-loading">
       {/* Banner */}
       <div className="rounded-2xl px-4 py-6 sm:px-6 sm:py-7 md:px-8" style={{ backgroundColor: 'rgba(127, 127, 127, 0.08)' }}>
         <div className="flex items-center gap-4">

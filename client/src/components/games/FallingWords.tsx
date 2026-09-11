@@ -1,5 +1,5 @@
-﻿import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { RefreshCw, Heart, CloudLightning, ArrowLeft, AlertTriangle, Gamepad2, Keyboard, ShieldAlert, Play, Type, Gauge, Target, Trophy, Clock } from 'lucide-react';
+﻿import { useCallback, useEffect, useRef, useState } from 'react';
+import { RefreshCw, Heart, CloudLightning, ArrowLeft, Gamepad2, Keyboard, ShieldAlert, Play, Type, Gauge, Target, Trophy, Clock } from 'lucide-react';
 import { COMMON_WORDS } from '../../data/wordLists';
 import { gamesService, type GameSubmitResponse } from '../../services/games.service';
 import { useAuthStore } from '../../store/authStore';
@@ -52,9 +52,9 @@ interface GameResult {
   elapsed: number;
 }
 
-const CANVAS_W = 800;
-const CANVAS_H = 240;
-const DANGER_Y = CANVAS_H - 6;
+const DEFAULT_W = 800;
+const DEFAULT_H = 240;
+const DANGER_MARGIN = 6;
 const BASE_SPEED = 45;
 const SPEED_INCREMENT = 5;
 const WORDS_PER_LEVEL = 5;
@@ -116,6 +116,12 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
   const poolIndexRef = useRef(0);
   const frameRef = useRef<number>(0);
 
+  // Track the actual rendered play area so the danger line, collisions, and
+  // spawning scale with the real on-screen size instead of hardcoded pixels.
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const dimsRef = useRef({ w: DEFAULT_W, h: DEFAULT_H });
+  const wordHRef = useRef(0);
+
   // React state for display (updated via ref polling)
   const [displayLives, setDisplayLives] = useState(INITIAL_LIVES);
   const [displayScore, setDisplayScore] = useState(0);
@@ -132,6 +138,37 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
   const streakRef = useRef(0);
   const longestStreakRef = useRef(0);
   const [displayStreak, setDisplayStreak] = useState(0);
+
+  // Live copy of the play-area size for JSX rendering (danger progress, etc.).
+  const [playDims, setPlayDims] = useState({ w: DEFAULT_W, h: DEFAULT_H });
+
+  // Fallback word-height estimate (used before the first pill is measured):
+  // the pill scales with the fluid root font (text-lg on a clamp() root).
+  const estimateWordHeight = useCallback(() => {
+    const rootPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    return Math.round(rootPx * 2.36);
+  }, []);
+
+  // Measure the real rendered word pill so danger collisions use the visual
+  // bottom edge (top + height) rather than the word's top coordinate.
+  const measureWordRef = useCallback((el: HTMLDivElement | null) => {
+    if (el) wordHRef.current = el.offsetHeight;
+  }, []);
+
+  // Keep the play-area dims in sync with the responsive canvas element.
+  useEffect(() => {
+    const el = canvasRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const dims = { w: entry.contentRect.width || DEFAULT_W, h: entry.contentRect.height || DEFAULT_H };
+        dimsRef.current = dims;
+        setPlayDims(dims);
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [view]);
 
   const getNextWord = useCallback(() => {
     if (poolIndexRef.current >= wordPoolRef.current.length) {
@@ -226,6 +263,9 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
       const dt = (now - lastTime) / 1000;
       lastTime = now;
 
+      const { w: playW, h: playH } = dimsRef.current;
+      const wordH = wordHRef.current || estimateWordHeight();
+
       const elapsedSec = (now - startTimeRef.current) / 1000;
       setElapsed(Math.floor(elapsedSec));
 
@@ -240,7 +280,7 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
       if (now - lastSpawnRef.current > spawnInterval && wordsRef.current.length < maxActive + 1) {
         lastSpawnRef.current = now;
         const text = getNextWord();
-        const x = 40 + Math.random() * (CANVAS_W - 160);
+        const x = 40 + Math.random() * Math.max(80, playW - 160);
         wordsRef.current.push({
           id: idCounterRef.current++,
           text,
@@ -255,7 +295,7 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
       for (const w of wordsRef.current) {
         if (w.completed) continue;
         w.y += w.speed * dt;
-        if (w.y >= DANGER_Y) {
+        if (w.y + wordH >= playH - DANGER_MARGIN) {
           toRemove.push(w.id);
           livesRef.current = Math.max(0, livesRef.current - 1);
           streakRef.current = 0;
@@ -375,8 +415,8 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
         for (let i = 0; i < BULLET_BURST; i++) {
           bulletsRef.current.push({
             id: bulletIdRef.current++,
-            fromX: CANVAS_W / 2 + (i - (BULLET_BURST - 1) / 2) * 16,
-            fromY: CANVAS_H - 60,
+            fromX: dimsRef.current.w / 2 + (i - (BULLET_BURST - 1) / 2) * 16,
+            fromY: dimsRef.current.h - 60,
             toX: target.x + (i - (BULLET_BURST - 1) / 2) * 5,
             toY: target.y,
             progress: 0,
@@ -742,30 +782,46 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
               <span className="navbar-gradient-circle w-44 h-44 -left-16 -bottom-24" style={{ opacity: 0.5 }} />
             </div>
             <div className="relative flex flex-wrap items-center gap-x-4 gap-y-3">
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 min-w-0">
-                <div className="w-11 h-11 rounded-xl bg-white/20 ring-1 ring-white/30 flex items-center justify-center flex-none">
-                  <CloudLightning size={22} color="#ffffff" />
+                <div className="flex items-center gap-x-3 gap-y-2 min-w-0">
+                  <div className="w-11 h-11 rounded-xl bg-white/20 ring-1 ring-white/30 flex items-center justify-center flex-none">
+                    <CloudLightning size={22} color="#ffffff" />
+                  </div>
+                  <div className="min-w-0">
+                    <h1 className="text-lg sm:text-xl font-extrabold tracking-tight text-white leading-tight">Falling Words</h1>
+                    <p className="text-xs sm:text-sm text-white/80 mt-0.5">Type the falling words before they reach the bottom!</p>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <h1 className="text-lg sm:text-xl font-extrabold tracking-tight text-white leading-tight">Falling Words</h1>
-                  <p className="text-xs sm:text-sm text-white/80 mt-0.5">Type the falling words before they reach the bottom!</p>
-                </div>
-                <span className="inline-flex items-center gap-1.5 ml-1 px-2.5 py-1 rounded-full bg-white/20 ring-1 ring-white/25 text-[11px] font-bold text-white whitespace-nowrap">
+
+                <span className="inline-flex items-center gap-1.5 ml-auto px-2.5 py-1 rounded-full bg-white/20 ring-1 ring-white/25 text-[11px] font-bold text-white whitespace-nowrap">
                   <Gamepad2 size={11} />
                   Level {currentLevel}
                 </span>
               </div>
 
-              <div className="ml-auto flex flex-wrap items-center gap-x-4 gap-y-2">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-semibold text-white/70">Words</span>
-                  <span className="text-sm font-bold text-white tabular-nums">{displayScore}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-semibold text-white/70">WPM</span>
-                  <span className="text-sm font-bold text-white tabular-nums">{liveWpm}</span>
-                </div>
-                <div className="flex items-center gap-1">
+              {/* Thin divider between identity row and stats row */}
+              <div className="relative mt-3 h-px" style={{ background: 'rgba(255,255,255,0.16)' }} />
+
+              {/* Consolidated stats row */}
+              <div className="relative mt-3 flex flex-wrap items-center gap-x-6 gap-y-3">
+                {[
+                  { label: 'Words', value: String(displayScore), Icon: Type },
+                  { label: 'WPM', value: String(liveWpm), Icon: Gauge },
+                  { label: 'Accuracy', value: `${liveAccuracy}%`, Icon: Target },
+                  { label: 'Streak', value: String(displayStreak), Icon: Trophy },
+                  { label: 'Time', value: timeElapsed, Icon: Clock },
+                ].map(({ label, value, Icon }) => (
+                  <div key={label} className="flex items-center gap-2 min-w-0">
+                    <div className="w-7 h-7 rounded-md bg-white/10 ring-1 ring-white/15 flex items-center justify-center flex-none">
+                      <Icon size={13} className="text-white/85" />
+                    </div>
+                    <div className="flex flex-col leading-none min-w-0">
+                      <span className="text-base sm:text-lg font-bold text-white tabular-nums font-mono">{value}</span>
+                      <span className="mt-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-white/50">{label}</span>
+                    </div>
+                  </div>
+                ))}
+
+                <div className="ml-auto flex items-center gap-1">
                   <span className="hidden sm:inline text-[10px] font-bold uppercase tracking-widest text-white/70 mr-0.5">Lives</span>
                   {Array.from({ length: INITIAL_LIVES }).map((_, i) => (
                     <Heart
@@ -781,7 +837,6 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
                   ))}
                 </div>
               </div>
-            </div>
 
             {/* Level progress bar */}
             <div className="relative mt-3 h-[3px] rounded-full" style={{ background: 'rgba(255,255,255,0.18)' }}>
@@ -801,9 +856,10 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
 
             {/* ── Play canvas ── */}
             <div
+              ref={canvasRef}
               className="relative overflow-hidden"
               style={{
-                height: CANVAS_H,
+                height: 'clamp(200px, 30vw, 380px)',
                 background: 'radial-gradient(ellipse at 50% 30%, #141e33 0%, #0c1322 50%, #080e1a 100%)',
               }}
             >
@@ -828,7 +884,7 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
           />
 
           {/* ── Danger line (glowing) ── */}
-          <div className="absolute left-0 right-0" style={{ top: DANGER_Y }}>
+          <div className="absolute left-0 right-0" style={{ top: 'calc(100% - 6px)' }}>
             <div
               className="absolute inset-x-0 -top-2 h-6 pointer-events-none"
               style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(239,68,68,0.0) 30%, rgba(239,68,68,0.18) 50%, rgba(239,68,68,0.0) 70%, transparent 100%)' }}
@@ -846,16 +902,17 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
           </div>
 
           {/* ── Falling words ── */}
-          {displayWords.map((w) => {
+          {displayWords.map((w, i) => {
             const isActive = w.id === displayTargetId;
             const isFrozen = !!w.completed;
             const matched = isActive && displayInput.length > 0 && w.text.startsWith(displayInput);
-            const progressRatio = Math.min(1, w.y / DANGER_Y);
+            const progressRatio = Math.min(1, Math.max(0, w.y / (playDims.h - DANGER_MARGIN)));
             const proximityOpacity = isActive || isFrozen ? 1 : 0.45 + progressRatio * 0.55;
 
             return (
               <div
                 key={w.id}
+                ref={i === 0 ? measureWordRef : undefined}
                 className="absolute font-mono text-lg font-bold rounded-lg px-2.5 py-1"
                 style={{
                   left: w.x,
@@ -1045,29 +1102,6 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
             >
               <RefreshCw size={15} /> Restart
             </button>
-          </div>
-
-          {/* ── Stats row ── */}
-          <div className="flex flex-col sm:flex-row" style={{ borderTop: '1px solid var(--color-border)', backgroundColor: 'var(--color-page)' }}>
-            {[
-              { label: 'WPM', value: String(liveWpm), Icon: Gauge, color: 'var(--color-accent-text)' },
-              { label: 'Accuracy', value: `${liveAccuracy}%`, Icon: Target, color: 'var(--color-correct)' },
-              { label: 'Longest Streak', value: String(displayStreak), Icon: Trophy, color: '#D97706' },
-              { label: 'Time Elapsed', value: timeElapsed, Icon: Clock, color: '#8B5CF6' },
-            ].map((s, i) => (
-              <React.Fragment key={s.label}>
-                {i > 0 && <div className="hidden sm:block w-px self-stretch my-5" style={{ backgroundColor: 'var(--color-border)' }} />}
-                <div className="flex sm:flex-col items-center sm:items-center justify-center flex-1 min-w-0 gap-2 sm:gap-0 px-3 py-4 text-center">
-                  <s.Icon size={17} className="sm:mx-auto shrink-0" style={{ color: s.color }} />
-                  <div className="sm:mt-1.5 text-2xl sm:text-3xl font-extrabold tabular-nums font-mono leading-none" style={{ color: s.color }}>
-                    {s.value}
-                  </div>
-                  <div className="sm:mt-1.5 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
-                    {s.label}
-                  </div>
-                </div>
-              </React.Fragment>
-            ))}
           </div>
         </div>
       </div>
