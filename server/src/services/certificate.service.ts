@@ -81,12 +81,12 @@ export function sanitizeCertificateFileName(name: string, fallback = 'Certificat
 const FONTS_DIR = path.resolve(__dirname, '../../assets/fonts');
 const has = (file: string): boolean => fs.existsSync(path.join(FONTS_DIR, file));
 
-// Blue rounded-square Typeoye icon (matches the browser-tab favicon).
-const LOGO_PATH = path.resolve(__dirname, '../../assets/typeoye-logo.png');
-function readLogo(): Buffer | null {
-  if (!fs.existsSync(LOGO_PATH)) return null;
+// White Typeoye mark (transparent PNG) — used on the gradient header band.
+const WHITE_LOGO_PATH = path.resolve(__dirname, '../../assets/typeoye-logo-transparent.png');
+function readWhiteLogo(): Buffer | null {
+  if (!fs.existsSync(WHITE_LOGO_PATH)) return null;
   try {
-    return fs.readFileSync(LOGO_PATH);
+    return fs.readFileSync(WHITE_LOGO_PATH);
   } catch {
     return null;
   }
@@ -99,98 +99,57 @@ function pngSize(buf: Buffer): { width: number; height: number } {
   return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
 }
 
-// ── Palette (Typeoye brand — blue → purple, navy text, lavender accents) ─────
+// ── Palette (Typeoye brand — blue, purple, light lavender surfaces) ───────────
 
-const PRIMARY = '#4361EE';
-const SECONDARY = '#8B5CF6';
-const NAVY = '#1B2340';
-const MUTED = '#69708F';
-const BODY_TEXT = '#333A55';
-const LAVENDER_BG = '#F4F5FE';
-const CARD_BORDER = '#DDDEFB';
+const BLUE = '#2563EB';
+const PURPLE = '#7C3AED';
+const OYE = '#C7D2FE';
+const INK = '#1F2937';
+const BODY_TEXT = '#4B5563';
+const MUTED = '#6B7280';
+const GREEN = '#16A34A';
+const PILL_BG = '#EDE9FE';
+const PILL_TXT = '#6D28D9';
+const BOX_BG = '#F5F3FF';
+const BOX_DIV = '#DDD6FE';
+const FOOT_DIV = '#E5E7EB';
 
 // ── Drawing helpers ──────────────────────────────────────────────────────────
 
-/** Approximate an elliptical/circular arc with cubic beziers (pdfkit lacks .arc). */
-function strokeArc(
-  doc: PDFKit.PDFDocument,
-  cx: number,
-  cy: number,
-  r: number,
-  startDeg: number,
-  endDeg: number
-): void {
-  const rad = (d: number): [number, number] => [
-    cx + r * Math.cos((d * Math.PI) / 180),
-    cy + r * Math.sin((d * Math.PI) / 180),
-  ];
-  const k = 0.5523;
-  let [px, py] = rad(startDeg);
-  doc.moveTo(px, py);
-  for (let a = startDeg; a < endDeg; ) {
-    const step = Math.min(60, endDeg - a);
-    const a0 = (a * Math.PI) / 180;
-    const a1 = ((a + step) * Math.PI) / 180;
-    const c1: [number, number] = [
-      cx + (r * k * step) / 90 * Math.cos(a0 - Math.PI / 2),
-      cy + (r * k * step) / 90 * Math.sin(a0 - Math.PI / 2),
-    ];
-    const c2: [number, number] = [
-      cx + (r * k * step) / 90 * Math.cos(a1 + Math.PI / 2),
-      cy + (r * k * step) / 90 * Math.sin(a1 + Math.PI / 2),
-    ];
-    const [ex, ey] = rad(a + step);
-    doc.bezierCurveTo(c1[0], c1[1], c2[0], c2[1], ex, ey);
-    px = ex;
-    py = ey;
-    a += step;
+/** Five-point star — the small award icon inside the pill badge. */
+function drawStar(doc: PDFKit.PDFDocument, cx: number, cy: number, r: number, color: string): void {
+  doc.save();
+  doc.fillColor(color);
+  doc.moveTo(cx, cy - r);
+  for (let i = 0; i < 5; i++) {
+    const aOut = -Math.PI / 2 + (i * 2 * Math.PI) / 5;
+    const aIn = aOut + Math.PI / 5;
+    doc.lineTo(cx + r * Math.cos(aOut), cy + r * Math.sin(aOut));
+    doc.lineTo(cx + r * 0.45 * Math.cos(aIn), cy + r * 0.45 * Math.sin(aIn));
   }
-  void px; void py;
-}
-
-// Card icons
-function iconGauge(doc: PDFKit.PDFDocument, cx: number, cy: number, s: number): void {
-  doc.save();
-  doc.lineWidth(1.7).strokeColor(PRIMARY);
-  strokeArc(doc, cx, cy, s, 135, 405);
-  doc.stroke();
-  doc.moveTo(cx, cy).lineTo(cx + s * 0.6, cy - s * 0.5).lineWidth(1.5).stroke();
-  doc.circle(cx, cy, s * 0.14).fill(PRIMARY);
+  doc.closePath().fill();
   doc.restore();
 }
 
-function iconTarget(doc: PDFKit.PDFDocument, cx: number, cy: number, s: number): void {
+/** Rounded white checkmark — inside the footer gradient badge. */
+function drawCheck(doc: PDFKit.PDFDocument, cx: number, cy: number, s: number): void {
   doc.save();
-  doc.lineWidth(1.6).strokeColor(PRIMARY);
-  doc.circle(cx, cy, s).stroke();
-  doc.circle(cx, cy, s * 0.55).stroke();
-  doc.circle(cx, cy, s * 0.16).fill(PRIMARY);
+  doc.lineWidth(2.1).lineCap('round').lineJoin('round').strokeColor('#FFFFFF');
+  doc.moveTo(cx - s * 0.45, cy - 0.5)
+    .lineTo(cx - s * 0.1, cy + s * 0.32)
+    .lineTo(cx + s * 0.48, cy - s * 0.35)
+    .stroke();
   doc.restore();
 }
 
-function iconClock(doc: PDFKit.PDFDocument, cx: number, cy: number, s: number): void {
+/** Sparse ring of translucent dots — subtle header texture. */
+function drawDotRing(doc: PDFKit.PDFDocument, cx: number, cy: number, r: number, count: number): void {
   doc.save();
-  doc.lineWidth(1.7).strokeColor(PRIMARY);
-  doc.circle(cx, cy, s).stroke();
-  doc.moveTo(cx, cy).lineTo(cx, cy - s * 0.62).moveTo(cx, cy).lineTo(cx + s * 0.48, cy + s * 0.18)
-    .lineWidth(1.5).stroke();
-  doc.restore();
-}
-
-/** Corner angle ticks — premium certificate accent. */
-function cornerTick(
-  doc: PDFKit.PDFDocument,
-  x: number,
-  y: number,
-  dirX: number,
-  dirY: number,
-  len: number
-): void {
-  doc.save();
-  doc.lineWidth(2).strokeColor(PRIMARY).strokeOpacity(0.75);
-  doc.moveTo(x, y).lineTo(x + dirX * len, y);
-  doc.moveTo(x, y).lineTo(x, y + dirY * len);
-  doc.stroke();
+  doc.fillOpacity(0.13).fillColor('#FFFFFF');
+  for (let i = 0; i < count; i++) {
+    const a = (i / count) * 2 * Math.PI;
+    doc.circle(cx + r * Math.cos(a), cy + r * Math.sin(a), 2).fill();
+  }
   doc.restore();
 }
 
@@ -206,61 +165,23 @@ export interface CertificatePdfData {
   certificateId: string;
   /** ISO date of test completion; defaults to "now" when omitted. */
   completionDate?: string;
-  /** Public verification URL (rendered when the platform provides one). */
+  /** Public verification URL (reserved; not rendered in the card layout). */
   verificationUrl?: string;
 }
 
-/** Premium stat card with icon chip, value and label. */
-function statCard(
-  doc: PDFKit.PDFDocument,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  value: string,
-  label: string,
-  icon: (d: PDFKit.PDFDocument, cx: number, cy: number, s: number) => void,
-): void {
-  const r = 12;
-  doc.save();
-  // Soft shadow
-  doc.fillOpacity(0.07).fillColor(NAVY);
-  doc.roundedRect(x + 1, y + 3, w, h, r).fill();
-  // Card body: white → lavender gradient
-  doc.fillOpacity(1);
-  const grad = doc.linearGradient(x, y, x, y + h);
-  grad.stop(0, '#FFFFFF').stop(1, LAVENDER_BG);
-  doc.roundedRect(x, y, w, h, r).fill(grad);
-  // Border
-  doc.lineWidth(0.8).strokeColor(CARD_BORDER).strokeOpacity(1);
-  doc.roundedRect(x, y, w, h, r).stroke();
-  // Top accent bar (gradient)
-  const accent = doc.linearGradient(x + 1, 0, x + w - 1, 0);
-  accent.stop(0, PRIMARY).stop(1, SECONDARY);
-  doc.roundedRect(x + 1, y + 1, w - 2, 3, 1.5).fill(accent);
-  // Icon chip
-  doc.fillOpacity(1).fillColor('#EEF0FF');
-  const chipR = 12;
-  doc.circle(x + w / 2, y + h * 0.4, chipR).fill();
-  doc.lineWidth(0.8).strokeColor('#D9DDFB');
-  doc.circle(x + w / 2, y + h * 0.4, chipR).stroke();
-  icon(doc, x + w / 2, y + h * 0.4, chipR * 0.55);
-  // Value
-  const vfs = value.length > 8 ? 16 : 20;
-  doc.font('Helvetica-Bold').fontSize(vfs).fillColor(NAVY)
-    .text(value, x, y + h * 0.5, { width: w, align: 'center', height: 22 });
-  // Label
-  doc.font('Helvetica-Bold').fontSize(7.5).fillColor(MUTED)
-    .text(label.toUpperCase(), x, y + h - 20, { width: w, align: 'center', characterSpacing: 1.5 });
-  doc.restore();
-}
-
-/** Render the official Typeoye certificate to a vector PDF buffer (A4 landscape). */
+/**
+ * Render the official Typeoye certificate to a vector PDF buffer.
+ *
+ * The output is a single-page "certificate card" document sized to the design:
+ * gradient header band (logo + wordmark), achievement pill, recipient name,
+ * 3-column stats box (WPM / Accuracy / Duration) and a footer row (issue date,
+ * gradient checkmark badge, certificate ID).
+ */
 export async function renderCertificatePdf(cert: CertificatePdfData): Promise<Buffer> {
   return new Promise((resolve, reject) => {
-    // Landscape A4 (841.89 × 595.28 points)
-    const W = 841.89;
-    const H = 595.28;
+    // Card dimensions in PDF points (1px @96dpi = 0.75pt).
+    const W = 510; // 680px
+    const H = 392;
     const doc = new PDFDocument({
       size: [W, H],
       margins: { top: 0, bottom: 0, left: 0, right: 0 },
@@ -278,204 +199,152 @@ export async function renderCertificatePdf(cert: CertificatePdfData): Promise<Bu
 
     const cx = W / 2;
 
-    // Optional bundled fonts
+    // Optional bundled serif font for the recipient name.
     let serifFont = 'Helvetica';
-    let scriptFont = 'Helvetica-Oblique';
     if (has('PlayfairDisplay-Italic.ttf')) {
       doc.registerFont('cert-serif', path.join(FONTS_DIR, 'PlayfairDisplay-Italic.ttf'));
       serifFont = 'cert-serif';
     }
-    if (has('GreatVibes-Regular.ttf')) {
-      doc.registerFont('cert-script', path.join(FONTS_DIR, 'GreatVibes-Regular.ttf'));
-      scriptFont = 'cert-script';
-    }
 
-    // ── Background: clean white → very light lavender gradient ────────────
-    const bg = doc.linearGradient(0, 0, W, H);
-    bg.stop(0, '#FFFFFF').stop(0.6, '#FCFCFF').stop(1, '#F2F1FF');
-    doc.rect(0, 0, W, H).fill(bg);
+    // ── Header band: blue → purple gradient, logo + wordmark ───────────────
+    const headerH = 76;
+    const headerGrad = doc.linearGradient(0, 0, W, headerH);
+    headerGrad.stop(0, BLUE).stop(1, PURPLE);
+    doc.rect(0, 0, W, headerH).fill(headerGrad);
 
-    // ── Subtle abstract curved shapes in the corners ──────────────────────
-    const cornerArc = (x: number, y: number, r: number, a: number, b: number): void => {
-      doc.save();
-      doc.lineWidth(1.1).strokeColor(SECONDARY).strokeOpacity(0.22);
-      strokeArc(doc, x, y, r, a, b);
-      doc.stroke();
-      doc.restore();
-    };
-    cornerArc(28, 28, 20, 180, 270);
-    cornerArc(W - 28, 28, 20, 270, 360);
-    cornerArc(28, H - 28, 20, 90, 180);
-    cornerArc(W - 28, H - 28, 20, 0, 90);
+    // Subtle decorative dot rings in the header corners (white, low opacity)
+    drawDotRing(doc, W - 42, 18, 17, 8);
+    drawDotRing(doc, 44, 58, 13, 6);
 
-    // Very subtle dot clusters near each corner
-    doc.save();
-    doc.fillOpacity(0.18).fillColor(PRIMARY);
-    for (const [dx, dy] of [[46, 46], [34, 58], [58, 34]] as Array<[number, number]>) doc.circle(dx, dy, 1.3).fill();
-    for (const pair of [[W - 46, 46], [W - 34, 58], [W - 58, 34]] as Array<[number, number]>) {
-      doc.circle(pair[0], pair[1], 1.3).fill();
-    }
-    for (const pair of [[46, H - 46], [34, H - 58], [58, H - 34]] as Array<[number, number]>) {
-      doc.circle(pair[0], pair[1], 1.3).fill();
-    }
-    for (const pair of [[W - 46, H - 46], [W - 34, H - 58], [W - 58, H - 34]] as Array<[number, number]>) {
-      doc.circle(pair[0], pair[1], 1.3).fill();
-    }
-    doc.restore();
-
-    // ── Refined thin double border ────────────────────────────────────────
-    doc.save();
-    doc.lineWidth(1.1).strokeColor(PRIMARY).strokeOpacity(0.4);
-    doc.roundedRect(20, 20, W - 40, H - 40, 10).stroke();
-    doc.lineWidth(0.5).strokeColor(CARD_BORDER).strokeOpacity(1);
-    doc.roundedRect(26, 26, W - 52, H - 52, 8).stroke();
-    doc.restore();
-
-    // Corner accent ticks
-    const tickLen = 13;
-    cornerTick(doc, 30, 30, 1, 1, tickLen);
-    cornerTick(doc, W - 30, 30, -1, 1, tickLen);
-    cornerTick(doc, 30, H - 30, 1, -1, tickLen);
-    cornerTick(doc, W - 30, H - 30, -1, -1, tickLen);
-
-    // ── Brand lockup: logo + "Typeoye" as one header ──────────────────────
-    const logo = readLogo();
-    const brandWord = 'Typeoye';
+    // Centered lockup: white logo icon + "Typeoye" (with "oye" in periwinkle)
+    const logo = readWhiteLogo();
+    const headerCenterY = headerH / 2;
     if (logo) {
       const dims = pngSize(logo);
-      const s = dims.width > 0 && dims.height > 0 ? (dims.width / dims.height) : 1;
-      const logoSize = 40;
-      const logoW = s >= 1 ? logoSize : logoSize * s;
-      const logoH = s >= 1 ? logoSize / s : logoSize;
+      const s = dims.width > 0 && dims.height > 0 ? dims.width / dims.height : 1;
+      const logoH = 26;
+      const logoW = logoH * s;
 
-      doc.font('Helvetica-Bold').fontSize(20);
-      const wordW = doc.widthOfString(brandWord, { characterSpacing: 0.5 });
-      const gap = 12;
-      const totalW = logoW + gap + wordW;
+      doc.font('Helvetica-Bold').fontSize(19);
+      const tW = doc.widthOfString('Type');
+      const oW = doc.widthOfString('oye');
+      const gap = 8;
+      const totalW = logoW + gap + tW + oW;
       const startX = cx - totalW / 2;
-      const brandTop = 44;
+      const logoTop = headerCenterY - logoH / 2;
+      const wordTop = headerCenterY - 6.5;
 
-      const brandGrad = doc.linearGradient(startX + logoW + gap, 0, startX + totalW, 0);
-      brandGrad.stop(0, PRIMARY).stop(1, SECONDARY);
-      doc.image(logo, startX, brandTop, { width: logoW, height: logoH });
-      // Wordmark vertically centered with the logo tile
-      doc.font('Helvetica-Bold').fontSize(20).fillColor(brandGrad)
-        .text(brandWord, startX + logoW + gap, brandTop + logoH / 2 - 9, { characterSpacing: 0.5 });
+      doc.image(logo, startX, logoTop, { width: logoW, height: logoH });
+      doc.fillColor('#FFFFFF').text('Type', startX + logoW + gap, wordTop, { characterSpacing: 0 });
+      doc.fillColor(OYE).text('oye', startX + logoW + gap + tW, wordTop, { characterSpacing: 0 });
     }
 
-    // ── Title ────────────────────────────────────────────────────────────
-    const titleY = 98;
-    doc.font('Helvetica-Bold').fontSize(21).fillColor(NAVY)
-      .text('TYPING CERTIFICATE', 0, titleY, { width: W, align: 'center', characterSpacing: 4 });
+    // ── Body ───────────────────────────────────────────────────────────────
+    const bodyX = 44;
+    const bodyW = W - bodyX * 2;
+    doc.fillColor('#FFFFFF');
 
-    // Gradient accent rule under the title
-    const ruleW = 140;
-    const ruleGrad = doc.linearGradient(cx - ruleW / 2, 0, cx + ruleW / 2, 0);
-    ruleGrad.stop(0, PRIMARY).stop(1, SECONDARY);
+    // Achievement pill badge
+    const pillText = 'CERTIFICATE OF ACHIEVEMENT';
+    const pillY = 102;
+    const pillH = 20;
+    doc.font('Helvetica-Bold').fontSize(6.8);
+    const pillTextW = doc.widthOfString(pillText, { characterSpacing: 1.4 });
+    const starW = 8;
+    const pillW = 9 + starW + 5 + pillTextW + 12;
+    const pillX = cx - pillW / 2;
+    doc.fillColor(PILL_BG);
+    doc.roundedRect(pillX, pillY, pillW, pillH, pillH / 2).fill();
+    drawStar(doc, pillX + 9 + starW / 2, pillY + pillH / 2, 3.6, PILL_TXT);
+    doc.font('Helvetica-Bold').fontSize(6.8).fillColor(PILL_TXT)
+      .text(pillText, pillX + 9 + starW + 5, pillY + (pillH - 9) / 2, { characterSpacing: 1.4 });
+
+    // Muted lead-in line
+    doc.font('Helvetica').fontSize(9.5).fillColor(MUTED)
+      .text('This certifies that', 0, 132, { width: W, align: 'center' });
+
+    // Recipient name (serif, adaptive size)
+    const nameText = cert.recipientName.trim();
+    const nameFontSize = nameText.length > 20 ? 19 : nameText.length > 13 ? 22 : 25;
+    doc.font(serifFont).fontSize(nameFontSize).fillColor(INK)
+      .text(nameText, cx - 180, 146, { width: 360, align: 'center', height: 32 });
+
+    // Gradient underline below the name
+    const ulW = 52.5;
+    const ulGrad = doc.linearGradient(cx - ulW / 2, 0, cx + ulW / 2, 0);
+    ulGrad.stop(0, BLUE).stop(1, PURPLE);
+    doc.roundedRect(cx - ulW / 2, 183, ulW, 2.25, 1.2).fill(ulGrad);
+
+    // Statement sentence
+    doc.font('Helvetica').fontSize(10.5).fillColor(BODY_TEXT)
+      .text(
+        'has successfully completed a Typeoye typing test,\ndemonstrating consistent speed and accuracy.',
+        0, 197, { width: W, align: 'center', lineGap: 3 }
+      );
+
+    // ── Stats box: 3 equal columns (WPM / Accuracy / Duration) ─────────────
+    const boxY = 240;
+    const boxH = 64;
+    doc.fillColor(BOX_BG);
+    doc.roundedRect(bodyX, boxY, bodyW, boxH, 10).fill();
     doc.save();
-    doc.roundedRect(cx - ruleW / 2, titleY + 32, ruleW, 2.2, 1.1).fill(ruleGrad);
+    doc.lineWidth(0.8).strokeColor(BOX_DIV);
+    for (let i = 1; i < 3; i++) {
+      const dx = bodyX + (bodyW / 3) * i;
+      doc.moveTo(dx, boxY + 12).lineTo(dx, boxY + boxH - 12).stroke();
+    }
     doc.restore();
 
-    // ── Presented to ─────────────────────────────────────────────────────
-    const presentedY = 148;
-    doc.font('Helvetica').fontSize(9.5).fillColor(MUTED)
-      .text('PROUDLY PRESENTED TO', 0, presentedY, { width: W, align: 'center', characterSpacing: 2.5 });
+    const colW = bodyW / 3;
+    const wpm = `${Math.round(cert.wpm)}`;
+    const accuracy = `${Math.round(cert.accuracy * 10) / 10}%`;
+    const duration = `${Math.max(1, Math.round(cert.durationSeconds / 60))} min`;
+    const columns: Array<[string, string, string]> = [
+      [wpm, 'WPM', BLUE],
+      [accuracy, 'ACCURACY', GREEN],
+      [duration, 'DURATION', INK],
+    ];
+    const valueY = boxY + 22;
+    const labelY = boxY + 44;
+    columns.forEach(([value, label, color], i) => {
+      const colX = bodyX + colW * i;
+      doc.font('Helvetica-Bold').fontSize(16).fillColor(color)
+        .text(value, colX, valueY, { width: colW, align: 'center' });
+      doc.font('Helvetica-Bold').fontSize(7.5).fillColor(MUTED)
+        .text(label, colX, labelY, { width: colW, align: 'center', characterSpacing: 1.2 });
+    });
 
-    // Dotted hairline flanking the "presented to" line
+    // ── Footer row: issue date | gradient checkmark | certificate ID ───────
     doc.save();
-    doc.lineWidth(0.6).strokeColor(SECONDARY).strokeOpacity(0.3);
-    doc.dash(0.6, { space: 4 });
-    doc.moveTo(cx - 260, presentedY + 4).lineTo(cx - 95, presentedY + 4).stroke();
-    doc.moveTo(cx + 95, presentedY + 4).lineTo(cx + 260, presentedY + 4).stroke();
+    doc.lineWidth(1).strokeColor(FOOT_DIV).dash(2, { space: 2.5 });
+    doc.moveTo(bodyX, 322).lineTo(bodyX + bodyW, 322).stroke();
     doc.undash();
     doc.restore();
 
-    // ── Name (prominent serif/script style) ──────────────────────────────
-    const nameText = cert.recipientName.trim();
-    const nameFontSize = nameText.length > 30 ? 21 : nameText.length > 18 ? 26 : 31;
-    doc.font(serifFont).fontSize(nameFontSize).fillColor(NAVY)
-      .text(nameText, cx - 320, 164, {
-        width: 640,
-        align: 'center',
-        ellipsis: true,
-        height: 46,
-        characterSpacing: 0.5,
-      });
-
-    // ── Statement (two explicit lines) ───────────────────────────────────
-    doc.font('Helvetica').fontSize(11).fillColor(BODY_TEXT)
-      .text(
-        'has successfully completed the Typing Test on Typeoye\nand has demonstrated excellent typing skills.',
-        0, 226, { width: W, align: 'center', lineGap: 5, characterSpacing: 0.3 }
-      );
-
-    // ── 3 stat tiles: WPM, ACCURACY, TEST DURATION ───────────────────────
-    const cards = [
-      { value: `${Math.round(cert.wpm)}`, label: 'WPM', icon: iconGauge },
-      { value: `${Math.round(cert.accuracy * 10) / 10}%`, label: 'ACCURACY', icon: iconTarget },
-      { value: formatTestDuration(cert.durationSeconds), label: 'TEST DURATION', icon: iconClock },
-    ];
-    const cardGap = 24;
-    const cardW = 175;
-    const cardH = 95;
-    const totalCardsW = cards.length * cardW + (cards.length - 1) * cardGap;
-    const cardsStartX = cx - totalCardsW / 2;
-    const cardsY = 282;
-    cards.forEach((c, i) => {
-      statCard(doc, cardsStartX + i * (cardW + cardGap), cardsY, cardW, cardH, c.value, c.label, c.icon);
-    });
-
-    // ── Footer ───────────────────────────────────────────────────────────
-    const footerY = 428;
-
-    // Divider line
-    doc.lineWidth(0.7).strokeColor(CARD_BORDER);
-    doc.moveTo(80, footerY).lineTo(W - 80, footerY).stroke();
-
-    // Small diamond accent at the divider center
-    const diamondY = footerY;
-    doc.save();
-    doc.fillOpacity(1).fillColor(SECONDARY);
-    doc.translate(cx, diamondY).rotate(45);
-    doc.rect(-3, -3, 6, 6).fill();
-    doc.restore();
-
-    const fy = footerY + 26;
-
-    // Left: Date of Completion
-    const completionDate = cert.completionDate
+    // Left: issued-on date
+    const issueDate = cert.completionDate
       ? formatCertificateDate(new Date(cert.completionDate))
       : formatCertificateDate(new Date());
-    doc.font('Helvetica').fontSize(8).fillColor(MUTED)
-      .text('Date of Completion', 80, fy, { characterSpacing: 1 });
-    doc.font('Helvetica-Bold').fontSize(11).fillColor(NAVY)
-      .text(completionDate, 80, fy + 14);
+    doc.font('Helvetica').fontSize(7.5).fillColor(MUTED)
+      .text('ISSUED ON', bodyX, 332, { characterSpacing: 1 });
+    doc.font('Helvetica-Bold').fontSize(10).fillColor(INK)
+      .text(issueDate, bodyX, 347);
 
-    // Center: Certificate ID
-    doc.font('Helvetica').fontSize(8).fillColor(MUTED)
-      .text('Certificate ID', 0, fy, { width: W, align: 'center', characterSpacing: 1 });
-    doc.font('Helvetica-Bold').fontSize(12).fillColor(PRIMARY)
-      .text(cert.certificateId, 0, fy + 13, { width: W, align: 'center' });
+    // Center: circular gradient badge with a white checkmark
+    const cy = 339;
+    const cr = 13;
+    const badgeGrad = doc.linearGradient(cx - cr, 0, cx + cr, 0);
+    badgeGrad.stop(0, BLUE).stop(1, PURPLE);
+    doc.circle(cx, cy, cr).fill(badgeGrad);
+    drawCheck(doc, cx, cy, cr);
 
-    // Right: Authorized signature
-    const sigW = 220;
-    const sigX = W - 80 - sigW;
-    doc.font(scriptFont).fontSize(21).fillColor(NAVY)
-      .text('Typeoye Team', sigX, fy - 4, { width: sigW, align: 'right' });
-    doc.moveTo(sigX, fy + 26).lineTo(W - 80, fy + 26)
-      .lineWidth(0.8).strokeColor(SECONDARY).stroke();
-    doc.font('Helvetica').fontSize(8).fillColor(MUTED)
-      .text('AUTHORIZED SIGNATURE', sigX, fy + 32, { width: sigW, align: 'right', characterSpacing: 1 });
-
-    // Optional verification line (rendered only when the platform provides a URL)
-    if (cert.verificationUrl) {
-      doc.font('Helvetica').fontSize(8).fillColor(MUTED)
-        .text(`Verify this certificate at ${cert.verificationUrl}`, 0, 512, {
-          width: W,
-          align: 'center',
-          characterSpacing: 0.3,
-        });
-    }
+    // Right: certificate ID
+    const rightW = 260;
+    const rightX = bodyX + bodyW - rightW;
+    doc.font('Helvetica').fontSize(7.5).fillColor(MUTED)
+      .text('CERTIFICATE ID', rightX, 332, { width: rightW, align: 'right', characterSpacing: 1 });
+    doc.font('Helvetica-Bold').fontSize(10).fillColor(BLUE)
+      .text(cert.certificateId, rightX, 347, { width: rightW, align: 'right' });
 
     doc.end();
   });
