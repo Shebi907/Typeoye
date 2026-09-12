@@ -101,7 +101,7 @@ export default function PracticeSetup() {
   };
 
   return (
-    <PageWrapper title={meta.label} noHeader fullWidth className="py-6 sm:py-8 px-3 sm:px-4 md:px-6">
+    <PageWrapper title={meta.label} noHeader fullWidth className="py-8 sm:py-10 px-3 sm:px-4 md:px-6">
         <div className="max-w-[106.25rem] mx-auto w-full">
 
         {/* ── Back to Practice — standalone, above the setup card (page header area) ── */}

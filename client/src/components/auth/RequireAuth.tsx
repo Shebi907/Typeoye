@@ -8,6 +8,17 @@ import { useAuthStore } from '../../store/authStore';
 export function RequireAuth() {
   const location = useLocation();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isSessionChecked = useAuthStore((s) => s.isSessionChecked);
+
+  // While the boot-time session check (/auth/me) is still running we can't yet
+  // tell a guest from a returning user. Rendering <Outlet /> here is safe —
+  // the page below will just see its "loading" state via its own data fetches,
+  // and AuthProvider resolves the session a few frames later. Returning a
+  // <Navigate to /login> during this window would flash every freshly-reloaded
+  // signed-in visit through the sign-in page.
+  if (!isSessionChecked) {
+    return <Outlet />;
+  }
 
   if (!isAuthenticated) {
     // Send guests straight to Sign In; AuthLayout returns them here after a

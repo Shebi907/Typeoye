@@ -218,7 +218,7 @@ export default function Leaderboard() {
   const inTop = me ? entries.some((e) => e.userId === me.userId) : false;
 
   return (
-        <PageWrapper title="" fullWidth className="py-6 px-3 sm:px-4 md:px-6">
+        <PageWrapper title="" fullWidth className="py-8 px-3 sm:px-4 md:px-6">
       <div className="max-w-[106.25rem] mx-auto w-full">
 
         {/* ── Header ── */}

@@ -28,10 +28,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const setAuth = useAuthStore((s) => s.setAuth);
   const logout = useAuthStore((s) => s.logout);
+  const setSessionChecked = useAuthStore((s) => s.setSessionChecked);
 
   useEffect(() => {
     const storedToken = token ?? '';
-    if (!storedToken) return;
+    if (!storedToken) {
+      // No stored token at all → definitely a guest. Mark the session as
+      // "checked" so the navbar/guards stop waiting immediately.
+      setSessionChecked(true);
+      return;
+    }
 
     async function rehydrate() {
       try {
@@ -49,11 +55,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
         // Any other error (network timeout, 500, etc.): keep the existing auth
         // state. The token may still be valid; we just couldn't confirm it.
+      } finally {
+        // Whether we confirmed the session, definitively rejected it, or simply
+        // couldn't reach the server — the boot-time check is over. isAuthenticated
+        // governs whether the UI shows a signed-in state; isSessionChecked just
+        // releases any "verifying session" placeholders.
+        setSessionChecked(true);
       }
     }
 
     void rehydrate();
-  }, [token, setAuth, logout]);
+  }, [token, setAuth, logout, setSessionChecked]);
 
   // ── Global 401 watchdog ────────────────────────────────────────────────
   // The axios interceptor cannot import this store (would create a circular

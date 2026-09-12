@@ -418,7 +418,7 @@ const certEarned =
     const durationOptions = VALID_DURATIONS.map((sec) => ({ value: sec, label: sec === 60 ? '1 Minute' : `${sec / 60} Minutes` }));
 
     return (
-      <PageWrapper fullWidth noHeader title="Typing Test" className="py-6 sm:py-8 px-3 sm:px-4 md:px-6">
+      <PageWrapper fullWidth noHeader title="Typing Test" className="py-8 sm:py-10 px-3 sm:px-4 md:px-6">
         <div className="max-w-[106.25rem] mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-stretch justify-center gap-5 w-full">
             {/* Left — setup card */}
@@ -498,7 +498,7 @@ const certEarned =
   }
 
   return (
-    <PageWrapper fullWidth className="tt-page py-6 px-4 sm:px-6" title={undefined}>
+    <PageWrapper fullWidth className="tt-page py-8 sm:py-10 px-4 sm:px-6" title={undefined}>
       <div className="max-w-[106.25rem] mx-auto w-full">
         {certificateMode ? (
           <div className="mb-4">

@@ -44,7 +44,7 @@ export default function Blog() {
           <h1 className="mt-5 text-3xl font-extrabold tracking-tight sm:text-4xl" style={{ color: 'var(--color-text-primary)' }}>
             Typeoye Blog
           </h1>
-          <p className="mt-3 text-base leading-relaxed sm:text-lg" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="readable-text mt-3 text-base leading-relaxed sm:text-lg" style={{ color: 'var(--color-text-secondary)' }}>
             Tips, guides, and insights to help you type faster, improve accuracy, and become more productive.
           </p>
         </div>

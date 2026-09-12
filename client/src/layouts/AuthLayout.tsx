@@ -12,10 +12,15 @@ function safeRedirect(raw: string | null): string {
 
 export function AuthLayout() {
   const location = useLocation();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, isSessionChecked } = useAuthStore();
   const isRegister = location.pathname === '/register';
 
-  if (isAuthenticated) {
+  // While the boot-time session check (/auth/me) hasn't settled, we can't yet
+  // tell a guest from a returning user. Rendering the form here is safe — it
+  // sits behind the empty-right-column layout, and AuthProvider resolves the
+  // session shortly after; a stale token must never bounce straight into the
+  // signed-in app, and a returning user must not flash the login form either.
+  if (isSessionChecked && isAuthenticated) {
     const params = new URLSearchParams(location.search);
     return <Navigate to={safeRedirect(params.get('redirect'))} replace />;
   }

@@ -65,7 +65,7 @@ export default function SupportArticle() {
           </span>
         </div>
 
-        <div className="mt-8 flex flex-col gap-4 text-[0.9375rem] leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+        <div className="readable-text mt-8 flex flex-col gap-4 text-[0.9375rem] leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
           {article.body.map((paragraph, index) => {
             if (paragraph.startsWith('- ')) {
               return (

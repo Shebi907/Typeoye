@@ -38,7 +38,7 @@ export function PageWrapper({
   return (
     <main
       className={cn(
-        'flex-1 py-8 px-4 sm:px-6',
+        'page-fill flex-1 py-8 px-4 sm:px-6',
         !fullWidth && 'max-w-5xl mx-auto w-full',
         className
       )}
@@ -54,7 +54,7 @@ export function PageWrapper({
               </h1>
             )}
             {description && (
-              <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              <p className="readable-text mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
                 {description}
               </p>
             )}

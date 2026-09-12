@@ -213,7 +213,7 @@ export default function Learn() {
   const doneCount = sectionLessons.filter(l => l.completed).length;
 
   return (
-    <PageWrapper title="Learn to Type" noHeader fullWidth className="py-6 sm:py-10 px-4 sm:px-6 overflow-hidden">
+    <PageWrapper title="Learn to Type" noHeader fullWidth className="py-8 sm:py-12 px-4 sm:px-6 overflow-hidden">
       <div className="max-w-5xl mx-auto w-full overflow-hidden">
         
         {/* ── 1. Page Header ────────────────────────────────────────────── */}

@@ -272,7 +272,7 @@ export default function Terms() {
                 style={{ background: 'linear-gradient(90deg, #4361EE, #8B5CF6)' }}
                 aria-hidden="true"
               />
-              <p className="mt-5 max-w-xl text-base sm:text-lg leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+              <p className="readable-text mt-5 max-w-xl text-base sm:text-lg leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
                 Please read these terms and conditions carefully before using Typeoye. By accessing our
                 website and services, you agree to be bound by these terms.
               </p>

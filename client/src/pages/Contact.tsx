@@ -140,7 +140,7 @@ export default function Contact() {
         <h1 className="mt-5 text-3xl font-extrabold tracking-tight sm:text-4xl" style={{ color: 'var(--color-text-primary)' }}>
           Contact Us
         </h1>
-        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed sm:text-base" style={{ color: 'var(--color-text-secondary)' }}>
+        <p className="readable-text mx-auto mt-3 max-w-xl text-sm leading-relaxed sm:text-base" style={{ color: 'var(--color-text-secondary)' }}>
           We'd love to hear from you. Send us a message and we'll get back to you soon.
         </p>
         <div

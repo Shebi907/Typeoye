@@ -12,16 +12,34 @@ interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  /** True once the boot-time session check (/auth/me) has settled — either a
+   *  real session was confirmed (isAuthenticated → true) or the visitor was
+   *  resolved to a guest. UI must treat the pre-check phase as "unknown" and
+   *  render a neutral state instead of an avatar or signed-out buttons. */
+  isSessionChecked: boolean;
 
   setAuth: (user: User, profile: Profile, settings: Settings, token: string) => void;
   setUser: (user: User) => void;
   setProfile: (profile: Profile) => void;
   setSettings: (settings: Settings) => void;
   setLoading: (loading: boolean) => void;
+  setSessionChecked: (checked: boolean) => void;
   logout: () => void;
 }
 
 const TOKEN_KEY = 'typeoye_token';
+
+/** A stored token is only a *hint* that a session may exist — it is NEVER
+ *  proof of authentication. The presence of a stale/expired/revoked token must
+ *  not render the navbar in a signed-in state, so we always boot as a guest and
+ *  let AuthProvider's /auth/me check promote to isAuthenticated: true. */
+function readStoredToken(): string | null {
+  try {
+    return localStorage.getItem(TOKEN_KEY);
+  } catch {
+    return null;
+  }
+}
 
 function clearAllServiceCaches(): void {
   analyticsService.clearCache();
@@ -43,14 +61,15 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   profile: null,
   settings: null,
-  token: localStorage.getItem(TOKEN_KEY),
-  isAuthenticated: !!localStorage.getItem(TOKEN_KEY),
+  token: readStoredToken(),
+  isAuthenticated: false,
   isLoading: false,
+  isSessionChecked: false,
 
   setAuth: (user, profile, settings, token) => {
     clearAllServiceCaches();
     localStorage.setItem(TOKEN_KEY, token);
-    set({ user, profile, settings, token, isAuthenticated: true, isLoading: false });
+    set({ user, profile, settings, token, isAuthenticated: true, isLoading: false, isSessionChecked: true });
   },
 
   setUser: (user) => set({ user }),
@@ -65,10 +84,12 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   setLoading: (isLoading) => set({ isLoading }),
 
+  setSessionChecked: (isSessionChecked) => set({ isSessionChecked }),
+
   logout: () => {
     clearAllServiceCaches();
     localStorage.removeItem(TOKEN_KEY);
-    set({ user: null, profile: null, settings: null, token: null, isAuthenticated: false });
+    set({ user: null, profile: null, settings: null, token: null, isAuthenticated: false, isLoading: false, isSessionChecked: true });
   },
 }));
 

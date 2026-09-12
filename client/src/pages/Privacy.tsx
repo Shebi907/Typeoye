@@ -240,7 +240,7 @@ export default function Privacy() {
                 style={{ background: 'linear-gradient(90deg, #4361EE, #8B5CF6)' }}
                 aria-hidden="true"
               />
-              <p className="mt-5 max-w-xl text-base sm:text-lg leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+              <p className="readable-text mt-5 max-w-xl text-base sm:text-lg leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
                 Your privacy is important to us. This Privacy Policy explains how Typeoye collects, uses,
                 shares, and protects your information when you use our website and services.
               </p>

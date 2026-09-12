@@ -53,7 +53,7 @@ export default function AboutUs() {
         <h1 className="mt-6 text-3xl font-extrabold tracking-tight sm:text-5xl" style={{ color: 'var(--color-text-primary)' }}>
           About Typeoye
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
+        <p className="readable-text mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
           We believe typing well shouldn't require a paywall. Typeoye is a free, open typing platform
           built to help anyone — student, professional, or beginner — type faster and more accurately.
         </p>
@@ -84,7 +84,7 @@ export default function AboutUs() {
         <h2 className="text-center text-2xl font-extrabold tracking-tight sm:text-3xl text-[#17171F] dark:text-white">
           Why we built this
         </h2>
-        <div className="mx-auto mt-6 flex max-w-3xl flex-col gap-5 text-base leading-relaxed text-[#3A3A46] dark:text-[#9294B0]">
+        <div className="readable-text mx-auto mt-6 flex max-w-3xl flex-col gap-5 text-base leading-relaxed text-[#3A3A46] dark:text-[#9294B0]">
           <p>
             Most typing platforms lock the good stuff behind a login wall before you even know if it's
             worth your time. We wanted something different — a place where anyone can open a lesson,

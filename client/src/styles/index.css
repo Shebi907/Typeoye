@@ -104,6 +104,34 @@ body {
   }
 }
 
+/* Floor for the page content wrapper (shared <main> in PageWrapper) rendered
+   by AppLayout between the navbar (h-16 = 4rem) and the footer. On short pages
+   this makes the content area fill the full viewport minus the navbar, so the
+   footer that follows it lands below the fold instead of riding up into view.
+   Pages taller than the viewport grow normally. 100vh is the universal
+   fallback; browsers that understand the dynamic viewport unit get 100dvh. */
+.page-fill {
+  min-height: calc(100vh - 4rem);
+}
+@supports (height: 100dvh) {
+  .page-fill {
+    min-height: calc(100dvh - 4rem);
+  }
+}
+
+/* ── Readability cap for running text (ultra-wide screens) ────────
+   Long paragraphs must not stretch into extremely long lines on huge
+   monitors. ch is relative to the text's own font size — which still follows
+   the fluid root clamp — so the ~72-character line length holds at every
+   viewport width. A rem/px max-width would not: it would scale up with the
+   fluid root and get even wider on 4K. Applied only to text blocks
+   (paragraphs, descriptions, article body); page structure, hero widths, and
+   card grids stay full-width. Centered so capped text never hugs one side. */
+.readable-text {
+  max-width: 72ch;
+  margin-inline: auto;
+}
+
 /* ── Scrollbar ──────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;

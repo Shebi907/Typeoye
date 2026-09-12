@@ -65,7 +65,7 @@ export default function Faq() {
         <h1 className="mt-6 text-3xl font-extrabold tracking-tight sm:text-4xl" style={{ color: 'var(--color-text-primary)' }}>
           Frequently Asked <span style={{ background: 'linear-gradient(135deg, #4361EE 0%, #7C3AED 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>Questions</span>
         </h1>
-        <p className="mt-3 text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
+        <p className="readable-text mt-3 text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
           Everything you need to know about Typeoye.
         </p>
         <div className="mx-auto mt-5 h-0.5 w-16 rounded-full" style={{ background: 'linear-gradient(90deg, #4361EE 0%, #7C3AED 100%)' }} />

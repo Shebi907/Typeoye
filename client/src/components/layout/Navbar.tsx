@@ -7,6 +7,7 @@ import { useAuthStore } from '../../store/authStore';
 import { useSettingsStore } from '../../store/settingsStore';
 import { authService } from '../../services/auth.service';
 import { Avatar } from '../ui/Avatar';
+import { Spinner } from '../ui/Spinner';
 
 const navLinks = [
   { to: '/', label: 'Home' },
@@ -19,7 +20,7 @@ const navLinks = [
 ];
 
 export function Navbar() {
-  const { user, profile, isAuthenticated, logout } = useAuthStore();
+  const { user, profile, isAuthenticated, isSessionChecked, logout } = useAuthStore();
   const { theme, setTheme } = useSettingsStore();
   const navigate = useNavigate();
   const location = useLocation();
@@ -53,11 +54,18 @@ export function Navbar() {
     logout();
   };
 
-  const guest = !isAuthenticated;
+  // While the boot-time session check (/auth/me) is still running we don't yet
+  // know if this visitor is signed in. Until it settles, show neither the
+  // signed-in avatar nor the guest Sign in / Get Started buttons — a stale
+  // token must never render a profile icon, and a real session must not flash
+  // the guest buttons either.
+  const checkingSession = !isSessionChecked;
+  const guest = isSessionChecked && !isAuthenticated;
 
   // Signed-in users don't have a "Home" destination — their home is the
-  // Progress page. Keep the item only for guests.
-  const links = guest ? navLinks : navLinks.filter((l) => l.to !== '/');
+  // Progress page. Keep the item only for guests (and while the session is
+  // still being verified, where Home is the safe default).
+  const links = isSessionChecked && isAuthenticated ? navLinks.filter((l) => l.to !== '/') : navLinks;
   const gamesIndex = Math.max(0, links.findIndex((l) => l.to === '/games'));
   const beforeGames = links.slice(0, gamesIndex + 1);
   const afterGames = links.slice(gamesIndex + 1);
@@ -72,7 +80,7 @@ export function Navbar() {
           <span className="navbar-gradient-circle w-28 h-28 right-[38%] -top-16" style={{ opacity: 0.5 }} />
         </div>
 
-        <Link to={guest ? '/' : '/progress'} className="navbar-logo-hover relative flex items-center flex-shrink-0">
+        <Link to={guest ? '/' : isAuthenticated ? '/progress' : '/'} className="navbar-logo-hover relative flex items-center flex-shrink-0">
           <Logo size={25} gap={5} />
         </Link>
 
@@ -108,7 +116,7 @@ export function Navbar() {
           })}
 
           {/* Progress dropdown — signed-in users only, right after Games */}
-          {!guest && <ProgressDropdown />}
+          {isAuthenticated && <ProgressDropdown />}
 
           {afterGames.map(({ to, label }) => {
             const isCertMode = to === '/test' && location.search.includes('cert=1');
@@ -151,7 +159,13 @@ export function Navbar() {
             <ThemeIcon size={18} />
           </button>
 
-          {!isAuthenticated && (
+          {checkingSession && (
+            <span className="hidden sm:flex items-center gap-2" aria-hidden="true">
+              <Spinner size="sm" style={{ color: 'rgba(255,255,255,0.7)' }} />
+            </span>
+          )}
+
+          {guest && (
             <span className="hidden sm:flex items-center gap-2">
               <Link to="/login" className="btn btn-sm gpill-signin">Sign in</Link>
               <Link to="/register" className="btn btn-sm gpill-start">Get Started</Link>
@@ -242,7 +256,7 @@ export function Navbar() {
                   </Link>
                 );
               })}
-              {!guest && (
+              {isAuthenticated && (
                 <>
                   <Link
                     to="/progress"

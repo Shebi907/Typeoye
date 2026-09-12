@@ -54,7 +54,7 @@ export default function SupportCenter() {
         <h1 className="mt-5 text-3xl font-extrabold tracking-tight sm:text-4xl" style={{ color: 'var(--color-text-primary)' }}>
           Support Center
         </h1>
-        <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed sm:text-lg" style={{ color: 'var(--color-text-secondary)' }}>
+        <p className="readable-text mx-auto mt-3 max-w-xl text-base leading-relaxed sm:text-lg" style={{ color: 'var(--color-text-secondary)' }}>
           Answers and guides to help you get the most out of Typeoye.
         </p>
 

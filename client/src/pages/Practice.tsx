@@ -46,7 +46,7 @@ export default function Practice() {
   const recommendedType = recommendation ? PRACTICE_TYPES.find((t) => t.slug === recommendation.type) : undefined;
 
   return (
-    <PageWrapper title="Practice" description="Build your speed, accuracy, and confidence with focused practice." icon={Target} dotGrid fullWidth className="py-8">
+    <PageWrapper title="Practice" description="Build your speed, accuracy, and confidence with focused practice." icon={Target} dotGrid fullWidth className="py-10">
       <div className="max-w-[106.25rem] mx-auto w-full">
 
         {/* ── Practice modes ───────────────────────────────────────────── */}

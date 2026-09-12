@@ -72,7 +72,7 @@ export default function HowItWorks() {
         <h1 className="mt-6 text-3xl font-extrabold tracking-tight sm:text-5xl" style={{ color: 'var(--color-text-primary)' }}>
           Three steps. That's it.
         </h1>
-        <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
+        <p className="readable-text mx-auto mt-4 max-w-xl text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
           No complicated setup — just open a lesson and start typing.
         </p>
       </section>

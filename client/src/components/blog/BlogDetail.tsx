@@ -22,7 +22,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
       </Link>
 
       {/* Header */}
-      <header className="max-w-3xl">
+      <header className="readable-text max-w-3xl">
         <span
           className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ${CATEGORY_BADGE[post.category]}`}
         >
@@ -76,7 +76,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
       </div>
 
       {/* Article body */}
-      <div className="mt-8 max-w-3xl">
+      <div className="readable-text mt-8 max-w-3xl">
         {post.content.map((section, index) => (
           <section key={section.heading} className="mb-8">
             <h2

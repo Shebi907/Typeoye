@@ -114,7 +114,7 @@ export default function Landing() {
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg max-w-2xl mx-auto mb-10 px-2" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="readable-text text-base sm:text-lg max-w-2xl mx-auto mb-10 px-2" style={{ color: 'var(--color-text-secondary)' }}>
             Typeoye combines structured lessons, real-time feedback, and adaptive practice
             to make you a faster, more accurate typist — starting today.
           </p>
@@ -173,7 +173,7 @@ export default function Landing() {
         >
           Everything You Need to Improve
         </h2>
-        <p className="text-center max-w-2xl mx-auto mb-12 sm:mb-14" style={{ color: 'var(--color-text-secondary)' }}>
+        <p className="readable-text text-center max-w-2xl mx-auto mb-12 sm:mb-14" style={{ color: 'var(--color-text-secondary)' }}>
           Powerful tools and fun games to make typing practice enjoyable and effective.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -210,7 +210,7 @@ export default function Landing() {
           >
             Why Choose TypeOye?
           </h2>
-          <p className="text-lg text-center mb-12 sm:mb-14" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="readable-text text-lg text-center mb-12 sm:mb-14" style={{ color: 'var(--color-text-secondary)' }}>
             Simple. Effective. Free.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto">
@@ -265,7 +265,7 @@ export default function Landing() {
           >
             Get Your Typing Certificate
           </h2>
-          <p className="text-lg max-w-xl mx-auto mb-8" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="readable-text text-lg max-w-xl mx-auto mb-8" style={{ color: 'var(--color-text-secondary)' }}>
             Prove your typing skills with a TypeOye typing certificate.
           </p>
           <Link to="/certificate" className="landing-cta">
