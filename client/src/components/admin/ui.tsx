@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useScrollLock } from '../../hooks/useScrollLock';
 
 export function AdminPage({
   title,
@@ -126,6 +127,9 @@ export function Modal({
   children: React.ReactNode;
   wide?: boolean;
 }) {
+  // Mounted only while an admin modal is open (parents render it conditionally),
+  // so locking on mount/cleanup is equivalent to locking on open/close.
+  useScrollLock(true);
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center p-4 sm:p-8 overflow-y-auto bg-black/40">
       <div className={`w-full ${wide ? 'max-w-3xl' : 'max-w-lg'} card p-6`} role="dialog" aria-modal="true">
@@ -164,6 +168,7 @@ export function ConfirmDialog({
   onConfirm: () => void;
   busy?: boolean;
 }) {
+  useScrollLock(open);
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">

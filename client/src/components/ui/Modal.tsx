@@ -2,6 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { cn } from '../../utils/cn';
+import { useScrollLock } from '../../hooks/useScrollLock';
 
 interface ModalProps {
   isOpen: boolean;
@@ -25,13 +26,13 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
     [onClose]
   );
 
+  useScrollLock(isOpen);
+
   useEffect(() => {
     if (!isOpen) return;
     document.addEventListener('keydown', handleKey);
-    document.body.style.overflow = 'hidden';
     return () => {
       document.removeEventListener('keydown', handleKey);
-      document.body.style.overflow = '';
     };
   }, [isOpen, handleKey]);
 

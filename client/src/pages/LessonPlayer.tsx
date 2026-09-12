@@ -10,6 +10,7 @@ import { Modal } from '../components/ui/Modal';
 import { TypingDisplay } from '../components/typing/TypingDisplay';
 import { StartTypingHint } from '../components/typing/StartTypingHint';
 import { VirtualKeyboard } from '../components/typing/VirtualKeyboard';
+import { useScrollLock } from '../hooks/useScrollLock';
 import { LiveStatsCard } from '../components/typing/LiveStatsCard';
 import { computeWpm, computeAccuracy } from '../utils/wpm';
 import { useTypingEngine } from '../hooks/useTypingEngine';
@@ -216,6 +217,9 @@ export default function LessonPlayer() {
 
   const displayElapsed = isPaused ? pausedElapsedRef.current : engine.elapsed;
   const displayRemaining = Math.max(0, 999999 - displayElapsed);
+
+  // Lock page scroll while the exercise-completion overlay is shown.
+  useScrollLock(engine.phase === 'finished' && !!feedback);
 
   if (!lesson && error) {
     return <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6 overflow-hidden">

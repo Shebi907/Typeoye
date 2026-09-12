@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useScrollLock } from '../../hooks/useScrollLock';
 
 interface GameOverOverlayProps {
   /** The game content to show blurred+dimmed behind the overlay */
@@ -13,14 +14,9 @@ interface GameOverOverlayProps {
  * edge) and a centered result card on top. Also locks page scroll while open.
  */
 export default function GameOverOverlay({ children, result }: GameOverOverlayProps) {
-  // Lock page scroll while the overlay is mounted; always restore on cleanup.
-  useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, []);
+  // Mounted only while a game-over overlay is shown, so locking on mount is
+  // equivalent to locking on open; cleanup restores page scroll.
+  useScrollLock(true);
 
   return (
     <div className="relative w-full max-w-[53.75rem]">

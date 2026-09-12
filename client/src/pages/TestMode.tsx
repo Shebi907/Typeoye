@@ -10,6 +10,7 @@ import { VirtualKeyboard } from '../components/typing/VirtualKeyboard';
 import { generateTestChunk } from '../data/testContent';
 import { computeWpm, computeAccuracy } from '../utils/wpm';
 import { useAuthStore } from '../store/authStore';
+import { useScrollLock } from '../hooks/useScrollLock';
 import { useSeo } from '../hooks/useSeo';
 import { typingService } from '../services/typing.service';
 import { downloadGuestCertificate, getCertificateParagraph, CERT_TO_PARAGRAPH_DIFFICULTY, readCertHistory, recordCertUsed, peekCertificateParagraphPreload, takeCertificateParagraphPreload, type GuestCertificatePayload } from '../services/certificate.service';
@@ -287,15 +288,7 @@ const response = await typingService.submitSession({
   }, [engine.phase, engine.wordStates.length, engine.currentWordIndex, engine.appendText, newChunk]);
 
   // Lock page scroll while the blurred result modal is open.
-  useEffect(() => {
-    if (engine.phase === 'finished' && summary) {
-      const prev = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = prev;
-      };
-    }
-  }, [engine.phase, summary]);
+  useScrollLock(engine.phase === 'finished' && !!summary);
 
 const restart = useCallback(() => {
     setSummary(null);
