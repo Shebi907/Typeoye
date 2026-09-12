@@ -59,7 +59,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
 
       {/* Featured image */}
       <div
-        className="relative mt-7 w-full overflow-hidden rounded-[1.25rem] border"
+        className="readable-text relative mt-7 w-full overflow-hidden rounded-[1.25rem] border"
         style={{ borderColor: 'var(--color-border)', aspectRatio: '16 / 7' }}
       >
         <img
