@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { RefreshCw, Heart, CloudLightning, ArrowLeft, Gamepad2, Keyboard, ShieldAlert, Play, Type, Gauge, Target, Trophy, Clock } from 'lucide-react';
 import { COMMON_WORDS } from '../../data/wordLists';
 import { gamesService, type GameSubmitResponse } from '../../services/games.service';
@@ -529,10 +529,10 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
                     style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(239,68,68,0.0) 30%, rgba(239,68,68,0.18) 50%, rgba(239,68,68,0.0) 70%, transparent 100%)' }}
                   />
                   <div
-                    className="absolute inset-x-0 h-[2px]"
+                    className="absolute inset-x-0 h-[0.125rem]"
                     style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(239,68,68,0.15) 15%, rgba(239,68,68,0.7) 50%, rgba(239,68,68,0.15) 85%, transparent 100%)', boxShadow: '0 0 12px 2px rgba(239,68,68,0.25)' }}
                   />
-                  <span className="absolute right-2 -top-4 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'rgba(239,68,68,0.55)' }}>
+                  <span className="absolute right-2 -top-4 text-[0.625rem] font-bold uppercase tracking-widest" style={{ color: 'rgba(239,68,68,0.55)' }}>
                     ⚠ Danger Zone
                   </span>
                 </div>
@@ -586,7 +586,7 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
           </div>
 
           {/* Right: Instructions + start */}
-          <div className="w-full lg:w-[340px] shrink-0 flex flex-col">
+          <div className="w-full lg:w-[21.25rem] shrink-0 flex flex-col">
             <div className="card p-5 flex flex-col gap-4">
               {/* Heading */}
               <div className="flex items-center gap-2.5">
@@ -650,7 +650,7 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
   const timeElapsed = `${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, '0')}`;
 
   const resultCard = gameOver ? (
-    <div className="w-full max-w-[400px]">
+    <div className="w-full max-w-[25rem]">
       <div className="card result-card overflow-hidden" style={{ boxShadow: '0 20px 50px -15px rgba(0,0,0,0.25)' }}>
 
         {/* Light-gradient header section */}
@@ -662,7 +662,7 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
             <Keyboard size={20} style={{ color: '#8B5CF6' }} />
           </div>
           <h2 className="text-xl font-extrabold mt-2" style={{ color: 'var(--color-text-primary)' }}>Game Over!</h2>
-          <p className="text-[13px] mt-1" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="text-[0.8125rem] mt-1" style={{ color: 'var(--color-text-secondary)' }}>
             Survived {result!.elapsed}s · Game complete
           </p>
         </div>
@@ -675,21 +675,21 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
                 <Type size={14} style={{ color: '#4361EE' }} />
               </div>
               <div className="text-xl font-extrabold tabular-nums" style={{ color: 'var(--color-text-primary)' }}>{result!.score}</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted)' }}>Words</div>
+              <div className="text-[0.625rem] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted)' }}>Words</div>
             </div>
             <div className="rounded-xl p-2.5 text-center" style={{ backgroundColor: 'rgba(217,119,6,0.08)' }}>
               <div className="w-7 h-7 rounded-lg mx-auto flex items-center justify-center mb-1.5" style={{ backgroundColor: 'rgba(217,119,6,0.15)' }}>
                 <Gauge size={14} style={{ color: '#d97706' }} />
               </div>
               <div className="text-xl font-extrabold tabular-nums" style={{ color: 'var(--color-text-primary)' }}>{result!.wpm}</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted)' }}>WPM</div>
+              <div className="text-[0.625rem] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted)' }}>WPM</div>
             </div>
             <div className="rounded-xl p-2.5 text-center" style={{ backgroundColor: 'rgba(34,197,94,0.08)' }}>
               <div className="w-7 h-7 rounded-lg mx-auto flex items-center justify-center mb-1.5" style={{ backgroundColor: 'rgba(34,197,94,0.15)' }}>
                 <Target size={14} style={{ color: 'var(--color-correct)' }} />
               </div>
               <div className="text-xl font-extrabold tabular-nums" style={{ color: 'var(--color-correct)' }}>{result!.accuracy}%</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted)' }}>Accuracy</div>
+              <div className="text-[0.625rem] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted)' }}>Accuracy</div>
             </div>
           </div>
         </div>
@@ -761,7 +761,7 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
         <div className="absolute rounded-full" style={{ bottom: -160, left: '32%', width: 400, height: 400, background: 'radial-gradient(circle, rgba(67,97,238,0.06), transparent 70%)' }} />
       </div>
 
-      <div className="relative mx-auto w-full max-w-[1200px] px-4 sm:px-2">
+      <div className="relative mx-auto w-full max-w-[75rem] px-4 sm:px-2">
         {/* Back to games */}
         <div className="mb-5">
           <BackToGames onBack={onBack} />
@@ -792,7 +792,7 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
                   </div>
                 </div>
 
-                <span className="inline-flex items-center gap-1.5 ml-auto px-2.5 py-1 rounded-full bg-white/20 ring-1 ring-white/25 text-[11px] font-bold text-white whitespace-nowrap">
+                <span className="inline-flex items-center gap-1.5 ml-auto px-2.5 py-1 rounded-full bg-white/20 ring-1 ring-white/25 text-[0.6875rem] font-bold text-white whitespace-nowrap">
                   <Gamepad2 size={11} />
                   Level {currentLevel}
                 </span>
@@ -816,13 +816,13 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
                     </div>
                     <div className="flex flex-col leading-none min-w-0">
                       <span className="text-base sm:text-lg font-bold text-white tabular-nums font-mono">{value}</span>
-                      <span className="mt-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-white/50">{label}</span>
+                      <span className="mt-1 text-[0.5625rem] sm:text-[0.625rem] font-bold uppercase tracking-widest text-white/50">{label}</span>
                     </div>
                   </div>
                 ))}
 
                 <div className="ml-auto flex items-center gap-1">
-                  <span className="hidden sm:inline text-[10px] font-bold uppercase tracking-widest text-white/70 mr-0.5">Lives</span>
+                  <span className="hidden sm:inline text-[0.625rem] font-bold uppercase tracking-widest text-white/70 mr-0.5">Lives</span>
                   {Array.from({ length: INITIAL_LIVES }).map((_, i) => (
                     <Heart
                       key={i}
@@ -839,7 +839,7 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
               </div>
 
             {/* Level progress bar */}
-            <div className="relative mt-3 h-[3px] rounded-full" style={{ background: 'rgba(255,255,255,0.18)' }}>
+            <div className="relative mt-3 h-[0.1875rem] rounded-full" style={{ background: 'rgba(255,255,255,0.18)' }}>
               <div
                 className="h-full rounded-full transition-all duration-300"
                 style={{
@@ -890,11 +890,11 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
               style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(239,68,68,0.0) 30%, rgba(239,68,68,0.18) 50%, rgba(239,68,68,0.0) 70%, transparent 100%)' }}
             />
             <div
-              className="absolute inset-x-0 h-[2px]"
+              className="absolute inset-x-0 h-[0.125rem]"
               style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(239,68,68,0.15) 15%, rgba(239,68,68,0.7) 50%, rgba(239,68,68,0.15) 85%, transparent 100%)', boxShadow: '0 0 12px 2px rgba(239,68,68,0.25)' }}
             />
             <span
-              className="absolute right-3 -top-4 text-[10px] font-bold uppercase tracking-widest"
+              className="absolute right-3 -top-4 text-[0.625rem] font-bold uppercase tracking-widest"
               style={{ color: 'rgba(239,68,68,0.55)' }}
             >
               ⚠ Danger Zone
@@ -1054,7 +1054,7 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
           <div className="px-4 sm:px-7 pt-6 pb-5 flex flex-col items-center">
             {/* Typing input */}
             <div
-              className="w-full max-w-[520px] rounded-2xl px-6 py-3.5 text-center transition-shadow duration-200"
+              className="w-full max-w-[32.5rem] rounded-2xl px-6 py-3.5 text-center transition-shadow duration-200"
               style={{
                 background: 'linear-gradient(180deg, #0c1426 0%, #090f1d 100%)',
                 border: '1.5px solid rgba(99,102,241,0.6)',
@@ -1068,7 +1068,7 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
                   <span className="italic text-slate-500">{'\u00a0'}type here...</span>
                 )}
                 <span
-                  className="inline-block w-[3px] h-6 rounded bg-[#4F46E5] ml-1 caret-blink"
+                  className="inline-block w-[0.1875rem] h-6 rounded bg-[#4F46E5] ml-1 caret-blink"
                   style={{ boxShadow: '0 0 10px rgba(99,102,241,0.9)' }}
                 />
               </span>

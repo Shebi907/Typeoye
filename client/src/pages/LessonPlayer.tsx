@@ -219,7 +219,7 @@ export default function LessonPlayer() {
 
   if (!lesson && error) {
     return <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6 overflow-hidden">
-      <div className="max-w-[1700px] mx-auto w-full overflow-hidden">
+      <div className="max-w-[106.25rem] mx-auto w-full overflow-hidden">
         <nav className="flex items-center justify-between mb-5">
           <Link to="/lessons" className="flex items-center gap-1.5 text-sm font-semibold transition-colors hover:opacity-80" style={{ color: 'var(--color-accent-text)' }}>
             <ArrowLeft size={15} />
@@ -255,7 +255,7 @@ export default function LessonPlayer() {
   if (!lesson) {
     return (
       <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6 overflow-hidden">
-        <div className="max-w-[1700px] mx-auto w-full overflow-hidden">
+        <div className="max-w-[106.25rem] mx-auto w-full overflow-hidden">
           <nav className="flex items-center justify-between mb-5">
             <Link to="/lessons" className="flex items-center gap-1.5 text-sm font-semibold transition-colors hover:opacity-80" style={{ color: 'var(--color-accent-text)' }}>
               <ArrowLeft size={15} />
@@ -279,7 +279,7 @@ export default function LessonPlayer() {
 
   return (
     <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6 overflow-hidden">
-      <div className="max-w-[1700px] mx-auto w-full overflow-hidden">
+      <div className="max-w-[106.25rem] mx-auto w-full overflow-hidden">
 
         {/* ── Top Navigation ── */}
         <nav className="flex items-center justify-between mb-5">
@@ -313,7 +313,7 @@ export default function LessonPlayer() {
                   {lesson.order}. {lesson.title}
                 </h1>
                 <span
-                  className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full leading-none"
+                  className="text-[0.625rem] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full leading-none"
                   style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff' }}
                 >
                   Level {lesson.order}
@@ -321,7 +321,7 @@ export default function LessonPlayer() {
                 {isReplay && (
                   <span
                     data-testid="replay-badge"
-                    className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full leading-none"
+                    className="text-[0.625rem] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full leading-none"
                     style={{ backgroundColor: 'rgba(34, 197, 94, 0.12)', color: 'var(--color-correct)' }}
                   >
                     Replay
@@ -504,15 +504,15 @@ export default function LessonPlayer() {
                         <div className="grid grid-cols-3 gap-3 mt-5">
                           <div className="rounded-xl p-3" style={{ background: 'var(--color-accent-light)' }}>
                             <div className="text-xl font-bold" style={{ color: 'var(--color-accent-text)' }}>{feedback.stats.wpm}</div>
-                            <div className="text-[10px] uppercase tracking-widest font-semibold" style={{ color: 'var(--color-text-muted)' }}>WPM</div>
+                            <div className="text-[0.625rem] uppercase tracking-widest font-semibold" style={{ color: 'var(--color-text-muted)' }}>WPM</div>
                           </div>
                           <div className="rounded-xl p-3" style={{ background: 'var(--color-accent-light)' }}>
                             <div className="text-xl font-bold" style={{ color: 'var(--color-accent-text)' }}>{feedback.stats.accuracy}%</div>
-                            <div className="text-[10px] uppercase tracking-widest font-semibold" style={{ color: 'var(--color-text-muted)' }}>Accuracy</div>
+                            <div className="text-[0.625rem] uppercase tracking-widest font-semibold" style={{ color: 'var(--color-text-muted)' }}>Accuracy</div>
                           </div>
                           <div className="rounded-xl p-3" style={{ background: 'var(--color-accent-light)' }}>
                             <div className="text-xl font-bold" style={{ color: 'var(--color-accent-text)' }}>{feedback.stats.correctWords}/{feedback.stats.attemptedWords}</div>
-                            <div className="text-[10px] uppercase tracking-widest font-semibold" style={{ color: 'var(--color-text-muted)' }}>Correct</div>
+                            <div className="text-[0.625rem] uppercase tracking-widest font-semibold" style={{ color: 'var(--color-text-muted)' }}>Correct</div>
                           </div>
                         </div>
 
@@ -599,7 +599,7 @@ export default function LessonPlayer() {
           </div>
 
           {/* RIGHT: Live Performance Card */}
-          <aside className="w-full lg:w-[260px] shrink-0 flex flex-col gap-4 lg:sticky lg:top-24">
+          <aside className="w-full lg:w-[16.25rem] shrink-0 flex flex-col gap-4 lg:sticky lg:top-24">
             <LiveStatsCard
               wpm={engine.liveWpm}
               accuracy={engine.liveAccuracy}

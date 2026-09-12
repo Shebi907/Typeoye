@@ -243,7 +243,7 @@ export default function PracticeSession() {
     ];
     return (
       <PageWrapper fullWidth className="tt-page py-6 px-3 sm:px-4 md:px-6" title={undefined}>
-        <div className="max-w-[1700px] mx-auto w-full">
+        <div className="max-w-[106.25rem] mx-auto w-full">
           <div className="flex flex-col lg:flex-row gap-5 w-full items-start">
             {/* ── Result card ── */}
             <div className="flex-1 min-w-0 w-full">
@@ -265,7 +265,7 @@ export default function PracticeSession() {
                         <span className="text-2xl font-extrabold tabular-nums" style={{ color: stat.color, fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}>
                           {stat.value}
                         </span>
-                        <span className="text-[10px] font-bold uppercase tracking-wider mt-1" style={{ color: stat.labelColor }}>{stat.label}</span>
+                        <span className="text-[0.625rem] font-bold uppercase tracking-wider mt-1" style={{ color: stat.labelColor }}>{stat.label}</span>
                       </div>
                     ))}
                   </div>
@@ -335,7 +335,7 @@ export default function PracticeSession() {
             </div>
 
             {/* ── Right column ── */}
-            <aside className="w-full lg:w-[260px] shrink-0 flex flex-col gap-4 lg:sticky lg:top-24">
+            <aside className="w-full lg:w-[16.25rem] shrink-0 flex flex-col gap-4 lg:sticky lg:top-24">
               <LiveStatsCard
                 wpm={engine.liveWpm}
                 accuracy={engine.liveAccuracy}
@@ -371,7 +371,7 @@ export default function PracticeSession() {
     const keyBlock = { width: 'clamp(17px, 5.4vw, 34px)', height: 'clamp(17px, 5.4vw, 34px)' } as const;
     return (
       <PageWrapper fullWidth className="tt-page py-6 px-3 sm:px-4 md:px-6" title={undefined}>
-        <div className="max-w-[1700px] mx-auto w-full">
+        <div className="max-w-[106.25rem] mx-auto w-full">
           <div className="mb-4">
             <button
               type="button"
@@ -408,25 +408,25 @@ export default function PracticeSession() {
                 {/* Keyboard placeholder — same sizing as VirtualKeyboard 'premium' */}
                 <div className="w-full mx-auto mt-4 px-2" aria-hidden="true">
                   {[13, 13, 11, 10].map((count, rowIdx) => (
-                    <div key={rowIdx} className="flex justify-center gap-[5px] mb-[5px]" style={{ paddingLeft: `${rowIdx * 14}px` }}>
+                    <div key={rowIdx} className="flex justify-center gap-[0.3125rem] mb-[0.3125rem]" style={{ paddingLeft: `${rowIdx * 0.875}rem` }}>
                       {Array.from({ length: count }).map((_, i) => (
-                        <Skeleton key={i} className="flex-1 min-w-[17px]" height={keyBlock.height} rounded />
+                        <Skeleton key={i} className="flex-1 min-w-[1.0625rem]" height={keyBlock.height} rounded />
                       ))}
                     </div>
                   ))}
-                  <div className="flex justify-center gap-[5px] mt-[5px]">
-                    <Skeleton className="flex-1 min-w-[24px]" height="28px" rounded />
-                    <Skeleton className="flex-1 min-w-[24px]" height="28px" rounded />
-                    <Skeleton className="flex-[3_1_0%] min-w-[110px]" height="28px" rounded />
-                    <Skeleton className="flex-1 min-w-[24px]" height="28px" rounded />
-                    <Skeleton className="flex-1 min-w-[24px]" height="28px" rounded />
+                  <div className="flex justify-center gap-[0.3125rem] mt-[0.3125rem]">
+                    <Skeleton className="flex-1 min-w-[1.5rem]" height="28px" rounded />
+                    <Skeleton className="flex-1 min-w-[1.5rem]" height="28px" rounded />
+                    <Skeleton className="flex-[3_1_0%] min-w-[6.875rem]" height="28px" rounded />
+                    <Skeleton className="flex-1 min-w-[1.5rem]" height="28px" rounded />
+                    <Skeleton className="flex-1 min-w-[1.5rem]" height="28px" rounded />
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Right column skeleton */}
-            <aside className="w-full lg:w-[260px] shrink-0 flex flex-col gap-4 lg:sticky lg:top-24">
+            <aside className="w-full lg:w-[16.25rem] shrink-0 flex flex-col gap-4 lg:sticky lg:top-24">
               <div className="card p-4 w-full">
                 <Skeleton width="90px" height="0.7rem" className="mb-4" />
                 <div className="flex flex-col gap-3.5">
@@ -461,7 +461,7 @@ export default function PracticeSession() {
 
   return (
     <PageWrapper fullWidth className="tt-page py-6 px-3 sm:px-4 md:px-6" title={undefined}>
-      <div className="max-w-[1700px] mx-auto w-full">
+      <div className="max-w-[106.25rem] mx-auto w-full">
         <div className="mb-4">
           <button
             type="button"
@@ -544,7 +544,7 @@ export default function PracticeSession() {
           </div>
 
           {/* ── Right column: live stats + tips ── */}
-          <aside className="w-full lg:w-[260px] shrink-0 flex flex-col gap-4 lg:sticky lg:top-24">
+          <aside className="w-full lg:w-[16.25rem] shrink-0 flex flex-col gap-4 lg:sticky lg:top-24">
             <LiveStatsCard
               wpm={engine.liveWpm}
               accuracy={engine.liveAccuracy}

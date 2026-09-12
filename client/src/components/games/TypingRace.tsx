@@ -175,7 +175,7 @@ export default function TypingRace({ onBack }: { onBack?: () => void }) {
   const gameOver = over && !!displayResult;
 
   const resultCard = gameOver && displayResult ? (
-    <div className="w-full max-w-[400px]">
+    <div className="w-full max-w-[25rem]">
       <div className="card result-card overflow-hidden" style={{ boxShadow: '0 20px 50px -15px rgba(0,0,0,0.25)' }}>
         <div className="px-5 py-4 text-center relative overflow-hidden" style={{ background: winner === 'user' ? 'linear-gradient(135deg, rgba(34,197,94,0.06) 0%, rgba(34,197,94,0.03) 100%)' : 'linear-gradient(135deg, rgba(239,68,68,0.06) 0%, rgba(239,68,68,0.03) 100%)' }}>
           <div className="w-11 h-11 rounded-xl mx-auto flex items-center justify-center" style={{ backgroundColor: winner === 'user' ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)', boxShadow: winner === 'user' ? '0 4px 12px rgba(34,197,94,0.15)' : '0 4px 12px rgba(239,68,68,0.15)' }}>
@@ -184,7 +184,7 @@ export default function TypingRace({ onBack }: { onBack?: () => void }) {
           <h2 className="text-xl font-extrabold mt-2" style={{ color: 'var(--color-text-primary)' }}>
             {winner === 'user' ? 'You win!' : 'Opponent wins'}
           </h2>
-          <p className="text-[13px] mt-1" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="text-[0.8125rem] mt-1" style={{ color: 'var(--color-text-secondary)' }}>
             Race complete · {displayResult.elapsed}s
           </p>
         </div>
@@ -195,21 +195,21 @@ export default function TypingRace({ onBack }: { onBack?: () => void }) {
                 <Gauge size={14} style={{ color: '#4361EE' }} />
               </div>
               <div className="text-xl font-extrabold tabular-nums" style={{ color: 'var(--color-text-primary)' }}>{displayResult.wpm}</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>WPM</div>
+              <div className="text-[0.625rem] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>WPM</div>
             </div>
             <div className="rounded-xl p-2.5 text-center" style={{ backgroundColor: 'rgba(34,197,94,0.08)' }}>
               <div className="w-7 h-7 rounded-lg mx-auto flex items-center justify-center mb-1.5" style={{ backgroundColor: 'rgba(34,197,94,0.15)' }}>
                 <Target size={14} style={{ color: '#16a34a' }} />
               </div>
               <div className="text-xl font-extrabold tabular-nums" style={{ color: '#16a34a' }}>{displayResult.accuracy}%</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>Accuracy</div>
+              <div className="text-[0.625rem] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>Accuracy</div>
             </div>
             <div className="rounded-xl p-2.5 text-center" style={{ backgroundColor: 'rgba(217,119,6,0.08)' }}>
               <div className="w-7 h-7 rounded-lg mx-auto flex items-center justify-center mb-1.5" style={{ backgroundColor: 'rgba(217,119,6,0.15)' }}>
                 <Clock size={14} style={{ color: '#d97706' }} />
               </div>
               <div className="text-xl font-extrabold tabular-nums" style={{ color: 'var(--color-text-primary)' }}>{displayResult.elapsed}s</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>Time</div>
+              <div className="text-[0.625rem] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>Time</div>
             </div>
           </div>
         </div>
@@ -217,15 +217,15 @@ export default function TypingRace({ onBack }: { onBack?: () => void }) {
           <div className="grid grid-cols-3 gap-2.5">
             <div className="rounded-xl p-2 text-center" style={{ backgroundColor: 'rgba(34,197,94,0.08)' }}>
               <div className="text-lg font-extrabold tabular-nums" style={{ color: '#16a34a' }}>{displayResult.correctWords}</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>Correct</div>
+              <div className="text-[0.625rem] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>Correct</div>
             </div>
             <div className="rounded-xl p-2 text-center" style={{ backgroundColor: 'rgba(239,68,68,0.08)' }}>
               <div className="text-lg font-extrabold tabular-nums" style={{ color: '#EF4444' }}>{displayResult.errorsCount}</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>Incorrect</div>
+              <div className="text-[0.625rem] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>Incorrect</div>
             </div>
             <div className="rounded-xl p-2 text-center" style={{ backgroundColor: 'var(--color-accent-light)' }}>
               <div className="text-lg font-extrabold tabular-nums" style={{ color: 'var(--color-text-primary)' }}>{displayResult.attemptedWords}</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>Words</div>
+              <div className="text-[0.625rem] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>Words</div>
             </div>
           </div>
         </div>
@@ -301,7 +301,7 @@ export default function TypingRace({ onBack }: { onBack?: () => void }) {
                 style={{ width: `${Math.min(100, Math.max(0, userProgress * 100))}%`, background: 'linear-gradient(90deg, #4361EE, #7C3AED)' }}
               />
             </div>
-            <p className="text-[11px] mt-1.5" style={{ color: 'var(--color-text-muted)' }}>
+            <p className="text-[0.6875rem] mt-1.5" style={{ color: 'var(--color-text-muted)' }}>
               {Math.round(userProgress * TOTAL_WORDS)} / {TOTAL_WORDS} words
             </p>
           </div>
@@ -324,7 +324,7 @@ export default function TypingRace({ onBack }: { onBack?: () => void }) {
                 style={{ width: `${Math.min(100, Math.max(0, opponentProgress * 100))}%`, background: 'linear-gradient(90deg, #F59E0B, #FBBF24)' }}
               />
             </div>
-            <p className="text-[11px] mt-1.5" style={{ color: 'var(--color-text-muted)' }}>
+            <p className="text-[0.6875rem] mt-1.5" style={{ color: 'var(--color-text-muted)' }}>
               {Math.round(opponentProgress * TOTAL_WORDS)} / {TOTAL_WORDS} words &middot; {opponentWpm} WPM pace
             </p>
           </div>
@@ -340,7 +340,7 @@ export default function TypingRace({ onBack }: { onBack?: () => void }) {
           <div className="text-3xl font-extrabold tabular-nums leading-none" style={{ color: 'var(--color-accent-text)' }}>
             {engine.liveWpm}
           </div>
-          <div className="mt-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
+          <div className="mt-2 text-[0.625rem] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
             WPM
           </div>
         </div>
@@ -351,7 +351,7 @@ export default function TypingRace({ onBack }: { onBack?: () => void }) {
           <div className="text-3xl font-extrabold tabular-nums leading-none" style={{ color: 'var(--color-text-primary)' }}>
             {Math.max(0, Math.ceil(opponentFinishSeconds - engine.elapsed))}
           </div>
-          <div className="mt-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-accent-text)' }}>
+          <div className="mt-2 text-[0.625rem] font-bold uppercase tracking-widest" style={{ color: 'var(--color-accent-text)' }}>
             Seconds
           </div>
         </div>
@@ -362,7 +362,7 @@ export default function TypingRace({ onBack }: { onBack?: () => void }) {
           <div className="text-3xl font-extrabold tabular-nums leading-none" style={{ color: 'var(--color-correct)' }}>
             {engine.liveAccuracy}%
           </div>
-          <div className="mt-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
+          <div className="mt-2 text-[0.625rem] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
             Accuracy
           </div>
         </div>

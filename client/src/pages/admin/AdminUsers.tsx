@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Search, Eye, ShieldCheck, ShieldOff } from 'lucide-react';
 import { listUsers, getUser, setUserRole } from '../../services/admin.service';
 import type { AdminUser } from '../../types';
@@ -84,7 +84,7 @@ export default function AdminUsers() {
       />
 
       <div className="flex flex-wrap items-center gap-3 mb-5">
-        <div className="relative flex-1 min-w-[200px] max-w-sm">
+        <div className="relative flex-1 min-w-[12.5rem] max-w-sm">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
           <input
             value={search}

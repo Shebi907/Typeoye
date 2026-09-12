@@ -419,10 +419,10 @@ const certEarned =
 
     return (
       <PageWrapper fullWidth noHeader title="Typing Test" className="py-6 sm:py-8 px-3 sm:px-4 md:px-6">
-        <div className="max-w-[1700px] mx-auto w-full">
+        <div className="max-w-[106.25rem] mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-stretch justify-center gap-5 w-full">
             {/* Left — setup card */}
-            <section className="w-full max-w-[540px] flex">
+            <section className="w-full max-w-[33.75rem] flex">
               <div className="card w-full p-6 sm:p-8 lg:p-10 flex flex-col" data-testid="test-setup">
                 <div className="text-center">
                   <h1 className="text-3xl font-extrabold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>Test Your Typing Speed</h1>
@@ -438,7 +438,7 @@ const certEarned =
                       value={pendingDuration}
                       onChange={(e) => setPendingDuration(Number(e.target.value))}
                       className="input-base block w-full"
-                      style={{ padding: '13px 14px' }}
+                      style={{ padding: '0.8125rem 0.875rem' }}
                     >
                       {durationOptions.map((d) => (
                         <option key={d.value} value={d.value}>{d.label}</option>
@@ -454,7 +454,7 @@ const certEarned =
                       value={pendingDifficulty}
                       onChange={(e) => setPendingDifficulty(e.target.value as 'simple' | 'medium' | 'hard')}
                       className="input-base block w-full"
-                      style={{ padding: '13px 14px' }}
+                      style={{ padding: '0.8125rem 0.875rem' }}
                     >
                       {(['simple', 'medium', 'hard'] as const).map((d) => (
                         <option key={d} value={d}>{d === 'simple' ? 'Easy' : d === 'medium' ? 'Medium' : 'Hard'}</option>
@@ -475,7 +475,7 @@ const certEarned =
             </section>
 
             {/* Right — perks stretch to match the main card's exact height */}
-            <aside className="w-full lg:w-[340px] shrink-0 flex flex-col gap-4">
+            <aside className="w-full lg:w-[21.25rem] shrink-0 flex flex-col gap-4">
               {perks.map(({ icon: Icon, tone, title, description }) => (
                 <div key={title} className="card p-5 flex items-center gap-3 flex-1">
                   <div
@@ -499,7 +499,7 @@ const certEarned =
 
   return (
     <PageWrapper fullWidth className="tt-page py-6 px-4 sm:px-6" title={undefined}>
-      <div className="max-w-[1700px] mx-auto w-full">
+      <div className="max-w-[106.25rem] mx-auto w-full">
         {certificateMode ? (
           <div className="mb-4">
             <Link
@@ -567,20 +567,20 @@ const certEarned =
                     <h1 className="text-2xl font-bold leading-tight">Typing Test</h1>
                     <div className="flex flex-wrap items-center gap-2" data-testid="live-meta">
                       <span
-                        className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold"
+                        className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[0.6875rem] font-bold"
                         style={{ backgroundColor: 'rgba(67, 97, 238, 0.10)', color: 'var(--color-accent-text)' }}
                       >
                         <Timer size={12} /> {duration / 60} min
                       </span>
                       <span
-                        className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold"
+                        className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[0.6875rem] font-bold"
                         style={{ backgroundColor: 'rgba(139, 92, 246, 0.10)', color: 'var(--color-accent-text)' }}
                       >
                         <SlidersHorizontal size={12} /> {difficultyLabel}
                       </span>
                       {(running || finished) && (
                         <span
-                          className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold"
+                          className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[0.6875rem] font-bold"
                           style={{ backgroundColor: 'rgba(239, 68, 68, 0.12)', color: 'var(--color-error)' }}
                         >
                           ✗ {liveErrors} {liveErrors === 1 ? 'error' : 'errors'}
@@ -637,7 +637,7 @@ const certEarned =
           </div>
 
           {/* ── Right column: live stats + tips ─────────────────────────── */}
-          <aside className="w-full lg:w-[260px] shrink-0 flex flex-col gap-4 lg:sticky lg:top-24">
+          <aside className="w-full lg:w-[16.25rem] shrink-0 flex flex-col gap-4 lg:sticky lg:top-24">
             <LiveStatsCard
               wpm={engine.liveWpm}
               accuracy={engine.liveAccuracy}
@@ -671,7 +671,7 @@ const certEarned =
       {finished && (
         <>
           <div className="fixed inset-0 z-20 backdrop-blur-md bg-black/40" aria-hidden="true" />
-          <div className="fixed inset-0 z-30 overflow-y-auto" style={{ paddingTop: 'calc(var(--navbar-h, 64px) + 1rem)', paddingBottom: '1rem' }}>
+          <div className="fixed inset-0 z-30 overflow-y-auto" style={{ paddingTop: 'calc(var(--navbar-h, 4rem) + 1rem)', paddingBottom: '1rem' }}>
             <div className="grid place-items-center min-h-full px-3 sm:px-4">
 <div
               className="result-card w-full text-center overflow-hidden max-w-[calc(100vw-1.5rem)] sm:max-w-md"
@@ -723,7 +723,7 @@ const certEarned =
                     >
                       {summary!.wpm}
                     </span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider mt-1" style={{ color: '#60A5FA' }}>WPM</span>
+                    <span className="text-[0.625rem] font-bold uppercase tracking-wider mt-1" style={{ color: '#60A5FA' }}>WPM</span>
                   </div>
                   {/* Accuracy */}
                   <div
@@ -736,7 +736,7 @@ const certEarned =
                     >
                       {summary!.accuracy}%
                     </span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider mt-1" style={{ color: '#F472B6' }}>ACCURACY</span>
+                    <span className="text-[0.625rem] font-bold uppercase tracking-wider mt-1" style={{ color: '#F472B6' }}>ACCURACY</span>
                   </div>
                   {/* Time */}
                   <div
@@ -749,7 +749,7 @@ const certEarned =
                     >
                       {Math.round(engine.elapsed)}s
                     </span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider mt-1" style={{ color: '#4ADE80' }}>TIME</span>
+                    <span className="text-[0.625rem] font-bold uppercase tracking-wider mt-1" style={{ color: '#4ADE80' }}>TIME</span>
                   </div>
                 </div>
                 {certificateMode ? (

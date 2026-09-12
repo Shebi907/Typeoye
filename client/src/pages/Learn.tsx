@@ -135,7 +135,7 @@ export default function Learn() {
          <div className="flex-1 w-full">
             <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
                <h3 className="text-base font-bold text-[var(--color-text-primary)]">{lesson.order}. {lesson.title}</h3>
-               <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-[rgba(34,197,94,0.1)] text-[var(--color-correct)]" data-testid="completed-pill">Completed</span>
+               <span className="text-[0.625rem] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-[rgba(34,197,94,0.1)] text-[var(--color-correct)]" data-testid="completed-pill">Completed</span>
             </div>
             <p className="text-sm text-[var(--color-text-secondary)] mb-2.5">{lesson.description}</p>
             <div className="flex items-center gap-3">
@@ -163,13 +163,13 @@ export default function Learn() {
            <div className="flex-1 w-full min-w-0">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
                  <h3 className="text-base font-extrabold text-[var(--color-text-primary)] truncate">{lesson.order}. {lesson.title}</h3>
-                 <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full text-white flex-shrink-0" style={{ background: GRADIENT }} data-testid="hero-pill">
+                 <span className="text-[0.625rem] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full text-white flex-shrink-0" style={{ background: GRADIENT }} data-testid="hero-pill">
                     {pct > 0 ? 'In Progress' : 'Ready'}
                  </span>
               </div>
               <p className="text-sm text-[var(--color-text-secondary)] mb-3">{lesson.description}</p>
               <div className="flex items-center gap-3 w-full">
-                 <div className="h-2 rounded-full bg-[var(--color-border)] flex-1 max-w-[200px] overflow-hidden">
+                 <div className="h-2 rounded-full bg-[var(--color-border)] flex-1 max-w-[12.5rem] overflow-hidden">
                     <div className="h-full rounded-full transition-all duration-300" style={{ width: `${pct}%`, background: GRADIENT }} />
                  </div>
                  <span className="text-xs font-bold text-[var(--color-accent-text)]">{pct}%</span>
@@ -194,7 +194,7 @@ export default function Learn() {
            <div className="flex-1 w-full min-w-0">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
                  <h3 className="text-base font-bold text-[var(--color-text-secondary)] truncate">{lesson.order}. {lesson.title}</h3>
-                 <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-[var(--color-border)] text-[var(--color-text-muted)] flex-shrink-0" data-testid="locked-pill">Locked</span>
+                 <span className="text-[0.625rem] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-[var(--color-border)] text-[var(--color-text-muted)] flex-shrink-0" data-testid="locked-pill">Locked</span>
               </div>
               <p className="text-sm text-[var(--color-text-muted)] line-clamp-1">{lesson.description}</p>
            </div>
@@ -224,7 +224,7 @@ export default function Learn() {
             </div>
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--color-text-primary)] tracking-tight">Learn to Type</h1>
-              <p className="text-sm sm:text-base text-[var(--color-text-secondary)] mt-0.5 sm:mt-1 max-w-[400px] leading-relaxed">Follow structured lessons and improve your typing step by step.</p>
+              <p className="text-sm sm:text-base text-[var(--color-text-secondary)] mt-0.5 sm:mt-1 max-w-[25rem] leading-relaxed">Follow structured lessons and improve your typing step by step.</p>
             </div>
           </div>
           <div className="flex items-center gap-3.5 p-3 sm:p-4 rounded-xl flex-shrink-0" style={{ backgroundColor: 'rgba(139, 92, 246, 0.06)', border: '1px solid rgba(139, 92, 246, 0.15)' }}>
@@ -233,7 +233,7 @@ export default function Learn() {
             </div>
             <div className="min-w-0">
               <h3 className="text-sm font-bold text-[var(--color-text-primary)]">Typing Faster Starts Here</h3>
-              <p className="text-[11px] sm:text-xs text-[var(--color-text-secondary)] mt-0.5 max-w-[180px] sm:max-w-[200px] leading-snug">Practice regularly, build confidence and see real improvement.</p>
+              <p className="text-[0.6875rem] sm:text-xs text-[var(--color-text-secondary)] mt-0.5 max-w-[11.25rem] sm:max-w-[12.5rem] leading-snug">Practice regularly, build confidence and see real improvement.</p>
             </div>
           </div>
         </div>
@@ -267,13 +267,13 @@ export default function Learn() {
                 <Play size={28} fill="currentColor" className="ml-1" />
               </div>
               <div className="flex-1 min-w-0">
-                 <p className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#FFD98E] mb-1">
+                 <p className="text-[0.625rem] sm:text-xs font-bold uppercase tracking-widest text-[#FFD98E] mb-1">
                    Recommended Next Lesson
                  </p>
                  <h2 className="text-xl sm:text-2xl font-bold text-white mb-1.5 truncate">Level {hero.order} — {hero.title}</h2>
                  <p className="text-sm text-white/85 line-clamp-1 mb-3">{hero.description}</p>
                  <div className="flex items-center gap-3">
-                   <div className="h-1.5 sm:h-2 rounded-full bg-white/20 flex-1 max-w-[240px] overflow-hidden">
+                   <div className="h-1.5 sm:h-2 rounded-full bg-white/20 flex-1 max-w-[15rem] overflow-hidden">
                      <div className="h-full rounded-full bg-white transition-all duration-300" style={{ width: `${progressPct(hero)}%` }} />
                    </div>
                    <span className="text-xs font-bold text-white/90">{progressPct(hero)}%</span>
@@ -341,7 +341,7 @@ export default function Learn() {
                        <StageIconComponent size={160} />
                     </div>
                     <div className="relative z-10">
-                      <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] mb-2">STAGE {sIndex + 1} — {section.label.toUpperCase()}</div>
+                      <div className="text-[0.625rem] font-bold uppercase tracking-widest text-[var(--color-accent-text)] mb-2">STAGE {sIndex + 1} — {section.label.toUpperCase()}</div>
                       <h2 className="text-2xl font-extrabold text-[var(--color-text-primary)] mb-1">
                         {section.subtitle.split('·')[1]?.trim() || section.subtitle}
                       </h2>
@@ -373,7 +373,7 @@ export default function Learn() {
                                   <CheckCircle2 size={14} />
                                 </div>
                               ) : isCurrent ? (
-                                <div className="w-6 h-6 rounded-full border-[6px] border-[var(--color-accent-text)] bg-white dark:bg-[var(--color-page)] flex-shrink-0 relative z-10 shadow-sm" />
+                                <div className="w-6 h-6 rounded-full border-[0.375rem] border-[var(--color-accent-text)] bg-white dark:bg-[var(--color-page)] flex-shrink-0 relative z-10 shadow-sm" />
                               ) : (
                                 <div className="w-5 h-5 rounded-full border-2 border-[var(--color-border)] bg-[var(--color-page)] flex-shrink-0 relative z-10 mt-0.5" />
                               )}
@@ -398,7 +398,7 @@ export default function Learn() {
                  <activeSectionInfo.icon size={160} />
               </div>
               <div className="relative z-10">
-                <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] mb-2">STAGE {SECTIONS.indexOf(activeSectionInfo) + 1} — {activeSectionInfo.label.toUpperCase()}</div>
+                <div className="text-[0.625rem] font-bold uppercase tracking-widest text-[var(--color-accent-text)] mb-2">STAGE {SECTIONS.indexOf(activeSectionInfo) + 1} — {activeSectionInfo.label.toUpperCase()}</div>
                 <h2 className="text-2xl font-extrabold text-[var(--color-text-primary)] mb-1">
                   {activeSectionInfo.subtitle.split('·')[1]?.trim() || activeSectionInfo.subtitle}
                 </h2>
@@ -433,7 +433,7 @@ export default function Learn() {
                             <CheckCircle2 size={14} />
                           </div>
                         ) : isCurrent ? (
-                          <div className="w-6 h-6 rounded-full border-[6px] border-[var(--color-accent-text)] bg-white dark:bg-[var(--color-page)] flex-shrink-0 relative z-10 shadow-sm" />
+                          <div className="w-6 h-6 rounded-full border-[0.375rem] border-[var(--color-accent-text)] bg-white dark:bg-[var(--color-page)] flex-shrink-0 relative z-10 shadow-sm" />
                         ) : (
                           <div className="w-5 h-5 rounded-full border-2 border-[var(--color-border)] bg-[var(--color-page)] flex-shrink-0 relative z-10 mt-0.5" />
                         )}

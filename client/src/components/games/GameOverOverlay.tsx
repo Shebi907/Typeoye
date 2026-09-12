@@ -23,7 +23,7 @@ export default function GameOverOverlay({ children, result }: GameOverOverlayPro
   }, []);
 
   return (
-    <div className="relative w-full max-w-[860px]">
+    <div className="relative w-full max-w-[53.75rem]">
       {/* 1. Blurred + dimmed game background */}
       <div
         className="w-full pointer-events-none select-none"
@@ -48,7 +48,7 @@ export default function GameOverOverlay({ children, result }: GameOverOverlayPro
       {/* 3. Centered result card — fixed to the viewport so it is always
            horizontally + vertically centered, at a compact width */}
       <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-        <div className="w-full max-w-[400px] pointer-events-auto">
+        <div className="w-full max-w-[25rem] pointer-events-auto">
           {result}
         </div>
       </div>

@@ -102,7 +102,7 @@ export default function PracticeSetup() {
 
   return (
     <PageWrapper title={meta.label} noHeader fullWidth className="py-6 sm:py-8 px-3 sm:px-4 md:px-6">
-        <div className="max-w-[1700px] mx-auto w-full">
+        <div className="max-w-[106.25rem] mx-auto w-full">
 
         {/* ── Back to Practice — standalone, above the setup card (page header area) ── */}
         <div className="mb-6">
@@ -123,24 +123,24 @@ export default function PracticeSetup() {
 
         {/* ── Two-column setup (matches Test setup page) ── */}
         <div
-          className="max-w-[1700px] mx-auto flex items-center justify-center"
+          className="max-w-[106.25rem] mx-auto flex items-center justify-center"
         >
           <div className="flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-6 lg:gap-10 w-full">
             {/* Center — setup card */}
-            <div className="w-full max-w-[540px]">
+            <div className="w-full max-w-[33.75rem]">
               <div className="card relative p-5 sm:p-[34px_38px] text-center" data-testid="practice-setup">
                 <span className="dot-grid dot-grid-tl" aria-hidden="true" />
-                <h1 className="text-[32px] font-bold leading-tight mb-2">{meta.heroTitle}</h1>
-                <p className="text-[15px] text-secondary mb-[26px]">{meta.heroDesc}</p>
+                <h1 className="text-[2rem] font-bold leading-tight mb-2">{meta.heroTitle}</h1>
+                <p className="text-[0.9375rem] text-secondary mb-[1.625rem]">{meta.heroDesc}</p>
 
-                <label className="block text-left text-sm font-bold mb-[22px]">
+                <label className="block text-left text-sm font-bold mb-[1.375rem]">
                   Duration
                   <select
                     data-testid="setup-duration"
                     value={time}
                     onChange={(e) => setTime(Number(e.target.value))}
                     className="input-base block w-full mt-2"
-                    style={{ padding: '13px 14px' }}
+                    style={{ padding: '0.8125rem 0.875rem' }}
                   >
                     {durationOptions.map((d) => (
                       <option key={d.value} value={d.value}>{d.label}</option>
@@ -148,14 +148,14 @@ export default function PracticeSetup() {
                   </select>
                 </label>
 
-                <label className="block text-left text-sm font-bold mb-[26px]">
+                <label className="block text-left text-sm font-bold mb-[1.625rem]">
                   Difficulty
                   <select
                     data-testid="setup-difficulty"
                     value={difficulty}
                     onChange={(e) => setDifficulty(e.target.value as 'beginner' | 'intermediate' | 'advanced')}
                     className="input-base block w-full mt-2"
-                    style={{ padding: '13px 14px' }}
+                    style={{ padding: '0.8125rem 0.875rem' }}
                   >
                     {difficultyOptions.map((d) => (
                       <option key={d.value} value={d.value}>{d.label}</option>
@@ -164,7 +164,7 @@ export default function PracticeSetup() {
                 </label>
 
                 {isCustom && (
-                  <div className="text-left mb-[26px]">
+                  <div className="text-left mb-[1.625rem]">
                     <label className="block text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>
                       Your text
                     </label>
@@ -184,7 +184,7 @@ export default function PracticeSetup() {
                   data-testid="start-practice"
                   onClick={start}
                   disabled={starting}
-                  className="tt-start-btn btn w-full justify-center px-6 py-[15px] rounded-full"
+                  className="tt-start-btn btn w-full justify-center px-6 py-[0.9375rem] rounded-full"
                   style={{ fontSize: 15, fontWeight: 700, color: '#fff', opacity: starting ? 0.75 : 1 }}
                 >
                   {starting ? 'Preparing practice…' : 'Start Practice'} {!starting && <ArrowRight size={19} />}
@@ -193,7 +193,7 @@ export default function PracticeSetup() {
             </div>
 
             {/* Right — Practice highlights (stretch to match the card's height) */}
-            <aside className="w-full lg:w-[270px] shrink-0 self-stretch flex flex-col gap-[14px]">
+            <aside className="w-full lg:w-[16.875rem] shrink-0 self-stretch flex flex-col gap-[0.875rem]">
               {perks.map(({ icon: Icon, tone, title, description }) => (
                 <div key={title} className="card p-5 flex-1 flex flex-col items-center justify-center gap-1.5 text-center">
                   <div

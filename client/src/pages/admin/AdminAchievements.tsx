@@ -198,7 +198,7 @@ export default function AdminAchievements() {
                 <tr key={a._id} className="border-t" style={{ borderColor: 'var(--color-border)' }}>
                   <td className="px-4 py-3">
                     <div className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>{a.name}</div>
-                    <div className="text-xs max-w-[320px] truncate" style={{ color: 'var(--color-text-muted)' }}>{a.description}</div>
+                    <div className="text-xs max-w-[20rem] truncate" style={{ color: 'var(--color-text-muted)' }}>{a.description}</div>
                   </td>
                   <td className="px-4 py-3" style={{ color: 'var(--color-text-secondary)' }}>
                     <code className="text-xs">{a.condition.type}</code> ≥ {a.condition.threshold}

@@ -105,7 +105,7 @@ export default function HowItWorks() {
 
       {/* Everything included */}
       <section
-        className="mt-16 rounded-[24px] px-5 py-12 sm:px-10 sm:py-14"
+        className="mt-16 rounded-[1.5rem] px-5 py-12 sm:px-10 sm:py-14"
         style={{ backgroundColor: '#F5F6FC' }}
         data-testid="how-checklist"
       >
@@ -135,7 +135,7 @@ export default function HowItWorks() {
 
       {/* Bottom CTA */}
       <section
-        className="mt-8 rounded-[24px] px-6 py-10 text-center sm:px-10 sm:py-12"
+        className="mt-8 rounded-[1.5rem] px-6 py-10 text-center sm:px-10 sm:py-12"
         style={{ backgroundColor: '#EEF0FF' }}
         data-testid="how-cta"
       >

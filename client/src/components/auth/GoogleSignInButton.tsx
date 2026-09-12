@@ -32,7 +32,7 @@ export function GoogleSignInButton() {
         type="button"
         data-testid="google-signin"
         onClick={start}
-        className="btn btn-ghost w-full justify-center gap-3 px-6 py-[15px] rounded-full"
+        className="btn btn-ghost w-full justify-center gap-3 px-6 py-[0.9375rem] rounded-full"
         style={{ fontSize: 15, fontWeight: 600 }}
       >
         <GoogleSignature />

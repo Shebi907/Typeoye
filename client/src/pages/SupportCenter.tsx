@@ -45,7 +45,7 @@ export default function SupportCenter() {
   return (
     <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6">
       {/* Header */}
-      <section className="relative mb-8 overflow-hidden rounded-[24px] border px-4 pt-10 pb-8 text-center sm:px-8" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }}>
+      <section className="relative mb-8 overflow-hidden rounded-[1.5rem] border px-4 pt-10 pb-8 text-center sm:px-8" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }}>
         <span className="dot-grid dot-grid-tl" aria-hidden="true" />
         <span className="dot-grid dot-grid-tr" aria-hidden="true" />
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl text-white" style={{ background: 'linear-gradient(135deg, #4361EE 0%, #7C3AED 100%)', boxShadow: '0 10px 24px -8px rgba(67, 97, 238, 0.55)' }}>
@@ -124,11 +124,11 @@ export default function SupportCenter() {
                 return (
                   <article
                     key={article.slug}
-                    className="group card card-hover flex h-full flex-col rounded-[16px] transition-all duration-200 hover:-translate-y-0.5"
+                    className="group card card-hover flex h-full flex-col rounded-[1rem] transition-all duration-200 hover:-translate-y-0.5"
                   >
                     <div className="flex min-w-0 flex-1 flex-col p-5 sm:p-6">
                       <div className="flex flex-wrap items-center gap-3">
-                        <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide" style={{ backgroundColor: meta.bg, color: meta.color }}>
+                        <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.6875rem] font-bold uppercase tracking-wide" style={{ backgroundColor: meta.bg, color: meta.color }}>
                           <Icon size={12} /> {article.category}
                         </span>
                         <span className="inline-flex items-center gap-1 text-xs" style={{ color: 'var(--color-text-muted)' }}>
@@ -201,7 +201,7 @@ export default function SupportCenter() {
 
       {/* FAQ + Contact section */}
       <section className="mx-auto mt-12 max-w-7xl" data-testid="support-faq-cta">
-        <div className="flex flex-col items-center justify-between gap-5 rounded-[20px] border px-6 py-6 text-center sm:flex-row sm:px-8 sm:text-left" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }}>
+        <div className="flex flex-col items-center justify-between gap-5 rounded-[1.25rem] border px-6 py-6 text-center sm:flex-row sm:px-8 sm:text-left" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }}>
           <div>
             <h2 className="text-lg font-extrabold tracking-tight sm:text-xl" style={{ color: 'var(--color-text-primary)' }}>
               Still need help?

@@ -50,7 +50,7 @@ export default function SupportArticle() {
 
       {/* Article */}
       <article className="card overflow-hidden p-6 sm:p-8" data-testid="support-article">
-        <div className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide" style={{ backgroundColor: meta.bg, color: meta.color }}>
+        <div className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.6875rem] font-bold uppercase tracking-wide" style={{ backgroundColor: meta.bg, color: meta.color }}>
           <Icon size={12} /> {article.category}
         </div>
 
@@ -65,7 +65,7 @@ export default function SupportArticle() {
           </span>
         </div>
 
-        <div className="mt-8 flex flex-col gap-4 text-[15px] leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+        <div className="mt-8 flex flex-col gap-4 text-[0.9375rem] leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
           {article.body.map((paragraph, index) => {
             if (paragraph.startsWith('- ')) {
               return (

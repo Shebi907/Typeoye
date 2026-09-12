@@ -157,7 +157,7 @@ function formatDate(date: Date): string {
 function HeroBadge({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
   return (
     <span
-      className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[13px] font-semibold"
+      className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[0.8125rem] font-semibold"
       style={{ backgroundColor: 'var(--color-accent-light)', color: 'var(--color-accent-text)' }}
     >
       <Icon size={15} strokeWidth={2.2} />
@@ -218,7 +218,7 @@ export default function Privacy() {
               'radial-gradient(600px 320px at 12% -10%, rgba(67,97,238,0.10), transparent 60%), radial-gradient(520px 300px at 95% 0%, rgba(139,92,246,0.12), transparent 60%)',
           }}
         />
-        <div className="relative mx-auto max-w-[1700px] px-4 sm:px-6 pt-12 pb-10 sm:pt-16 sm:pb-12">
+        <div className="relative mx-auto max-w-[106.25rem] px-4 sm:px-6 pt-12 pb-10 sm:pt-16 sm:pb-12">
           <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-12 items-center">
             {/* Left — copy */}
             <div>
@@ -322,7 +322,7 @@ export default function Privacy() {
       </section>
 
       {/* ── MAIN CONTENT ────────────────────────────────────────────── */}
-      <section className="mx-auto max-w-[1700px] px-4 sm:px-6 pb-16">
+      <section className="mx-auto max-w-[106.25rem] px-4 sm:px-6 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 lg:gap-10">
           {/* LEFT SIDEBAR */}
           <aside>
@@ -392,14 +392,14 @@ export default function Privacy() {
                         <button
                           type="button"
                           onClick={() => scrollToSection(s.id)}
-                          className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-[13.5px] font-medium transition-colors"
+                          className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-[0.84375rem] font-medium transition-colors"
                           style={{
                             color: isActive ? 'var(--color-accent-text)' : 'var(--color-text-secondary)',
                             backgroundColor: isActive ? 'var(--color-accent-light)' : 'transparent',
                             borderLeft: `3px solid ${isActive ? 'var(--color-accent)' : 'transparent'}`,
                           }}
                         >
-                          <span className="text-[11px] font-bold tabular-nums">{s.number}</span>
+                          <span className="text-[0.6875rem] font-bold tabular-nums">{s.number}</span>
                           {s.title}
                         </button>
                       </li>
@@ -425,7 +425,7 @@ export default function Privacy() {
                 <h3 className="text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>
                   Your Privacy Matters
                 </h3>
-                <p className="mt-1.5 text-[13px] leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+                <p className="mt-1.5 text-[0.8125rem] leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
                   Typeoye is committed to protecting your personal information and being transparent about how we use it.
                 </p>
               </div>
@@ -482,7 +482,7 @@ export default function Privacy() {
                         </h3>
                       </span>
                       {!isOpen && (
-                        <span className="mt-1 block truncate text-[13px]" style={{ color: 'var(--color-text-muted)' }}>
+                        <span className="mt-1 block truncate text-[0.8125rem]" style={{ color: 'var(--color-text-muted)' }}>
                           {s.preview}
                         </span>
                       )}
@@ -503,7 +503,7 @@ export default function Privacy() {
                   >
                     <div className="overflow-hidden">
                       <div
-                        className="px-5 pb-6 sm:px-6 text-[15px] leading-relaxed"
+                        className="px-5 pb-6 sm:px-6 text-[0.9375rem] leading-relaxed"
                         style={{ color: 'var(--color-text-secondary)' }}
                       >
                         {s.content}

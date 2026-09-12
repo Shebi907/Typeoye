@@ -132,7 +132,7 @@ export default function AdminCertificateParagraphs() {
       />
 
       <div className="flex flex-wrap items-center gap-3 mb-5">
-        <div className="relative flex-1 min-w-[220px]">
+        <div className="relative flex-1 min-w-[13.75rem]">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--color-text-muted)' }} />
           <input
             value={search}
@@ -176,7 +176,7 @@ export default function AdminCertificateParagraphs() {
             <tbody>
               {rows.map((p) => (
                 <tr key={p._id} className="border-t" style={{ borderColor: 'var(--color-border)' }}>
-                  <td className="px-4 py-3 max-w-[480px]">
+                  <td className="px-4 py-3 max-w-[30rem]">
                     <div className="text-xs leading-relaxed line-clamp-2" style={{ color: 'var(--color-text-secondary)' }}>
                       {p.content}
                     </div>

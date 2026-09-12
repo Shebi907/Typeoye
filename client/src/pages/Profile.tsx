@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Activity, Award, CalendarClock, Camera, CheckCircle2, Circle, Eye, EyeOff, Gauge,
@@ -256,7 +256,7 @@ export default function ProfilePage() {
 
   return (
     <PageWrapper title={profile.displayName} description="Typing profile and progress." noHeader className="py-8 px-4 sm:px-6">
-      <div className="max-w-[1700px] mx-auto w-full space-y-6">
+      <div className="max-w-[106.25rem] mx-auto w-full space-y-6">
         {/* ── Profile header banner ── */}
         <section
           className="relative overflow-hidden rounded-2xl px-4 py-6 sm:px-6 sm:py-7 md:px-8"
@@ -361,7 +361,7 @@ export default function ProfilePage() {
           {/* Left — account information + security question */}
           <div className="flex flex-col gap-6">
             <div className="card p-6" data-testid="account-info-card">
-            <h2 className="text-[15px] font-bold text-[var(--color-text-primary)]">Account Information</h2>
+            <h2 className="text-[0.9375rem] font-bold text-[var(--color-text-primary)]">Account Information</h2>
             <p className="text-sm mt-0.5 mb-5" style={{ color: 'var(--color-text-secondary)' }}>
               Manage your profile and account details
             </p>
@@ -377,7 +377,7 @@ export default function ProfilePage() {
           {/* Security question — below account information */}
           {(user?.authProvider === 'google' || user?.authProvider === 'both') && (
             <div className="card p-6" data-testid="security-question-card">
-              <h2 className="text-[15px] font-bold text-[var(--color-text-primary)]">Security Question</h2>
+              <h2 className="text-[0.9375rem] font-bold text-[var(--color-text-primary)]">Security Question</h2>
               <p className="text-sm mt-0.5 mb-5" style={{ color: 'var(--color-text-secondary)' }}>
                 Used for account recovery if you forget your password
               </p>
@@ -451,7 +451,7 @@ export default function ProfilePage() {
               {user?.authProvider === 'google' ? (
                 <>
                   <div className="card p-6" data-testid="signin-method-card">
-                    <h2 className="text-[15px] font-bold text-[var(--color-text-primary)]">Sign-in Method</h2>
+                    <h2 className="text-[0.9375rem] font-bold text-[var(--color-text-primary)]">Sign-in Method</h2>
                     <p className="text-sm mt-0.5 mb-5" style={{ color: 'var(--color-text-secondary)' }}>
                       How you access your Typeoye account
                     </p>
@@ -470,7 +470,7 @@ export default function ProfilePage() {
                   </div>
 
                   <div className="card p-6" data-testid="set-password-card">
-                    <h2 className="text-[15px] font-bold text-[var(--color-text-primary)]">Set Password</h2>
+                    <h2 className="text-[0.9375rem] font-bold text-[var(--color-text-primary)]">Set Password</h2>
                     <p className="text-sm mt-0.5 mb-5" style={{ color: 'var(--color-text-secondary)' }}>
                       Add a password to also sign in with your email address
                     </p>
@@ -495,8 +495,8 @@ export default function ProfilePage() {
                               style={{ color: ok ? '#16a34a' : 'var(--color-text-muted)' }}
                             >
                               {ok
-                                ? <CheckCircle2 size={13} className="mt-[2px] shrink-0" />
-                                : <Circle size={13} className="mt-[2px] shrink-0" />}
+                                ? <CheckCircle2 size={13} className="mt-[0.125rem] shrink-0" />
+                                : <Circle size={13} className="mt-[0.125rem] shrink-0" />}
                               <span>{rule.label}</span>
                             </li>
                           );
@@ -529,7 +529,7 @@ export default function ProfilePage() {
                 </>
               ) : (
                 <div className="card p-6" data-testid="change-password-card">
-                  <h2 className="text-[15px] font-bold text-[var(--color-text-primary)]">Update Password</h2>
+                  <h2 className="text-[0.9375rem] font-bold text-[var(--color-text-primary)]">Update Password</h2>
                   <p className="text-sm mt-0.5 mb-5" style={{ color: 'var(--color-text-secondary)' }}>
                     Keep your account secure
                   </p>
@@ -593,7 +593,7 @@ export default function ProfilePage() {
  *  loads in — it never pops into view or shifts during the fetch. */
 function ProfileSkeleton() {
   return (
-    <div className="max-w-[1700px] mx-auto w-full space-y-6" aria-busy="true" data-testid="profile-loading">
+    <div className="max-w-[106.25rem] mx-auto w-full space-y-6" aria-busy="true" data-testid="profile-loading">
       {/* Banner */}
       <div className="rounded-2xl px-4 py-6 sm:px-6 sm:py-7 md:px-8" style={{ backgroundColor: 'rgba(127, 127, 127, 0.08)' }}>
         <div className="flex items-center gap-4">

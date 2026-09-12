@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ChevronDown, ChevronRight, Plus, Pencil, Trash2, ArrowUp, ArrowDown, Eye, EyeOff, FilePlus2 } from 'lucide-react';
 import {
   listLessons,
@@ -224,7 +224,7 @@ export default function AdminLessons() {
                         >
                           {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
                         </button>
-                        <div className="flex-1 min-w-[180px]">
+                        <div className="flex-1 min-w-[11.25rem]">
                           <div className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>
                             {lesson.title}
                           </div>
@@ -272,7 +272,7 @@ export default function AdminLessons() {
                             <div className="rounded-xl" style={{ backgroundColor: 'var(--color-page)' }}>
                               {expanded[lesson._id]!.map((exercise) => (
                                 <div key={exercise._id} className="flex flex-wrap items-center gap-3 px-4 py-2.5 border-b last:border-0" style={{ borderColor: 'var(--color-border)' }}>
-                                  <div className="flex-1 min-w-[160px]">
+                                  <div className="flex-1 min-w-[10rem]">
                                     <div className="text-sm font-medium" style={{ color: 'var(--color-text-primary)' }}>
                                       {exercise.title}
                                     </div>

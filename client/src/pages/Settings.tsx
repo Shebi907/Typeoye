@@ -76,7 +76,7 @@ export default function Settings() {
                 >
                   <span
                     className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all"
-                    style={{ left: value ? 18 : 2 }}
+                    style={{ left: value ? '1.125rem' : '0.125rem' }}
                   />
                 </span>
               </button>

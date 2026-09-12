@@ -26,7 +26,9 @@ function TopThreePodium({ entries }: { entries: LeaderboardEntry[] }) {
   const third = top3.find((e) => e.rank === 3);
 
   const podiumOrder = [second, first, third].filter(Boolean) as LeaderboardEntry[];
-  const heights = [100, 130, 80];
+  // rem so podium bar heights scale with the fluid root font (16px ≤1280px,
+  // up to 22px on wide monitors) — matches the rem-based w-16/w-20 bar widths.
+  const heights = ['6.25rem', '8.125rem', '5rem'];
   const medalColors = ['text-gray-400', 'text-yellow-500', 'text-amber-600'];
   const medalBgs = ['rgba(156,163,175,0.12)', 'rgba(234,179,8,0.12)', 'rgba(180,83,9,0.12)'];
 
@@ -41,10 +43,10 @@ function TopThreePodium({ entries }: { entries: LeaderboardEntry[] }) {
             <div key={entry.userId ?? entry.rank} className="flex flex-col items-center" style={{ flex: '0 0 auto' }}>
               {/* Avatar */}
               <Avatar name={entry.displayName} size={isFirst ? 56 : 44} className="mb-2" />
-              <span className="text-xs font-semibold text-center mb-1 truncate max-w-[70px] sm:max-w-[80px]" style={{ color: 'var(--color-text-primary)' }}>
+              <span className="text-xs font-semibold text-center mb-1 truncate max-w-[4.375rem] sm:max-w-[5rem]" style={{ color: 'var(--color-text-primary)' }}>
                 {entry.displayName}
               </span>
-              <span className="text-[11px] font-bold tabular-nums mb-2" style={{ color: 'var(--color-accent-text)' }}>{entry.wpm} WPM</span>
+              <span className="text-[0.6875rem] font-bold tabular-nums mb-2" style={{ color: 'var(--color-accent-text)' }}>{entry.wpm} WPM</span>
               {/* Podium bar */}
               <div
                 className={cn('w-16 sm:w-20 rounded-t-xl flex items-center justify-center')}
@@ -86,15 +88,15 @@ function YourRankCard({ me }: { me: Omit<LeaderboardEntry, 'isMe'> | null }) {
       <div className="grid grid-cols-3 gap-3 mt-4">
         <div className="text-center p-2 rounded-lg" style={{ backgroundColor: 'rgba(67,97,238,0.08)' }}>
           <div className="text-lg font-bold tabular-nums" style={{ color: 'var(--color-accent-text)' }}>{me.wpm}</div>
-          <div className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#60A5FA' }}>WPM</div>
+          <div className="text-[0.625rem] font-bold uppercase tracking-wider" style={{ color: '#60A5FA' }}>WPM</div>
         </div>
         <div className="text-center p-2 rounded-lg" style={{ backgroundColor: 'rgba(34,197,94,0.08)' }}>
           <div className="text-lg font-bold tabular-nums" style={{ color: 'var(--color-correct)' }}>{me.accuracy}%</div>
-          <div className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#4ADE80' }}>ACC</div>
+          <div className="text-[0.625rem] font-bold uppercase tracking-wider" style={{ color: '#4ADE80' }}>ACC</div>
         </div>
         <div className="text-center p-2 rounded-lg" style={{ backgroundColor: 'rgba(139,92,246,0.08)' }}>
           <div className="text-lg font-bold rs-cert">Lvl {me.level}</div>
-          <div className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#A78BFA' }}>LEVEL</div>
+          <div className="text-[0.625rem] font-bold uppercase tracking-wider" style={{ color: '#A78BFA' }}>LEVEL</div>
         </div>
       </div>
     </div>
@@ -105,13 +107,13 @@ function YourRankCard({ me }: { me: Omit<LeaderboardEntry, 'isMe'> | null }) {
  *  rank on the left, a full-width ranking table on the right — so the footer
  *  never jumps while the leaderboard data loads in. */
 function LeaderboardSkeleton() {
-  const podiumHeights = [100, 130, 80];
+  const podiumHeights = ['6.25rem', '8.125rem', '5rem'];
   const rowCount = 6;
 
   return (
     <div className="flex flex-col lg:flex-row gap-5" aria-busy="true" data-testid="leaderboard-loading">
       {/* Left column — podium + your rank */}
-      <aside className="w-full lg:w-[320px] shrink-0 flex flex-col">
+      <aside className="w-full lg:w-[20rem] shrink-0 flex flex-col">
         <div className="card p-5 mb-4">
           <Skeleton width="90px" height="0.8rem" className="mb-4" />
       <div className="flex items-end justify-center gap-2 sm:gap-4 pt-4">
@@ -217,7 +219,7 @@ export default function Leaderboard() {
 
   return (
         <PageWrapper title="" fullWidth className="py-6 px-3 sm:px-4 md:px-6">
-      <div className="max-w-[1700px] mx-auto w-full">
+      <div className="max-w-[106.25rem] mx-auto w-full">
 
         {/* ── Header ── */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
@@ -267,7 +269,7 @@ export default function Leaderboard() {
         <div className="flex flex-col lg:flex-row gap-5">
 
           {/* Left column */}
-          <div className="w-full lg:w-[320px] shrink-0 flex flex-col">
+          <div className="w-full lg:w-[20rem] shrink-0 flex flex-col">
             <>
               <TopThreePodium entries={entries} />
               <YourRankCard me={me} />
@@ -327,7 +329,7 @@ export default function Leaderboard() {
                                   <div className="font-semibold text-sm truncate flex items-center gap-1.5" style={{ color: 'var(--color-text-primary)' }}>
                                     {entry.displayName}
                                     {entry.isMe && (
-                                      <span className="text-[9px] px-1.5 py-0.5 rounded font-bold" style={{ backgroundColor: 'var(--color-accent)', color: '#fff' }}>YOU</span>
+                                      <span className="text-[0.5625rem] px-1.5 py-0.5 rounded font-bold" style={{ backgroundColor: 'var(--color-accent)', color: '#fff' }}>YOU</span>
                                     )}
                                   </div>
                                 </div>

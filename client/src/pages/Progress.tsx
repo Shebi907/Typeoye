@@ -176,7 +176,7 @@ function StreakCard({ streak }: { streak: ProgressStreak }) {
       <div className="mt-4 grid grid-cols-7 gap-1.5">
         {days.map((d, i) => (
           <div key={`${d.key}-${i}`} className="flex flex-col items-center gap-1">
-            <span className="text-[10px] font-bold uppercase" style={{ color: d.isToday ? 'var(--color-accent-text)' : 'var(--color-text-muted)' }}>
+            <span className="text-[0.625rem] font-bold uppercase" style={{ color: d.isToday ? 'var(--color-accent-text)' : 'var(--color-text-muted)' }}>
               {d.label}
             </span>
             <span
@@ -260,7 +260,7 @@ function RecentActivity({ testRows, practiceRows, lessonRows }: {
                   <p className="text-sm font-semibold truncate" style={{ color: 'var(--color-text-primary)' }}>{item.title}</p>
                   <p className="text-xs truncate mt-0.5" style={{ color: 'var(--color-text-muted)' }}>{item.meta}</p>
                 </div>
-                <span className="text-[11px] shrink-0" style={{ color: 'var(--color-text-muted)' }}>{relativeTime(item.at)}</span>
+                <span className="text-[0.6875rem] shrink-0" style={{ color: 'var(--color-text-muted)' }}>{relativeTime(item.at)}</span>
               </li>
             );
           })}

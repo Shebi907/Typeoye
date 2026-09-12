@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { RefreshCw, Zap, Shield, Trophy, ArrowLeft, Gauge, Target, Clock, Square, Info } from 'lucide-react';
 import { useAccuracyEngine } from '../../hooks/useAccuracyEngine';
 import { TypingDisplay } from '../typing/TypingDisplay';
@@ -293,7 +293,7 @@ export default function SuddenDeath({ onBack }: { onBack?: () => void }) {
           </div>
 
           {/* Right: Instructions + start */}
-          <div className="w-full lg:w-[340px] shrink-0 flex">
+          <div className="w-full lg:w-[21.25rem] shrink-0 flex">
             <div
               className="w-full rounded-2xl border p-6 sm:p-7 flex flex-col gap-4"
               style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}
@@ -352,7 +352,7 @@ export default function SuddenDeath({ onBack }: { onBack?: () => void }) {
   const isNewBest = gameOver ? result!.streak >= best : false;
 
   const resultCard = gameOver ? (
-    <div className="w-full max-w-[400px]">
+    <div className="w-full max-w-[25rem]">
       <div className="card result-card overflow-hidden" style={{ boxShadow: '0 20px 50px -15px rgba(0,0,0,0.25)' }}>
         <div
           className="px-5 py-4 text-center relative overflow-hidden"
@@ -362,7 +362,7 @@ export default function SuddenDeath({ onBack }: { onBack?: () => void }) {
             <Zap size={20} style={{ color: 'var(--color-accent-text)' }} />
           </div>
           <h2 className="text-xl font-extrabold mt-2" style={{ color: 'var(--color-text-primary)' }}>Round Over!</h2>
-          <p className="text-[13px] mt-1" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="text-[0.8125rem] mt-1" style={{ color: 'var(--color-text-secondary)' }}>
             Survived {Math.floor(result!.elapsed / 60)}m {result!.elapsed % 60}s · Sprint complete
           </p>
           {isNewBest && <p className="text-sm font-bold mt-2" style={{ color: '#EAB308' }}>New personal best!</p>}
@@ -375,21 +375,21 @@ export default function SuddenDeath({ onBack }: { onBack?: () => void }) {
                 <Zap size={14} style={{ color: 'var(--color-accent-text)' }} />
               </div>
               <div className="text-xl font-extrabold tabular-nums" style={{ color: 'var(--color-text-primary)' }}>{result!.streak}</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>Streak</div>
+              <div className="text-[0.625rem] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>Streak</div>
             </div>
             <div className="rounded-xl p-2.5 text-center" style={{ backgroundColor: 'rgba(217,119,6,0.08)' }}>
               <div className="w-7 h-7 rounded-lg mx-auto flex items-center justify-center mb-1.5" style={{ backgroundColor: 'rgba(217,119,6,0.15)' }}>
                 <Gauge size={14} style={{ color: '#d97706' }} />
               </div>
               <div className="text-xl font-extrabold tabular-nums" style={{ color: 'var(--color-text-primary)' }}>{result!.wpm}</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>WPM</div>
+              <div className="text-[0.625rem] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>WPM</div>
             </div>
             <div className="rounded-xl p-2.5 text-center" style={{ backgroundColor: 'rgba(34,197,94,0.08)' }}>
               <div className="w-7 h-7 rounded-lg mx-auto flex items-center justify-center mb-1.5" style={{ backgroundColor: 'rgba(34,197,94,0.15)' }}>
                 <Target size={14} style={{ color: 'var(--color-correct)' }} />
               </div>
               <div className="text-xl font-extrabold tabular-nums" style={{ color: 'var(--color-correct)' }}>{result!.accuracy}%</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>Accuracy</div>
+              <div className="text-[0.625rem] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--color-text-muted, var(--color-text-secondary))' }}>Accuracy</div>
             </div>
           </div>
         </div>
@@ -470,14 +470,14 @@ export default function SuddenDeath({ onBack }: { onBack?: () => void }) {
                   <h1 className="text-lg sm:text-xl font-extrabold tracking-tight text-white leading-tight">Sudden Death Sprint</h1>
                   <p className="text-xs sm:text-sm text-white/80 mt-0.5">One mistake ends it — unless you've earned a shield.</p>
                 </div>
-                <span className="inline-flex items-center gap-1.5 ml-1 px-2.5 py-1 rounded-full bg-white/20 ring-1 ring-white/25 text-[11px] font-bold text-white whitespace-nowrap">
+                <span className="inline-flex items-center gap-1.5 ml-1 px-2.5 py-1 rounded-full bg-white/20 ring-1 ring-white/25 text-[0.6875rem] font-bold text-white whitespace-nowrap">
                   <Shield size={11} className="fill-[#FDE047] text-[#FDE047]" />
                   {shields === 1 ? '1 life left' : `${shields} lives left`}
                 </span>
               </div>
 
               <div className="ml-auto flex items-center gap-2">
-                <span className="hidden sm:inline text-[10px] font-bold uppercase tracking-widest text-white/70 mr-1">Lives</span>
+                <span className="hidden sm:inline text-[0.625rem] font-bold uppercase tracking-widest text-white/70 mr-1">Lives</span>
                 {Array.from({ length: MAX_SHIELDS }).map((_, i) => (
                   <div
                     key={i}
@@ -509,7 +509,7 @@ export default function SuddenDeath({ onBack }: { onBack?: () => void }) {
                     <div className="mt-1.5 text-2xl sm:text-3xl font-extrabold tabular-nums font-mono leading-none" style={{ color: s.color }}>
                       {s.value}
                     </div>
-                    <div className="mt-1.5 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
+                    <div className="mt-1.5 text-[0.625rem] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
                       {s.sub}
                     </div>
                   </div>
@@ -533,7 +533,7 @@ export default function SuddenDeath({ onBack }: { onBack?: () => void }) {
                   <span className="text-xl font-extrabold tabular-nums font-mono leading-none" style={{ color: 'var(--color-text-primary)' }}>
                     {streak}
                   </span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
+                  <span className="text-[0.625rem] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
                     Word streak
                   </span>
                 </div>
@@ -549,7 +549,7 @@ export default function SuddenDeath({ onBack }: { onBack?: () => void }) {
                   ))}
                 </div>
               </div>
-              <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-medium whitespace-nowrap" style={{ color: 'var(--color-text-muted)' }}>
+              <span className="ml-auto inline-flex items-center gap-1.5 text-[0.6875rem] sm:text-xs font-medium whitespace-nowrap" style={{ color: 'var(--color-text-muted)' }}>
                 <Info size={12} /> One mistake ends the sprint
               </span>
             </div>

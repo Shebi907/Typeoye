@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Keyboard, BookOpen, Pencil, Gamepad2, Zap, Target, Trophy, Award,
@@ -135,7 +135,7 @@ export default function Landing() {
           {/* Demo typing preview */}
           <div
             className="card p-5 sm:p-8 max-w-2xl mx-auto text-left overflow-hidden"
-            style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '20px', lineHeight: 2 }}
+            style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '1.25rem', lineHeight: 2 }}
           >
             <div className="text-xs font-semibold uppercase tracking-widest mb-4"
               style={{ color: 'var(--color-text-muted)', fontFamily: 'Inter, sans-serif' }}>
@@ -203,7 +203,7 @@ export default function Landing() {
 
       {/* WHY CHOOSE TYPEOYE */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
-        <div className="rounded-[20px] sm:rounded-[28px] px-4 sm:px-6 py-12 sm:py-16 lg:py-20" style={{ backgroundColor: 'var(--color-accent-light)' }}>
+        <div className="rounded-[1.25rem] sm:rounded-[1.75rem] px-4 sm:px-6 py-12 sm:py-16 lg:py-20" style={{ backgroundColor: 'var(--color-accent-light)' }}>
           <h2
             className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-2"
             style={{ color: 'var(--color-text-primary)' }}
@@ -238,7 +238,7 @@ export default function Landing() {
       {/* CERTIFICATE CTA */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-20">
         <div
-          className="cert-cta relative overflow-hidden rounded-[20px] sm:rounded-[28px] px-4 sm:px-6 py-12 sm:py-16 lg:py-20 text-center"
+          className="cert-cta relative overflow-hidden rounded-[1.25rem] sm:rounded-[1.75rem] px-4 sm:px-6 py-12 sm:py-16 lg:py-20 text-center"
         >
           <span className="dot-grid dot-grid-tl" aria-hidden="true" />
           <span className="dot-grid dot-grid-br" aria-hidden="true" />

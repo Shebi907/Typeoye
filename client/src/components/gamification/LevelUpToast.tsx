@@ -20,7 +20,7 @@ export function LevelUpToast() {
   if (!leveledUp) return null;
 
   return (
-    <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 levelup-pop" style={{ width: 'min(92vw, 380px)' }}>
+    <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 levelup-pop" style={{ width: 'min(92vw, 23.75rem)' }}>
       <div
         className="card p-5 text-center relative pointer-events-auto"
         style={{

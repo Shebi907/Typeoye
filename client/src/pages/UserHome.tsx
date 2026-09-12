@@ -64,7 +64,7 @@ export default function UserHome() {
 
   return (
     <PageWrapper fullWidth className="py-6 px-3 sm:px-4 md:px-6" title={undefined}>
-      <div className="max-w-[1700px] mx-auto w-full flex flex-col gap-6">
+      <div className="max-w-[106.25rem] mx-auto w-full flex flex-col gap-6">
         {/* ── Hero ─────────────────────────────────────────────────────── */}
         <section
           className="rounded-2xl p-6 sm:p-8 relative overflow-hidden"
@@ -208,7 +208,7 @@ export default function UserHome() {
                       <b className="block text-sm truncate">{a.name}</b>
                       <span className="text-xs text-secondary truncate block">{a.description}</span>
                     </div>
-                    <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-[var(--color-border)] text-secondary whitespace-nowrap">+{a.xpReward} XP</span>
+                    <span className="ml-auto text-[0.625rem] px-2 py-0.5 rounded-full bg-[var(--color-border)] text-secondary whitespace-nowrap">+{a.xpReward} XP</span>
                   </li>
                 ))}
               </ul>

@@ -151,11 +151,11 @@ export default function Contact() {
 
       {/* Main two-column layout */}
       <section
-        className="mx-auto grid max-w-[1700px] items-start gap-8 md:grid-cols-2"
+        className="mx-auto grid max-w-[106.25rem] items-start gap-8 md:grid-cols-2"
         data-testid="contact-layout"
       >
         {/* Left — Get in Touch */}
-        <div className="card rounded-[24px] p-6 sm:p-8" data-testid="contact-info-panel">
+        <div className="card rounded-[1.5rem] p-6 sm:p-8" data-testid="contact-info-panel">
           <h2 className="text-2xl font-extrabold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
             Get in Touch
           </h2>
@@ -215,7 +215,7 @@ export default function Contact() {
 
         {/* Right — Send Us a Message */}
           <div
-            className="card rounded-[24px] p-6 sm:p-8"
+            className="card rounded-[1.5rem] p-6 sm:p-8"
             style={{ boxShadow: '0 16px 40px -18px rgba(23, 23, 31, 0.28)' }}
             data-testid="contact-form-card"
           >
@@ -328,7 +328,7 @@ export default function Contact() {
 
                 <Field label="Message" className="mt-5" error={errors.message}>
                   <textarea
-                    className={cn('input-base min-h-[140px] resize-y', errors.message && 'input-error')}
+                    className={cn('input-base min-h-[8.75rem] resize-y', errors.message && 'input-error')}
                     placeholder="Tell us what's on your mind..."
                     value={form.message}
                     onChange={(e) => set('message')(e.target.value)}

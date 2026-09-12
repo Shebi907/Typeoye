@@ -27,7 +27,7 @@ export default function Blog() {
     <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6">
       {/* Hero */}
       <section
-        className="relative mb-8 flex flex-col gap-8 overflow-hidden rounded-[24px] border p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:p-10"
+        className="relative mb-8 flex flex-col gap-8 overflow-hidden rounded-[1.5rem] border p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:p-10"
         style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }}
       >
         <span className="dot-grid dot-grid-tr" aria-hidden="true" />
@@ -52,7 +52,7 @@ export default function Blog() {
         {/* Typing workspace illustration */}
         <div className="hidden shrink-0 md:block" aria-hidden="true">
           <div
-            className="relative flex h-48 w-80 items-center justify-center overflow-hidden rounded-[22px] border sm:h-52"
+            className="relative flex h-48 w-80 items-center justify-center overflow-hidden rounded-[1.375rem] border sm:h-52"
             style={{ borderColor: 'var(--color-border)', background: 'linear-gradient(160deg, var(--color-accent-light) 0%, #f4effd 100%)' }}
           >
             <span className="dot-grid" aria-hidden="true" />
@@ -61,7 +61,7 @@ export default function Blog() {
 
             {/* Monitor + keyboard blocks */}
             <div className="relative z-10">
-              <div className="mx-auto mb-3 h-24 w-44 overflow-hidden rounded-lg border-[6px] border-b-[10px] p-3" style={{ borderColor: '#4361ee', backgroundColor: '#151521' }}>
+              <div className="mx-auto mb-3 h-24 w-44 overflow-hidden rounded-lg border-[0.375rem] border-b-[0.625rem] p-3" style={{ borderColor: '#4361ee', backgroundColor: '#151521' }}>
                 <Keyboard className="h-full w-full text-white" strokeWidth={1.2} />
               </div>
               <div className="h-3 w-48 rounded-full sm:w-56" style={{ background: 'linear-gradient(135deg, #4361EE 0%, #7C3AED 100%)' }} />

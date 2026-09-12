@@ -58,7 +58,7 @@ export function StreakBadge({ currentStreak, longestStreak }: StreakBadgeProps) 
   return (
     <div
       className="card px-4 py-3 flex items-center gap-3"
-      style={{ minWidth: '160px' }}
+      style={{ minWidth: '10rem' }}
     >
       <div className="text-2xl">🔥</div>
       <div>

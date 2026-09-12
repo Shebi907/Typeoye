@@ -13,11 +13,11 @@ export function StartTypingHint({ className = '' }: StartTypingHintProps) {
       aria-hidden
       className={`pointer-events-none absolute z-20 select-none ${className}`}
     >
-      <div className="hint-in flex flex-col items-start leading-none -translate-y-[100%] -translate-x-[6px] pb-1">
+      <div className="hint-in flex flex-col items-start leading-none -translate-y-[100%] -translate-x-[0.375rem] pb-1">
         <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-xs font-semibold text-white shadow-md">
           Start typing!
         </span>
-        <span className="ml-[18px] h-0 w-0 border-x-[5px] border-t-[6px] border-x-transparent border-t-[var(--color-accent)]" />
+        <span className="ml-[1.125rem] h-0 w-0 border-x-[0.3125rem] border-t-[0.375rem] border-x-transparent border-t-[var(--color-accent)]" />
       </div>
     </div>
   );

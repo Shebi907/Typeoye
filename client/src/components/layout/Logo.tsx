@@ -18,16 +18,18 @@ interface LogoProps {
  * "oye":      lavender    #C7B8FF
  */
 export function Logo({ size = 33, gap = 5 }: LogoProps) {
+  // Render in rem so the mark and gap scale with the app's fluid root
+  // font-size (identical below 1280px, scales up on wide monitors).
+  const toRem = (px: number) => `${px / 16}rem`;
+
   return (
-    <span className="flex items-center select-none" style={{ gap }}>
+    <span className="flex items-center select-none" style={{ gap: toRem(gap) }}>
       {/* Transparent logo mark — height-based so the aspect ratio is preserved */}
       <img
         src={typeoyeLogo}
         alt="Typeoye"
-        width={size}
-        height={size}
         className="flex-shrink-0"
-        style={{ height: size, width: 'auto', filter: 'drop-shadow(0 1px 2px rgba(10, 20, 60, 0.4))' }}
+        style={{ height: toRem(size), width: 'auto', filter: 'drop-shadow(0 1px 2px rgba(10, 20, 60, 0.4))' }}
       />
 
       {/* Wordmark */}

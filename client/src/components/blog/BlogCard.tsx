@@ -41,7 +41,7 @@ export function BlogCard({ post, variant = 'horizontal' }: BlogCardProps) {
           )}
         />
         <span
-          className="absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-[#4361ee] shadow-sm"
+          className="absolute left-3 top-3 rounded-full px-2.5 py-1 text-[0.6875rem] font-bold uppercase tracking-wide text-[#4361ee] shadow-sm"
           style={{ backgroundColor: 'rgba(255,255,255,0.94)' }}
         >
           {post.category}

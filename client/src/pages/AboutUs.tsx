@@ -78,7 +78,7 @@ export default function AboutUs() {
 
       {/* Why we built this */}
       <section
-        className="mx-auto mt-14 max-w-5xl rounded-[24px] bg-[#F5F6FC] px-5 py-12 sm:px-10 sm:py-14 dark:border dark:border-[#333340] dark:bg-[#1C1E2E]"
+        className="mx-auto mt-14 max-w-5xl rounded-[1.5rem] bg-[#F5F6FC] px-5 py-12 sm:px-10 sm:py-14 dark:border dark:border-[#333340] dark:bg-[#1C1E2E]"
         data-testid="about-why"
       >
         <h2 className="text-center text-2xl font-extrabold tracking-tight sm:text-3xl text-[#17171F] dark:text-white">
@@ -124,7 +124,7 @@ export default function AboutUs() {
 
       {/* Bottom CTA */}
       <section
-        className="mt-14 rounded-[24px] bg-[#EEF0FF] px-6 py-10 text-center sm:px-10 sm:py-12 dark:border dark:border-[#333340] dark:bg-[#1C1E2E]"
+        className="mt-14 rounded-[1.5rem] bg-[#EEF0FF] px-6 py-10 text-center sm:px-10 sm:py-12 dark:border dark:border-[#333340] dark:bg-[#1C1E2E]"
         data-testid="about-cta"
       >
         <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl text-[#17171F] dark:text-white">

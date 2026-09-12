@@ -167,7 +167,7 @@ export function Navbar() {
                 className="ng-icon-btn p-1 pr-2 rounded-full flex items-center gap-2"
               >
                 <Avatar src={profile?.avatarUrl} name={profile?.displayName ?? user?.username} size={32} />
-                <span className="hidden xl:block text-sm font-semibold max-w-[120px] truncate" style={{ color: '#ffffff' }}>
+                <span className="hidden xl:block text-sm font-semibold max-w-[7.5rem] truncate" style={{ color: '#ffffff' }}>
                   {profile?.displayName ?? user?.username}
                 </span>
               </button>

@@ -60,7 +60,7 @@ export default function CertificatePage() {
 
   return (
     <PageWrapper fullWidth className="py-6 sm:py-8 px-3 sm:px-4 md:px-6">
-      <div className="max-w-[1700px] mx-auto flex flex-col lg:flex-row gap-6 sm:gap-8 items-start">
+      <div className="max-w-[106.25rem] mx-auto flex flex-col lg:flex-row gap-6 sm:gap-8 items-start">
         {/* Main form card */}
         <div className="w-full lg:flex-1 card p-6 sm:p-8 lg:p-10">
           <div
@@ -83,7 +83,7 @@ export default function CertificatePage() {
               onBlur={() => setTouched(true)}
               placeholder="Enter your full name"
               className={`input-base block w-full mt-2 ${touched && !name.trim() ? 'input-error' : ''}`}
-              style={{ fontSize: '1.05rem', padding: '12px 14px' }}
+              style={{ fontSize: '1.05rem', padding: '0.75rem 0.875rem' }}
             />
             {touched && !name.trim() && (
               <span className="text-sm font-normal mt-1.5 block" style={{ color: 'var(--color-error)' }}>
@@ -126,7 +126,7 @@ export default function CertificatePage() {
         </div>
 
         {/* Info cards */}
-        <aside className="w-full lg:w-[320px] shrink-0 space-y-6">
+        <aside className="w-full lg:w-[20rem] shrink-0 space-y-6">
           <div className="card p-6">
             <h2 className="font-bold text-lg mb-4">How It Works</h2>
             <ol className="space-y-3">

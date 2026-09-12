@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight, Dumbbell, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PageWrapper } from '../components/layout/PageWrapper';
@@ -47,7 +47,7 @@ export default function Practice() {
 
   return (
     <PageWrapper title="Practice" description="Build your speed, accuracy, and confidence with focused practice." icon={Target} dotGrid fullWidth className="py-8">
-      <div className="max-w-[1700px] mx-auto w-full">
+      <div className="max-w-[106.25rem] mx-auto w-full">
 
         {/* ── Practice modes ───────────────────────────────────────────── */}
         <section className="mb-8">
@@ -71,7 +71,7 @@ export default function Practice() {
                 >
                   <span
                     className="flex items-center justify-center rounded-lg shrink-0 transition-all duration-200 ease-out group-hover:bg-[linear-gradient(135deg,#4F46E5,#7C6EF2)]"
-                    style={{ width: 40, height: 40, backgroundColor: 'var(--color-accent-light)' }}
+                    style={{ width: '2.5rem', height: '2.5rem', backgroundColor: 'var(--color-accent-light)' }}
                   >
                     <Icon size={18} className="transition-colors duration-200 text-[var(--color-accent-text)] group-hover:text-white" />
                   </span>
@@ -80,7 +80,7 @@ export default function Practice() {
                       <p className="text-sm font-semibold leading-tight transition-colors duration-200 text-[var(--color-text-primary)] group-hover:text-[#4F46E5] dark:group-hover:text-[#A5B4FF]">{label}</p>
                       {badge && (
                         <span
-                          className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wide ${
+                          className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[0.5625rem] font-bold uppercase tracking-wide ${
                             badge === 'Smart'
                               ? 'bg-[#dbeafe] text-[#2563eb] dark:bg-blue-950 dark:text-blue-200'
                               : 'bg-[#ede9fe] text-[#7c3aed] dark:bg-purple-950 dark:text-purple-200'
@@ -90,11 +90,11 @@ export default function Practice() {
                         </span>
                       )}
                     </div>
-                    <p className="text-[11px] mt-0.5 leading-snug" style={{ color: 'var(--color-text-secondary)' }}>{desc}</p>
+                    <p className="text-[0.6875rem] mt-0.5 leading-snug" style={{ color: 'var(--color-text-secondary)' }}>{desc}</p>
                   </div>
                   <ArrowRight
                     size={15}
-                    className="shrink-0 transition-all duration-200 text-[var(--color-text-muted)] group-hover:text-[#4F46E5] dark:group-hover:text-[#A5B4FF] group-hover:translate-x-[3px]"
+                    className="shrink-0 transition-all duration-200 text-[var(--color-text-muted)] group-hover:text-[#4F46E5] dark:group-hover:text-[#A5B4FF] group-hover:translate-x-[0.1875rem]"
                   />
                 </button>
               );
@@ -121,7 +121,7 @@ export default function Practice() {
                 <recommendedType.icon size={22} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#A5B4FF' }}>Continue practicing</p>
+                <p className="text-[0.625rem] font-bold uppercase tracking-widest" style={{ color: '#A5B4FF' }}>Continue practicing</p>
                 <h3 className="text-lg font-extrabold text-white mt-0.5">
                   {recommendedType.label}
                 </h3>

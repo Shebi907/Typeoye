@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import type { TypingPhase } from '../../types';
 
 interface LiveStatsSidebarProps {
@@ -22,7 +22,7 @@ export function LiveStatsSidebar({ wpm, accuracy, remaining, elapsed, phase, dur
 
   return (
     <div
-      className="card p-4 w-full rounded-xl border-[0.5px]"
+      className="card p-4 w-full rounded-xl border-[0.03125rem]"
       role="status"
       aria-label="Typing statistics"
       aria-live="polite"
@@ -31,12 +31,12 @@ export function LiveStatsSidebar({ wpm, accuracy, remaining, elapsed, phase, dur
       {/* WPM */}
       <div className="text-center py-3">
         <div
-          className="text-[30px] leading-none font-bold tabular-nums"
+          className="text-[1.875rem] leading-none font-bold tabular-nums"
           style={{ color: 'var(--color-accent-text)' }}
         >
           {phase === 'idle' ? '—' : wpm}
         </div>
-        <div className="text-[10px] font-semibold mt-1.5 uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
+        <div className="text-[0.625rem] font-semibold mt-1.5 uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
           WPM
         </div>
       </div>
@@ -46,12 +46,12 @@ export function LiveStatsSidebar({ wpm, accuracy, remaining, elapsed, phase, dur
       {/* Seconds left */}
       <div className="text-center py-3">
         <div
-          className={`text-[34px] leading-none font-bold tabular-nums ${timeCritical ? 'text-[var(--color-error)]' : ''}`}
+          className={`text-[2.125rem] leading-none font-bold tabular-nums ${timeCritical ? 'text-[var(--color-error)]' : ''}`}
           style={timeCritical ? undefined : { color: 'var(--color-text-primary)' }}
         >
           {timeDisplay}
         </div>
-        <div className="text-[10px] font-semibold mt-1.5 uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
+        <div className="text-[0.625rem] font-semibold mt-1.5 uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
           Seconds left
         </div>
       </div>
@@ -61,12 +61,12 @@ export function LiveStatsSidebar({ wpm, accuracy, remaining, elapsed, phase, dur
       {/* Accuracy */}
       <div className="text-center pt-3 pb-1.5">
         <div
-          className="text-[30px] leading-none font-bold tabular-nums"
+          className="text-[1.875rem] leading-none font-bold tabular-nums"
           style={{ color: 'var(--color-correct)' }}
         >
           {phase === 'idle' ? '—' : `${accuracy.toFixed(0)}%`}
         </div>
-        <div className="text-[10px] font-semibold mt-1.5 uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
+        <div className="text-[0.625rem] font-semibold mt-1.5 uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
           Accuracy
         </div>
       </div>

@@ -64,7 +64,7 @@ export function VirtualKeyboard({ currentKey, errorKey, highlightKeys = [], vari
       {ROWS.map((row, rowIdx) => (
         <div
           key={rowIdx}
-          className={premium ? 'flex justify-center gap-[5px] mb-[5px]' : 'flex justify-center gap-[3px] mb-[3px]'}
+          className={premium ? 'flex justify-center gap-[0.3125rem] mb-[0.3125rem]' : 'flex justify-center gap-[0.1875rem] mb-[0.1875rem]'}
           style={{ paddingLeft: `${rowIdx * (premium ? 14 : 10)}px` }}
         >
           {row.map((key) => {
@@ -129,7 +129,7 @@ export function VirtualKeyboard({ currentKey, errorKey, highlightKeys = [], vari
       ))}
 
       {/* Spacebar row */}
-      <div className={premium ? 'flex justify-center gap-[5px] mt-[5px]' : 'flex justify-center gap-[3px] mt-[3px]'}>
+      <div className={premium ? 'flex justify-center gap-[0.3125rem] mt-[0.3125rem]' : 'flex justify-center gap-[0.1875rem] mt-[0.1875rem]'}>
         {['Alt', 'Cmd', '', 'Space', '', 'Cmd', 'Alt'].map((k, i) => (
           <div
             key={i}

@@ -94,7 +94,7 @@ export default function AchievementsPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2 mb-1">
                         <h3 className="font-bold text-base truncate" style={{ color: 'var(--color-text-primary)' }}>{item.name}</h3>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider shrink-0 ${RARITY_PILL[item.rarity]}`}>
+                        <span className={`text-[0.625rem] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider shrink-0 ${RARITY_PILL[item.rarity]}`}>
                           {item.rarity}
                         </span>
                       </div>

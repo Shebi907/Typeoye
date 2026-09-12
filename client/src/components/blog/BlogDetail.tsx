@@ -41,7 +41,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
         <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm" style={{ color: 'var(--color-text-muted)' }}>
           <span className="inline-flex items-center gap-1.5 font-medium" style={{ color: 'var(--color-text-primary)' }}>
             <span
-              className="flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-extrabold text-white"
+              className="flex h-6 w-6 items-center justify-center rounded-full text-[0.6875rem] font-extrabold text-white"
               style={{ background: 'linear-gradient(135deg, #4361EE 0%, #7C3AED 100%)' }}
             >
               T
@@ -59,7 +59,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
 
       {/* Featured image */}
       <div
-        className="relative mt-7 w-full overflow-hidden rounded-[20px] border"
+        className="relative mt-7 w-full overflow-hidden rounded-[1.25rem] border"
         style={{ borderColor: 'var(--color-border)', aspectRatio: '16 / 7' }}
       >
         <img
@@ -89,7 +89,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
               />
               {section.heading}
             </h2>
-            <p className="pl-4 text-[17px] leading-[1.75]" style={{ color: 'var(--color-text-secondary)' }}>
+            <p className="pl-4 text-[1.0625rem] leading-[1.75]" style={{ color: 'var(--color-text-secondary)' }}>
               {section.body}
             </p>
           </section>
@@ -97,7 +97,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
 
         {/* Closing CTA */}
         <div
-          className="mt-9 mx-auto max-w-3xl rounded-2xl px-6 pt-6 pb-16 text-center sm:px-7 sm:pt-7 sm:pb-[72px]"
+          className="mt-9 mx-auto max-w-3xl rounded-2xl px-6 pt-6 pb-16 text-center sm:px-7 sm:pt-7 sm:pb-[4.5rem]"
           style={{ backgroundColor: 'var(--color-accent-light)' }}
         >
           <h3 className="text-lg font-extrabold sm:text-xl" style={{ color: 'var(--color-text-primary)' }}>

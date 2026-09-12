@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import TypingRace from '../components/games/TypingRace';
@@ -156,7 +156,7 @@ export default function Games() {
     const goBack = () => setActive('hub');
     return (
       <PageWrapper title="Games" noHeader fullWidth className="py-6 px-4 sm:px-6">
-        <div className="max-w-[1700px] mx-auto w-full">
+        <div className="max-w-[106.25rem] mx-auto w-full">
           <GameErrorBoundary onBack={goBack}>
             <GameComponent onBack={goBack} />
           </GameErrorBoundary>
@@ -169,14 +169,14 @@ export default function Games() {
 
   return (
     <PageWrapper title="" fullWidth className="py-6 px-4 sm:px-6">
-      <div className="max-w-[1700px] mx-auto w-full">
+      <div className="max-w-[106.25rem] mx-auto w-full">
 
         {/* ── Header ── */}
         <div className="relative mb-6">
           <div className="flex items-center gap-3 mb-1">
             <span
               className="flex items-center justify-center rounded-xl shrink-0"
-              style={{ width: 42, height: 42, background: 'linear-gradient(135deg, #4361ee, #7c3aed)' }}
+              style={{ width: '2.625rem', height: '2.625rem', background: 'linear-gradient(135deg, #4361ee, #7c3aed)' }}
             >
               <Gamepad2 size={22} color="#fff" />
             </span>
@@ -232,7 +232,7 @@ export default function Games() {
               return (
                 <div
                   key={game.key}
-                  className="sm:col-span-2 rounded-2xl p-[1px] cursor-pointer transition-all duration-200"
+                  className="sm:col-span-2 rounded-2xl p-[0.0625rem] cursor-pointer transition-all duration-200"
                   style={{
                     background: 'linear-gradient(135deg, rgba(67,97,238,0.35), rgba(124,58,237,0.35))',
                     boxShadow: '0 8px 32px -10px rgba(67, 97, 238, 0.4)',
@@ -242,7 +242,7 @@ export default function Games() {
                   data-testid={`game-card-${game.key}`}
                 >
                   <div
-                    className="rounded-[15px] p-6 sm:p-7 flex flex-col sm:flex-row items-start sm:items-center gap-5 transition-all duration-200"
+                    className="rounded-[0.9375rem] p-6 sm:p-7 flex flex-col sm:flex-row items-start sm:items-center gap-5 transition-all duration-200"
                     style={{ backgroundColor: 'var(--color-card)' }}
                   >
                     <div className="flex items-center gap-4 flex-1 min-w-0">
@@ -256,7 +256,7 @@ export default function Games() {
                         <div className="flex items-center gap-2 flex-wrap">
                           <h3 className="text-xl font-bold" style={{ color: 'var(--color-text-primary)' }}>{game.title}</h3>
                           <span
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[0.625rem] font-bold uppercase tracking-wider"
                             style={{ background: 'linear-gradient(135deg, #4361ee, #7c3aed)', color: '#fff' }}
                           >
                             <Star size={10} fill="currentColor" /> Recommended
@@ -265,7 +265,7 @@ export default function Games() {
                         <p className="text-sm mt-1" style={{ color: 'var(--color-text-secondary)' }}>{game.description}</p>
                         <div className="flex items-center gap-3 mt-2 flex-wrap">
                           <span
-                            className={`games-diff games-diff-${game.key} inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider`}
+                            className={`games-diff games-diff-${game.key} inline-flex items-center px-2 py-0.5 rounded-full text-[0.625rem] font-bold uppercase tracking-wider`}
                             style={{ backgroundColor: `${game.color}14` }}
                           >
                             {game.difficulty}
@@ -316,7 +316,7 @@ export default function Games() {
                     <Icon size={20} />
                   </div>
                   <span
-                    className={`games-diff games-diff-${game.key} inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider`}
+                    className={`games-diff games-diff-${game.key} inline-flex items-center px-2 py-0.5 rounded-full text-[0.625rem] font-bold uppercase tracking-wider`}
                     style={{ backgroundColor: `${game.color}14` }}
                   >
                     {game.difficulty}
@@ -350,7 +350,7 @@ export default function Games() {
               Recent Races
             </div>
             <div className="overflow-x-auto">
-              <div className="min-w-[400px]">
+              <div className="min-w-[25rem]">
                 <div className="divide-y" style={{ borderColor: 'var(--color-border)' }}>
                   {recent.map((race) => (
                     <div key={race._id} className="flex items-center justify-between px-4 py-3 text-sm">

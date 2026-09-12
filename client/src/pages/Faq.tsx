@@ -72,14 +72,14 @@ export default function Faq() {
       </section>
 
       {/* Accordion */}
-      <section className="mx-auto flex max-w-[1024px] flex-col gap-3.5" data-testid="faq-list">
+      <section className="mx-auto flex max-w-[64rem] flex-col gap-3.5" data-testid="faq-list">
         {FAQS.map((item, index) => {
           const isOpen = open === index;
           return (
             <div
               key={item.q}
               data-testid="faq-item"
-              className="overflow-hidden rounded-[16px] border bg-[var(--color-card)] transition-all duration-200"
+              className="overflow-hidden rounded-[1rem] border bg-[var(--color-card)] transition-all duration-200"
               style={{
                 borderColor: 'var(--color-border)',
                 boxShadow: isOpen ? '0 10px 30px -14px rgba(23, 23, 31, 0.18)' : '0 4px 14px -10px rgba(23, 23, 31, 0.10)',
@@ -93,7 +93,7 @@ export default function Faq() {
                 className="flex w-full items-center gap-3 px-4 py-4 text-left transition-colors duration-150 sm:px-6"
               >
                 <span
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] transition-colors duration-200"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[0.625rem] transition-colors duration-200"
                   style={{
                     backgroundColor: isOpen ? 'rgba(67, 97, 238, 0.16)' : 'var(--color-accent-light)',
                     color: isOpen ? '#4361ee' : '#7C3AED',
@@ -139,9 +139,9 @@ export default function Faq() {
       </section>
 
       {/* Support CTA */}
-      <section className="mx-auto mt-12 max-w-[1024px]" data-testid="faq-cta">
+      <section className="mx-auto mt-12 max-w-[64rem]" data-testid="faq-cta">
         <div
-          className="flex flex-col items-center justify-between gap-5 rounded-[20px] px-6 py-6 text-center sm:flex-row sm:px-8 sm:text-left"
+          className="flex flex-col items-center justify-between gap-5 rounded-[1.25rem] px-6 py-6 text-center sm:flex-row sm:px-8 sm:text-left"
           style={{ background: 'linear-gradient(135deg, #EEF1FD 0%, #F4EDFD 100%)' }}
         >
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:gap-4">

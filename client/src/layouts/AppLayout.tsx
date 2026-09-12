@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
@@ -44,7 +44,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col px-1.5 pb-1.5 sm:px-2 sm:pb-2 md:px-3 md:pb-3" style={{ backgroundColor: 'var(--color-canvas)' }}>
       <div
-        className="app-sheet flex flex-1 flex-col rounded-[16px] sm:rounded-[24px] border shadow-sm overflow-hidden"
+        className="app-sheet flex flex-1 flex-col rounded-[1rem] sm:rounded-[1.5rem] border shadow-sm overflow-hidden"
         style={{
           backgroundColor: 'var(--color-page)',
           borderColor: 'var(--color-border)',
