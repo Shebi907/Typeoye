@@ -9,6 +9,11 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(10),
   JWT_EXPIRES_IN: z.string().default('7d'),
   CLIENT_URL: z.string().default('http://localhost:5173'),
+  // Public origin of the API server itself, used to build the Google OAuth
+  // redirect_uri. MUST be set in production to the deployed backend origin
+  // (https://typeoye.onrender.com) — otherwise OAuth falls back to localhost
+  // and Google rejects the flow with redirect_uri_mismatch.
+  APP_BASE_URL: z.string().optional(),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   // Optional — only required when Google Sign-In is enabled.
   GOOGLE_CLIENT_ID: z.string().optional(),

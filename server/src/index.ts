@@ -8,6 +8,7 @@ import { env } from './config/env';
 import { UPLOADS_DIR, ensureUploadDirs } from './config/uploads';
 import { authLimiter, apiLimiter } from './middleware/rateLimit.middleware';
 import { errorHandler } from './middleware/errorHandler.middleware';
+import { googleOAuthRedirectUri } from './controllers/googleAuth.controller';
 import User from './models/User';
 
 import authRoutes from './routes/auth.routes';
@@ -99,6 +100,8 @@ if (require.main === module) {
 
       const PORT = Number(process.env.PORT) || 5000;
       const app = createApp();
+      // Diagnostic: print the exact URL Google will be asked to call back on.
+      console.log(`   Google OAuth redirect_uri: ${googleOAuthRedirectUri()}`);
       const server = app.listen(PORT, "0.0.0.0", () => {
         console.log(`🚀 Typeoye server running on port ${PORT}`);
         console.log(`   Environment: ${env.NODE_ENV}`);

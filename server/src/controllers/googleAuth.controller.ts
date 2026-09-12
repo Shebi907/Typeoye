@@ -17,10 +17,16 @@ const STATE_COOKIE = 'google_oauth_state';
 
 /** The backend's own OAuth callback URL. This exact string (with the real host
  *  and port) must be registered in Google Cloud Console under "Authorized
- *  redirect URIs". */
+ *  redirect URIs". In production the host MUST come from APP_BASE_URL — a
+ *  missing variable here is the classic cause of redirect_uri_mismatch on
+ *  deployed backends (it silently falls back to localhost). */
 function buildRedirectUri(): string {
-  const base = process.env.APP_BASE_URL || `http://localhost:${env.PORT}`;
+  const base = (process.env.APP_BASE_URL || `http://localhost:${env.PORT}`).replace(/\/+$/, '');
   return `${base}/api/auth/google/callback`;
+}
+
+export function googleOAuthRedirectUri(): string {
+  return buildRedirectUri();
 }
 
 interface GoogleUserInfo {

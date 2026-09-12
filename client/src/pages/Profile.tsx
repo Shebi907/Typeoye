@@ -375,13 +375,13 @@ export default function ProfilePage() {
           </div>
 
           {/* Security question — below account information */}
-          {(user?.authProvider === 'google' || user?.authProvider === 'both') && !secConfigured && (
+          {(user?.authProvider === 'google' || user?.authProvider === 'both') && (
             <div className="card p-6" data-testid="security-question-card">
               <h2 className="text-[15px] font-bold text-[var(--color-text-primary)]">Security Question</h2>
               <p className="text-sm mt-0.5 mb-5" style={{ color: 'var(--color-text-secondary)' }}>
                 Used for account recovery if you forget your password
               </p>
-              {!secConfigured || secEditing ? (
+              {secConfigured === null ? null : !secConfigured || secEditing ? (
                 <form onSubmit={submitSecurityQuestion} className="space-y-4">
                   <label className="block text-sm font-medium" style={{ color: 'var(--color-text-primary)' }}>
                     Security Question
@@ -529,7 +529,7 @@ export default function ProfilePage() {
                 </>
               ) : (
                 <div className="card p-6" data-testid="change-password-card">
-                  <h2 className="text-[15px] font-bold text-[var(--color-text-primary)]">Change Password</h2>
+                  <h2 className="text-[15px] font-bold text-[var(--color-text-primary)]">Update Password</h2>
                   <p className="text-sm mt-0.5 mb-5" style={{ color: 'var(--color-text-secondary)' }}>
                     Keep your account secure
                   </p>
