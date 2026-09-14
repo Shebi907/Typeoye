@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, Keyboard, Rocket, RefreshCw, Trophy } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { useSeo } from '../hooks/useSeo';
 
 interface Step {
   label: string;
@@ -52,9 +52,12 @@ const CHECKLIST = [
 ];
 
 export default function HowItWorks() {
-  useEffect(() => {
-    document.title = 'How It Works — Typeoye';
-  }, []);
+  useSeo({
+    title: 'How It Works | TypeOye',
+    description:
+      'Learn how TypeOye works — take a typing test, follow guided lessons, practice your weak keys, play typing games, and earn a typing certificate.',
+    canonicalPath: '/how-it-works',
+  });
 
   return (
     <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-10 sm:px-6">

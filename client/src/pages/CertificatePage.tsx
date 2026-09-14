@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Award, ArrowRight, Check, Loader2 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { useAuthStore } from '../store/authStore';
 import { preloadCertificateParagraph } from '../services/certificate.service';
+import { useSeo } from '../hooks/useSeo';
 
 const DURATIONS = [
   { seconds: 60, label: '1 min' },
@@ -31,6 +32,13 @@ const INCLUDED = [
  * result modal) — never before.
  */
 export default function CertificatePage() {
+  useSeo({
+    title: 'Typing Certificate | TypeOye',
+    description:
+      'Earn a free typing certificate from TypeOye. Complete a timed typing test at 30+ WPM with 90% accuracy to prove your typing skills.',
+    canonicalPath: '/certificate',
+  });
+
   const navigate = useNavigate();
   const profile = useAuthStore((s) => s.profile);
   const user = useAuthStore((s) => s.user);
@@ -38,10 +46,6 @@ export default function CertificatePage() {
   const [duration, setDuration] = useState(60);
   const [touched, setTouched] = useState(false);
   const [preparing, setPreparing] = useState(false);
-
-  useEffect(() => {
-    document.title = 'Certificate — TypeOye';
-  }, []);
 
   const start = async () => {
     const trimmed = name.trim();

@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ArrowRight, BookOpen, Calendar, Clock, LifeBuoy, Search, SearchX } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SUPPORT_CATEGORIES, SUPPORT_ARTICLES, SUPPORT_CATEGORY_META, SUPPORT_CATEGORY_COUNTS } from '../data/support';
 import type { SupportArticle, SupportCategory } from '../data/support';
 import { SUPPORT_EMAIL } from '../config';
 import { cn } from '../utils/cn';
+import { useSeo } from '../hooks/useSeo';
 
 const CATEGORIES = ['All Articles', ...SUPPORT_CATEGORIES] as const;
 
@@ -29,9 +30,12 @@ export default function SupportCenter() {
   const [category, setCategory] = useState<'All Articles' | SupportCategory>('All Articles');
   const [query, setQuery] = useState('');
 
-  useEffect(() => {
-    document.title = 'Support Center — Typeoye';
-  }, []);
+  useSeo({
+    title: 'Help Center & Support | TypeOye',
+    description:
+      'Get help with TypeOye — account setup, typing test and practice questions, Learn course, certificates, and troubleshooting guides.',
+    canonicalPath: '/support',
+  });
 
   const filtered = useMemo(() => {
     const byCategory =

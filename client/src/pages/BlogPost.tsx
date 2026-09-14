@@ -5,6 +5,10 @@ import { PageWrapper } from '../components/layout/PageWrapper';
 import { BlogDetail } from '../components/blog/BlogDetail';
 import { POSTS } from '../data/blog';
 import type { BlogPost } from '../data/blog';
+import { useSeo } from '../hooks/useSeo';
+import { useJsonLd } from '../hooks/useJsonLd';
+
+const SITE_URL = 'https://www.typeoye.com';
 
 function getRelated(post: BlogPost, count = 3): BlogPost[] {
   const sameCategory = POSTS.filter((p) => p.slug !== post.slug && p.category === post.category);
@@ -17,9 +21,48 @@ export default function BlogPostPage() {
   const post = POSTS.find((p) => p.slug === slug);
   const related = useMemo(() => (post ? getRelated(post) : []), [post]);
 
+  useSeo(
+    post
+      ? {
+          title: `${post.title} | Typeoye Blog`,
+          description: post.description,
+          canonicalPath: `/blog/${post.slug}`,
+          image: `${SITE_URL}${post.image}`,
+          type: 'article',
+        }
+      : {
+          title: 'Article Not Found | Typeoye Blog',
+          description:
+            'The article you are looking for does not exist or may have moved. Browse the Typeoye Blog for typing tips and guides.',
+          canonicalPath: '/blog',
+          robots: 'noindex, nofollow',
+        }
+  );
+
+  useJsonLd(
+    post
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/${post.slug}` },
+          headline: post.title,
+          description: post.description,
+          image: `${SITE_URL}${post.image}`,
+          author: { '@type': 'Organization', name: 'Typeoye' },
+          publisher: {
+            '@type': 'Organization',
+            name: 'Typeoye',
+            logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.png` },
+          },
+          datePublished: post.publishedAt,
+          inLanguage: 'en',
+        }
+      : null
+  );
+
   if (!post) {
     return (
-      <PageWrapper noHeader title="Article Not Found">
+      <PageWrapper noHeader>
         <div className="card p-10 text-center">
           <h1 className="text-xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
             Article not found
@@ -40,7 +83,7 @@ export default function BlogPostPage() {
   }
 
   return (
-    <PageWrapper noHeader title={post.title}>
+    <PageWrapper noHeader>
       <BlogDetail post={post} related={related} />
     </PageWrapper>
   );

@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Heart, Target, Unlock } from 'lucide-react';
+import { useSeo } from '../hooks/useSeo';
 
 const STATS = [
   { value: '16', label: 'Guided lessons' },
@@ -33,9 +33,12 @@ const VALUES = [
 ];
 
 export default function AboutUs() {
-  useEffect(() => {
-    document.title = 'About Us — Typeoye';
-  }, []);
+  useSeo({
+    title: 'About TypeOye | Online Typing Platform',
+    description:
+      'TypeOye is a free online typing platform with typing tests, guided lessons, practice drills, and games to help you type faster and more accurately.',
+    canonicalPath: '/about',
+  });
 
   return (
     <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-10 sm:px-6">

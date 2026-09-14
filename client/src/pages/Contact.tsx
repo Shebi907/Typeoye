@@ -17,6 +17,7 @@ import { cn } from '../utils/cn';
 import { SUPPORT_EMAIL } from '../config';
 import { contactService } from '../services/contact.service';
 import type { ContactTopic } from '../services/contact.service';
+import { useSeo } from '../hooks/useSeo';
 
 const TOPICS: ContactTopic[] = [
   'General question',
@@ -36,9 +37,12 @@ interface FormState {
 const INITIAL: FormState = { name: '', email: '', topic: 'General question', message: '' };
 
 export default function Contact() {
-  useEffect(() => {
-    document.title = 'Contact Us — Typeoye';
-  }, []);
+  useSeo({
+    title: 'Contact TypeOye',
+    description:
+      'Questions about TypeOye? Get in touch with our team for support, feedback, or feature requests about typing tests, lessons, and practice.',
+    canonicalPath: '/contact',
+  });
 
   const [form, setForm] = useState<FormState>(INITIAL);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});

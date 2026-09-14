@@ -6,6 +6,9 @@ import {
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { useSeo } from '../hooks/useSeo';
+import { useJsonLd } from '../hooks/useJsonLd';
+
+const SITE_URL = 'https://www.typeoye.com';
 
 const features = [
   {
@@ -66,6 +69,32 @@ export default function Landing() {
     title: 'Free Typing Test & Learn Touch Typing Online | Typeoye',
     description: 'Take a free typing test, measure your WPM and accuracy, and learn touch typing online with structured lessons and real-time feedback.',
     canonicalPath: '/',
+  });
+
+  useJsonLd({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': `${SITE_URL}/#website`,
+        url: `${SITE_URL}/`,
+        name: 'Typeoye',
+        alternateName: 'TypeOye',
+        description:
+          'Free online typing tests, structured lessons, practice drills, and typing games to help you type faster and more accurately.',
+        inLanguage: 'en',
+      },
+      {
+        '@type': 'Organization',
+        '@id': `${SITE_URL}/#organization`,
+        url: `${SITE_URL}/`,
+        name: 'Typeoye',
+        logo: {
+          '@type': 'ImageObject',
+          url: `${SITE_URL}/favicon.png`,
+        },
+      },
+    ],
   });
   const [demoText] = useState('the quick brown fox jumps over');
   const [demoTyped] = useState('the quick brown ');

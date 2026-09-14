@@ -97,7 +97,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
 
         {/* Closing CTA */}
         <div
-          className="mt-9 mx-auto max-w-3xl rounded-2xl px-6 pt-6 pb-16 text-center sm:px-7 sm:pt-7 sm:pb-[4.5rem]"
+          className="mt-9 mx-auto max-w-3xl rounded-2xl px-6 pt-6 pb-8 text-center sm:px-7 sm:pt-7 sm:pb-8"
           style={{ backgroundColor: 'var(--color-accent-light)' }}
         >
           <h3 className="text-lg font-extrabold sm:text-xl" style={{ color: 'var(--color-text-primary)' }}>
@@ -117,6 +117,27 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
           >
             Start Typing Test <ArrowRight size={16} />
           </Link>
+
+          {/* Internal links to key Typeoye features */}
+          <div className="mt-7 border-t pt-5" style={{ borderColor: 'var(--color-border)' }}>
+            <p className="text-[0.625rem] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
+              More free typing tools
+            </p>
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm font-semibold">
+              <Link to="/practice" className="transition-opacity hover:opacity-75" style={{ color: 'var(--color-accent-text)' }}>
+                Typing Practice
+              </Link>
+              <Link to="/lessons" className="transition-opacity hover:opacity-75" style={{ color: 'var(--color-accent-text)' }}>
+                Typing Lessons
+              </Link>
+              <Link to="/games" className="transition-opacity hover:opacity-75" style={{ color: 'var(--color-accent-text)' }}>
+                Typing Games
+              </Link>
+              <Link to="/certificate" className="transition-opacity hover:opacity-75" style={{ color: 'var(--color-accent-text)' }}>
+                Typing Certificate
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
 

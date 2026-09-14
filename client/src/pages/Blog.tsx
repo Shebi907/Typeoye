@@ -1,18 +1,45 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Keyboard, PenLine } from 'lucide-react';
 import { BlogCard } from '../components/blog/BlogCard';
 import { CategoryFilter } from '../components/blog/CategoryFilter';
 import { BlogSidebar } from '../components/blog/BlogSidebar';
 import { POSTS } from '../data/blog';
 import type { BlogCategory, BlogSort } from '../data/blog';
+import { useSeo } from '../hooks/useSeo';
+import { useJsonLd } from '../hooks/useJsonLd';
+
+const SITE_URL = 'https://www.typeoye.com';
 
 export default function Blog() {
   const [category, setCategory] = useState<'All Posts' | BlogCategory>('All Posts');
   const [sort, setSort] = useState<BlogSort>('latest');
 
-  useEffect(() => {
-    document.title = 'Typeoye Blog — Typeoye';
-  }, []);
+  useSeo({
+    title: 'Typing Tips & Guides | Typeoye Blog',
+    description:
+      'Typing tips, guides, and practice advice to help you type faster, improve accuracy, and boost productivity with Typeoye.',
+    canonicalPath: '/blog',
+    image: `${SITE_URL}/favicon.png`,
+  });
+
+  useJsonLd({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Typeoye Blog',
+    url: `${SITE_URL}/blog`,
+    description:
+      'Typing tips, guides, and practice advice to help you type faster, improve accuracy, and boost productivity with Typeoye.',
+    isPartOf: { '@type': 'WebSite', name: 'Typeoye', url: `${SITE_URL}/` },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: POSTS.map((post, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `${SITE_URL}/blog/${post.slug}`,
+        name: post.title,
+      })),
+    },
+  });
 
   const filtered = useMemo(() => {
     const list = category === 'All Posts' ? POSTS : POSTS.filter((p) => p.category === category);

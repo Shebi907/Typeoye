@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ArrowRight, ChevronDown, Headphones } from 'lucide-react';
 import { SUPPORT_EMAIL } from '../config';
 import { cn } from '../utils/cn';
+import { useSeo } from '../hooks/useSeo';
 
 const FAQS = [
   {
@@ -37,9 +38,12 @@ const FAQS = [
 export default function Faq() {
   const [open, setOpen] = useState<number | null>(0);
 
-  useEffect(() => {
-    document.title = 'FAQ — Typeoye';
-  }, []);
+  useSeo({
+    title: 'Typing FAQ | TypeOye',
+    description:
+      'Answers to common questions about TypeOye typing tests, lessons, practice drills, WPM and accuracy, certificates, and account management.',
+    canonicalPath: '/faq',
+  });
 
   const toggle = (index: number) => setOpen((prev) => (prev === index ? null : index));
 

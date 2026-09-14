@@ -3,14 +3,30 @@ import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, ChevronRight, Clock, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { SUPPORT_ARTICLES, SUPPORT_CATEGORY_META } from '../data/support';
 import { cn } from '../utils/cn';
+import { useSeo } from '../hooks/useSeo';
 
 export default function SupportArticle() {
   const { slug } = useParams<{ slug: string }>();
   const article = SUPPORT_ARTICLES.find((a) => a.slug === slug);
   const [feedback, setFeedback] = useState<'up' | 'down' | null>(null);
 
+  useSeo(
+    article
+      ? {
+          title: `${article.title} | TypeOye Support`,
+          description: article.description,
+          canonicalPath: `/support/${article.slug}`,
+        }
+      : {
+          title: 'Article Not Found | TypeOye Support',
+          description:
+            'The support article you are looking for does not exist or may have been moved. Visit the TypeOye Support Center.',
+          canonicalPath: '/support',
+          robots: 'noindex, nofollow',
+        }
+  );
+
   useEffect(() => {
-    document.title = article ? `${article.title} — Support Center` : 'Article Not Found — Support Center';
     setFeedback(null);
   }, [article]);
 
