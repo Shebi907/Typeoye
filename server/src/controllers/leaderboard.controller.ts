@@ -2,7 +2,10 @@ import { Request, Response } from 'express';
 import TypingResult from '../models/TypingResult';
 import Profile from '../models/Profile';
 import User from '../models/User';
+import Lesson from '../models/Lesson';
+import LessonProgress from '../models/LessonProgress';
 import PlatformSetting from '../models/PlatformSetting';
+import { deriveCurrentLearnLevel } from '../services/session.service';
 import { sendSuccess, sendError } from '../utils/response';
 
 const PERIODS = ['global', 'daily', 'weekly', 'monthly'] as const;
@@ -105,18 +108,37 @@ export async function getLeaderboard(req: Request, res: Response): Promise<void>
     const top = ranked.slice(0, limit);
 
     // Enrich with user info.
-    const userIds = top
+    const topIds = top
       .map((e) => e.userId)
       .filter((id): id is NonNullable<typeof id> => id != null);
-    const [users, profiles] = await Promise.all([
-      User.find({ _id: { $in: userIds } }).select('username').lean(),
-      Profile.find({ userId: { $in: userIds } }).select('userId displayName level').lean(),
+    const currentUserId = req.user?._id?.toString();
+    const allIds =
+      currentUserId && !topIds.some((id) => String(id) === currentUserId)
+        ? [...topIds, currentUserId]
+        : topIds;
+
+    const [users, profiles, activeLessons, progressDocs] = await Promise.all([
+      User.find({ _id: { $in: allIds } }).select('username').lean(),
+      Profile.find({ userId: { $in: allIds } }).select('userId displayName').lean(),
+      Lesson.find({ isActive: true }).sort({ order: 1 }).select('_id order').lean(),
+      LessonProgress.find({ userId: { $in: allIds }, completedAt: { $exists: true } }).select('userId lessonId').lean(),
     ]);
 
     const userMap = new Map(users.map((u) => [u._id.toString(), u]));
     const profileMap = new Map(profiles.map((p) => [p.userId.toString(), p]));
 
-    const currentUserId = req.user?._id?.toString();
+    const completedByUser = new Map<string, string[]>();
+    for (const doc of progressDocs) {
+      const key = doc.userId.toString();
+      if (!completedByUser.has(key)) completedByUser.set(key, []);
+      completedByUser.get(key)!.push(doc.lessonId.toString());
+    }
+
+    // The level shown on the leaderboard is the user's CURRENT LEARN LEVEL
+    // (the first unlocked but not-yet-completed lesson — the same level the
+    // Learn page shows), NOT Profile.level which is the XP/gamification level.
+    const currentLearnLevel = (userId: unknown): number =>
+      deriveCurrentLearnLevel(activeLessons, completedByUser.get(String(userId)) ?? []);
 
     const leaderboard = top.map((entry) => {
       const id = String(entry.userId);
@@ -127,7 +149,7 @@ export async function getLeaderboard(req: Request, res: Response): Promise<void>
         userId: entry.userId,
         username: u?.username ?? 'Unknown',
         displayName: p?.displayName ?? u?.username ?? 'Unknown',
-        level: p?.level ?? 1,
+        level: currentLearnLevel(id),
         wpm: entry.wpm,
         accuracy: entry.accuracy,
         isMe: currentUserId ? id === currentUserId : false,
@@ -135,19 +157,19 @@ export async function getLeaderboard(req: Request, res: Response): Promise<void>
     });
 
     // Current user's own rank — read from the same ranked list as the board so
-// rank, ties and period filtering are always consistent with what is shown.
+    // rank, ties and period filtering are always consistent with what is shown.
     let me: Record<string, unknown> | null = null;
     if (currentUserId) {
       const meEntry = ranked.find((entry) => String(entry.userId) === currentUserId);
       if (meEntry) {
-        const [myUser] = await User.find({ _id: req.user!._id }).select('username').lean();
-        const [myProfile] = await Profile.find({ userId: req.user!._id }).select('displayName level').lean();
+        const myUser = userMap.get(currentUserId);
+        const myProfile = profileMap.get(currentUserId);
         me = {
           rank: meEntry.rank,
           userId: req.user!._id,
           username: myUser?.username ?? 'You',
           displayName: myProfile?.displayName ?? myUser?.username ?? 'You',
-          level: myProfile?.level ?? 1,
+          level: currentLearnLevel(currentUserId),
           wpm: meEntry.wpm,
           accuracy: meEntry.accuracy,
         };

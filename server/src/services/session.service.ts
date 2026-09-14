@@ -82,6 +82,28 @@ export interface ProfileProgressStats {
 }
 
 /**
+ * Current Learn level for a user: the FIRST lesson (by order) that is unlocked
+ * and not yet completed. Order 1 is always unlocked; any later lesson is only
+ * unlocked once the previous lesson is completed. When every lesson is done,
+ * the current level is the last one. This is the exact same "current level"
+ * the Learn page shows (its "Recommended Next Lesson" hero card).
+ */
+export function deriveCurrentLearnLevel(
+  lessons: { _id: unknown; order: number }[],
+  completedLessonIds: string[]
+): number {
+  if (lessons.length === 0) return 1;
+  const completed = new Set(completedLessonIds.map((id) => id.toString()));
+  for (let i = 0; i < lessons.length; i++) {
+    const previousDone = i === 0 || completed.has(String(lessons[i - 1]!._id));
+    if (previousDone && !completed.has(String(lessons[i]!._id))) {
+      return lessons[i]!.order;
+    }
+  }
+  return lessons[lessons.length - 1]!.order;
+}
+
+/**
  * Live profile statistics derived directly from stored records every time they
  * are requested — the database is the source of truth, so the profile always
  * reflects the latest activity even when a user has no UserProgress document.
@@ -153,23 +175,10 @@ export async function getProfileStats(userId: Types.ObjectId | string): Promise<
   // Mirrors the Learn page "hero" logic (order 1 always unlocked; otherwise the
   // previous lesson must be completed). When every lesson is done, the level is
   // the last one.
-  let learnLevel = 1;
-  for (let i = 0; i < lessons.length; i++) {
-    const completed = lessonProgressDocs.some(
-      (doc) => doc.completedAt && doc.lessonId.toString() === lessons[i]!._id.toString()
-    );
-    const previousDone =
-      i === 0 || lessonProgressDocs.some(
-        (doc) => doc.completedAt && doc.lessonId.toString() === lessons[i - 1]!._id.toString()
-      );
-    if (previousDone && !completed) {
-      learnLevel = lessons[i]!.order;
-      break;
-    }
-  }
-  if (lessons.length > 0 && lessonProgressDocs.filter((doc) => doc.completedAt).length === lessons.length) {
-    learnLevel = lessons[lessons.length - 1]!.order;
-  }
+  const completedLessonIds = lessonProgressDocs
+    .filter((doc) => doc.completedAt)
+    .map((doc) => doc.lessonId.toString());
+  const learnLevel = deriveCurrentLearnLevel(lessons, completedLessonIds);
 
   const typing = typingTotals[0];
   const typedSessions = typing?.sessions ?? 0;
