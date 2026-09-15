@@ -19,7 +19,7 @@ interface CaretAnchor {
 
 const CARET_FONT = '"JetBrains Mono", "Fira Code", monospace';
 const CARET_WIDTH = 3;
-const CARET_GAP = 3;
+const CARET_GAP = 0;
 /** Milliseconds of no input before the caret begins its idle blink. Kept tiny so
  *  the blink starts almost immediately after the user pauses, but long enough
  *  that continuous typing (keystrokes < this apart) keeps the bar solid. */
@@ -136,8 +136,9 @@ export function TypingDisplay({
     // rect spans the full line (including leading), so align it to the middle.
     const top = charRect.top - contentRect.top + (charRect.height - caretHeight) / 2;
 
-    // Keep a small, consistent gap between the caret and the letter it hugs —
-    // never overlapping the glyph, never floating far from it.
+    // Sit the caret's nearest edge flush against the letter it precedes —
+    // before the next character while typing, directly after a fully-typed
+    // word. No gap, so it reads as "this is the next character to type".
     const gap = CARET_GAP;
     let left = charRect.left - contentRect.left - CARET_WIDTH - gap;
     if (anchor.afterChar) {

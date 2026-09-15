@@ -186,7 +186,6 @@ body {
   border-radius: 1px;
   vertical-align: text-bottom;
   animation: caretBlink 1s step-end infinite;
-  margin-right: 2px;
   position: relative;
   top: 1px;
 }
