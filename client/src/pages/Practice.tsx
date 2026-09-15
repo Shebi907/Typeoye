@@ -26,8 +26,8 @@ const DIFF_LABEL: Record<string, string> = {
 
 export default function Practice() {
   useSeo({
-    title: 'Typing Practice Online — Improve Speed & Accuracy',
-    description: 'Practice typing online with focused drills, custom text, and real-time feedback to improve your typing speed and accuracy over time.',
+    title: 'Free Typing Practice Online – Improve Your Typing Speed | TypeOye',
+    description: 'Practice typing online for free with TypeOye. Improve typing speed, accuracy, and touch typing skills with focused typing practice.',
     canonicalPath: '/practice',
   });
   const { isAuthenticated } = useAuthStore();
@@ -46,7 +46,7 @@ export default function Practice() {
   const recommendedType = recommendation ? PRACTICE_TYPES.find((t) => t.slug === recommendation.type) : undefined;
 
   return (
-    <PageWrapper title="Practice" description="Build your speed, accuracy, and confidence with focused practice." icon={Target} dotGrid fullWidth className="py-10">
+    <PageWrapper title="Free Typing Practice" description="Improve your typing speed, typing accuracy, and touch typing skills with focused practice." icon={Target} dotGrid fullWidth className="py-10">
       <div className="max-w-[106.25rem] mx-auto w-full">
 
         {/* ── Practice modes ───────────────────────────────────────────── */}

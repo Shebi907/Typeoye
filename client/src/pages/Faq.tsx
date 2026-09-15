@@ -3,6 +3,9 @@ import { ArrowRight, ChevronDown, Headphones } from 'lucide-react';
 import { SUPPORT_EMAIL } from '../config';
 import { cn } from '../utils/cn';
 import { useSeo } from '../hooks/useSeo';
+import { useJsonLd } from '../hooks/useJsonLd';
+
+const SITE_URL = 'https://www.typeoye.com';
 
 const FAQS = [
   {
@@ -43,6 +46,21 @@ export default function Faq() {
     description:
       'Answers to common questions about TypeOye typing tests, lessons, practice drills, WPM and accuracy, certificates, and account management.',
     canonicalPath: '/faq',
+  });
+
+  useJsonLd({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${SITE_URL}/faq#faqpage`,
+    url: `${SITE_URL}/faq`,
+    mainEntity: FAQS.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.a,
+      },
+    })),
   });
 
   const toggle = (index: number) => setOpen((prev) => (prev === index ? null : index));

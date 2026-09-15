@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
+import { useNoindex } from '../../hooks/useNoindex';
 
 /** Route guard for account pages. Nested INSIDE the shared AppLayout (rather
  *  than wrapping it) so that guests are redirected to Sign In without the app
@@ -9,6 +10,9 @@ export function RequireAuth() {
   const location = useLocation();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isSessionChecked = useAuthStore((s) => s.isSessionChecked);
+
+  // Account and admin pages are private — keep them out of search indexes.
+  useNoindex();
 
   // While the boot-time session check (/auth/me) is still running we can't yet
   // tell a guest from a returning user. Rendering <Outlet /> here is safe —

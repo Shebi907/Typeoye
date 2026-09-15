@@ -10,7 +10,12 @@ export interface BlogPost {
   slug: string;
   title: string;
   category: BlogCategory;
+  /** Visible one-liner shown on cards and as the intro snippet. */
   description: string;
+  /** SEO <title> for the article — falls back to `${title}` when omitted. */
+  metaTitle?: string;
+  /** SEO meta description — falls back to `description` when omitted. */
+  metaDescription?: string;
   intro: string;
   readTime: number;
   publishedAt: string;
@@ -62,6 +67,9 @@ export const POSTS: BlogPost[] = [
     category: 'Typing Tips',
     description:
       'Discover practical techniques that can help you type faster while maintaining accuracy.',
+    metaTitle: 'How to Increase Typing Speed – 10 Proven Tips | TypeOye',
+    metaDescription:
+      'Learn how to increase typing speed with 10 practical typing speed tips. Discover how to type faster while keeping your typing accuracy high, with free practice.',
     intro:
       'Typing faster is less about willpower and more about technique. Small, consistent changes to how you sit, move, and practice add up quickly — here are ten proven ways to raise your WPM without sacrificing accuracy.',
     readTime: 5,
@@ -118,6 +126,9 @@ export const POSTS: BlogPost[] = [
     category: 'Guides',
     description:
       'Learn why the home row is important and how mastering it can improve your typing skills.',
+    metaTitle: 'Home Row Technique – The Foundation of Touch Typing | TypeOye',
+    metaDescription:
+      'Master the home row technique to type faster without looking at the keyboard. A practical touch typing guide covering finger placement, drills, and common mistakes.',
     intro:
       'Every fast typist shares one fundamental habit: the home row. This short guide explains what it is, why it matters, and how to build the muscle memory that makes effortless speed possible.',
     readTime: 6,
@@ -153,6 +164,9 @@ export const POSTS: BlogPost[] = [
     title: 'Best Typing Exercises to Improve Accuracy',
     category: 'Practice',
     description: 'Improve your accuracy with simple and effective typing exercises.',
+    metaTitle: 'Typing Exercises to Improve Your Accuracy | TypeOye',
+    metaDescription:
+      'Improve typing accuracy with simple typing exercises and targeted drills. Practice the skills that help you type faster and more accurately.',
     intro:
       'Accuracy is the multiplier that makes speed useful. These exercises train precise finger movement, eliminate habitual mistakes, and turn careful typing into automatic muscle memory.',
     readTime: 7,
@@ -189,6 +203,9 @@ export const POSTS: BlogPost[] = [
     category: 'Productivity',
     description:
       'Learn how faster and more accurate typing can save time and improve your daily productivity.',
+    metaTitle: 'How Good Typing Skills Boost Your Productivity | TypeOye',
+    metaDescription:
+      'Faster, more accurate typing saves hours every week. Learn how improving your typing speed and accuracy can boost your daily productivity.',
     intro:
       'Typing speed feels like a small metric, but it compounds across every email, document, and line of code you write. Here is what improving it actually does for your daily output.',
     readTime: 4,
@@ -225,6 +242,9 @@ export const POSTS: BlogPost[] = [
     category: 'News & Updates',
     description:
       'Explore the latest improvements and features added to Typeoye to make your learning better than ever.',
+    metaTitle: "What's New in TypeOye – Latest Updates | TypeOye",
+    metaDescription:
+      'Explore the latest TypeOye updates — new typing features, practice tools, and improvements that make learning to type faster and smarter.',
     intro:
       'Typeoye keeps improving the way you train. Here is everything we shipped recently to make practice smarter, tests fairer, and progress easier to understand.',
     readTime: 3,

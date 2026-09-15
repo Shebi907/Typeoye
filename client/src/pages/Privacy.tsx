@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { SUPPORT_EMAIL } from '../config';
+import { useSeo } from '../hooks/useSeo';
 
 type SectionId =
   | 'information-we-collect'
@@ -167,6 +168,12 @@ function HeroBadge({ icon: Icon, label, value }: { icon: React.ElementType; labe
 }
 
 export default function Privacy() {
+  useSeo({
+    title: 'Privacy Policy | TypeOye',
+    description:
+      'Read the TypeOye privacy policy to learn how your typing test results, progress, and personal information are collected, used, and protected.',
+    canonicalPath: '/privacy',
+  });
   const lastUpdated = formatDate(new Date());
   const [open, setOpen] = useState<SectionId | null>('information-we-collect');
   const [activeId, setActiveId] = useState<SectionId>('information-we-collect');

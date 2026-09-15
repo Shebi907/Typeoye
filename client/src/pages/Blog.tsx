@@ -15,9 +15,9 @@ export default function Blog() {
   const [sort, setSort] = useState<BlogSort>('latest');
 
   useSeo({
-    title: 'Typing Tips & Guides | Typeoye Blog',
+    title: 'Typing Tips & Guides – Improve Your Typing Speed | TypeOye',
     description:
-      'Typing tips, guides, and practice advice to help you type faster, improve accuracy, and boost productivity with Typeoye.',
+      'Learn typing tips, improve your typing speed and accuracy, and discover useful touch typing guides and techniques on the TypeOye blog.',
     canonicalPath: '/blog',
     image: `${SITE_URL}/favicon.png`,
   });
@@ -25,11 +25,11 @@ export default function Blog() {
   useJsonLd({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Typeoye Blog',
+    name: 'Typing Tips & Guides',
     url: `${SITE_URL}/blog`,
     description:
-      'Typing tips, guides, and practice advice to help you type faster, improve accuracy, and boost productivity with Typeoye.',
-    isPartOf: { '@type': 'WebSite', name: 'Typeoye', url: `${SITE_URL}/` },
+      'Typing tips, guides, and practice advice to help you type faster, improve accuracy, and boost productivity with TypeOye.',
+    isPartOf: { '@type': 'WebSite', name: 'TypeOye', url: `${SITE_URL}/` },
     mainEntity: {
       '@type': 'ItemList',
       itemListElement: POSTS.map((post, index) => ({
@@ -69,10 +69,10 @@ export default function Blog() {
             <PenLine size={26} strokeWidth={2} />
           </div>
           <h1 className="mt-5 text-3xl font-extrabold tracking-tight sm:text-4xl" style={{ color: 'var(--color-text-primary)' }}>
-            Typeoye Blog
+            Typing Tips &amp; Guides
           </h1>
           <p className="readable-text mt-3 text-base leading-relaxed sm:text-lg" style={{ color: 'var(--color-text-secondary)' }}>
-            Tips, guides, and insights to help you type faster, improve accuracy, and become more productive.
+            Typing tips and guides to help you type faster, improve accuracy, and learn useful touch typing techniques.
           </p>
         </div>
 

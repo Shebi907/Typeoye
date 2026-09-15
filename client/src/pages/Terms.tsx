@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { SUPPORT_EMAIL } from '../config';
+import { useSeo } from '../hooks/useSeo';
 
 type SectionId =
   | 'acceptance-of-terms'
@@ -199,6 +200,12 @@ function HeroBadge({ icon: Icon, label, value }: { icon: React.ElementType; labe
 }
 
 export default function Terms() {
+  useSeo({
+    title: 'Terms and Conditions | TypeOye',
+    description:
+      'Read the TypeOye terms and conditions covering your use of the typing test, lessons, practice tools, games, and leaderboard.',
+    canonicalPath: '/terms',
+  });
   const lastUpdated = formatDate(new Date());
   const [open, setOpen] = useState<SectionId | null>('acceptance-of-terms');
   const [activeId, setActiveId] = useState<SectionId>('acceptance-of-terms');

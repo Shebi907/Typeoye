@@ -24,16 +24,16 @@ export default function BlogPostPage() {
   useSeo(
     post
       ? {
-          title: `${post.title} | Typeoye Blog`,
-          description: post.description,
+          title: post.metaTitle ?? `${post.title} | TypeOye Blog`,
+          description: post.metaDescription ?? post.description,
           canonicalPath: `/blog/${post.slug}`,
           image: `${SITE_URL}${post.image}`,
           type: 'article',
         }
       : {
-          title: 'Article Not Found | Typeoye Blog',
+          title: 'Article Not Found | TypeOye Blog',
           description:
-            'The article you are looking for does not exist or may have moved. Browse the Typeoye Blog for typing tips and guides.',
+            'The article you are looking for does not exist or may have moved. Browse the TypeOye Blog for typing tips and guides.',
           canonicalPath: '/blog',
           robots: 'noindex, nofollow',
         }
@@ -46,7 +46,7 @@ export default function BlogPostPage() {
           '@type': 'BlogPosting',
           mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/${post.slug}` },
           headline: post.title,
-          description: post.description,
+          description: post.metaDescription ?? post.description,
           image: `${SITE_URL}${post.image}`,
           author: { '@type': 'Organization', name: 'Typeoye' },
           publisher: {

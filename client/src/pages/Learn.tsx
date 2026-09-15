@@ -70,8 +70,8 @@ function LearnSkeleton() {
 
 export default function Learn() {
   useSeo({
-    title: 'Learn Touch Typing — Free Lessons for Beginners | Typeoye',
-    description: 'Learn touch typing from the ground up with free structured lessons designed for beginners. Master the keyboard and build lasting typing skills.',
+    title: 'Learn Touch Typing Online – Typing Lessons | TypeOye',
+    description: 'Learn touch typing online with structured lessons and practice. Build typing accuracy, improve speed, and develop better keyboard skills with TypeOye.',
     canonicalPath: '/lessons',
   });
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -223,8 +223,8 @@ export default function Learn() {
                <GraduationCap size={32} />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--color-text-primary)] tracking-tight">Learn to Type</h1>
-              <p className="text-sm sm:text-base text-[var(--color-text-secondary)] mt-0.5 sm:mt-1 max-w-[25rem] leading-relaxed">Follow structured lessons and improve your typing step by step.</p>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--color-text-primary)] tracking-tight">Learn Touch Typing</h1>
+              <p className="text-sm sm:text-base text-[var(--color-text-secondary)] mt-0.5 sm:mt-1 max-w-[25rem] leading-relaxed">Follow structured typing lessons and improve your speed and accuracy step by step.</p>
             </div>
           </div>
           <div className="flex items-center gap-3.5 p-3 sm:p-4 rounded-xl flex-shrink-0" style={{ backgroundColor: 'rgba(139, 92, 246, 0.06)', border: '1px solid rgba(139, 92, 246, 0.15)' }}>

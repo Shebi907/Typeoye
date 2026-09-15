@@ -61,6 +61,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.typeoye.com/certificate</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.typeoye.com/blog/typing-speed-tips</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

@@ -3,6 +3,7 @@ import { Navigate, Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { Logo } from '../components/layout/Logo';
 import { Target, LineChart, Award } from 'lucide-react';
+import { useNoindex } from '../hooks/useNoindex';
 
 /** Only allow same-app relative paths as post-login destinations. */
 function safeRedirect(raw: string | null): string {
@@ -14,6 +15,9 @@ export function AuthLayout() {
   const location = useLocation();
   const { isAuthenticated, isSessionChecked } = useAuthStore();
   const isRegister = location.pathname === '/register';
+
+  // Sign-in and sign-up pages are not meant to be indexed.
+  useNoindex();
 
   // While the boot-time session check (/auth/me) hasn't settled, we can't yet
   // tell a guest from a returning user. Rendering the form here is safe — it

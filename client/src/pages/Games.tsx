@@ -94,8 +94,8 @@ function formatDate(iso: string): string {
 
 export default function Games() {
   useSeo({
-    title: 'Free Typing Games Online — Play & Improve Speed | Typeoye',
-    description: 'Play free typing games online and improve your speed and accuracy while having fun. Race, dodge, and challenge yourself in interactive games.',
+    title: 'Typing Games Online – Improve Your Typing Speed | TypeOye',
+    description: 'Play free typing games online and improve your typing speed, accuracy, and keyboard skills while having fun with TypeOye.',
     canonicalPath: '/games',
   });
   const [active, setActive] = useState<'hub' | GameKey>('hub');
@@ -181,7 +181,7 @@ export default function Games() {
               <Gamepad2 size={22} color="#fff" />
             </span>
             <div>
-              <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)' }}>Games</h1>
+              <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)' }}>Typing Games Online</h1>
               <p className="text-sm mt-0.5" style={{ color: 'var(--color-text-secondary)' }}>
                 Sharpen your typing skills with a little competition.
               </p>

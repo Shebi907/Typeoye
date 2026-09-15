@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { authService } from '../services/auth.service';
+import { useNoindex } from '../hooks/useNoindex';
 
 /**
  * Landing point for the Google OAuth round-trip. The backend callback redirects
@@ -15,6 +16,9 @@ export default function OAuthCallback() {
   const token = params.get('token');
   const setAuth = useAuthStore((s) => s.setAuth);
   const ran = useRef(false);
+
+  // OAuth round-trip pages should never appear in search indexes.
+  useNoindex();
 
   useEffect(() => {
     if (ran.current) return;

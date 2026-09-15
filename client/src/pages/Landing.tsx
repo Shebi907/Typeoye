@@ -14,28 +14,28 @@ const features = [
   {
     icon: Keyboard,
     title: 'Typing Test',
-    description: 'Test your speed and accuracy with real-time results.',
+    description: 'Take a free typing test and see your WPM and accuracy instantly.',
     cta: 'Start Test',
     to: '/test',
   },
   {
     icon: Pencil,
     title: 'Practice',
-    description: 'Practice with custom text and track steady improvement.',
+    description: 'Improve your typing speed with custom text and focused drills.',
     cta: 'Start Practice',
     to: '/practice',
   },
   {
     icon: BookOpen,
     title: 'Learn',
-    description: 'Structured lessons that teach the best typing techniques.',
+    description: 'Learn touch typing step by step with structured lessons.',
     cta: 'Start Learning',
     to: '/lessons',
   },
   {
     icon: Gamepad2,
     title: 'Games',
-    description: 'Make typing fun with engaging typing games.',
+    description: 'Make typing practice fun with engaging typing games.',
     cta: 'Play Games',
     to: '/games',
   },
@@ -66,8 +66,8 @@ const benefits = [
  */
 export default function Landing() {
   useSeo({
-    title: 'Free Typing Test & Learn Touch Typing Online | Typeoye',
-    description: 'Take a free typing test, measure your WPM and accuracy, and learn touch typing online with structured lessons and real-time feedback.',
+    title: 'Free Typing Test Online – Check Your WPM & Accuracy | TypeOye',
+    description: 'Take a free typing test online and check your typing speed, WPM, and accuracy. Practice touch typing, improve your speed, and learn with TypeOye.',
     canonicalPath: '/',
   });
 
@@ -78,17 +78,33 @@ export default function Landing() {
         '@type': 'WebSite',
         '@id': `${SITE_URL}/#website`,
         url: `${SITE_URL}/`,
-        name: 'Typeoye',
-        alternateName: 'TypeOye',
+        name: 'TypeOye',
+        alternateName: 'Typeoye',
         description:
-          'Free online typing tests, structured lessons, practice drills, and typing games to help you type faster and more accurately.',
+          'Free online typing test, structured typing lessons, practice drills, and typing games to help you measure your WPM, improve your typing speed, and learn touch typing.',
+        inLanguage: 'en',
+      },
+      {
+        '@type': 'WebApplication',
+        '@id': `${SITE_URL}/#webapp`,
+        url: `${SITE_URL}/`,
+        name: 'TypeOye',
+        description:
+          'A free typing test website that measures your WPM and accuracy and helps you improve your typing speed with touch typing lessons, practice, and games.',
+        applicationCategory: 'EducationalApplication',
+        operatingSystem: 'Any',
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+        },
         inLanguage: 'en',
       },
       {
         '@type': 'Organization',
         '@id': `${SITE_URL}/#organization`,
         url: `${SITE_URL}/`,
-        name: 'Typeoye',
+        name: 'TypeOye',
         logo: {
           '@type': 'ImageObject',
           url: `${SITE_URL}/favicon.png`,
@@ -133,19 +149,19 @@ export default function Landing() {
             className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] mb-6"
             style={{ color: 'var(--color-text-primary)' }}
           >
-            Master the Keyboard.
+            Free Typing Test
             <br />
             <span
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: 'linear-gradient(135deg, #4361ee 0%, #7c8cf8 55%, #a5b4fc 100%)' }}
             >
-              One Word at a Time.
+              Online.
             </span>
           </h1>
 
           <p className="readable-text text-base sm:text-lg max-w-2xl mx-auto mb-10 px-2" style={{ color: 'var(--color-text-secondary)' }}>
-            Typeoye combines structured lessons, real-time feedback, and adaptive practice
-            to make you a faster, more accurate typist — starting today.
+            Check your WPM and typing accuracy with a free typing speed test, then improve
+            with touch typing lessons, practice drills, and fun games — right from your browser.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16">
@@ -203,7 +219,11 @@ export default function Landing() {
           Everything You Need to Improve
         </h2>
         <p className="readable-text text-center max-w-2xl mx-auto mb-12 sm:mb-14" style={{ color: 'var(--color-text-secondary)' }}>
-          Powerful tools and fun games to make typing practice enjoyable and effective.
+          Powerful tools and fun games to make typing practice enjoyable and effective.{' '}
+          <Link to="/blog" className="font-semibold" style={{ color: 'var(--color-accent-text)' }}>
+            Need advice? Read our typing tips
+          </Link>{' '}
+          to get started.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {features.map(({ icon: Icon, title, description, cta, to }) => (

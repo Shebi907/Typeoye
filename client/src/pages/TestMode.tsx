@@ -104,8 +104,8 @@ const buildNextChunk = (
 
 export default function TestMode() {
   useSeo({
-    title: 'Typing Speed Test & WPM Accuracy Check | Typeoye',
-    description: 'Take a free typing speed test to measure your WPM and accuracy. Get instant results and see exactly how fast you can type.',
+    title: 'Typing Test Online – Test Your Typing Speed | TypeOye',
+    description: 'Take an online typing test to measure your WPM and accuracy. Test your typing speed with different durations and improve your typing skills with TypeOye.',
     canonicalPath: '/test',
   });
   const { settings, isAuthenticated, profile, user } = useAuthStore();
@@ -418,8 +418,8 @@ const certEarned =
             <section className="w-full max-w-[33.75rem] flex">
               <div className="card w-full p-6 sm:p-8 lg:p-10 flex flex-col" data-testid="test-setup">
                 <div className="text-center">
-                  <h1 className="text-3xl font-extrabold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>Test Your Typing Speed</h1>
-                  <p className="text-sm mt-2" style={{ color: 'var(--color-text-secondary)' }}>Check your WPM and accuracy instantly.</p>
+                  <h1 className="text-3xl font-extrabold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>Typing Speed Test</h1>
+                  <p className="text-sm mt-2" style={{ color: 'var(--color-text-secondary)' }}>Measure your WPM and accuracy in a timed typing test.</p>
                 </div>
 
                 <div className="mt-8 flex flex-col flex-1">
