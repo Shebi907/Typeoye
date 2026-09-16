@@ -957,9 +957,11 @@ select:-webkit-autofill {
 }
 
 /* ── Global responsive fixes ─────────────────────────────────────── */
-/* Prevent horizontal overflow from decorative/absolute elements */
+/* Prevent horizontal overflow from decorative/absolute elements.
+   overflow-x: clip (not hidden) clips identically but does NOT make html, body
+   or #root a scroll container — which would break the sticky navbar header. */
 html, body, #root {
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100vw;
 }
 
