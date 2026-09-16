@@ -55,17 +55,27 @@ api.interceptors.response.use(
 export default api;
 
 interface ApiErrorShape {
-  response?: { status?: number; data?: { error?: string } };
+  response?: { status?: number; data?: { error?: string; retryAfterSeconds?: number } };
   message?: string;
+}
+
+/** Structured error info for a failed API call, including machine-readable
+ *  recovery-lock data (retryAfterSeconds) the UI uses to show a countdown. */
+export function getApiErrorDetails(err: unknown, fallback = 'Something went wrong'): { message: string; retryAfterSeconds?: number } {
+  const e = err as ApiErrorShape;
+  const serverError = e?.response?.data?.error;
+  const status = e?.response?.status;
+  let message: string;
+  if (serverError) message = serverError;
+  else if (!status) message = 'Cannot reach the server. Please try again in a moment.';
+  else if (status >= 500) message = 'The server hit an error. Please try again.';
+  else message = e?.message || fallback;
+  const retryAfterSeconds = e?.response?.data?.retryAfterSeconds;
+  return retryAfterSeconds != null ? { message, retryAfterSeconds } : { message };
 }
 
 /** Human-friendly error text for a failed API call. Prefers the server's own
  *  `error` payload, then distinguishes reachability/5xx from other failures. */
 export function getApiErrorMessage(err: unknown, fallback = 'Something went wrong'): string {
-  const e = err as ApiErrorShape;
-  if (e?.response?.data?.error) return e.response.data.error;
-  const status = e?.response?.status;
-  if (!status) return 'Cannot reach the server. Please try again in a moment.';
-  if (status >= 500) return 'The server hit an error. Please try again.';
-  return e?.message || fallback;
+  return getApiErrorDetails(err, fallback).message;
 }

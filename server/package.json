@@ -12,7 +12,7 @@
     "seed:test": "ts-node src/seed/seedTestParagraphs.ts",
     "seed:certificate": "ts-node src/seed/seedCertificateParagraphs.ts",
     "promote:admin": "ts-node src/seed/promoteAdmin.ts",
-    "test": "ts-node src/services/wpm.service.test.ts && ts-node src/services/gamification.service.test.ts"
+    "test": "ts-node src/services/wpm.service.test.ts && ts-node src/services/gamification.service.test.ts && ts-node src/services/recoveryLockout.service.test.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

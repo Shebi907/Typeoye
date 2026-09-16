@@ -12,6 +12,12 @@ import { sendSuccess, sendError } from '../utils/response';
 import { syncProfileLevel } from '../services/gamification.service';
 import { sendEmail } from '../services/emailService';
 import { env } from '../config/env';
+import {
+  buildFailedAnswerPipeline,
+  isRecoveryLocked,
+  lockedResponse,
+  recoverySuccessState,
+} from '../services/recoveryLockout.service';
 
 export const SECURITY_QUESTIONS = [
   'What is your favorite color?',
@@ -279,8 +285,8 @@ export async function forgotPassword(req: Request, res: Response): Promise<void>
       return;
     }
 
-    if (user.recoveryLockedUntil && user.recoveryLockedUntil.getTime() > Date.now()) {
-      sendError(res, 'Too many recovery attempts. Please try again later.', 429);
+    if (isRecoveryLocked(user.recoveryLockedUntil, new Date())) {
+      lockedResponse(res, user.recoveryLockedUntil!);
       return;
     }
 
@@ -299,39 +305,58 @@ export async function forgotPassword(req: Request, res: Response): Promise<void>
   }
 }
 
-/** Step 2: Verify the security answer and issue a short-lived recovery token. */
+/** Step 2: Verify the security answer and issue a short-lived recovery token.
+ *  Wrong answers are counted server-side: the 5th consecutive failure locks
+ *  recovery for this account for 30 minutes. The increment + lock decision run
+ *  as one atomic findOneAndUpdate pipeline so concurrent requests can't bypass
+ *  the attempt limit. */
 export async function verifySecurityAnswer(req: Request, res: Response): Promise<void> {
   try {
     const { identifier, answer } = req.body as z.infer<typeof verifySecurityAnswerSchema>;
     const user = await findUserByIdentifier(identifier);
+    const now = new Date();
 
     if (!user || !user.securityAnswerHash) {
       sendError(res, 'Invalid answer. Please try again.', 400);
       return;
     }
 
-    if (user.recoveryLockedUntil && user.recoveryLockedUntil.getTime() > Date.now()) {
-      sendError(res, 'Too many recovery attempts. Please try again later.', 429);
+    // Active 30-minute lock — reject before even checking the answer.
+    if (isRecoveryLocked(user.recoveryLockedUntil, now)) {
+      lockedResponse(res, user.recoveryLockedUntil!);
       return;
     }
+
+    // An expired lock timestamp is harmless here: the wrong-answer pipeline
+    // restarts the counter atomically (see buildFailedAnswerPipeline stage 1).
 
     const answerMatch = await bcrypt.compare(answer.toLowerCase().trim(), user.securityAnswerHash);
 
     if (!answerMatch) {
-      const attempts = (user.recoveryFailedAttempts || 0) + 1;
-      const update: Record<string, unknown> = { recoveryFailedAttempts: attempts };
-      if (attempts >= 5) {
-        update.recoveryLockedUntil = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes
+      // Atomic increment + conditional lock in a single update. findOneAndUpdate
+      // returns the post-update doc so we can tailor the response.
+      const updated = await User.findOneAndUpdate(
+        { _id: user._id },
+        buildFailedAnswerPipeline(now) as any,
+        { new: true }
+      );
+
+      if (isRecoveryLocked(updated?.recoveryLockedUntil, now)) {
+        // This failure pushed the counter to 5 — recovery is now locked.
+        lockedResponse(res, updated!.recoveryLockedUntil!);
+        return;
       }
-      await User.updateOne({ _id: user._id }, { $set: update });
+
+      // Attempts 1–4 (or the post-expiry restart counting from 1). Not locked.
       sendError(res, 'Invalid answer. Please try again.', 400);
       return;
     }
 
-    // Answer is correct — issue a single-use recovery token
+    // Answer is correct — reset the consecutive-failure counter, clear any
+    // lock, and issue a single-use 10-minute recovery token.
     const rawToken = crypto.randomBytes(32).toString('hex');
     const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
-    const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    const expires = new Date(now.getTime() + 10 * 60 * 1000); // 10 minutes
 
     await User.updateOne(
       { _id: user._id },
@@ -339,8 +364,7 @@ export async function verifySecurityAnswer(req: Request, res: Response): Promise
         $set: {
           recoveryToken: hashedToken,
           recoveryTokenExpires: expires,
-          recoveryFailedAttempts: 0,
-          recoveryLockedUntil: null,
+          ...recoverySuccessState(),
         },
       },
     );
@@ -368,12 +392,19 @@ export async function resetPassword(req: Request, res: Response): Promise<void> 
       return;
     }
 
+    // Defense in depth: a valid token must not be usable while this account's
+    // recovery flow is locked (e.g. it got locked after the token was issued).
+    if (isRecoveryLocked(user.recoveryLockedUntil, new Date())) {
+      lockedResponse(res, user.recoveryLockedUntil!);
+      return;
+    }
+
     user.passwordHash = await bcrypt.hash(newPassword, 12);
     user.authProvider = user.authProvider === 'local' ? 'local' : 'both';
     user.recoveryToken = null;
     user.recoveryTokenExpires = null;
-    user.recoveryFailedAttempts = 0;
-    user.recoveryLockedUntil = null;
+    user.recoveryFailedAttempts = recoverySuccessState().recoveryFailedAttempts;
+    user.recoveryLockedUntil = recoverySuccessState().recoveryLockedUntil;
     await user.save();
 
     sendSuccess(res, { message: 'Password reset successfully' });

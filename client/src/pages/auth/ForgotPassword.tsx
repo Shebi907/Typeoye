@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, ShieldCheck, CheckCircle2, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ShieldCheck, CheckCircle2, ArrowLeft, Clock } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { authService } from '../../services/auth.service';
-import { getApiErrorMessage } from '../../services/api';
+import { getApiErrorDetails } from '../../services/api';
 
 type Step = 1 | 2 | 3 | 4;
 
 const GENERIC_MESSAGE = 'If an account matches these details, you can continue with account recovery.';
+
+/** "mm minutes ss seconds" countdown text used while recovery is locked. */
+function formatCountdown(totalSeconds: number): string {
+  const mins = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
+  const minutes = `${mins} minute${mins === 1 ? '' : 's'}`;
+  const seconds = `${secs} second${secs === 1 ? '' : 's'}`;
+  return `${minutes} ${seconds}`;
+}
 
 export default function ForgotPassword() {
   const [step, setStep] = useState<Step>(1);
@@ -23,6 +32,32 @@ export default function ForgotPassword() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [notice, setNotice] = useState('');
+  const [lockSeconds, setLockSeconds] = useState<number | null>(null);
+
+  // Live countdown while recovery is locked. The lock itself lives on the
+  // backend — this is only a display of the remaining time it reported.
+  useEffect(() => {
+    if (lockSeconds === null) return;
+    if (lockSeconds <= 0) {
+      setLockSeconds(null);
+      return;
+    }
+    const t = setTimeout(() => setLockSeconds((s) => (s === null || s <= 0 ? null : s - 1)), 1000);
+    return () => clearTimeout(t);
+  }, [lockSeconds]);
+
+  const handleApiError = (err: unknown) => {
+    const details = getApiErrorDetails(err, 'Something went wrong. Please try again.');
+    if (details.retryAfterSeconds != null) {
+      // Backend reports the account's recovery is locked — show countdown.
+      setError('');
+      setNotice('');
+      setLockSeconds(details.retryAfterSeconds);
+    } else {
+      setLockSeconds(null);
+      setError(details.message);
+    }
+  };
 
   const handleIdentifier = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +66,7 @@ export default function ForgotPassword() {
     setIsLoading(true);
     try {
       const res = await authService.forgotPassword(identifier);
+      setLockSeconds(null);
       if (res.securityQuestion) {
         setSecurityQuestion(res.securityQuestion);
         setStep(2);
@@ -42,7 +78,7 @@ export default function ForgotPassword() {
     } catch (err) {
       // Unknown email/username (or locked/no security question) surfaces here as
       // an error box on step 1 so the user can enter a different identifier.
-      setError(getApiErrorMessage(err, 'Something went wrong. Please try again.'));
+      handleApiError(err);
     } finally {
       setIsLoading(false);
     }
@@ -54,10 +90,11 @@ export default function ForgotPassword() {
     setIsLoading(true);
     try {
       const res = await authService.verifySecurityAnswer(identifier, answer);
+      setLockSeconds(null);
       setResetToken(res.resetToken);
       setStep(3);
     } catch (err) {
-      setError(getApiErrorMessage(err, 'Something went wrong. Please try again.'));
+      handleApiError(err);
     } finally {
       setIsLoading(false);
     }
@@ -79,7 +116,7 @@ export default function ForgotPassword() {
       await authService.resetPassword(resetToken, newPassword);
       setStep(4);
     } catch (err) {
-      setError(getApiErrorMessage(err, 'Something went wrong. Please try again.'));
+      handleApiError(err);
     } finally {
       setIsLoading(false);
     }
@@ -112,6 +149,19 @@ export default function ForgotPassword() {
     </div>
   ) : null;
 
+  const lockBox = lockSeconds !== null ? (
+    <div
+      className="rounded-input px-4 py-3 text-sm mb-6"
+      style={{ backgroundColor: 'rgba(245,158,11,0.12)', color: '#92400e', border: '1px solid rgba(217,119,6,0.4)' }}
+    >
+      <p className="font-semibold">Password recovery is temporarily locked.</p>
+      <p className="mt-1 flex items-center gap-1.5" style={{ color: '#92400e' }}>
+        <Clock size={14} />
+        Try again in {formatCountdown(lockSeconds)}.
+      </p>
+    </div>
+  ) : null;
+
   return (
     <div>
       {step === 1 && (
@@ -125,6 +175,7 @@ export default function ForgotPassword() {
 
           {errorBox}
           {noticeBox}
+          {lockBox}
 
           <form onSubmit={handleIdentifier} className="space-y-5">
             <Input
@@ -138,7 +189,7 @@ export default function ForgotPassword() {
               autoComplete="username"
             />
 
-            <Button type="submit" variant="primary" size="lg" loading={isLoading} className="w-full">
+            <Button type="submit" variant="primary" size="lg" loading={isLoading} disabled={lockSeconds !== null} className="w-full">
               Continue
             </Button>
           </form>
@@ -172,6 +223,7 @@ export default function ForgotPassword() {
           </div>
 
           {errorBox}
+          {lockBox}
 
           <form onSubmit={handleVerifyAnswer} className="space-y-5">
             <Input
@@ -182,10 +234,11 @@ export default function ForgotPassword() {
               placeholder="Your answer"
               prefixIcon={<ShieldCheck size={16} />}
               autoComplete="off"
+              disabled={lockSeconds !== null}
               required
             />
 
-            <Button type="submit" variant="primary" size="lg" loading={isLoading} className="w-full">
+            <Button type="submit" variant="primary" size="lg" loading={isLoading} disabled={lockSeconds !== null} className="w-full">
               Verify Answer
             </Button>
           </form>
