@@ -1339,3 +1339,30 @@ html, body, #root {
   background: linear-gradient(135deg, #3730A3 0%, #4361EE 52%, #8B5CF6 100%);
   box-shadow: 0 18px 44px -18px rgba(67, 97, 238, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
+
+/* ── Support article page — important-note callout ──────────────── */
+.support-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background-color: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(217, 119, 6, 0.4);
+  border-left: 4px solid #f59e0b;
+  border-radius: 0.75rem;
+  padding: 0.875rem 1rem;
+  color: #92400e;
+}
+.support-note-icon {
+  color: #d97706;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+.dark .support-note {
+  background-color: rgba(180, 130, 30, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-left: 4px solid #f5b13d;
+  color: #f5c97c;
+}
+.dark .support-note-icon {
+  color: #f5b13d;
+}

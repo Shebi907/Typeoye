@@ -20,7 +20,12 @@ export interface SupportArticle {
   icon: LucideIcon;
   readTime: number;
   updatedAt: string;
+  /** Body copy. Lines starting with "1. " become numbered steps and lines
+   *  starting with "- " become bullet lists; `**bold**` is supported inline. */
   body: string[];
+  /** Supplementary important notes (time limits, attempt limits, fallbacks)
+   *  rendered as amber warning callouts instead of plain paragraphs. */
+  notes?: string[];
   keywords?: string[];
 }
 
@@ -68,16 +73,21 @@ export const SUPPORT_ARTICLES: SupportArticle[] = [
     category: 'Account & Sign-in',
     icon: HelpCircle,
     readTime: 1,
-    updatedAt: 'Aug 22, 2026',
+    updatedAt: 'Sep 16, 2026',
     keywords: ['password', 'reset', 'forgot', 'sign in', 'login', 'account', 'recover'],
     body: [
-      'If you have forgotten your password, you can reset it in a few steps:',
-      '1. Go to the **Sign In** page.',
-      '2. Click **Forgot Password?** below the sign-in button.',
-      '3. Enter the email address you used when creating your account.',
-      '4. Check your inbox for a password reset email.',
-      '5. Click the link in the email and choose a new password.',
-      'The reset link expires after 24 hours. If it has expired, simply repeat the steps above to request a new one.',
+      'If you have forgotten your password, you can reset it by answering the security question you chose when creating your account:',
+      '1. Go to the **Sign In** page and click **Forgot Password?** below the sign-in button.',
+      '2. Enter the email address or username linked to your account, then click **Continue**.',
+      '3. Read the **security question** shown and type your answer, then click **Verify Answer**.',
+      '4. Enter a new password (at least 8 characters) and confirm it, then click **Reset Password**.',
+      '5. Sign in with your new password.',
+    ],
+    notes: [
+      'Security answers are **not case-sensitive**, and leading or trailing spaces are ignored when checking your answer.',
+      'After **5 incorrect answers**, password recovery is temporarily locked for **30 minutes**. You can try again once the lock expires.',
+      'Once you answer the security question correctly, you have **10 minutes** to set your new password. If the session expires, simply start the recovery process again.',
+      'If your account has no security question set up, the app will let you know — you can add one from your **Profile** page.',
     ],
   },
   {
@@ -94,6 +104,8 @@ export const SUPPORT_ARTICLES: SupportArticle[] = [
       '- **You are signed in.** Guest results are not saved to your account. Sign in before starting a test.',
       '- **The test completed normally.** If you closed the browser or navigated away before the timer ended, the result was not recorded.',
       '- **No network errors appeared.** A brief connection issue during save can prevent the result from reaching the server. Check your browser console for failed requests.',
+    ],
+    notes: [
       'If none of the above applies and results still are not saving, contact support with your email address and the approximate time of the test.',
     ],
   },
@@ -111,8 +123,10 @@ export const SUPPORT_ARTICLES: SupportArticle[] = [
       'To complete a lesson, you need to:',
       '- Finish all exercises in the lesson.',
       '- Achieve at least the required accuracy threshold (usually 90%).',
-      'There is no built-in skip button. However, if you already have strong typing skills, you can quickly pass each exercise to unlock the next one.',
       'Focus on accuracy over speed — the exercises are designed to build proper muscle memory, and rushing them can form bad habits.',
+    ],
+    notes: [
+      'There is no built-in skip button. However, if you already have strong typing skills, you can quickly pass each exercise to unlock the next one.',
     ],
   },
   {
@@ -132,7 +146,9 @@ export const SUPPORT_ARTICLES: SupportArticle[] = [
       'Tips for earning your certificate:',
       '- Pick a comfortable, distraction-free environment.',
       '- Focus on accuracy first — speed will follow naturally.',
-      '- You can retake the certificate test as many times as you want.',
+    ],
+    notes: [
+      'You can retake the certificate test as many times as you want.',
     ],
   },
   {
@@ -151,6 +167,8 @@ export const SUPPORT_ARTICLES: SupportArticle[] = [
       '3. **Try a different browser.** Typeoye works best on Chrome, Edge, Firefox, or Safari. If one browser has issues, try another.',
       '4. **Check your internet connection.** Ensure you have a stable connection — a weak or intermittent signal can prevent the app from loading.',
       '5. **Disable browser extensions.** Some ad-blockers or privacy extensions can interfere with the site. Try disabling them temporarily.',
+    ],
+    notes: [
       'If none of these steps help, reach out to our support team with your browser name, version, and a screenshot of the issue.',
     ],
   },

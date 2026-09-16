@@ -1,9 +1,71 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, ChevronRight, Clock, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { AlertCircle, ArrowLeft, ArrowRight, ChevronRight, Clock, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { SUPPORT_ARTICLES, SUPPORT_CATEGORY_META } from '../data/support';
+import type { SupportArticle } from '../data/support';
 import { cn } from '../utils/cn';
 import { useSeo } from '../hooks/useSeo';
+
+type BodyLine =
+  | { kind: 'step'; number: number; text: string }
+  | { kind: 'bullet'; text: string }
+  | { kind: 'paragraph'; text: string };
+
+/** Consecutive steps/bullets are grouped so they render as one contiguous list. */
+function buildBody(lines: string[]): (BodyLine | BodyLine[])[] {
+  const groups: (BodyLine | BodyLine[])[] = [];
+  let pending: BodyLine[] = [];
+  let pendingKind: 'step' | 'bullet' | null = null;
+  const flush = () => {
+    if (pending.length > 0) {
+      groups.push(pending);
+      pending = [];
+      pendingKind = null;
+    }
+  };
+  for (const raw of lines) {
+    const step = raw.match(/^(\d+)\.\s+(.*)$/);
+    if (step) {
+      if (pendingKind !== 'step') flush();
+      pendingKind = 'step';
+      pending.push({ kind: 'step', number: Number(step[1]), text: step[2] });
+      continue;
+    }
+    if (raw.startsWith('- ')) {
+      if (pendingKind !== 'bullet') flush();
+      pendingKind = 'bullet';
+      pending.push({ kind: 'bullet', text: raw.replace(/^- /, '') });
+      continue;
+    }
+    flush();
+    groups.push({ kind: 'paragraph', text: raw });
+  }
+  flush();
+  return groups;
+}
+
+type StepLine = Extract<BodyLine, { kind: 'step' }>;
+type BulletLine = Extract<BodyLine, { kind: 'bullet' }>;
+
+function isStepGroup(group: BodyLine | BodyLine[]): group is StepLine[] {
+  return Array.isArray(group) && group[0].kind === 'step';
+}
+
+function isBulletGroup(group: BodyLine | BodyLine[]): group is BulletLine[] {
+  return Array.isArray(group) && group[0].kind === 'bullet';
+}
+
+/** Converts the data's `**bold**` markers to styled <strong> for rich text. */
+function toHtml(text: string): string {
+  return text.replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--color-text-primary)">$1</strong>');
+}
+
+/** Related picks: prefer same-category siblings, then fill from other categories. */
+function getRelated(article: SupportArticle): SupportArticle[] {
+  return SUPPORT_ARTICLES.filter((a) => a.slug !== article.slug)
+    .sort((a, b) => Number(b.category === article.category) - Number(a.category === article.category))
+    .slice(0, 3);
+}
 
 export default function SupportArticle() {
   const { slug } = useParams<{ slug: string }>();
@@ -48,6 +110,8 @@ export default function SupportArticle() {
 
   const meta = SUPPORT_CATEGORY_META[article.category];
   const Icon = meta.icon;
+  const bodyGroups = buildBody(article.body);
+  const related = getRelated(article);
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
@@ -82,36 +146,128 @@ export default function SupportArticle() {
         </div>
 
         <div className="readable-text mt-8 flex flex-col gap-4 text-[0.9375rem] leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-          {article.body.map((paragraph, index) => {
-            if (paragraph.startsWith('- ')) {
+          {bodyGroups.map((group, gi) => {
+            if (isStepGroup(group)) {
               return (
-                <li key={index} className="ml-4 list-disc" dangerouslySetInnerHTML={{ __html: paragraph.replace(/^- /, '').replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--color-text-primary)">$1</strong>') }} />
+                <ol key={gi} className="flex flex-col gap-1.5">
+                  {group.map((step, si) => (
+                      <li
+                        key={step.number}
+                        className="flex items-start gap-3 rounded-lg px-3 py-2.5"
+                        style={si % 2 === 1 ? { backgroundColor: 'var(--color-page)' } : undefined}
+                      >
+                        <span
+                          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-extrabold text-white"
+                          style={{ background: 'var(--color-accent)', boxShadow: '0 2px 6px rgba(67, 97, 238, 0.35)' }}
+                        >
+                          {step.number}
+                        </span>
+                        <span dangerouslySetInnerHTML={{ __html: toHtml(step.text) }} />
+                      </li>
+))}
+                </ol>
               );
             }
-            return (
-              <p key={index} dangerouslySetInnerHTML={{ __html: paragraph.replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--color-text-primary)">$1</strong>') }} />
-            );
+            if (isBulletGroup(group)) {
+              return (
+                <ul key={gi} className="flex flex-col gap-1.5">
+                  {group.map((item, si) => (
+                    <li key={si} className="ml-3 list-disc" dangerouslySetInnerHTML={{ __html: toHtml(item.text) }} />
+                  ))}
+                </ul>
+              );
+            }
+            return <p key={gi} dangerouslySetInnerHTML={{ __html: toHtml((group as BodyLine).text) }} />;
           })}
-        </div>
 
-        {/* Feedback row */}
-        <div className="mt-10 flex items-center gap-4 border-t pt-6" style={{ borderColor: 'var(--color-border)' }}>
-          <span className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>Was this article helpful?</span>
-          <div className="flex items-center gap-2">
-            <button type="button" onClick={() => setFeedback(feedback === 'up' ? null : 'up')} className={cn('flex h-9 w-9 items-center justify-center rounded-lg border transition-all', feedback === 'up' ? 'border-[#22C55E] bg-[rgba(34,197,94,0.1)] text-[#22C55E]' : 'text-[var(--color-text-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]')} style={{ borderColor: feedback !== 'up' ? 'var(--color-border)' : undefined, backgroundColor: feedback !== 'up' ? 'var(--color-card)' : undefined }} aria-label="Yes, helpful" data-testid="feedback-up">
-              <ThumbsUp size={16} />
-            </button>
-            <button type="button" onClick={() => setFeedback(feedback === 'down' ? null : 'down')} className={cn('flex h-9 w-9 items-center justify-center rounded-lg border transition-all', feedback === 'down' ? 'border-[#EF4444] bg-[rgba(239,68,68,0.1)] text-[#EF4444]' : 'text-[var(--color-text-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]')} style={{ borderColor: feedback !== 'down' ? 'var(--color-border)' : undefined, backgroundColor: feedback !== 'down' ? 'var(--color-card)' : undefined }} aria-label="No, not helpful" data-testid="feedback-down">
-              <ThumbsDown size={16} />
-            </button>
-          </div>
+          {/* Important notes — amber callouts */}
+          {article.notes && article.notes.length > 0 && (
+            <div className="flex flex-col gap-3">
+              {article.notes.map((note, ni) => (
+                <aside key={ni} className="support-note" role="note">
+                  <AlertCircle size={18} className="support-note-icon" />
+                  <p className="text-[0.9375rem] leading-relaxed" dangerouslySetInnerHTML={{ __html: toHtml(note) }} />
+                </aside>
+              ))}
+            </div>
+          )}
+        </div>
+      </article>
+
+      {/* Feedback — its own card */}
+      <section
+        className="card mt-6 flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-7"
+        data-testid="support-feedback"
+      >
+        <div>
+          <h2 className="text-base font-bold" style={{ color: 'var(--color-text-primary)' }}>
+            Was this article helpful?
+          </h2>
+          <p className="mt-0.5 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+            Your feedback helps us improve our guides.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setFeedback(feedback === 'up' ? null : 'up')}
+            className={cn(
+              'flex h-10 w-10 items-center justify-center rounded-xl border text-sm transition-all',
+              feedback === 'up'
+                ? 'border-[#22C55E] bg-[rgba(34,197,94,0.12)] text-[#16A34A]'
+                : 'text-[var(--color-text-muted)] hover:border-[#22C55E] hover:bg-[rgba(34,197,94,0.08)] hover:text-[#22C55E]'
+            )}
+            style={{ borderColor: feedback !== 'up' ? 'var(--color-border)' : undefined, backgroundColor: feedback !== 'up' ? 'var(--color-card)' : undefined }}
+            aria-label="Yes, this was helpful"
+            data-testid="feedback-up"
+          >
+            <ThumbsUp size={17} />
+          </button>
+          <button
+            type="button"
+            onClick={() => setFeedback(feedback === 'down' ? null : 'down')}
+            className={cn(
+              'flex h-10 w-10 items-center justify-center rounded-xl border text-sm transition-all',
+              feedback === 'down'
+                ? 'border-[#EF4444] bg-[rgba(239,68,68,0.12)] text-[#DC2626]'
+                : 'text-[var(--color-text-muted)] hover:border-[#EF4444] hover:bg-[rgba(239,68,68,0.08)] hover:text-[#EF4444]'
+            )}
+            style={{ borderColor: feedback !== 'down' ? 'var(--color-border)' : undefined, backgroundColor: feedback !== 'down' ? 'var(--color-card)' : undefined }}
+            aria-label="No, this was not helpful"
+            data-testid="feedback-down"
+          >
+            <ThumbsDown size={17} />
+          </button>
           {feedback && (
-            <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+            <span className="ml-1 text-sm" style={{ color: 'var(--color-text-muted)' }}>
               {feedback === 'up' ? 'Thanks for your feedback!' : 'Sorry to hear that. We will work on improving this article.'}
             </span>
           )}
         </div>
-      </article>
+      </section>
+
+      {/* Related articles */}
+      {related.length > 0 && (
+        <section className="card mt-6 p-6 sm:p-7" data-testid="support-related">
+          <h2 className="text-base font-bold" style={{ color: 'var(--color-text-primary)' }}>
+            Related Articles
+          </h2>
+          <ul className="mt-4 flex flex-col gap-3">
+            {related.map((a) => (
+              <li key={a.slug}>
+                <Link
+                  to={`/support/${a.slug}`}
+                  className="group inline-flex items-center gap-2 text-sm font-semibold transition-colors"
+                  style={{ color: 'var(--color-accent-text)' }}
+                >
+                  <ArrowRight size={15} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+                  {a.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {/* Back link */}
       <Link to="/support" className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold transition-colors hover:text-[var(--color-accent-text)]" style={{ color: 'var(--color-accent-text)' }}>
