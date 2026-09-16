@@ -16,6 +16,8 @@ export interface BlogPost {
   metaTitle?: string;
   /** SEO meta description — falls back to `description` when omitted. */
   metaDescription?: string;
+  /** Key sentence surfaced as the mid-article pull-quote. */
+  pullQuote?: string;
   intro: string;
   readTime: number;
   publishedAt: string;
@@ -77,6 +79,7 @@ export const POSTS: BlogPost[] = [
     popular: true,
     image: '/assets/blog/typing-speed-tips.jpg',
     imageAlt: 'Typing speed practice',
+    pullQuote: 'What gets measured gets improved.',
     content: [
       {
         heading: '1. Learn Proper Finger Placement',
@@ -136,6 +139,7 @@ export const POSTS: BlogPost[] = [
     popular: false,
     image: '/assets/blog/home-row-technique.jpg',
     imageAlt: 'Home row typing technique',
+    pullQuote: 'Typing speed is ultimately about minimizing finger travel.',
     content: [
       {
         heading: 'What Is the Home Row?',
@@ -174,6 +178,7 @@ export const POSTS: BlogPost[] = [
     popular: false,
     image: '/assets/blog/typing-accuracy.jpg',
     imageAlt: 'Typing accuracy practice',
+    pullQuote: 'Every typo you fix adds a detour to your rhythm.',
     content: [
       {
         heading: 'Why Accuracy Comes First',
@@ -213,6 +218,7 @@ export const POSTS: BlogPost[] = [
     popular: true,
     image: '/assets/blog/typing-productivity.jpg',
     imageAlt: 'Typing productivity',
+    pullQuote: 'Moving from 40 to 70 WPM roughly halves the time you spend on text entry.',
     content: [
       {
         heading: 'Save Hours Every Week',
@@ -252,6 +258,7 @@ export const POSTS: BlogPost[] = [
     popular: false,
     image: '/assets/blog/typeoye-updates.jpg',
     imageAlt: 'Typeoye latest updates',
+    pullQuote: 'Results now break down your weak keys so you know precisely what to work on next.',
     content: [
       {
         heading: 'Reimagined Progress Tracking',

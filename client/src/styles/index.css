@@ -1260,3 +1260,82 @@ html, body, #root {
    root font-size above — no vw clamps needed. At the 1280px reference the
    widths equal today's values; on wider/more-scaled screens they grow in
    lockstep with everything else. */
+
+/* ── Blog post page (redesigned) — page-scoped, no shared impact ──── */
+.bp-header-card {
+  background: linear-gradient(135deg, #EEF1FD 0%, #F1EAFE 100%);
+  border: 1px solid rgba(139, 92, 246, 0.18);
+  box-shadow: 0 14px 34px -18px rgba(67, 97, 238, 0.35);
+}
+.dark .bp-header-card {
+  background: linear-gradient(135deg, #14163E 0%, #211E53 55%, #38206A 100%);
+  border-color: rgba(139, 92, 246, 0.34);
+  box-shadow: 0 18px 44px -18px rgba(67, 97, 238, 0.45);
+}
+
+.bp-header-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  color: #5b5470;
+  padding: 0.3rem 0.8rem;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+.dark .bp-header-chip {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #d7d2f2;
+}
+
+/* Large light-purple section numbers (01, 02, …) beside headings. */
+.bp-section-num {
+  color: #bda8fb;
+}
+.dark .bp-section-num {
+  color: #9a7ff0;
+}
+
+/* Pull-quote callout — soft background, accent left bar, italic text. */
+.bp-quote {
+  background-color: #f6f4ff;
+  border-left: 4px solid #8b5cf6;
+  color: var(--color-text-primary);
+}
+.dark .bp-quote {
+  background-color: #1f1c4a;
+  border-left-color: #a78bfa;
+}
+
+/* "More tools" sidebar card — light purple gradient to stand apart. */
+.bp-tools-card {
+  background: linear-gradient(135deg, #EEF1FD 0%, #F1EAFE 100%);
+  border: 1px solid rgba(139, 92, 246, 0.18);
+}
+.dark .bp-tools-card {
+  background: linear-gradient(135deg, #14163E 0%, #211E53 55%, #38206A 100%);
+  border-color: rgba(139, 92, 246, 0.34);
+}
+.bp-tools-heading {
+  color: #6d28d9;
+}
+.dark .bp-tools-heading {
+  color: #c9b8ff;
+}
+.bp-tools-link {
+  color: #6d28d9;
+}
+.bp-tools-link:hover {
+  opacity: 0.78;
+}
+.dark .bp-tools-link {
+  color: #c9b8ff;
+}
+
+/* Closing CTA — solid brand gradient with a white button. */
+.bp-cta {
+  background: linear-gradient(135deg, #3730A3 0%, #4361EE 52%, #8B5CF6 100%);
+  box-shadow: 0 18px 44px -18px rgba(67, 97, 238, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
