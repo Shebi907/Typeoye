@@ -3,6 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Site-wide canonical fix for the SPA: this single index.html is served
+      // for EVERY route, so a hardcoded homepage canonical made crawlers that
+      // snapshot before the app boots treat every page as an alternate of the
+      // homepage. Derive the canonical + og:url from the actual URL instead
+      // (self-referencing for every page) at parse time, before the bundle
+      // loads. Path only — query strings and hashes are stripped, and a
+      // trailing slash is normalized away for consistency.
+      (function () {
+        var path = window.location.pathname;
+        if (path.length > 1 && path.charAt(path.length - 1) === '/') path = path.slice(0, -1);
+        var canonicalUrl = window.location.origin + path;
+
+        var canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) {
+          canonical = document.createElement('link');
+          canonical.setAttribute('rel', 'canonical');
+          document.head.appendChild(canonical);
+        }
+        canonical.setAttribute('href', canonicalUrl);
+
+        var ogUrl = document.querySelector('meta[property="og:url"]');
+        if (!ogUrl) {
+          ogUrl = document.createElement('meta');
+          ogUrl.setAttribute('property', 'og:url');
+          document.head.appendChild(ogUrl);
+        }
+        ogUrl.setAttribute('content', canonicalUrl);
+      })();
+    </script>
     <title>Free Typing Test Online – Check Your WPM &amp; Accuracy | TypeOye</title>
     <meta
       name="description"
@@ -11,9 +41,7 @@
     <meta name="theme-color" content="#4361EE" />
     <meta name="google-site-verification" content="3XoVafoTDAhEkP3OJU_NVRpIjQ5NuUdKuAb_rlJ9LUg" />
     <meta name="google-adsense-account" content="ca-pub-2021787489750461" />
-    <link rel="canonical" href="https://www.typeoye.com/" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.typeoye.com/" />
     <meta property="og:site_name" content="TypeOye" />
     <meta property="og:title" content="Free Typing Test Online – Check Your WPM &amp; Accuracy | TypeOye" />
     <meta
