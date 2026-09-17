@@ -134,7 +134,7 @@ export const SUPPORT_ARTICLES: SupportArticle[] = [
   {
     slug: 'certificate-not-earned',
     title: 'Why did I not earn a certificate?',
-    description: 'Find out why a certificate test attempt did not result in a earned certificate.',
+    description: 'Find out why a certificate test attempt didn\'t result in you earning a certificate.',
     category: 'Certificates',
     icon: Award,
     readTime: 1,

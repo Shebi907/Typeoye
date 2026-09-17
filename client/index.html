@@ -12,6 +12,12 @@
       // loads. Path only — query strings and hashes are stripped, and a
       // trailing slash is normalized away for consistency.
       (function () {
+        // Per-route title/description map, injected at build time by the
+        // seo-meta Vite plugin (see the marker below). Absent in a raw/static
+        // serve, in which case the static <title> and meta tags in this file
+        // remain the fallback.
+        var SEO_META = /*__SEO_META__*/null;
+
         var path = window.location.pathname;
         if (path.length > 1 && path.charAt(path.length - 1) === '/') path = path.slice(0, -1);
         var canonicalUrl = window.location.origin + path;
@@ -31,6 +37,38 @@
           document.head.appendChild(ogUrl);
         }
         ogUrl.setAttribute('content', canonicalUrl);
+
+        // Route-specific metadata: exact path match first, then walk up the
+        // path segments in case a prefix route covers dynamic segments (e.g.
+        // /blog/* for /blog/some-new-slug, /challenge/* for /challenge/XYZ).
+        var meta = null;
+        if (SEO_META) {
+          meta = SEO_META[path] || null;
+          if (!meta) {
+            var i = path.lastIndexOf('/');
+            while (!meta && i > 0) {
+              meta = SEO_META[path.slice(0, i) + '/*'] || null;
+              i = path.lastIndexOf('/', i - 1);
+            }
+          }
+        }
+        if (meta) {
+          document.title = meta.title;
+          function setMeta(attr, name, content) {
+            var el = document.querySelector(attr + '="' + name + '"');
+            if (!el) {
+              el = document.createElement('meta');
+              el.setAttribute(attr, name);
+              document.head.appendChild(el);
+            }
+            el.setAttribute('content', content);
+          }
+          setMeta('name', 'description', meta.description);
+          setMeta('property', 'og:title', meta.title);
+          setMeta('property', 'og:description', meta.description);
+          setMeta('name', 'twitter:title', meta.title);
+          setMeta('name', 'twitter:description', meta.description);
+        }
       })();
     </script>
     <title>Free Typing Test Online – Check Your WPM &amp; Accuracy | TypeOye</title>
