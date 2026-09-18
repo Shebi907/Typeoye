@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { PageWrapper } from '../components/layout/PageWrapper';
+import { ProseSection } from '../components/content/ProseSection';
 import TypingRace from '../components/games/TypingRace';
 import FallingWords from '../components/games/FallingWords';
 import SuddenDeath from '../components/games/SuddenDeath';
@@ -367,6 +368,35 @@ export default function Games() {
             </div>
           </div>
         )}
+
+        <ProseSection title="About these games" learnMoreLabel="Learn more about typing games" icon={Gamepad2}>
+          <p>
+            Each game trains a different side of typing.
+          </p>
+          <p>
+            <strong>Typing Race</strong> is a test of sustained speed. You race a bot to 60 words, and the
+            bot is paced at your average WPM — so winning means typing at your own best level, consistently,
+            from start to finish. It's the closest thing here to a head-to-head speed trial.
+          </p>
+          <p>
+            <strong>Falling Words</strong> is a test of accuracy and reaction time. Words drift down the
+            screen and you have to type them before they fall out of reach. The longer you survive, the
+            faster everything falls, so the challenge is staying calm and accurate under growing time
+            pressure.
+          </p>
+          <p>
+            <strong>Sudden Death Sprint</strong> is the hardest: one mistake ends the run, unless you've
+            earned a shield. It rewards slow, precise typing and forces you to fight the instinct to rush.
+            Longevity is the metric — how long can you keep a near-perfect streak alive?
+          </p>
+          <p>
+            <strong>What they build.</strong> Between the three, you'll develop raw speed (Typing Race),
+            reaction time and stress control (Falling Words), and precision under pressure (Sudden Death).
+            Games also count toward the leaderboard when you finish at 90% accuracy or higher, so a strong
+            run can be both fun and a rankings play. Play as a guest or sign in to save every score and
+            watch your best WPM climb.
+          </p>
+        </ProseSection>
       </div>
     </PageWrapper>
   );

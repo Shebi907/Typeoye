@@ -164,16 +164,20 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
               })}
             </div>
 
-            {/* Closing CTA */}
+            {/* Closing CTA — per-post when provided, generic fallback otherwise */}
             <div className="bp-cta mt-12 rounded-2xl px-6 py-8 text-center sm:px-8 sm:py-10">
-              <h3 className="text-xl font-extrabold text-white sm:text-2xl">Ready to improve your typing?</h3>
-              <p className="mt-2 text-sm text-white/85 sm:text-base">Practice your speed and accuracy with Typeoye</p>
+              <h3 className="text-xl font-extrabold text-white sm:text-2xl">
+                {post.cta?.heading ?? 'Ready to improve your typing?'}
+              </h3>
+              <p className="mt-2 text-sm text-white/85 sm:text-base">
+                {post.cta?.blurb ?? 'Practice your speed and accuracy with Typeoye'}
+              </p>
               <Link
-                to="/test"
+                to={post.cta?.to ?? '/test'}
                 data-testid="article-cta"
                 className="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-bold text-[#1B2340] shadow-lg transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
               >
-                Start Typing Test <ArrowRight size={16} />
+                {post.cta?.label ?? 'Start Typing Test'} <ArrowRight size={16} />
               </Link>
             </div>
           </div>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArrowRight, Dumbbell, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PageWrapper } from '../components/layout/PageWrapper';
+import { ProseSection } from '../components/content/ProseSection';
 import { practiceService } from '../services/practice.service';
 import { useAuthStore } from '../store/authStore';
 import { PRACTICE_TYPES } from '../data/practiceTypes';
@@ -142,6 +143,31 @@ export default function Practice() {
             </div>
           </section>
         )}
+
+        <ProseSection title="About free practice" learnMoreLabel="Learn more about practice drills" icon={Dumbbell}>
+          <p>
+            Practice lets you pick exactly what you want to work on and repeat it as often as you like.
+            Unlike the structured Learn course — which moves you through 16 lessons in a fixed order —
+            practice has no sequence and no unlocks. You choose the drill, the difficulty, and the duration
+            (1–15 minutes), or let Quick Practice build a session from your recent performance.
+          </p>
+          <p>
+            <strong>The drills.</strong> Character focuses on specific keys — useful when certain letters
+            or symbols consistently trip you up. Combination practices common key pairs to smooth awkward
+            transitions. Words builds speed on everyday vocabulary. Sentences uses real sentences so you
+            practice rhythm across words and punctuation. Paragraphs pushes you with longer text to build
+            stamina. Quick Practice personalizes a session around your recent results and problem keys,
+            making it a great place to start. Custom Text lets you paste your own material — a work
+            document, an essay, or a snippet of code — so practice matches what you actually type day to day.
+          </p>
+          <p>
+            <strong>Getting started is simple.</strong> If you're just beginning, start with Character or
+            Words and repeat each drill a few times, prioritizing accuracy before speed. If you already type
+            comfortably, Quick Practice or Sentences will keep you honest about your weak spots. Everything
+            is free with or without an account, and signing in saves your history so you can watch yourself
+            improve over time.
+          </p>
+        </ProseSection>
       </div>
     </PageWrapper>
   );

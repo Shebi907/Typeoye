@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Sun, Monitor, LogOut, User, ShieldCheck, Menu, X } from 'lucide-react';
 import { Logo } from './Logo';
 import { ProgressDropdown } from './ProgressDropdown';
+import { GamesDropdown } from './GamesDropdown';
 import { useAuthStore } from '../../store/authStore';
 import { useSettingsStore } from '../../store/settingsStore';
 import { authService } from '../../services/auth.service';
@@ -14,7 +15,6 @@ const navLinks = [
   { to: '/test', label: 'Test' },
   { to: '/practice', label: 'Practice' },
   { to: '/lessons', label: 'Learn' },
-  { to: '/games', label: 'Games' },
   { to: '/leaderboard', label: 'Leaderboard' },
   { to: '/certificate', label: 'Certificate' },
 ];
@@ -66,9 +66,10 @@ export function Navbar() {
   // Progress page. Keep the item only for guests (and while the session is
   // still being verified, where Home is the safe default).
   const links = isSessionChecked && isAuthenticated ? navLinks.filter((l) => l.to !== '/') : navLinks;
-  const gamesIndex = Math.max(0, links.findIndex((l) => l.to === '/games'));
-  const beforeGames = links.slice(0, gamesIndex + 1);
-  const afterGames = links.slice(gamesIndex + 1);
+  // Split at the Games dropdown: links rendered before it (Home…Learn) and
+  // links rendered after it (Leaderboard, Certificate). Each link appears once.
+  const linksBeforeGames = links.filter((l) => l.to !== '/leaderboard' && l.to !== '/certificate');
+  const linksAfterGames = links.filter((l) => l.to === '/leaderboard' || l.to === '/certificate');
 
   return (
     <header className="sticky top-0 z-40">
@@ -85,7 +86,7 @@ export function Navbar() {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1.5 ml-6">
-          {beforeGames.map(({ to, label }) => {
+          {linksBeforeGames.map(({ to, label }) => {
             const isCertMode = to === '/test' && location.search.includes('cert=1');
             const forceActive = to === '/certificate' && location.search.includes('cert=1');
             return (
@@ -115,10 +116,12 @@ export function Navbar() {
             );
           })}
 
+          <GamesDropdown />
+
           {/* Progress dropdown — signed-in users only, right after Games */}
           {isAuthenticated && <ProgressDropdown />}
 
-          {afterGames.map(({ to, label }) => {
+          {linksAfterGames.map(({ to, label }) => {
             const isCertMode = to === '/test' && location.search.includes('cert=1');
             const forceActive = to === '/certificate' && location.search.includes('cert=1');
             return (

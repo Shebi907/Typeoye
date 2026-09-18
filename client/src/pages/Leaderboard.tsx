@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { PageWrapper } from '../components/layout/PageWrapper';
+import { ProseSection } from '../components/content/ProseSection';
 import { leaderboardService } from '../services/leaderboard.service';
 import type { LeaderboardEntry, LeaderboardPeriod, LeaderboardResponse } from '../types';
 import { Trophy, Flame, Users, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -392,6 +393,30 @@ export default function Leaderboard() {
           </div>
         </div>
         )}
+
+        <ProseSection title="How the leaderboard works" learnMoreLabel="Learn more about the leaderboard" eyebrow="Rankings" icon={Trophy}>
+          <p>
+            The leaderboard ranks signed-in typists by their fastest qualifying result. Qualifying has two
+            parts, and both matter: finish a timed typing test <strong>or</strong> a game at{' '}
+            <strong>90% accuracy or higher</strong>. There's no minimum WPM — the accuracy floor is what
+            filters out careless runs. Typing fast is easy when you're sloppy; the board rewards speed you
+            could repeat reliably.
+          </p>
+          <p>
+            Only your single fastest qualifying run counts, so each entry shows what a typist is genuinely
+            capable of. Rankings can be viewed by period — Today, This Week, This Month, and All Time. The
+            daily and weekly boards reset, which means the top is always within reach: the fastest clean run
+            on any given day puts you on that day's board.
+          </p>
+          <p>
+            <strong>What it takes to place well.</strong> First, get your accuracy above 90% consistently —
+            most wasted effort in leaderboard attempts is fast but inaccurate typing that simply doesn't
+            qualify. Then push your speed on modes you can finish cleanly. Games count too, so a strong
+            Typing Race or Falling Words run can move you up. Your best qualifying run since signing up
+            automatically places you, and your own rank is always shown — even outside the top ten, you'll
+            see exactly where you stand.
+          </p>
+        </ProseSection>
       </div>
     </PageWrapper>
   );

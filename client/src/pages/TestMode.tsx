@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { LineChart, RefreshCw, Award, Loader2, Keyboard, Target, Lightbulb, ArrowRight, Zap, UserPlus, ArrowLeft, Timer, SlidersHorizontal } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
+import { ProseSection } from '../components/content/ProseSection';
 import { LiveStatsCard } from '../components/typing/LiveStatsCard';
 import { useTypingEngine } from '../hooks/useTypingEngine';
 import { TypingDisplay } from '../components/typing/TypingDisplay';
@@ -485,6 +486,34 @@ const certEarned =
               ))}
             </aside>
           </div>
+
+          <ProseSection title="About the typing test" learnMoreLabel="Learn more about the typing test" icon={Timer}>
+            <p>
+              Typeoye's typing test measures two things: your speed, expressed in words per minute (WPM),
+              and your accuracy, expressed as a percentage. Both are calculated from what you actually
+              type, not from an estimate.
+            </p>
+            <p>
+              <strong>How WPM is calculated.</strong> A word counts as correct only if you type it exactly —
+              every character in the right order. At the end, the number of fully correct words is divided
+              by the elapsed time in minutes. Your score therefore reflects genuine, complete words per
+              minute: partially typed or mistyped words add nothing to your speed. Accuracy is the share of
+              attempted words you got right — correct words divided by every word you started.
+            </p>
+            <p>
+              <strong>Duration and difficulty.</strong> You can run the test for 1, 2, 5, 10, or 15 minutes.
+              A short test is a quick snapshot; longer tests give a more representative reading of your
+              sustained pace. Difficulty — Easy, Medium, or Hard — changes the complexity of the text you
+              type, with harder tests using denser vocabulary and punctuation.
+            </p>
+            <p>
+              <strong>Who uses a typing test.</strong> Typing speed and accuracy matter in many data-entry,
+              transcription, and administrative roles, so job seekers often test themselves to know where
+              they stand. Students use tests to build speed for essays and note-taking, and professionals —
+              writers, programmers, support staff — track their numbers to keep improving. Whether you're
+              job hunting or just curious, a few minutes on this page tells you exactly what you can do today.
+            </p>
+          </ProseSection>
         </div>
       </PageWrapper>
     );

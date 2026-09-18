@@ -1,23 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  ShieldCheck, ScrollText, Calendar, ChevronDown, Sparkles, User, Shield,
-  Copyright, Ban, Scale, FileClock, Landmark, Mail, FileText, Lock, Info,
+  ShieldCheck, ScrollText, Calendar, ChevronDown, Sparkles, User, Award,
+  Copyright, CloudOff, Ban, Mail, FileText, Lock, Info,
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { SUPPORT_EMAIL } from '../config';
 import { useSeo } from '../hooks/useSeo';
 
 type SectionId =
-  | 'acceptance-of-terms'
-  | 'use-of-our-services'
-  | 'user-accounts'
-  | 'user-conduct'
+  | 'service-description'
+  | 'account-responsibilities'
+  | 'certificate-and-leaderboard'
   | 'intellectual-property'
-  | 'termination'
-  | 'limitation-of-liability'
-  | 'changes-to-terms'
-  | 'governing-law'
+  | 'service-availability-and-advertising'
+  | 'account-termination-and-changes'
   | 'contact-us';
+
+const LINK_STYLE = {
+  fontWeight: 600,
+  color: 'var(--color-accent-text)',
+} as const;
 
 interface TermsSection {
   id: SectionId;
@@ -30,150 +32,224 @@ interface TermsSection {
 
 const SECTIONS: TermsSection[] = [
   {
-    id: 'acceptance-of-terms',
+    id: 'service-description',
     number: '01',
-    title: 'Acceptance of Terms',
-    preview: 'By using Typeoye you agree to be bound by these terms and conditions.',
-    icon: ShieldCheck,
-    content: (
-      <p>
-        By accessing or using Typeoye, you agree to be bound by these Terms and Conditions. If you
-        do not agree with any part of these terms, you may not use the service. Your continued use of
-        Typeoye constitutes your acceptance of these terms and any updates made to them.
-      </p>
-    ),
-  },
-  {
-    id: 'use-of-our-services',
-    number: '02',
-    title: 'Use of Our Services',
-    preview: 'What Typeoye provides and how you may use it.',
+    title: 'Service Description',
+    preview: 'What Typeoye offers, that it is free, and how guest use works.',
     icon: Sparkles,
     content: (
-      <p>
-        Typeoye provides typing tests, lessons, practice tools, games, and a leaderboard. Most
-        features are free to use, with or without an account. Some features (saved progress,
-        leaderboard ranking, certificates, and games) require a free account. You agree to use the
-        services only for lawful purposes and in accordance with these terms.
-      </p>
+      <>
+        <p>
+          Typeoye is an online typing platform. It is <strong>free to use</strong>, and there is currently
+          no paid tier or subscription. The service offers:
+        </p>
+        <ul>
+          <li>
+            <strong>Typing tests</strong> — timed tests you can adjust from 1 to 15 minutes at Easy,
+            Medium, or Hard difficulty.
+          </li>
+          <li>
+            <strong>Practice drills</strong> — free-form drills (character, combination, word, sentence,
+            paragraph, and quick), plus pasting your own custom text.
+          </li>
+          <li>
+            <strong>The Learn course</strong> — a structured 16-lesson path across four stages that
+            unlocks one lesson at a time.
+          </li>
+          <li>
+            <strong>Games</strong> — Typing Race, Falling Words, and Sudden Death Sprint.
+          </li>
+          <li>
+            <strong>Certificates</strong> — a downloadable PDF you can earn by meeting the requirements
+            described in section 03.
+          </li>
+          <li>
+            <strong>A leaderboard</strong> — today, week, month, and all-time rankings.
+          </li>
+        </ul>
+        <p>
+          You can use Typeoye <strong>without an account</strong>: guests can take tests, practice, play
+          games, and earn certificates, but <strong>guest sessions are never saved</strong>. If you want
+          your results, progress, and streaks to be stored — or to appear on the leaderboard — create a
+          free account. These terms apply to all use of the service, whether or not you sign in.
+        </p>
+      </>
     ),
   },
   {
-    id: 'user-accounts',
-    number: '03',
-    title: 'User Accounts',
-    preview: 'Your responsibilities when creating and using a Typeoye account.',
+    id: 'account-responsibilities',
+    number: '02',
+    title: 'Account Responsibilities',
+    preview: 'Your duties when creating and using a Typeoye account.',
     icon: User,
     content: (
-      <p>
-        You are responsible for keeping your password secure and for all activity that occurs under
-        your account. You must provide accurate information when creating an account and maintain the
-        security of your account credentials. One account per person is permitted — please do not
-        create multiple accounts to manipulate the leaderboard or achievements.
-      </p>
+      <>
+        <p className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+          Accurate information
+        </p>
+        <p>
+          When you create an account you provide a username, email address, and a security question and
+          answer. You agree to give truthful, current information and to keep it up to date. One account
+          per person is expected; creating extra accounts to manipulate rankings or achievements is not
+          allowed.
+        </p>
+        <p className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+          Keeping your credentials safe
+        </p>
+        <p>
+          You are responsible for your password and sign-in method. Don't share them, and if you think
+          your account has been compromised, reset your password or contact us. Activity on your account
+          is your responsibility.
+        </p>
+        <p className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+          No abuse of the platform
+        </p>
+        <p>
+          Don't use automation of any kind to take tests or inflate typing scores, and don't try to
+          manipulate your WPM, accuracy, or leaderboard position. Don't interfere with the service,
+          attempt to access other users' data, or use Typeoye for anything unlawful. To be clear, using
+          logins, bots, scripts, or automated tools to take tests or boost leaderboard rankings is a
+          violation of these terms.
+        </p>
+        <p className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+          Custom text
+        </p>
+        <p>
+          If you paste your own custom text for practice, you're responsible for it: don't submit text
+          that violates others' rights or any applicable law.
+        </p>
+      </>
     ),
   },
   {
-    id: 'user-conduct',
-    number: '04',
-    title: 'User Conduct',
-    preview: 'The rules you agree to follow while using Typeoye.',
-    icon: Shield,
+    id: 'certificate-and-leaderboard',
+    number: '03',
+    title: 'Certificate & Leaderboard Disclaimer',
+    preview: 'What a Typeoye certificate and leaderboard ranking actually represent.',
+    icon: Award,
     content: (
-      <p>
-        Do not attempt to manipulate your WPM, accuracy, leaderboard rank, or achievements through
-        automated tools, scripts, or bots — all results are validated server-side, and accounts found
-        cheating may be restricted or removed. Do not upload offensive, illegal, or harmful content,
-        and do not attempt to interfere with, disrupt, or gain unauthorized access to Typeoye's systems.
-      </p>
+      <>
+        <p className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+          What the certificate is
+        </p>
+        <p>
+          A Typeoye certificate is a skill-achievement record produced by Typeoye and generated as a PDF
+          you can download. It is awarded when a <strong>single</strong> test meets <strong>both</strong>{' '}
+          thresholds: <strong>at least 30 WPM</strong> and <strong>at least 90% accuracy</strong> in the
+          same run.
+        </p>
+        <p className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+          It is not an accredited qualification
+        </p>
+        <p>
+          The certificate is <strong>not</strong> an officially accredited, certified, or
+          government-recognized qualification. It documents typing performance measured under Typeoye's
+          own scoring rules (WPM counts fully correct words; accuracy is correct words divided by
+          attempted words). We do not warrant that any employer, school, or other institution will accept
+          it — confirming that is up to you.
+        </p>
+        <p className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+          How the leaderboard works
+        </p>
+        <p>
+          The leaderboard ranks signed-in users by their best WPM on qualifying runs: timed typing tests
+          and games finished at <strong>90% accuracy or higher</strong>. Rankings can be filtered by
+          period (Today, This Week, This Month, or All Time) and reflect performance under Typeoye's own
+          scoring and measurement, not any external standard. Rankings change as new qualifying runs are
+          recorded.
+        </p>
+      </>
     ),
   },
   {
     id: 'intellectual-property',
-    number: '05',
+    number: '04',
     title: 'Intellectual Property',
-    preview: 'Ownership of content and how your own content is handled.',
+    preview: 'Ownership of the service and how your custom text is handled.',
     icon: Copyright,
     content: (
       <p>
-        Lessons, exercises, and platform content belong to Typeoye and are protected by applicable
-        intellectual property laws. Any custom text you submit for Custom Practice or Custom Test
-        remains yours, but you grant us permission to process it (for example, to temporarily store it
-        during your session) in order to provide the feature.
+        Typeoye owns the service and its content: the code, design, branding, lessons, exercises,
+        practice texts, and certificate design are protected by applicable intellectual property laws.
+        You may use them only as part of using the service and may not copy, redistribute, or reuse
+        Typeoye's content for other purposes without our permission, although you may keep and share the
+        certificate PDF you earn. Custom text you provide for practice remains your own content: we
+        process it only to provide the feature and do not publish it.
       </p>
     ),
   },
   {
-    id: 'termination',
+    id: 'service-availability-and-advertising',
+    number: '05',
+    title: 'Service Availability & Advertising',
+    preview: 'How the service is provided and how advertising works.',
+    icon: CloudOff,
+    content: (
+      <>
+        <p className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+          As is
+        </p>
+        <p>
+          Typeoye is provided <strong>"as is" and "as available"</strong> without warranties of any kind,
+          including no guarantee of uninterrupted availability or error-free results. We work to keep the
+          service running, but it may be unavailable from time to time for maintenance or technical
+          issues, and we are not liable for interruptions or lost data.
+        </p>
+        <p className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+          Advertising
+        </p>
+        <p>
+          Typeoye has a Google AdSense account linked to this domain. As of the date of these terms, the
+          site does not display advertisements. If and when advertisements are shown, they are served by
+          Google AdSense, which may use its own cookies and similar technologies as described in our
+          Privacy Policy. We are not responsible for the content of third-party ads.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 'account-termination-and-changes',
     number: '06',
-    title: 'Termination',
-    preview: 'When Typeoye may suspend or terminate your account.',
+    title: 'Account Termination & Changes',
+    preview: 'When accounts may be suspended and how these terms may change.',
     icon: Ban,
     content: (
-      <p>
-        Typeoye may suspend or terminate accounts that violate these terms, including cheating, abuse,
-        or illegal activity. You may also stop using the service at any time. Termination does not
-        affect provisions that by their nature should survive termination.
-      </p>
-    ),
-  },
-  {
-    id: 'limitation-of-liability',
-    number: '07',
-    title: 'Limitation of Liability',
-    preview: "The extent of Typeoye's liability for your use of the platform.",
-    icon: Scale,
-    content: (
-      <p>
-        Typeoye is provided "as is" and "as available." To the fullest extent permitted by law, Typeoye
-        and its team are not liable for any indirect, incidental, or consequential damages arising from
-        your use of the platform, including loss of data, progress, or results.
-      </p>
-    ),
-  },
-  {
-    id: 'changes-to-terms',
-    number: '08',
-    title: 'Changes to Terms',
-    preview: 'How and when these terms may be updated.',
-    icon: FileClock,
-    content: (
-      <p>
-        Typeoye may update these terms from time to time to reflect changes in our services or for
-        legal, operational, or regulatory reasons. Changes will be posted on this page, and your
-        continued use of the service after changes take effect means you accept the updated terms.
-      </p>
-    ),
-  },
-  {
-    id: 'governing-law',
-    number: '09',
-    title: 'Governing Law',
-    preview: 'The jurisdiction that governs these terms and conditions.',
-    icon: Landmark,
-    content: (
-      <p>
-        These Terms and Conditions are governed by and construed in accordance with the laws of the
-        applicable jurisdiction, without regard to its conflict of law provisions. Any disputes arising
-        out of or relating to these terms shall be subject to the exclusive jurisdiction of the
-        competent courts in that jurisdiction.
-      </p>
+      <>
+        <p className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+          Termination
+        </p>
+        <p>
+          We may suspend or terminate accounts that violate these terms — including cheating, automation,
+          abuse, or unlawful activity — at our discretion and with or without notice where appropriate.
+          You may stop using the service at any time. To have your account and data deleted, contact us
+          (deletion is currently handled manually — see our Privacy Policy). Guests have nothing to
+          delete, because guest sessions are never saved.
+        </p>
+        <p className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+          Changes to these terms
+        </p>
+        <p>
+          We may update these terms as the service evolves or for legal, operational, or regulatory
+          reasons. Updates are posted on this page with the date shown at the top. Continuing to use
+          Typeoye after changes take effect means you accept the updated terms; for significant changes
+          we will aim to give reasonable notice on the site.
+        </p>
+      </>
     ),
   },
   {
     id: 'contact-us',
-    number: '10',
+    number: '07',
     title: 'Contact Us',
     preview: 'Questions or concerns about these terms and conditions.',
     icon: Mail,
     content: (
       <p>
-        If you have any questions or concerns regarding these Terms and Conditions, please contact us
-        at{' '}
+        If you have any questions or concerns regarding these Terms and Conditions, please contact us at{' '}
         <a
           href={`mailto:${SUPPORT_EMAIL}`}
           className="font-semibold hover:underline"
-          style={{ color: 'var(--color-accent-text)' }}
+          style={LINK_STYLE}
         >
           {SUPPORT_EMAIL}
         </a>
@@ -183,9 +259,7 @@ const SECTIONS: TermsSection[] = [
   },
 ];
 
-function formatDate(date: Date): string {
-  return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
-}
+const TERMS_LAST_UPDATED = 'September 18, 2026';
 
 function HeroBadge({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
   return (
@@ -203,12 +277,12 @@ export default function Terms() {
   useSeo({
     title: 'Terms and Conditions | TypeOye',
     description:
-      'Read the TypeOye terms and conditions covering your use of the typing test, lessons, practice tools, games, and leaderboard.',
+      'Read the TypeOye terms and conditions covering the free typing test, practice drills, 16-lesson Learn course, games, certificates, and leaderboard, including account rules and disclaimers.',
     canonicalPath: '/terms',
   });
-  const lastUpdated = formatDate(new Date());
-  const [open, setOpen] = useState<SectionId | null>('acceptance-of-terms');
-  const [activeId, setActiveId] = useState<SectionId>('acceptance-of-terms');
+  const lastUpdated = TERMS_LAST_UPDATED;
+  const [open, setOpen] = useState<SectionId | null>('service-description');
+  const [activeId, setActiveId] = useState<SectionId>('service-description');
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
@@ -280,8 +354,9 @@ export default function Terms() {
                 aria-hidden="true"
               />
               <p className="readable-text mt-5 max-w-xl text-base sm:text-lg leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-                Please read these terms and conditions carefully before using Typeoye. By accessing our
-                website and services, you agree to be bound by these terms.
+                Please read these terms before using Typeoye. They describe what the service offers,
+                the rules for using it, and how certificates and leaderboard rankings work. By accessing
+                or using Typeoye, you agree to these terms.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <HeroBadge icon={Calendar} label="Last updated:" value={lastUpdated} />
@@ -548,7 +623,7 @@ export default function Terms() {
                   >
                     <div className="overflow-hidden">
                       <div
-                        className="px-5 pb-6 sm:px-6 text-[0.9375rem] leading-relaxed"
+                        className="px-5 pb-6 sm:px-6 text-[0.9375rem] leading-relaxed [&_p+p]:mt-3 [&_ul+p]:mt-3 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mt-1.5"
                         style={{ color: 'var(--color-text-secondary)' }}
                       >
                         {s.content}

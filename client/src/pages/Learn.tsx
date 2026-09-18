@@ -5,6 +5,7 @@ import {
   Keyboard, Blocks, Waves, Rocket, ArrowRight, Lightbulb 
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
+import { ProseSection } from '../components/content/ProseSection';
 import { useSeo } from '../hooks/useSeo';
 import { Modal } from '../components/ui/Modal';
 import { Skeleton } from '../components/ui/Skeleton';
@@ -450,6 +451,34 @@ export default function Learn() {
             </div>
           </div>
         )}
+
+        <ProseSection title="About the Learn course" learnMoreLabel="Learn more about the Learn course" icon={GraduationCap}>
+          <p>
+            The Learn course is Typeoye's structured path to touch typing — 16 lessons organized into four
+            stages that build on each other. You can't skip ahead: lessons unlock in order, and finishing a
+            lesson opens the next one, so skills accumulate in a deliberate sequence.
+          </p>
+          <p>
+            <strong>The four stages.</strong> Foundation (Levels 1–5) covers hand position and keyboard
+            layout, establishing home-row technique before speed. Building Blocks (Levels 6–10) moves into
+            letter patterns and everyday vocabulary, training your fingers to recognize common combinations.
+            Flow &amp; Rhythm (Levels 11–14) introduces sentences, punctuation, and paragraphs to build a
+            natural, even pace. Advanced (Levels 15–16) finishes with numbers, symbols, and professional
+            text — the skills behind spreadsheets, code, and formal writing.
+          </p>
+          <p>
+            Progress is tracked per lesson — completed exercises, accuracy, and attempts — so you can see
+            exactly where you've improved. Progress saves when you're signed in; as a guest, Level 1 is free
+            to try and the rest of the course unlocks once you create an account.
+          </p>
+          <p>
+            <strong>Who benefits most.</strong> A structured course is especially valuable for beginners
+            learning correct technique from the start, and for anyone who has typed for years but wants to
+            rebuild proper habits. If you already type fluently and want focused work on specific weaknesses,
+            free practice may suit you better — but even experienced typists enjoy the course as a way to
+            measure steady, stage-by-stage progress.
+          </p>
+        </ProseSection>
 
         {!isAuthenticated && (
           <Modal isOpen={lockedPrompt !== null} onClose={() => setLockedPrompt(null)} title={lockedPrompt ? `Level ${lockedPrompt.order} is locked` : 'Level locked'} size="sm">

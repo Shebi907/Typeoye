@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  Shield, Lock, Calendar, ChevronDown, Info, Database, Share2, Server,
-  UserCheck, Users, FileClock, Mail, FileText, User, Sparkles,
+  Shield, Lock, Calendar, ChevronDown, Info, Database, Sparkles, Globe2,
+  Cookie, UserCheck, Users, Mail, User, FileText,
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { SUPPORT_EMAIL } from '../config';
@@ -10,11 +10,10 @@ import { useSeo } from '../hooks/useSeo';
 type SectionId =
   | 'information-we-collect'
   | 'how-we-use-your-information'
-  | 'data-sharing-and-disclosure'
-  | 'data-security'
+  | 'third-party-services'
+  | 'cookies'
   | 'your-rights-and-choices'
   | 'childrens-privacy'
-  | 'changes-to-this-policy'
   | 'contact-us';
 
 interface PrivacySection {
@@ -26,134 +25,338 @@ interface PrivacySection {
   content: React.ReactNode;
 }
 
+const LINK_STYLE = {
+  color: 'var(--color-accent-text)',
+} as React.CSSProperties;
+
 const SECTIONS: PrivacySection[] = [
   {
     id: 'information-we-collect',
     number: '01',
     title: 'Information We Collect',
-    preview: 'The information you provide and the usage data we gather to power Typeoye.',
+    preview: 'The exact information Typeoye stores — and that guest use is never saved.',
     icon: Database,
     content: (
-      <p>
-        We collect information you provide directly, including your account information such as your
-        name, email address, and profile information. We also collect information related to your use of
-        the service, such as typing results, WPM, accuracy, progress, games, and leaderboard activity, so
-        that we can track your improvement and power the Typeoye experience.
-      </p>
+      <>
+        <p>
+          If you use Typeoye without signing in (as a guest), we do not collect or store anything about
+          your typing. Guest sessions run entirely in your browser and are never saved to our servers. The
+          data listed below is only collected for signed-in accounts.
+        </p>
+        <h4>Account information</h4>
+        <ul>
+          <li>
+            When you create an account you provide a <strong>username</strong>, an{' '}
+            <strong>email address</strong>, a <strong>password</strong>, and a{' '}
+            <strong>security question and answer</strong> used for account recovery.
+          </li>
+          <li>
+            Passwords are stored only as a <strong>one-way cryptographic hash</strong>. We cannot read
+            your password back, and we never see your plaintext password after you set it.
+          </li>
+          <li>
+            If you sign in with Google, we receive the name and email Google shares with us. We never
+            receive your Google password.
+          </li>
+        </ul>
+        <h4>Profile and preferences</h4>
+        <ul>
+          <li>
+            You can optionally set a <strong>display name</strong>, a short <strong>bio</strong>, and a{' '}
+            <strong>profile picture</strong>, which we store for you.
+          </li>
+          <li>
+            We save your in-app preferences such as theme, font, font size, caret style, default test
+            duration, and whether numbers and punctuation appear in your test text.
+          </li>
+        </ul>
+        <h4>Typing practice data</h4>
+        <ul>
+          <li>
+            When you are signed in, completed sessions are saved so you can review them: the mode
+            (typing test, practice, lesson, or game), the date and duration, your <strong>WPM</strong> and{' '}
+            <strong>accuracy</strong>, correct and attempted word counts, and the text you were shown and
+            what you typed, word by word, including per-word timing.
+          </li>
+          <li>
+            From this data we derive items such as your <strong>weak keys</strong>, lesson-by-lesson
+            accuracy, <strong>streak history</strong>, and <strong>game scores</strong>.
+          </li>
+        </ul>
+        <h4>Progress, achievements, and certificates</h4>
+        <ul>
+          <li>
+            We save completed lessons and exercises, XP, level, badges, best and average WPM and
+            accuracy, total practice time, and leaderboard placement.
+          </li>
+          <li>
+            When you earn a certificate you type the <strong>name</strong> to print on it. That name is
+            used only to render the PDF you download and is <strong>not saved</strong> to your account.
+            The underlying test is saved like any other signed-in session.
+          </li>
+        </ul>
+        <h4>Messages you send us</h4>
+        <ul>
+          <li>
+            If you use the contact form, we keep your <strong>name</strong>, <strong>email
+            address</strong>, <strong>topic</strong>, and <strong>message</strong> so we can respond and
+            track issues.
+          </li>
+        </ul>
+      </>
     ),
   },
   {
     id: 'how-we-use-your-information',
     number: '02',
     title: 'How We Use Your Information',
-    preview: 'How your information powers and improves the services you use every day.',
+    preview: 'How your data powers tests, leaderboards, certificates, and account security.',
     icon: Sparkles,
     content: (
-      <p>
-        We use your information to provide and improve Typeoye services, manage your account, save your
-        progress and results, provide leaderboard functionality, communicate with you, and maintain the
-        security and integrity of our platform. Your data helps us personalize your experience and keep
-        the community fair and enjoyable.
-      </p>
+      <>
+        <ul>
+          <li>
+            <strong>Operating the service</strong> — displaying typing tests, practice drills, lessons,
+            and games, and saving your results so you can review progress and spot trends.
+          </li>
+          <li>
+            <strong>Leaderboards</strong> — ranking eligible sessions (timed tests and games finished at
+            90% accuracy or higher) by best WPM and showing your personal rank.
+          </li>
+          <li>
+            <strong>Certificates</strong> — checking whether a single run meets both thresholds (30 WPM
+            and 90% accuracy) and generating your PDF.
+          </li>
+          <li>
+            <strong>Account security and sign-in</strong> — hashing passwords, security-question
+            recovery, temporary lockouts after repeated failed attempts, and rate limiting.
+          </li>
+          <li>
+            <strong>Personalization</strong> — remembering your settings across devices when you are
+            signed in.
+          </li>
+          <li>
+            <strong>Fairness and support</strong> — keeping the leaderboard fair, responding to your
+            messages, and improving features.
+          </li>
+        </ul>
+        <p>
+          We never sell your personal information. Typeoye displays no third-party ads today and runs no
+          cross-site tracking, so there is nothing sold through advertising. We do not make automated
+          decisions about you beyond the ranking, gamification, and certificate features you use.
+        </p>
+      </>
     ),
   },
   {
-    id: 'data-sharing-and-disclosure',
+    id: 'third-party-services',
     number: '03',
-    title: 'Data Sharing and Disclosure',
-    preview: 'We never sell your personal information. Here is how it may be shared.',
-    icon: Share2,
+    title: 'Third-Party Services and Advertising',
+    preview: 'The only outside services we use, and our honest stance on advertising.',
+    icon: Globe2,
     content: (
-      <p>
-        Typeoye does not sell users' personal information to third parties. Information may only be shared
-        when reasonably necessary to operate our services, work with service providers, comply with
-        applicable law, or protect Typeoye and its users. Any sharing is limited to what is required for
-        those purposes.
-      </p>
+      <>
+        <h4>Hosting and infrastructure</h4>
+        <p>
+          The service runs on third-party cloud providers — the application on Render and the database on
+          MongoDB Atlas. These providers process data only as needed to host the service, and we rely on
+          their security practices to keep it running safely.
+        </p>
+        <h4>Google Sign-In</h4>
+        <p>
+          If you sign in with Google, Google runs its own authentication flow on its own pages and may
+          place its own cookies. We receive only the account information Google shares with us (such as
+          your name and email) and never your Google password.
+        </p>
+        <h4>Google Fonts</h4>
+        <p>
+          The site loads the Inter and JetBrains Mono typefaces from Google&apos;s font CDN. When the page
+          loads, your browser requests these fonts from Google, so Google may receive a standard web
+          request (including your IP address and the referring page). Google&apos;s handling of that
+          request is governed by Google&apos;s own privacy policy.
+        </p>
+        <h4>Advertising (Google AdSense)</h4>
+        <p>
+          Typeoye has a Google AdSense account linked to this domain. As of the date of this policy, the
+          site does not display advertisements — no ad scripts are loaded anywhere in the app. If we begin
+          showing ads in the future, Google — as AdSense&apos;s provider — may use cookies or similar
+          technologies to serve and personalize ads and to measure how they perform.
+        </p>
+        <ul>
+          <li>
+            How Google uses data when you visit sites that partner with Google:{' '}
+            <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" style={LINK_STYLE}>
+              policies.google.com/technologies/partner-sites
+            </a>
+          </li>
+          <li>
+            How Google uses cookies in advertising:{' '}
+            <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" style={LINK_STYLE}>
+              policies.google.com/technologies/ads
+            </a>
+          </li>
+          <li>
+            You can control personalized ads from Google at any time:{' '}
+            <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" style={LINK_STYLE}>
+              adssettings.google.com
+            </a>
+          </li>
+        </ul>
+        <h4>Analytics</h4>
+        <p>
+          Typeoye does not run Google Analytics or any other third-party analytics, tracking, or
+          fingerprinting scripts. We do not track you across other websites.
+        </p>
+      </>
     ),
   },
   {
-    id: 'data-security',
+    id: 'cookies',
     number: '04',
-    title: 'Data Security',
-    preview: 'The technical and organizational measures we take to protect your data.',
-    icon: Server,
+    title: 'Cookies and Similar Technologies',
+    preview: 'What cookies and browser storage are really used for — no tracking cookies.',
+    icon: Cookie,
     content: (
-      <p>
-        Typeoye uses reasonable technical and organizational measures to protect personal information from
-        unauthorized access, alteration, disclosure, or destruction. This includes secure password hashing
-        and ongoing monitoring of our systems to help keep your information safe.
-      </p>
+      <>
+        <p>
+          Typeoye itself does not set tracking cookies. Here is what actually happens in your browser:
+        </p>
+        <ul>
+          <li>
+            <strong>Sign-in tokens</strong> — when you sign in, we keep a token in your browser&apos;s
+            local storage so you stay signed in. This is not a traditional login cookie.
+          </li>
+          <li>
+            <strong>Preferences and recent settings</strong> — small items in your browser&apos;s local
+            and session storage, such as your theme, font size, last chosen test duration and difficulty,
+            and (for guests only) which typing paragraphs you have already seen so you are not shown
+            repeats.
+          </li>
+          <li>
+            <strong>Google services</strong> — as described above, Google Sign-In and Google Fonts may
+            place Google cookies or make requests to Google when you use them.
+          </li>
+          <li>
+            <strong>Advertising</strong> — if advertising is enabled in the future, Google AdSense may use
+            cookies or similar technologies to serve personalized ads and measure performance.
+          </li>
+        </ul>
+        <p>
+          You are in control: every browser lets you block or delete cookies and site data, browse
+          privately, and clear site storage (including storage for typeoye.com). Clearing this data will
+          not stop you from typing — you will simply be treated as a guest, may need to sign in again, and
+          may lose saved preferences.
+        </p>
+      </>
     ),
   },
   {
     id: 'your-rights-and-choices',
     number: '05',
     title: 'Your Rights and Choices',
-    preview: 'The control you have over your personal information.',
+    preview: 'How to view, copy, correct, or delete your data today.',
     icon: UserCheck,
     content: (
-      <p>
-        You can access, update, or request deletion of your information where applicable. If you have
-        questions about your data, want to review what we hold, or would like to exercise your rights,
-        you can contact the Typeoye team and we will assist you.
-      </p>
+      <>
+        <p>
+          Typeoye does not yet have a self-serve &ldquo;download my data&rdquo; or &ldquo;delete my
+          account&rdquo; button. Until we build those, here is exactly how your rights are handled:
+        </p>
+        <ul>
+          <li>
+            <strong>See your data</strong> — most of what we hold is already visible inside the app: your
+            results history, statistics, leaderboard position, profile, and the certificates you have
+            generated.
+          </li>
+          <li>
+            <strong>Get a copy of your data</strong> — email us at{' '}
+            <a href="mailto:contact.typeoye@gmail.com" style={LINK_STYLE}>
+              contact.typeoye@gmail.com
+            </a>{' '}
+            from the email address on your account and include your username. We will provide the data we
+            hold about you.
+          </li>
+          <li>
+            <strong>Correct your data</strong> — update your username, display name, avatar, password,
+            security question, and preferences from your Profile and Settings pages. Changing the email
+            address on your account is currently handled manually by support.
+          </li>
+          <li>
+            <strong>Delete your account and data</strong> — email the same address with your username. We
+            will permanently delete your account and its data: saved tests, practice sessions, game
+            results, lesson progress, streaks, achievements, settings, and profile.
+          </li>
+        </ul>
+        <p>
+          Guests have nothing to delete, because we never store guest sessions. Requests are handled
+          manually, so they may take a little time, but we aim to respond promptly and free of charge.
+        </p>
+      </>
     ),
   },
   {
     id: 'childrens-privacy',
     number: '06',
     title: "Children's Privacy",
-    preview: 'Our commitment to protecting younger users.',
+    preview: 'Our approach to younger users and guidance for parents and guardians.',
     icon: Users,
     content: (
-      <p>
-        Typeoye is not intended for children under 13, and Typeoye does not knowingly collect personal
-        information from children under 13. If you believe we have inadvertently collected such
-        information, please contact us so we can take appropriate action.
-      </p>
-    ),
-  },
-  {
-    id: 'changes-to-this-policy',
-    number: '07',
-    title: 'Changes to This Policy',
-    preview: 'How and when this Privacy Policy may be updated.',
-    icon: FileClock,
-    content: (
-      <p>
-        Typeoye may update this Privacy Policy from time to time to reflect changes in our practices or
-        for legal, operational, or regulatory reasons. Updates will be posted on this page with an updated
-        date, and we encourage you to review this page periodically.
-      </p>
+      <>
+        <p>
+          Typeoye is a typing practice tool used by people of all ages, including school-age children and
+          teenagers. We are transparent about how we handle children&apos;s data:
+        </p>
+        <ul>
+          <li>
+            We collect the same limited information from minors as from any other user — a username, an
+            email address, and typing scores — and do not knowingly collect anything more from children.
+          </li>
+          <li>
+            We do not run advertisements or third-party trackers today, so there is no behavioural
+            profiling of any user, including children.
+          </li>
+          <li>
+            Because creating an account requires an email address, we recommend that parents or guardians
+            help children set up and manage their accounts.
+          </li>
+          <li>
+            If you are a parent or guardian and are concerned about your child&apos;s account or data,
+            contact us — including to review or delete the account.
+          </li>
+        </ul>
+      </>
     ),
   },
   {
     id: 'contact-us',
-    number: '08',
+    number: '07',
     title: 'Contact Us',
-    preview: 'Questions or concerns about this Privacy Policy.',
+    preview: 'Reach us with questions or requests about your data.',
     icon: Mail,
     content: (
-      <p>
-        If you have any questions or concerns regarding this Privacy Policy or how we handle your personal
-        information, please contact us at{' '}
-        <a
-          href={`mailto:${SUPPORT_EMAIL}`}
-          className="font-semibold hover:underline"
-          style={{ color: 'var(--color-accent-text)' }}
-        >
-          {SUPPORT_EMAIL}
-        </a>
-        .
-      </p>
+      <>
+        <p>
+          If you have questions, concerns, or requests about this Privacy Policy or about your personal
+          information, email us at{' '}
+          <a
+            href={`mailto:${SUPPORT_EMAIL}`}
+            className="font-semibold hover:underline"
+            style={{ color: 'var(--color-accent-text)' }}
+          >
+            {SUPPORT_EMAIL}
+          </a>
+          .
+        </p>
+        <p>
+          For deletion or data-access requests, please email from the address on your account and include
+          your username so we can verify and act on the request. We will do our best to respond quickly.
+        </p>
+      </>
     ),
   },
 ];
 
-function formatDate(date: Date): string {
-  return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
-}
+const PRIVACY_POLICY_DATE = 'September 18, 2026';
 
 function HeroBadge({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
   return (
@@ -171,10 +374,10 @@ export default function Privacy() {
   useSeo({
     title: 'Privacy Policy | TypeOye',
     description:
-      'Read the TypeOye privacy policy to learn how your typing test results, progress, and personal information are collected, used, and protected.',
+      'What TypeOye collects and stores — your account, typing results, progress, and certificates — how it is used, the third-party services we rely on, and how to access or delete your data.',
     canonicalPath: '/privacy',
   });
-  const lastUpdated = formatDate(new Date());
+  const lastUpdated = PRIVACY_POLICY_DATE;
   const [open, setOpen] = useState<SectionId | null>('information-we-collect');
   const [activeId, setActiveId] = useState<SectionId>('information-we-collect');
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -248,8 +451,9 @@ export default function Privacy() {
                 aria-hidden="true"
               />
               <p className="readable-text mt-5 max-w-xl text-base sm:text-lg leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-                Your privacy is important to us. This Privacy Policy explains how Typeoye collects, uses,
-                shares, and protects your information when you use our website and services.
+                This policy explains what information Typeoye collects, why we collect it, and how you can
+                control it. It is written in plain language and describes how the service actually works —
+                including that guest use is never saved.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <HeroBadge icon={Calendar} label="Last updated:" value={lastUpdated} />
@@ -510,7 +714,7 @@ export default function Privacy() {
                   >
                     <div className="overflow-hidden">
                       <div
-                        className="px-5 pb-6 sm:px-6 text-[0.9375rem] leading-relaxed"
+                        className="px-5 pb-6 sm:px-6 text-[0.9375rem] leading-relaxed [&_h4]:mt-5 [&_h4]:mb-1 [&_h4]:text-[0.8125rem] [&_h4]:font-bold [&_h4]:uppercase [&_h4]:tracking-wide [&_h4]:text-[var(--color-text-primary)] [&_ul]:mt-2 [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-2 [&_ul]:pl-5 [&_ul]:list-disc [&_p+p]:mt-3 [&_ul+p]:mt-3"
                         style={{ color: 'var(--color-text-secondary)' }}
                       >
                         {s.content}

@@ -16,7 +16,13 @@ interface LiveStatsCardProps {
  * Shows WPM, Accuracy, Time Left with icon rows and a progress bar.
  */
 export function LiveStatsCard({ wpm, accuracy, remaining, elapsed, phase, duration }: LiveStatsCardProps) {
-  const timeDisplay = `${phase === 'idle' ? duration : Math.ceil(remaining)}s`;
+  const formatClock = (totalSeconds: number) => {
+    const secs = Math.max(0, Math.ceil(totalSeconds));
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  };
+  const timeDisplay = phase === 'idle' ? formatClock(duration) : formatClock(remaining);
   const progressPct = duration > 0 ? Math.min(100, (elapsed / duration) * 100) : 0;
   const timeCritical = remaining <= 10 && phase === 'running';
 

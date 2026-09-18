@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Award, ArrowRight, Check, Loader2 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
+import { ProseSection } from '../components/content/ProseSection';
 import { useAuthStore } from '../store/authStore';
 import { preloadCertificateParagraph } from '../services/certificate.service';
 import { useSeo } from '../hooks/useSeo';
@@ -160,6 +161,36 @@ export default function CertificatePage() {
             </ul>
           </div>
         </aside>
+      </div>
+
+      <div className="max-w-[106.25rem] mx-auto">
+        <ProseSection title="About the Typeoye certificate" learnMoreLabel="Learn more about the certificate" eyebrow="Certificates" icon={Award}>
+          <p>
+            The Typeoye certificate is a downloadable PDF that records your typing performance in a single
+            test. To earn one, you need to hit two thresholds in the same run: <strong>at least 30 words
+            per minute</strong> and <strong>at least 90% accuracy</strong>. Meet both, and the certificate
+            is generated with your name, your WPM, your accuracy, the test length, a certificate ID, and
+            the date of achievement — on a fresh piece of text you haven't seen before. You can retake the
+            test as many times as you like and choose your session length from 1 to 15 minutes.
+          </p>
+          <p>
+            <strong>What it's for.</strong> It's a personal skill-achievement record from Typeoye — proof
+            that you typed at 30+ WPM with 90%+ accuracy under test conditions. It's useful on a resume or
+            portfolio for roles where typing speed is relevant, as a school or personal milestone, and as a
+            concrete way to track improvement: earn it once, then aim to earn it at higher speeds.
+          </p>
+          <p>
+            <strong>One important note.</strong> The certificate is not an official accreditation. Typeoye
+            isn't a certification body, and the certificate isn't a government-recognized or professionally
+            accredited qualification. Its scoring rules — WPM counts fully correct words, accuracy is
+            correct divided by attempted — are Typeoye's own, so treat it as a measured personal benchmark
+            rather than a credential that institutions are obliged to accept.
+          </p>
+          <p>
+            Sign in to save every earned certificate to your profile. Guests can still download a copy, but
+            it won't be saved to any account.
+          </p>
+        </ProseSection>
       </div>
     </PageWrapper>
   );

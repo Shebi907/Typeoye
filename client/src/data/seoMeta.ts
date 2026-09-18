@@ -121,6 +121,42 @@ const SUPPORT_ARTICLE_ROUTES: Record<string, RouteSeoMeta> = {
     title: 'The site is not loading properly - what should I do? | TypeOye Support',
     description: 'Basic troubleshooting steps when Typeoye does not load or behaves unexpectedly in your browser.',
   },
+  '/support/change-email-address': {
+    title: 'How do I change the email address on my account? | TypeOye Support',
+    description: 'If you signed up with the wrong email or want to update it, here is what to do.',
+  },
+  '/support/delete-my-account': {
+    title: 'How do I delete my account and data? | TypeOye Support',
+    description: 'Learn what deleting your Typeoye account means and how to request it.',
+  },
+  '/support/change-test-duration-difficulty': {
+    title: 'How do I change the test duration or difficulty? | TypeOye Support',
+    description: 'Pick a time limit from 1 to 15 minutes and the difficulty level for your typing test.',
+  },
+  '/support/why-wpm-lower-than-expected': {
+    title: 'Why is my WPM lower than I expected? | TypeOye Support',
+    description: 'How Typeoye calculates words per minute and why your result may look different from other sites.',
+  },
+  '/support/difference-practice-and-learn': {
+    title: 'What is the difference between Practice and the Learn course? | TypeOye Support',
+    description: 'Understand how free-form drills in Practice compare to the structured 16-lesson Learn course.',
+  },
+  '/support/how-to-appear-on-leaderboard': {
+    title: 'How do I appear on the leaderboard? | TypeOye Support',
+    description: 'What it takes to rank on the Typeoye leaderboard.',
+  },
+  '/support/not-on-leaderboard': {
+    title: "Why isn't my score showing on the leaderboard? | TypeOye Support",
+    description: 'Common reasons a qualifying score doesn\'t appear and how to check.',
+  },
+  '/support/retake-certificate-test': {
+    title: 'Can I retake the certificate test for a better score? | TypeOye Support',
+    description: 'Yes — you can retry as many times as you like to improve your certificate.',
+  },
+  '/support/test-not-detecting-keystrokes': {
+    title: "My typing test isn't detecting my keystrokes. | TypeOye Support",
+    description: 'Fix common causes of keys not registering during a test.',
+  },
 };
 
 const BLOG_POST_ROUTES: Record<string, RouteSeoMeta> = POSTS.reduce(
