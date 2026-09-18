@@ -15,6 +15,7 @@ const navLinks = [
   { to: '/test', label: 'Test' },
   { to: '/practice', label: 'Practice' },
   { to: '/lessons', label: 'Learn' },
+  { to: '/games', label: 'Games' },
   { to: '/leaderboard', label: 'Leaderboard' },
   { to: '/certificate', label: 'Certificate' },
 ];
@@ -66,10 +67,23 @@ export function Navbar() {
   // Progress page. Keep the item only for guests (and while the session is
   // still being verified, where Home is the safe default).
   const links = isSessionChecked && isAuthenticated ? navLinks.filter((l) => l.to !== '/') : navLinks;
-  // Split at the Games dropdown: links rendered before it (Home…Learn) and
-  // links rendered after it (Leaderboard, Certificate). Each link appears once.
-  const linksBeforeGames = links.filter((l) => l.to !== '/leaderboard' && l.to !== '/certificate');
-  const linksAfterGames = links.filter((l) => l.to === '/leaderboard' || l.to === '/certificate');
+  // Show the Games dropdown only in development (import.meta.env.DEV, Vite's
+  // proper dev/prod mechanism). During `vite dev` the dropdown — with its Typing
+  // Challenge / Random Match entries — stays available for feature work. In
+  // production builds DEV is false, the dropdown branch is pruned from the
+  // bundle, and Games renders as a plain link instead.
+  const gamesDropdownEnabled = import.meta.env.DEV;
+  const barLinks = gamesDropdownEnabled ? links.filter((l) => l.to !== '/games') : links;
+  const gamesIndex = Math.max(0, barLinks.findIndex((l) => l.to === '/games'));
+  // Split at Games: links before it (Home…Games / Home…Learn) and links after
+  // it (Leaderboard, Certificate). The Progress dropdown renders between them
+  // for signed-in users.
+  const beforeGames = gamesDropdownEnabled
+    ? barLinks.filter((l) => l.to !== '/leaderboard' && l.to !== '/certificate')
+    : barLinks.slice(0, gamesIndex + 1);
+  const afterGames = gamesDropdownEnabled
+    ? barLinks.filter((l) => l.to === '/leaderboard' || l.to === '/certificate')
+    : barLinks.slice(gamesIndex + 1);
 
   return (
     <header className="sticky top-0 z-40">
@@ -86,7 +100,7 @@ export function Navbar() {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1.5 ml-6">
-          {linksBeforeGames.map(({ to, label }) => {
+          {beforeGames.map(({ to, label }) => {
             const isCertMode = to === '/test' && location.search.includes('cert=1');
             const forceActive = to === '/certificate' && location.search.includes('cert=1');
             return (
@@ -116,12 +130,12 @@ export function Navbar() {
             );
           })}
 
-          <GamesDropdown />
+          {gamesDropdownEnabled && <GamesDropdown />}
 
           {/* Progress dropdown — signed-in users only, right after Games */}
           {isAuthenticated && <ProgressDropdown />}
 
-          {linksAfterGames.map(({ to, label }) => {
+          {afterGames.map(({ to, label }) => {
             const isCertMode = to === '/test' && location.search.includes('cert=1');
             const forceActive = to === '/certificate' && location.search.includes('cert=1');
             return (
