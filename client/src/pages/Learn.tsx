@@ -76,8 +76,9 @@ export default function Learn() {
     canonicalPath: '/lessons',
   });
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isSessionChecked = useAuthStore((state) => state.isSessionChecked);
   const [lessons, setLessons] = useState<CourseLesson[]>(lessonService.getLessonsCached() ?? []);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [lockedPrompt, setLockedPrompt] = useState<CourseLesson | null>(null);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -212,6 +213,16 @@ export default function Learn() {
   const activeSectionInfo = activeCategory !== 'all' ? SECTIONS.find(s => s.category === activeCategory) : null;
   const sectionLessons = activeCategory !== 'all' ? lessons.filter(l => l.category === activeCategory) : [];
   const doneCount = sectionLessons.filter(l => l.completed).length;
+
+  if (!isSessionChecked || loading) {
+    return (
+      <PageWrapper title="Learn to Type" noHeader fullWidth className="py-8 sm:py-12 px-4 sm:px-6 overflow-hidden">
+        <div className="max-w-5xl mx-auto w-full overflow-hidden">
+          <LearnSkeleton />
+        </div>
+      </PageWrapper>
+    );
+  }
 
   return (
     <PageWrapper title="Learn to Type" noHeader fullWidth className="py-8 sm:py-12 px-4 sm:px-6 overflow-hidden">
