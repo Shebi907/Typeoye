@@ -37,34 +37,85 @@ function progressPct(lesson: CourseLesson): number {
  *  jumps while lesson data loads. */
 function LearnSkeleton() {
   return (
-    <div aria-busy="true" data-testid="learn-loading">
-      <div className="card p-6 md:p-8 mb-8 flex flex-col md:flex-row justify-between gap-6 bg-[var(--color-card)] border border-[var(--color-border)]">
-        <div className="space-y-3 flex-1">
-           <Skeleton width="100px" height="0.8rem" />
-           <Skeleton width="60%" height="1.8rem" />
-           <Skeleton width="140px" height="1rem" />
+    <div className="animate-pulse" aria-busy="true" data-testid="learn-loading">
+      {/* ── 1. Page Header (mirrors the real header block 1:1) ───────────── */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+        <div className="flex items-center gap-4">
+          <Skeleton width="64px" height="56px" rounded />
+          <div className="space-y-2.5 flex-1 min-w-0">
+            <Skeleton width="180px" height="1.9rem" />
+            <Skeleton width="240px" height="0.9rem" />
+          </div>
         </div>
-        <Skeleton width="120px" height="48px" rounded />
+        <Skeleton width="132px" height="42px" rounded />
       </div>
-      
-      <div className="relative pl-3 md:pl-10 space-y-6">
-        {[0, 1, 2, 3].map((row) => (
-          <div key={row} className="flex items-stretch gap-5 md:gap-8">
-            <div className="flex flex-col items-center pt-6">
-               <Skeleton width="24px" height="24px" rounded="full" />
-            </div>
-            <div className="flex-1 min-w-0 card p-5 border border-[var(--color-border)] bg-[var(--color-card)]">
-               <div className="flex items-center gap-5">
-                 <Skeleton width="48px" height="48px" rounded />
-                 <div className="space-y-2 flex-1">
-                   <Skeleton width="40%" height="1.2rem" />
-                   <Skeleton width="80%" height="0.8rem" />
-                 </div>
-               </div>
+
+      {/* ── 2. Recommended Lesson Card (mirrors the hero card) ───────────── */}
+      <div className="card p-5 sm:p-7 mb-8 flex flex-col sm:flex-row items-start sm:items-center gap-5 relative overflow-hidden rounded-2xl"
+           style={{ backgroundColor: 'var(--color-card)', border: '1px solid var(--color-border)' }}>
+        <div className="flex items-center gap-4 flex-1 min-w-0 w-full">
+          <Skeleton width="64px" height="64px" rounded />
+          <div className="space-y-2.5 flex-1 min-w-0">
+            <Skeleton width="120px" height="0.8rem" />
+            <Skeleton width="70%" height="1.7rem" />
+            <Skeleton width="90%" height="0.9rem" />
+            <div className="pt-1.5">
+              <Skeleton width="100%" height="0.6rem" />
             </div>
           </div>
+        </div>
+        <Skeleton width="132px" height="46px" rounded />
+      </div>
+
+      {/* ── 3. Category Filter Pills (mirrors the nav row) ───────────────── */}
+      <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar pb-2 mb-6">
+        {['all', ...SECTIONS.map((s) => s.category)].map((cat, i) => (
+            <Skeleton key={cat} width={i === 0 ? '72px' : '120px'} height="42px" rounded />
         ))}
       </div>
+
+      {/* ── 4. Stage Sections (mirrors stage header + lesson timeline) ───── */}
+      {SECTIONS.map((section, sIndex) => (
+        <div key={section.category} className="mb-10">
+          {/* Stage header card */}
+          <div className="card p-4 sm:p-6 md:p-8 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden"
+               style={{ backgroundColor: 'var(--color-card)', border: '1px solid var(--color-border)' }}>
+            <div className="space-y-3 flex-1">
+              <Skeleton width="130px" height="0.7rem" />
+              <Skeleton width="55%" height="1.7rem" />
+              <Skeleton width="70%" height="0.9rem" />
+            </div>
+            <Skeleton width="104px" height="40px" rounded />
+          </div>
+
+          {/* Lesson timeline rows */}
+          <div className="relative pl-3 md:pl-10">
+            <div className="space-y-5 md:space-y-6">
+              {[0, 1].map((row) => (
+                <div key={row} className="flex items-stretch gap-4 md:gap-8">
+                  <div className="flex flex-col items-center pt-6 flex-shrink-0">
+                    <Skeleton width="24px" height="24px" rounded="full" />
+                  </div>
+                  <div className="flex-1 min-w-0 card p-5"
+                       style={{ backgroundColor: 'var(--color-card)', border: '1px solid var(--color-border)' }}>
+                    <div className="flex items-center gap-4">
+                      <Skeleton width="48px" height="48px" rounded />
+                      <div className="space-y-2.5 flex-1 min-w-0">
+                        <Skeleton width="45%" height="1.1rem" />
+                        <Skeleton width="85%" height="0.8rem" />
+                        <div className="pt-1">
+                          <Skeleton width="100%" height="0.55rem" />
+                        </div>
+                      </div>
+                      <Skeleton width="96px" height="40px" rounded />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -218,6 +269,17 @@ export default function Learn() {
     return (
       <PageWrapper title="Learn to Type" noHeader fullWidth className="py-8 sm:py-12 px-4 sm:px-6 overflow-hidden">
         <div className="max-w-5xl mx-auto w-full overflow-hidden">
+          {!isAuthenticated && (
+            <div className="mb-8">
+              <div className="rounded-xl px-5 py-4 text-sm flex items-start gap-3 border shadow-sm" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }}>
+                <Skeleton width="18px" height="18px" />
+                <div className="space-y-2 flex-1 min-w-0">
+                  <Skeleton width="70%" height="0.9rem" />
+                  <Skeleton width="45%" height="0.8rem" />
+                </div>
+              </div>
+            </div>
+          )}
           <LearnSkeleton />
         </div>
       </PageWrapper>
