@@ -64,7 +64,7 @@ const SECTIONS: TermsSection[] = [
             described in section 03.
           </li>
           <li>
-            <strong>A leaderboard</strong> — today, week, month, and all-time rankings.
+            <strong>A leaderboard</strong> and 1v1 typing challenges.
           </li>
         </ul>
         <p>

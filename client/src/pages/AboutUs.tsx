@@ -36,7 +36,7 @@ const DIFFERENTIATORS = [
   {
     title: 'Practice that sometimes feels like play',
     description:
-      'Typing Race, Falling Words, and Sudden Death keep the drill playful. Consistency is easier when practice doesn’t always feel like practice.',
+      'Typing Race, Falling Words, and Sudden Death keep the drill playful, and live one-on-one challenges let you race a friend in real time. Consistency is easier when practice doesn’t always feel like practice.',
     icon: Gamepad2,
     color: '#F5A623',
     bg: 'rgba(245, 166, 35, 0.12)',
@@ -113,7 +113,8 @@ export default function AboutUs() {
             pasted text.
           </p>
           <p>
-            When you want practice that feels like play, there are typing games. And because improvement sticks best when you can see it, accounts save every
+            When you want practice that feels like play, there are typing games and one-on-one
+            challenges. And because improvement sticks best when you can see it, accounts save every
             result, chart it over time, and award a free certificate once you cross the 30 WPM / 90%
             accuracy bar. Typeoye is for students, job seekers, working professionals, and anyone who
             has decided to finally learn to touch type.

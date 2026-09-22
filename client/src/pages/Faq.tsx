@@ -18,11 +18,11 @@ const FAQ_GROUPS: { category: string; items: FaqItem[] }[] = [
     items: [
       {
         q: 'What is Typeoye?',
-        a: 'Typeoye is a free typing practice platform that runs entirely in your browser — nothing to download and no sign-up needed to start. It combines timed typing tests, a structured 16-lesson Learn course, free-form Practice drills, three typing games, certificates, and a leaderboard. Every session is scored live and each result shows your WPM and accuracy instantly.',
+        a: 'Typeoye is a free typing practice platform that runs entirely in your browser — nothing to download and no sign-up needed to start. It combines timed typing tests, a structured 16-lesson Learn course, free-form Practice drills, three typing games, live 1v1 challenges, certificates, and a leaderboard. Every session is scored live and each result shows your WPM and accuracy instantly.',
       },
       {
         q: 'Is Typeoye free?',
-        a: 'Yes, Typeoye is 100% free. Typing tests, practice drills, all 16 lessons, games, certificates, and the leaderboard are available with no subscription, no paywall, and no ads. Creating an account is also free and entirely optional.',
+        a: 'Yes, Typeoye is 100% free. Typing tests, practice drills, all 16 lessons, games, challenges, certificates, and the leaderboard are available with no subscription, no paywall, and no ads. Creating an account is also free and entirely optional.',
       },
       {
         q: 'Do I need an account to use Typeoye?',
