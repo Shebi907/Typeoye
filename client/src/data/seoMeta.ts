@@ -7,8 +7,8 @@ export interface RouteSeoMeta {
 
 const STATIC_ROUTES: Record<string, RouteSeoMeta> = {
   '/': {
-    title: 'Free Typing Test Online - Check Your WPM & Accuracy | Typeoye',
-    description: 'Take a free typing test online and check your typing speed, WPM, and accuracy. Practice touch typing, improve your speed, and learn with Typeoye.',
+    title: 'Free Typing Test – Check Your Typing Speed & Accuracy | Typeoye',
+    description: 'Take a free typing test online with Typeoye. Check your typing speed, WPM and accuracy, then practice to improve your typing skills.',
   },
   '/test': {
     title: 'Typing Test Online - Test Your Typing Speed | Typeoye',

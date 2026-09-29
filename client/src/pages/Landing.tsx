@@ -66,8 +66,8 @@ const benefits = [
  */
 export default function Landing() {
   useSeo({
-    title: 'Free Typing Test Online – Check Your WPM & Accuracy | Typeoye',
-    description: 'Take a free typing test online and check your typing speed, WPM, and accuracy. Practice touch typing, improve your speed, and learn with Typeoye.',
+    title: 'Free Typing Test – Check Your Typing Speed & Accuracy | Typeoye',
+    description: 'Take a free typing test online with Typeoye. Check your typing speed, WPM and accuracy, then practice to improve your typing skills.',
     canonicalPath: '/',
   });
 
@@ -142,26 +142,25 @@ export default function Landing() {
             style={{ backgroundColor: 'var(--color-accent-light)', color: 'var(--color-accent-text)' }}
           >
             <Zap size={14} />
-            Built for serious typists
+            Test. Practice. Improve.
           </div>
 
           <h1
-            className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] mb-6"
+            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05] mb-6"
             style={{ color: 'var(--color-text-primary)' }}
           >
-            Free Typing Test
+            Test Your Typing Speed
             <br />
             <span
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: 'linear-gradient(135deg, #4361ee 0%, #7c8cf8 55%, #a5b4fc 100%)' }}
             >
-              Online.
+              Improve Your WPM
             </span>
           </h1>
 
           <p className="readable-text text-base sm:text-lg max-w-2xl mx-auto mb-10 px-2" style={{ color: 'var(--color-text-secondary)' }}>
-            Check your WPM and typing accuracy with a free typing speed test, then improve
-            with touch typing lessons, practice drills, and fun games — right from your browser.
+            Take a free online typing test, check your typing speed and accuracy, and practice to become a faster, more accurate typist.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16">
