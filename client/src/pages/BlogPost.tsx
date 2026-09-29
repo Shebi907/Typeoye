@@ -24,16 +24,16 @@ export default function BlogPostPage() {
   useSeo(
     post
       ? {
-          title: post.metaTitle ?? `${post.title} | TypeOye Blog`,
+          title: post.metaTitle ?? `${post.title} | Typeoye Blog`,
           description: post.metaDescription ?? post.description,
           canonicalPath: `/blog/${post.slug}`,
           image: `${SITE_URL}${post.image}`,
           type: 'article',
         }
       : {
-          title: 'Article Not Found | TypeOye Blog',
+          title: 'Article Not Found | Typeoye Blog',
           description:
-            'The article you are looking for does not exist or may have moved. Browse the TypeOye Blog for typing tips and guides.',
+            'The article you are looking for does not exist or may have moved. Browse the Typeoye Blog for typing tips and guides.',
           canonicalPath: '/blog',
           robots: 'noindex, nofollow',
         }

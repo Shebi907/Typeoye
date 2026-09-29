@@ -71,7 +71,7 @@ export const POSTS: BlogPost[] = [
     category: 'Typing Tips',
     description:
       'Discover practical techniques that can help you type faster while maintaining accuracy.',
-    metaTitle: 'How to Increase Typing Speed – 10 Proven Tips | TypeOye',
+    metaTitle: 'How to Increase Typing Speed – 10 Proven Tips | Typeoye',
     metaDescription:
       "Learn how to improve your typing speed with 10 proven speed typing tips. Discover how to type faster while keeping your typing accuracy high, with free practice.",
     intro:
@@ -163,7 +163,7 @@ export const POSTS: BlogPost[] = [
     category: 'Guides',
     description:
       'Learn why the home row is important and how mastering it can improve your typing skills.',
-    metaTitle: 'Home Row Technique – The Foundation of Touch Typing | TypeOye',
+    metaTitle: 'Home Row Technique – The Foundation of Touch Typing | Typeoye',
     metaDescription:
       'Master the home row technique to type faster without looking at the keyboard. A practical touch typing guide covering finger placement, drills, and common mistakes.',
     intro:
@@ -210,7 +210,7 @@ export const POSTS: BlogPost[] = [
     title: 'Typing Accuracy Exercises: Improve Your Speed & Accuracy',
     category: 'Practice',
     description: 'Improve your typing accuracy with simple and effective typing exercises.',
-    metaTitle: 'Typing Accuracy Exercises to Increase Speed & Accuracy | TypeOye',
+    metaTitle: 'Typing Accuracy Exercises to Increase Speed & Accuracy | Typeoye',
     metaDescription:
       'Typing accuracy exercises that help you increase typing speed and accuracy. Improve your typing accuracy with targeted drills and learn to type faster without more mistakes.',
     intro:
@@ -287,7 +287,7 @@ export const POSTS: BlogPost[] = [
     category: 'Productivity',
     description:
       'Learn how faster and more accurate typing can save time and improve your daily productivity.',
-    metaTitle: 'How Good Typing Skills Boost Your Productivity | TypeOye',
+    metaTitle: 'How Good Typing Skills Boost Your Productivity | Typeoye',
     metaDescription:
       'Faster, more accurate typing saves hours every week. Learn how improving your typing speed and accuracy can boost your daily productivity.',
     intro:
@@ -327,9 +327,9 @@ export const POSTS: BlogPost[] = [
     category: 'News & Updates',
     description:
       'Explore the latest improvements and features added to Typeoye to make your learning better than ever.',
-    metaTitle: "What's New in TypeOye – Latest Updates | TypeOye",
+    metaTitle: "What's New in Typeoye – Latest Updates | Typeoye",
     metaDescription:
-      'Explore the latest TypeOye updates — new typing features, practice tools, and improvements that make learning to type faster and smarter.',
+      'Explore the latest Typeoye updates — new typing features, practice tools, and improvements that make learning to type faster and smarter.',
     intro:
       'Typeoye keeps improving the way you train. Here is everything we shipped recently to make practice smarter, tests fairer, and progress easier to understand.',
     readTime: 3,
@@ -362,7 +362,7 @@ export const POSTS: BlogPost[] = [
     title: 'How to Type Faster on a Laptop vs Desktop Keyboard',
     category: 'Guides',
     description: 'Practical differences in key travel, layout, and hand positioning — plus the adjustments that make you faster on each.',
-    metaTitle: 'Typing on a Laptop vs Desktop Keyboard – What Makes You Faster | TypeOye',
+    metaTitle: 'Typing on a Laptop vs Desktop Keyboard – What Makes You Faster | Typeoye',
     metaDescription:
       'Compare laptop and desktop keyboards for typing speed. Learn how key travel, layout, and hand position change your WPM and accuracy on each setup.',
     intro:
@@ -411,7 +411,7 @@ export const POSTS: BlogPost[] = [
     title: 'Why Touch Typing Matters for Programmers',
     category: 'Productivity',
     description: 'How typing speed and accuracy affect coding flow, and why symbols and brackets present a uniquely programmer-sized challenge.',
-    metaTitle: 'Touch Typing for Programmers – Better Flow, Fewer Symbol Errors | TypeOye',
+    metaTitle: 'Touch Typing for Programmers – Better Flow, Fewer Symbol Errors | Typeoye',
     metaDescription:
       'Why programmers should learn touch typing. Learn how typing speed, accuracy, and symbol handling affect coding flow, focus, and long sessions at the keyboard.',
     intro:
@@ -460,7 +460,7 @@ export const POSTS: BlogPost[] = [
     title: 'How Long Does It Take to Learn Touch Typing?',
     category: 'Guides',
     description: 'Realistic timelines for learning touch typing, what slows people down, and a sample plan that actually works.',
-    metaTitle: 'How Long Does It Take to Learn Touch Typing? A Realistic Timeline | TypeOye',
+    metaTitle: 'How Long Does It Take to Learn Touch Typing? A Realistic Timeline | Typeoye',
     metaDescription:
       'How long does it take to learn touch typing? A realistic timeline based on practice hours, the factors that move it faster or slower, and a six-week plan.',
     intro:
@@ -509,7 +509,7 @@ export const POSTS: BlogPost[] = [
     title: 'Best Typing Games to Learn Typing While Having Fun',
     category: 'Practice',
     description: 'How typing games make practice feel like play, what makes a good one, and where to start on Typeoye.',
-    metaTitle: 'Best Typing Games to Learn to Type Faster – While Having Fun | TypeOye',
+    metaTitle: 'Best Typing Games to Learn to Type Faster – While Having Fun | Typeoye',
     metaDescription:
       'Typing games turn practice into play. Discover what makes a typing game effective, the common game styles, and free typing games on Typeoye.',
     intro:
@@ -559,7 +559,7 @@ export const POSTS: BlogPost[] = [
     category: 'Guides',
     description:
       'A practical, parent-friendly guide to teaching children typing, with patience, games, and short sessions.',
-    metaTitle: 'How to Teach Kids Touch Typing at Home – A Parent’s Guide | TypeOye',
+    metaTitle: 'How to Teach Kids Touch Typing at Home – A Parent’s Guide | Typeoye',
     metaDescription:
       'Learn how to teach children typing at home with short sessions, playful drills, and the right setup. A practical parent guide covering age, routine, and progress.',
     intro:
@@ -608,7 +608,7 @@ export const POSTS: BlogPost[] = [
     title: '7 Common Typing Mistakes Beginners Make (and How to Fix Them)',
     category: 'Typing Tips',
     description: 'The seven mistakes that keep beginners slow, and the exact corrections that fix each one.',
-    metaTitle: '7 Common Typing Mistakes and How to Fix Them | TypeOye',
+    metaTitle: '7 Common Typing Mistakes and How to Fix Them | Typeoye',
     metaDescription:
       'Common typing mistakes beginners make — hunting keys, wrong fingers, mashing, bad posture — and the practical fix for each one on the way to faster, accurate typing.',
     intro:
@@ -661,7 +661,7 @@ export const POSTS: BlogPost[] = [
     title: 'How Typing Speed Affects Your Career',
     category: 'Productivity',
     description: 'From data entry to coding to remote freelancing, here is how typing speed and accuracy quietly shape your work.',
-    metaTitle: 'How Typing Speed Affects Your Career – Data, Coding, Remote Work | TypeOye',
+    metaTitle: 'How Typing Speed Affects Your Career – Data, Coding, Remote Work | Typeoye',
     metaDescription:
       'Typing speed and accuracy affect careers in data entry, coding, freelancing, and remote work. Learn the roles where typing matters and how to turn it into an edge.',
     intro:
@@ -710,7 +710,7 @@ export const POSTS: BlogPost[] = [
     title: 'Typing Tests for Job Interviews: What to Expect',
     category: 'Guides',
     description: 'A practical guide to typing assessments in hiring — what employers test, how to prepare, and what scores they want.',
-    metaTitle: 'Typing Tests for Job Interviews – What to Expect and How to Prepare | TypeOye',
+    metaTitle: 'Typing Tests for Job Interviews – What to Expect and How to Prepare | Typeoye',
     metaDescription:
       'Preparing for a typing test in a job interview? Learn what employers test, typical score requirements by role, and how to practice before the assessment.',
     intro:
@@ -759,7 +759,7 @@ export const POSTS: BlogPost[] = [
     title: 'How Accurate Are Online Typing Tests, Really?',
     category: 'Typing Tips',
     description: 'An honest look at how WPM and accuracy are calculated, why scores fluctuate, and how to read the numbers.',
-    metaTitle: 'How Accurate Are Online Typing Tests? WPM Explained Honestly | TypeOye',
+    metaTitle: 'How Accurate Are Online Typing Tests? WPM Explained Honestly | Typeoye',
     metaDescription:
       'Online typing tests measure skill — within limits. Understand how WPM and accuracy are calculated, why scores fluctuate, and how to read your results honestly.',
     intro:

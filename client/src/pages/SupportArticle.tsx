@@ -75,14 +75,14 @@ export default function SupportArticle() {
   useSeo(
     article
       ? {
-          title: `${article.title} | TypeOye Support`,
+          title: `${article.title} | Typeoye Support`,
           description: article.description,
           canonicalPath: `/support/${article.slug}`,
         }
       : {
-          title: 'Article Not Found | TypeOye Support',
+          title: 'Article Not Found | Typeoye Support',
           description:
-            'The support article you are looking for does not exist or may have been moved. Visit the TypeOye Support Center.',
+            'The support article you are looking for does not exist or may have been moved. Visit the Typeoye Support Center.',
           canonicalPath: '/support',
           robots: 'noindex, nofollow',
         }

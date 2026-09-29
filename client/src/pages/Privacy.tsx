@@ -372,9 +372,9 @@ function HeroBadge({ icon: Icon, label, value }: { icon: React.ElementType; labe
 
 export default function Privacy() {
   useSeo({
-    title: 'Privacy Policy | TypeOye',
+    title: 'Privacy Policy | Typeoye',
     description:
-      'What TypeOye collects and stores — your account, typing results, progress, and certificates — how it is used, the third-party services we rely on, and how to access or delete your data.',
+      'What Typeoye collects and stores — your account, typing results, progress, and certificates — how it is used, the third-party services we rely on, and how to access or delete your data.',
     canonicalPath: '/privacy',
   });
   const lastUpdated = PRIVACY_POLICY_DATE;

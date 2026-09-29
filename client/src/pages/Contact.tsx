@@ -38,9 +38,9 @@ const INITIAL: FormState = { name: '', email: '', topic: 'General question', mes
 
 export default function Contact() {
   useSeo({
-    title: 'Contact TypeOye',
+    title: 'Contact Typeoye',
     description:
-      'Questions about TypeOye? Get in touch with our team for support, feedback, or feature requests about typing tests, lessons, and practice.',
+      'Questions about Typeoye? Get in touch with our team for support, feedback, or feature requests about typing tests, lessons, and practice.',
     canonicalPath: '/contact',
   });
 

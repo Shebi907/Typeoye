@@ -66,8 +66,8 @@ const benefits = [
  */
 export default function Landing() {
   useSeo({
-    title: 'Free Typing Test Online – Check Your WPM & Accuracy | TypeOye',
-    description: 'Take a free typing test online and check your typing speed, WPM, and accuracy. Practice touch typing, improve your speed, and learn with TypeOye.',
+    title: 'Free Typing Test Online – Check Your WPM & Accuracy | Typeoye',
+    description: 'Take a free typing test online and check your typing speed, WPM, and accuracy. Practice touch typing, improve your speed, and learn with Typeoye.',
     canonicalPath: '/',
   });
 
@@ -78,7 +78,7 @@ export default function Landing() {
         '@type': 'WebSite',
         '@id': `${SITE_URL}/#website`,
         url: `${SITE_URL}/`,
-        name: 'TypeOye',
+        name: 'Typeoye',
         alternateName: 'Typeoye',
         description:
           'Free online typing test, structured typing lessons, practice drills, and typing games to help you measure your WPM, improve your typing speed, and learn touch typing.',
@@ -88,7 +88,7 @@ export default function Landing() {
         '@type': 'WebApplication',
         '@id': `${SITE_URL}/#webapp`,
         url: `${SITE_URL}/`,
-        name: 'TypeOye',
+        name: 'Typeoye',
         description:
           'A free typing test website that measures your WPM and accuracy and helps you improve your typing speed with touch typing lessons, practice, and games.',
         applicationCategory: 'EducationalApplication',
@@ -104,7 +104,7 @@ export default function Landing() {
         '@type': 'Organization',
         '@id': `${SITE_URL}/#organization`,
         url: `${SITE_URL}/`,
-        name: 'TypeOye',
+        name: 'Typeoye',
         logo: {
           '@type': 'ImageObject',
           url: `${SITE_URL}/favicon.png`,
@@ -257,7 +257,7 @@ export default function Landing() {
             className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-2"
             style={{ color: 'var(--color-text-primary)' }}
           >
-            Why Choose TypeOye?
+            Why Choose Typeoye?
           </h2>
           <p className="readable-text text-lg text-center mb-12 sm:mb-14" style={{ color: 'var(--color-text-secondary)' }}>
             Simple. Effective. Free.
@@ -315,7 +315,7 @@ export default function Landing() {
             Get Your Typing Certificate
           </h2>
           <p className="readable-text text-lg max-w-xl mx-auto mb-8" style={{ color: 'var(--color-text-secondary)' }}>
-            Prove your typing skills with a TypeOye typing certificate.
+            Prove your typing skills with a Typeoye typing certificate.
           </p>
           <Link to="/certificate" className="landing-cta">
             Learn More

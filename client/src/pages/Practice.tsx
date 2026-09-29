@@ -27,8 +27,8 @@ const DIFF_LABEL: Record<string, string> = {
 
 export default function Practice() {
   useSeo({
-    title: 'Free Typing Practice Online – Improve Your Typing Speed | TypeOye',
-    description: 'Practice typing online for free with TypeOye. Improve typing speed, accuracy, and touch typing skills with focused typing practice.',
+    title: 'Free Typing Practice Online – Improve Your Typing Speed | Typeoye',
+    description: 'Practice typing online for free with Typeoye. Improve typing speed, accuracy, and touch typing skills with focused typing practice.',
     canonicalPath: '/practice',
   });
   const { isAuthenticated } = useAuthStore();

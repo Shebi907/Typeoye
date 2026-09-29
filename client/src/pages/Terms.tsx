@@ -275,9 +275,9 @@ function HeroBadge({ icon: Icon, label, value }: { icon: React.ElementType; labe
 
 export default function Terms() {
   useSeo({
-    title: 'Terms and Conditions | TypeOye',
+    title: 'Terms and Conditions | Typeoye',
     description:
-      'Read the TypeOye terms and conditions covering the free typing test, practice drills, 16-lesson Learn course, games, certificates, and leaderboard, including account rules and disclaimers.',
+      'Read the Typeoye terms and conditions covering the free typing test, practice drills, 16-lesson Learn course, games, certificates, and leaderboard, including account rules and disclaimers.',
     canonicalPath: '/terms',
   });
   const lastUpdated = TERMS_LAST_UPDATED;

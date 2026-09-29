@@ -31,9 +31,9 @@ export default function SupportCenter() {
   const [query, setQuery] = useState('');
 
   useSeo({
-    title: 'Help Center & Support | TypeOye',
+    title: 'Help Center & Support | Typeoye',
     description:
-      'Get help with TypeOye — account setup, typing test and practice questions, Learn course, certificates, and troubleshooting guides.',
+      'Get help with Typeoye — account setup, typing test and practice questions, Learn course, certificates, and troubleshooting guides.',
     canonicalPath: '/support',
   });
 

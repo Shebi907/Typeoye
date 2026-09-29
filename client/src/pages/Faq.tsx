@@ -140,9 +140,9 @@ export default function Faq() {
   const [open, setOpen] = useState<number | null>(0);
 
   useSeo({
-    title: 'Typing FAQ | TypeOye',
+    title: 'Typing FAQ | Typeoye',
     description:
-      'Answers to common questions about TypeOye typing tests, lessons, practice drills, WPM and accuracy, certificates, and account management.',
+      'Answers to common questions about Typeoye typing tests, lessons, practice drills, WPM and accuracy, certificates, and account management.',
     canonicalPath: '/faq',
   });
 

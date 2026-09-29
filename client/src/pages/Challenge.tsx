@@ -204,8 +204,8 @@ export function formatClock(totalSeconds: number): string {
 
 function ChallengeHome() {
   useSeo({
-    title: 'Typing Challenge – Race a Friend in Real-Time | TypeOye',
-    description: 'Create a typing challenge, share your code, and race a friend in a real-time typing battle. Compare WPM and accuracy live on TypeOye.',
+    title: 'Typing Challenge – Race a Friend in Real-Time | Typeoye',
+    description: 'Create a typing challenge, share your code, and race a friend in a real-time typing battle. Compare WPM and accuracy live on Typeoye.',
     canonicalPath: '/challenge',
   });
   const navigate = useNavigate();

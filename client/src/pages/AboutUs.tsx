@@ -53,9 +53,9 @@ const STEPS = [
 
 export default function AboutUs() {
   useSeo({
-    title: 'About TypeOye | Free Typing Platform for Tests, Lessons & Practice',
+    title: 'About Typeoye | Free Typing Platform for Tests, Lessons & Practice',
     description:
-      'TypeOye is a free, ad-free typing platform with honest typing tests, 16 guided lessons, focused practice drills, typing games, certificates, and progress tracking.',
+      'Typeoye is a free, ad-free typing platform with honest typing tests, 16 guided lessons, focused practice drills, typing games, certificates, and progress tracking.',
     canonicalPath: '/about',
   });
 

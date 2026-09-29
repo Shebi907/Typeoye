@@ -105,8 +105,8 @@ const buildNextChunk = (
 
 export default function TestMode() {
   useSeo({
-    title: 'Typing Test Online – Test Your Typing Speed | TypeOye',
-    description: 'Take an online typing test to measure your WPM and accuracy. Test your typing speed with different durations and improve your typing skills with TypeOye.',
+    title: 'Typing Test Online – Test Your Typing Speed | Typeoye',
+    description: 'Take an online typing test to measure your WPM and accuracy. Test your typing speed with different durations and improve your typing skills with Typeoye.',
     canonicalPath: '/test',
   });
   const { settings, isAuthenticated, profile, user } = useAuthStore();

@@ -95,8 +95,8 @@ function formatDate(iso: string): string {
 
 export default function Games() {
   useSeo({
-    title: 'Typing Games Online – Improve Your Typing Speed | TypeOye',
-    description: 'Play free typing games online and improve your typing speed, accuracy, and keyboard skills while having fun with TypeOye.',
+    title: 'Typing Games Online – Improve Your Typing Speed | Typeoye',
+    description: 'Play free typing games online and improve your typing speed, accuracy, and keyboard skills while having fun with Typeoye.',
     canonicalPath: '/games',
   });
   const [active, setActive] = useState<'hub' | GameKey>('hub');

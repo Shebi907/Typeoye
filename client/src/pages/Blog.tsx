@@ -15,9 +15,9 @@ export default function Blog() {
   const [sort, setSort] = useState<BlogSort>('latest');
 
   useSeo({
-    title: 'Typing Tips & Guides – Improve Your Typing Speed | TypeOye',
+    title: 'Typing Tips & Guides – Improve Your Typing Speed | Typeoye',
     description:
-      'Learn typing tips, improve your typing speed and accuracy, and discover useful touch typing guides and techniques on the TypeOye blog.',
+      'Learn typing tips, improve your typing speed and accuracy, and discover useful touch typing guides and techniques on the Typeoye blog.',
     canonicalPath: '/blog',
     image: `${SITE_URL}/favicon.png`,
   });
@@ -28,8 +28,8 @@ export default function Blog() {
     name: 'Typing Tips & Guides',
     url: `${SITE_URL}/blog`,
     description:
-      'Typing tips, guides, and practice advice to help you type faster, improve accuracy, and boost productivity with TypeOye.',
-    isPartOf: { '@type': 'WebSite', name: 'TypeOye', url: `${SITE_URL}/` },
+      'Typing tips, guides, and practice advice to help you type faster, improve accuracy, and boost productivity with Typeoye.',
+    isPartOf: { '@type': 'WebSite', name: 'Typeoye', url: `${SITE_URL}/` },
     mainEntity: {
       '@type': 'ItemList',
       itemListElement: POSTS.map((post, index) => ({

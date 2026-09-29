@@ -53,9 +53,9 @@ const CHECKLIST = [
 
 export default function HowItWorks() {
   useSeo({
-    title: 'How It Works | TypeOye',
+    title: 'How It Works | Typeoye',
     description:
-      'Learn how TypeOye works — take a typing test, follow guided lessons, practice your weak keys, play typing games, and earn a typing certificate.',
+      'Learn how Typeoye works — take a typing test, follow guided lessons, practice your weak keys, play typing games, and earn a typing certificate.',
     canonicalPath: '/how-it-works',
   });
 

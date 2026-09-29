@@ -34,9 +34,9 @@ const INCLUDED = [
  */
 export default function CertificatePage() {
   useSeo({
-    title: 'Typing Certificate – Get Your Typing Test Certificate | TypeOye',
+    title: 'Typing Certificate – Get Your Typing Test Certificate | Typeoye',
     description:
-      'Take a typing test and get a typing certificate based on your typing speed and accuracy with TypeOye.',
+      'Take a typing test and get a typing certificate based on your typing speed and accuracy with Typeoye.',
     canonicalPath: '/certificate',
   });
 
@@ -75,7 +75,7 @@ export default function CertificatePage() {
             <Award size={24} style={{ color: 'var(--color-accent-text)' }} />
           </div>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2">Get Your Typing Certificate</h1>
-          <p className="text-secondary mb-8">Reach at least 30 WPM and 90% accuracy in one test to earn your TypeOye certificate.</p>
+          <p className="text-secondary mb-8">Reach at least 30 WPM and 90% accuracy in one test to earn your Typeoye certificate.</p>
 
           <label htmlFor="cert-name" className="block text-left text-base font-semibold mb-5">
             Your Name
