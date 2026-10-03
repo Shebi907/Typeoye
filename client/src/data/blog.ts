@@ -50,7 +50,7 @@ export const CATEGORY_BADGE: Record<BlogCategory, string> = {
 /** Sidebar category post counts (keep in sync with POSTS). */
 export const CATEGORY_COUNTS: Record<BlogCategory, number> = {
   'Typing Tips': 3,
-  'Guides': 5,
+  'Guides': 6,
   'Practice': 2,
   'Productivity': 3,
   'News & Updates': 1,
@@ -800,6 +800,54 @@ export const POSTS: BlogPost[] = [
       {
         heading: '6. How to Read Your Own Results Honestly',
         body: 'The discipline is to compare like with like. Always test at the same duration, prefer sites that show you their formula, and track the trend over two to three weeks rather than fixating on any single session. When your average sits comfortably at 58 with a high of 66 and a low of 50, the honest number is the middle band, not the peak. Use the tests that show accuracy and weak keys to direct your next practice session. A typing test will never hand you a perfectly trustworthy number — but used consistently, it gives you the next best thing: a steadily more trustworthy picture of whether you are improving.',
+      },
+    ],
+  },
+  {
+    slug: 'why-wpm-differs-across-sites',
+    title: 'Why Your Typing Speed Looks Different on Every Website (And What WPM Really Means)',
+    category: 'Guides',
+    description:
+      'Ever wondered why your WPM changes depending on which typing test you use? Here’s the real math behind typing speed scores — and why it matters more than you think.',
+    metaTitle:
+      'Why Your Typing Speed Looks Different on Every Website (And What WPM Really Means) | Typeoye',
+    metaDescription:
+      'Ever wondered why your WPM changes depending on which typing test you use? Here’s the real math behind typing speed scores — and why it matters more than you think.',
+    intro:
+      'Open three different typing test websites, type the exact same sentence at the exact same speed, and you’ll likely get three different WPM scores. This isn’t a bug. It’s because "words per minute" isn’t one standardized measurement — it’s a formula, and different sites calculate it differently.',
+    readTime: 4,
+    publishedAt: '2026-10-03',
+    popular: false,
+    image: '/assets/blog/why-wpm-differs-across-sites.jpg',
+    imageAlt: 'Hands typing on a laptop keyboard',
+    pullQuote:
+      'Pick one consistent method and track your progress against itself, not against scores from other sites.',
+    cta: {
+      heading: 'Get a score you can actually compare',
+      blurb: 'Run a test on a formula that never changes between sessions.',
+      label: 'Take a Typing Test',
+      to: '/test',
+    },
+    content: [
+      {
+        heading: 'The Industry’s Dirty Little Secret',
+        body: 'Most typing test websites use a convention from the days of mechanical typewriters: one "word" equals exactly 5 characters, regardless of what you actually typed. Type "cat" and "extraordinary" at the same pace, and the 5-character rule quietly inflates your score for the long word and deflates it for the short one — because it’s not counting real words at all. It’s counting keystrokes and dividing by five.\n\nThis made sense in 1910 when typing tests were standardizing across different languages and vocabularies. It makes less sense today, when most of us are typing real sentences, not arbitrary character strings.',
+      },
+      {
+        heading: 'How Typeoye Does It Differently',
+        body: 'On Typeoye, a word only counts if you type it completely and correctly. "To" counts as one word. "Extraordinary" also counts as one word. No character math, no keystroke conversion — just real words, correctly typed, divided by time.\n\nThis has a direct consequence: if a passage has longer words, your WPM on Typeoye will often look lower than it would on a site using the 5-character convention, even though your actual typing speed hasn’t changed. You’re not getting worse. You’re being measured honestly.',
+      },
+      {
+        heading: 'Why This Actually Matters',
+        body: 'If you’re using your typing speed for something that matters — a job application, a personal goal, comparing progress over time — the measurement method matters more than the number itself. A 60 WPM score on a site using character-based counting and a 60 WPM score on a site counting real words are not the same achievement. The second one is harder to earn.\n\nThis is also why jumping between different typing test sites can be misleading. If your score drops when you switch platforms, it’s not necessarily because your typing got worse — it might just be a stricter, more honest formula.',
+      },
+      {
+        heading: 'What Should You Actually Trust?',
+        body: 'Pick one consistent method and track your progress against itself, not against scores from other sites. If you’re using Typeoye to track real improvement over weeks or months, your numbers are comparable to each other because the formula never changes. That consistency is worth more than a flattering number.',
+      },
+      {
+        heading: 'The Bottom Line',
+        body: 'Typing speed scores aren’t lies, exactly — but they aren’t universal truths either. They’re the output of a formula, and formulas have assumptions baked into them. Understanding what’s being measured (real words vs. character chunks) helps you make sense of why your "speed" seems to shift depending on where you test it, and gives you a more honest picture of where you actually stand.',
       },
     ],
   },
