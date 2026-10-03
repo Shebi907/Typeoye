@@ -217,7 +217,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                       className={cn(
                         'block border-l-2 py-1 pl-3 text-sm leading-snug transition-colors',
                         activeId === heading.id
-                          ? 'border-l-[#4361ee] font-semibold text-[#4361ee]'
+                          ? 'border-l-[var(--color-accent-text)] font-semibold text-[var(--color-accent-text)]'
                           : 'border-l-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-accent-text)]'
                       )}
                     >

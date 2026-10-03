@@ -113,7 +113,7 @@ function applyOwnSlot(challenge: ChallengePublic, ownUserId: string | undefined)
 
 /* Decorative mini-keyboard used in the hero illustration. Visual only. */
 function MiniKeyboard({ tone, tilt }: { tone: 'blue' | 'purple'; tilt: number }) {
-  const accent = tone === 'blue' ? '#4361ee' : '#7c3aed';
+  const accentClass = tone === 'blue' ? 'text-[#4361ee] dark:text-[#8ba2ff]' : 'text-[#7c3aed] dark:text-[#c4a5ff]';
   const rows = [
     ['Q', 'W', 'E', 'R', 'T'],
     ['A', 'S', 'D', 'F', 'G'],
@@ -122,8 +122,8 @@ function MiniKeyboard({ tone, tilt }: { tone: 'blue' | 'purple'; tilt: number })
   return (
     <div className="flex-1 min-w-0" style={{ transform: `rotate(${tilt}deg)` }}>
       <div
-        className="rounded-xl sm:rounded-2xl p-2 sm:p-2.5"
-        style={{ border: '1px solid rgba(99, 102, 241, 0.18)', backgroundColor: '#fbfbfe', boxShadow: '0 12px 28px -14px rgba(23, 23, 31, 0.22)' }}
+        className="rounded-xl sm:rounded-2xl p-2 sm:p-2.5 border border-[rgba(99,102,241,0.18)] bg-[#fbfbfe] dark:border-[rgba(124,140,248,0.24)] dark:bg-[#1c1c25]"
+        style={{ boxShadow: '0 12px 28px -14px rgba(23, 23, 31, 0.22)' }}
       >
         <div className="flex flex-col gap-1">
           {rows.map((row, rowIdx) => (
@@ -131,8 +131,8 @@ function MiniKeyboard({ tone, tilt }: { tone: 'blue' | 'purple'; tilt: number })
               {row.map((key) => (
                 <span
                   key={key}
-                  className="grid h-3 w-[1.125rem] sm:h-3.5 sm:w-[1.375rem] place-items-center rounded-[3px] text-[0.4rem] sm:text-[0.5rem] font-bold"
-                  style={{ backgroundColor: `${accent}16`, color: accent }}
+                  className={`grid h-3 w-[1.125rem] sm:h-3.5 sm:w-[1.375rem] place-items-center rounded-[3px] text-[0.4rem] sm:text-[0.5rem] font-bold ${accentClass}`}
+                  style={{ backgroundColor: 'color-mix(in srgb, currentColor 12%, transparent)' }}
                 >
                   {key}
                 </span>
@@ -143,7 +143,7 @@ function MiniKeyboard({ tone, tilt }: { tone: 'blue' | 'purple'; tilt: number })
             <span className="h-2 w-9 sm:h-2.5 sm:w-12 rounded-[3px]" style={{ background: `linear-gradient(90deg, rgba(67, 97, 238, 0.5), rgba(124, 58, 237, 0.35))` }} />
           </div>
         </div>
-        <p className="mt-2 text-[0.55rem] sm:text-[0.6rem] font-bold uppercase tracking-[0.14em] text-center" style={{ color: accent }}>
+        <p className={`mt-2 text-[0.55rem] sm:text-[0.6rem] font-bold uppercase tracking-[0.14em] text-center ${accentClass}`}>
           {tone === 'blue' ? 'Player 1' : 'Player 2'}
         </p>
       </div>
@@ -156,8 +156,8 @@ function ChallengeHeroVisual() {
   return (
     <div className="challenge-fade-in relative" style={{ animationDelay: '90ms' }}>
       <div
-        className="relative rounded-[1.75rem] p-5 sm:p-7 overflow-hidden"
-        style={{ border: '1px solid rgba(99, 102, 241, 0.18)', backgroundColor: '#ffffff', boxShadow: '0 24px 60px -24px rgba(67, 97, 238, 0.30)' }}
+        className="relative rounded-[1.75rem] p-5 sm:p-7 overflow-hidden border border-[rgba(99,102,241,0.18)] bg-white dark:border-[rgba(124,140,248,0.24)] dark:bg-[#1c1c25]"
+        style={{ boxShadow: '0 24px 60px -24px rgba(67, 97, 238, 0.30)' }}
       >
         <span
           aria-hidden="true"
@@ -175,7 +175,7 @@ function ChallengeHeroVisual() {
           <span
             aria-hidden="true"
             className="relative z-10 grid h-12 w-12 sm:h-14 sm:w-14 shrink-0 place-items-center rounded-full text-sm sm:text-base font-extrabold text-white"
-            style={{ background: 'linear-gradient(135deg, #4361ee, #7c3aed)', boxShadow: '0 0 0 6px rgba(255, 255, 255, 0.85), 0 0 26px rgba(124, 58, 237, 0.55)' }}
+            style={{ background: 'linear-gradient(135deg, #4361ee, #7c3aed)', boxShadow: '0 0 0 6px var(--color-card), 0 0 26px rgba(124, 58, 237, 0.55)' }}
           >
             VS
           </span>
@@ -1323,7 +1323,7 @@ function ChallengeRoom({ code }: { code: string }) {
       return (
         <div className="max-w-[30rem] mx-auto w-full">
           <div className="card p-7 text-center">
-            <span className="inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-3" style={{ backgroundColor: 'rgba(239, 68, 68, 0.12)', color: '#dc2626' }}>
+            <span className="inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-3" style={{ backgroundColor: 'rgba(239, 68, 68, 0.12)', color: 'var(--status-danger)' }}>
               <AlertTriangle size={22} />
             </span>
             <h2 className="text-xl font-bold" style={{ color: 'var(--color-text-primary)' }}>{errorTitle}</h2>
@@ -1529,11 +1529,11 @@ function DuelStat({ icon: Icon, label, value, tone, prominent }: {
 }) {
   return (
     <div
-      className="flex flex-col items-center justify-center rounded-xl border px-2 py-2.5"
-      style={{
-        borderColor: prominent ? 'rgba(67, 97, 238, 0.25)' : 'var(--color-border)',
-        backgroundColor: prominent ? 'rgba(67, 97, 238, 0.06)' : 'rgba(251, 250, 254, 0.6)',
-      }}
+      className={`flex flex-col items-center justify-center rounded-xl border px-2 py-2.5 ${
+        prominent
+          ? 'border-[rgba(67,97,238,0.25)] bg-[rgba(67,97,238,0.06)] dark:bg-[rgba(86,103,238,0.16)]'
+          : 'border-[var(--color-border)] bg-[rgba(251,250,254,0.6)] dark:bg-white/5'
+      }`}
     >
       <span className="flex items-center gap-1 text-[0.625rem] font-semibold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>
         <Icon size={11} style={{ color: tone }} /> {label}
@@ -1577,10 +1577,10 @@ function LobbyCard({ challenge, code, shareUrl, waitingSecondsLeft, isCreator, o
   const opponentConnected = opponent?.connected ?? true;
 
   const conn = !hasOpponent
-    ? { label: 'Waiting for opponent…', bg: 'rgba(245, 158, 11, 0.12)', fg: '#b45309', dot: '#f59e0b', ping: true }
+    ? { label: 'Waiting for opponent…', bg: 'var(--status-warning-bg)', fg: 'var(--status-warning)', dot: '#f59e0b', ping: true }
     : !opponentConnected
-      ? { label: 'Opponent disconnected', bg: 'rgba(239, 68, 68, 0.08)', fg: '#dc2626', dot: '#ef4444', ping: false }
-      : { label: 'Both players connected', bg: 'rgba(34, 197, 94, 0.10)', fg: '#15803d', dot: '#22c55e', ping: false };
+      ? { label: 'Opponent disconnected', bg: 'var(--status-danger-bg)', fg: 'var(--status-danger)', dot: '#ef4444', ping: false }
+      : { label: 'Both players connected', bg: 'var(--status-success-bg)', fg: 'var(--status-success)', dot: '#22c55e', ping: false };
 
   let info: { icon: string; title: string; body: string; bg: string; fg: string; border: string };
   if (!hasOpponent) {
@@ -1588,8 +1588,8 @@ function LobbyCard({ challenge, code, shareUrl, waitingSecondsLeft, isCreator, o
       icon: '⏳',
       title: 'Waiting for your opponent to join…',
       body: 'Share your challenge code or link with a friend to get started.',
-      bg: 'rgba(245, 158, 11, 0.10)',
-      fg: '#b45309',
+      bg: 'var(--status-warning-bg)',
+      fg: 'var(--status-warning)',
       border: 'rgba(245, 158, 11, 0.22)',
     };
   } else if (!myReady) {
@@ -1616,8 +1616,8 @@ function LobbyCard({ challenge, code, shareUrl, waitingSecondsLeft, isCreator, o
       icon: '⚡',
       title: 'Both ready — starting the challenge!',
       body: 'You\'re seconds away from battle.',
-      bg: 'rgba(34, 197, 94, 0.10)',
-      fg: '#15803d',
+      bg: 'var(--status-success-bg)',
+      fg: 'var(--status-success)',
       border: 'rgba(34, 197, 94, 0.22)',
     };
   } else {
@@ -1670,7 +1670,7 @@ function LobbyCard({ challenge, code, shareUrl, waitingSecondsLeft, isCreator, o
         <div className="flex shrink-0 flex-wrap items-center gap-2">
           <span
             className="inline-flex w-fit items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold"
-            style={{ backgroundColor: 'rgba(139, 92, 246, 0.10)', color: '#7c3aed' }}
+            style={{ backgroundColor: 'var(--status-purple-bg)', color: 'var(--status-purple)' }}
           >
             <Swords size={13} /> Round {challenge.round}
           </span>
@@ -1843,7 +1843,7 @@ function LobbyCard({ challenge, code, shareUrl, waitingSecondsLeft, isCreator, o
                 </button>
               </div>
 
-              <div className="mt-3 flex items-center gap-2 truncate rounded-xl border px-3.5 py-2.5" style={{ borderColor: 'rgba(99, 102, 241, 0.20)', backgroundColor: 'rgba(251, 250, 254, 0.6)' }}>
+              <div className="mt-3 flex items-center gap-2 truncate rounded-xl border border-[rgba(99,102,241,0.20)] bg-[rgba(251,250,254,0.6)] px-3.5 py-2.5 dark:border-[rgba(124,140,248,0.24)] dark:bg-white/5">
                 <Globe size={14} className="shrink-0" style={{ color: 'var(--color-text-muted)' }} />
                 <span className="truncate font-mono text-sm font-semibold" style={{ color: 'var(--color-text-secondary)' }}>{shortLink}</span>
               </div>
@@ -1905,8 +1905,7 @@ function ChallengeInfoCard({ challenge }: { challenge: ChallengePublic }) {
 
   return (
     <div
-      className="relative overflow-hidden rounded-2xl border p-5"
-      style={{ borderColor: 'rgba(99, 102, 241, 0.18)', backgroundColor: 'rgba(251, 250, 254, 0.65)' }}
+      className="relative overflow-hidden rounded-2xl border border-[rgba(99,102,241,0.18)] bg-[rgba(251,250,254,0.65)] p-5 dark:border-[rgba(124,140,248,0.24)] dark:bg-white/5"
     >
       <span
         aria-hidden
@@ -2140,12 +2139,12 @@ function DuelArea({ round, text, duration, startAtMs, opponentName, opponentProg
                 Your opponent has left the challenge.
               </p>
             ) : opponentDisconnected ? (
-              <p className="mt-0.5 text-sm font-semibold" style={{ color: '#b45309' }}>
+              <p className="mt-0.5 text-sm font-semibold" style={{ color: 'var(--status-warning)' }}>
                 Your opponent lost connection — waiting for them to reconnect…
               </p>
             ) : (
               <p className="mt-0.5 text-sm normal-case" style={{ color: 'var(--color-text-secondary)' }}>
-                Race against <b style={{ color: '#7c3aed' }}>{opponentName}</b> — type fast, type clean.
+                Race against <b style={{ color: 'var(--status-purple)' }}>{opponentName}</b> — type fast, type clean.
               </p>
             )}
           </div>
@@ -2154,7 +2153,7 @@ function DuelArea({ round, text, duration, startAtMs, opponentName, opponentProg
         <div className="flex flex-wrap items-center gap-2">
           <span
             className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold"
-            style={{ backgroundColor: 'rgba(139, 92, 246, 0.12)', color: '#7c3aed' }}
+            style={{ backgroundColor: 'var(--status-purple-bg)', color: 'var(--status-purple)' }}
           >
             <Swords size={13} /> Round {round}
           </span>
@@ -2346,12 +2345,12 @@ function WaitingCard({ challenge, mySummary, opponentProgress, opponentDisconnec
   const livePct = `${liveProgress}%`;
 
   const status = opponentLeft
-    ? { dot: '#ef4444', chipBg: 'rgba(239, 68, 68, 0.10)', fg: '#dc2626', label: 'Opponent left', text: 'Your opponent has left the challenge — finishing up the race…' }
+    ? { dot: '#ef4444', chipBg: 'var(--status-danger-bg)', fg: 'var(--status-danger)', label: 'Opponent left', text: 'Your opponent has left the challenge — finishing up the race…' }
     : opponentDisconnected
-      ? { dot: '#f59e0b', chipBg: 'rgba(245, 158, 11, 0.10)', fg: '#b45309', label: 'Reconnecting…', text: 'Your opponent lost connection — waiting for them to return…' }
+      ? { dot: '#f59e0b', chipBg: 'var(--status-warning-bg)', fg: 'var(--status-warning)', label: 'Reconnecting…', text: 'Your opponent lost connection — waiting for them to return…' }
       : opponentProgress?.status === 'finished'
-        ? { dot: '#22c55e', chipBg: 'rgba(34, 197, 94, 0.10)', fg: '#15803d', label: 'Finished', text: `${oppName} has finished — the clock decides the rest.` }
-        : { dot: '#22c55e', chipBg: 'rgba(34, 197, 94, 0.10)', fg: '#15803d', label: 'Still typing', text: hasLive ? `${oppName} is mid-race — live stats below.` : `${oppName} will appear below as they type.` };
+        ? { dot: '#22c55e', chipBg: 'var(--status-success-bg)', fg: 'var(--status-success)', label: 'Finished', text: `${oppName} has finished — the clock decides the rest.` }
+        : { dot: '#22c55e', chipBg: 'var(--status-success-bg)', fg: 'var(--status-success)', label: 'Still typing', text: hasLive ? `${oppName} is mid-race — live stats below.` : `${oppName} will appear below as they type.` };
 
   return (
     <div className="mx-auto w-full max-w-3xl">
@@ -2845,7 +2844,7 @@ function OpponentLeaveToast({ title, body }: { title?: string; body?: string }) 
       data-testid="challenge-opponent-left-toast"
     >
       <div
-        className="challenge-toast-in relative w-full max-w-sm overflow-hidden rounded-[1.5rem] bg-white p-6 text-center"
+        className="challenge-toast-in relative w-full max-w-sm overflow-hidden rounded-[1.5rem] bg-white dark:bg-[var(--color-card)] p-6 text-center"
         style={{ boxShadow: '0 30px 70px -24px rgba(67, 97, 238, 0.55), 0 16px 34px -18px rgba(23, 23, 31, 0.42)' }}
       >
         <span

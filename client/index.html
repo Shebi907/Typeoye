@@ -3,6 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Apply the saved theme BEFORE first paint. Without this, a dark-mode
+      // reload paints the light site first and then flips once the JS bundle
+      // boots (a visible flash), because the theme is resolved in settingsStore
+      // at module-evaluation time. Mirrors that resolution exactly:
+      // 'light' | 'dark' | 'system' (system follows the OS preference).
+      (function () {
+        try {
+          var saved = localStorage.getItem('typeoye_theme') || 'light';
+          var dark =
+            saved === 'dark' ||
+            (saved === 'system' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          var root = document.documentElement;
+          root.classList.toggle('dark', dark);
+          // color-scheme styles the pre-CSS canvas + native controls so there is
+          // no white flash even before index.css is applied.
+          root.style.colorScheme = dark ? 'dark' : 'light';
+        } catch (e) {}
+      })();
+    </script>
     <title>Free Typing Test – Check Your Typing Speed &amp; Accuracy | Typeoye</title>
     <meta
       name="description"

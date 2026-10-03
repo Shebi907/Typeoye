@@ -222,11 +222,12 @@ export default function Faq() {
                     className="flex w-full items-center gap-3 px-4 py-4 text-left transition-colors duration-150 sm:px-6"
                   >
                     <span
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[0.625rem] transition-colors duration-200"
-                      style={{
-                        backgroundColor: isOpen ? 'rgba(67, 97, 238, 0.16)' : 'var(--color-accent-light)',
-                        color: isOpen ? '#4361ee' : '#7C3AED',
-                      }}
+                      className={cn(
+                        'flex h-9 w-9 shrink-0 items-center justify-center rounded-[0.625rem] transition-colors duration-200',
+                        isOpen
+                          ? 'bg-[rgba(67,97,238,0.16)] text-[#4361ee] dark:bg-[rgba(99,127,255,0.22)] dark:text-[#8ba2ff]'
+                          : 'bg-[var(--color-accent-light)] text-[#7C3AED] dark:text-[#c4a5ff]'
+                      )}
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="12" r="10" />
@@ -236,14 +237,14 @@ export default function Faq() {
                     </span>
                     <span
                       className="flex-1 text-sm font-bold transition-colors duration-150 sm:text-base"
-                      style={{ color: isOpen ? '#17171F' : 'var(--color-text-primary)' }}
+                      style={{ color: 'var(--color-text-primary)' }}
                     >
                       {item.q}
                     </span>
                     <ChevronDown
                       size={18}
                       className={cn('shrink-0 transition-transform duration-300', isOpen && 'rotate-180')}
-                      style={{ color: isOpen ? '#4361EE' : 'var(--color-text-muted)' }}
+                      style={{ color: isOpen ? 'var(--color-accent-text)' : 'var(--color-text-muted)' }}
                     />
                   </button>
                   <div
@@ -272,8 +273,7 @@ export default function Faq() {
       {/* Support CTA */}
       <section className="mx-auto mt-12 max-w-[64rem]" data-testid="faq-cta">
         <div
-          className="flex flex-col items-center justify-between gap-5 rounded-[1.25rem] px-6 py-6 text-center sm:flex-row sm:px-8 sm:text-left"
-          style={{ background: 'linear-gradient(135deg, #EEF1FD 0%, #F4EDFD 100%)' }}
+          className="faq-cta flex flex-col items-center justify-between gap-5 rounded-[1.25rem] px-6 py-6 text-center sm:flex-row sm:px-8 sm:text-left"
         >
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:gap-4">
             <span
@@ -283,7 +283,7 @@ export default function Faq() {
               <Headphones size={22} strokeWidth={2} />
             </span>
             <div>
-              <h2 className="text-lg font-extrabold tracking-tight sm:text-xl" style={{ color: '#17171F' }}>
+              <h2 className="text-lg font-extrabold tracking-tight sm:text-xl" style={{ color: 'var(--color-text-primary)' }}>
                 Still have questions?
               </h2>
               <p className="mt-0.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>

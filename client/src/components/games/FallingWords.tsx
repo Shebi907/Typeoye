@@ -614,9 +614,9 @@ export default function FallingWords({ onBack }: { onBack?: () => void }) {
                   </p>
                 </div>
                 <div className="flex items-start gap-2.5 px-3 py-2.5 rounded-lg" style={{ backgroundColor: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.15)' }}>
-                  <Heart size={15} className="shrink-0 mt-0.5 fill-red-500 text-red-500" />
+                  <Heart size={15} className="shrink-0 mt-0.5 fill-red-500 text-red-500 dark:fill-red-400 dark:text-red-400" />
                   <p className="text-sm leading-snug" style={{ color: 'var(--color-text-secondary)' }}>
-                    You have <span className="font-bold text-red-500">{INITIAL_LIVES} lives</span> — lose them all and the game ends.
+                    You have <span className="font-bold text-red-500 dark:text-red-400">{INITIAL_LIVES} lives</span> — lose them all and the game ends.
                   </p>
                 </div>
               </div>

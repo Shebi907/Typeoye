@@ -79,8 +79,7 @@ export default function Blog() {
         {/* Typing workspace illustration */}
         <div className="hidden shrink-0 md:block" aria-hidden="true">
           <div
-            className="relative flex h-48 w-80 items-center justify-center overflow-hidden rounded-[1.375rem] border sm:h-52"
-            style={{ borderColor: 'var(--color-border)', background: 'linear-gradient(160deg, var(--color-accent-light) 0%, #f4effd 100%)' }}
+            className="relative flex h-48 w-80 items-center justify-center overflow-hidden rounded-[1.375rem] border border-[var(--color-border)] bg-gradient-to-br from-[var(--color-accent-light)] to-[#f4effd] dark:to-[#241b3a] sm:h-52"
           >
             <span className="dot-grid" aria-hidden="true" />
             <span className="absolute -right-10 -top-12 h-32 w-32 rounded-full" style={{ background: 'rgba(67, 97, 238, 0.14)' }} />

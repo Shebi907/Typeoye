@@ -357,7 +357,7 @@ export default function Learn() {
             <Link
                to={`/lessons/${hero._id}`}
                onClick={(e) => handleLessonClick(e, hero._id)}
-               className="relative z-10 w-full md:w-auto flex-shrink-0 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-bold bg-white text-[var(--color-accent-text)] shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+               className="relative z-10 w-full md:w-auto flex-shrink-0 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-bold bg-white text-[#4361EE] shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
             >
                Continue <ArrowRight size={16} />
             </Link>

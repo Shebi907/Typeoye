@@ -31,13 +31,13 @@ export interface SupportArticle {
 }
 
 export const SUPPORT_CATEGORY_META: Record<SupportCategory, { icon: LucideIcon; bg: string; color: string }> = {
-  'Getting Started': { icon: BookOpen, bg: 'rgba(67,97,238,0.1)', color: '#4361EE' },
-  'Account & Sign-in': { icon: HelpCircle, bg: 'rgba(124,58,237,0.1)', color: '#7C3AED' },
-  'Test & Practice': { icon: FileText, bg: 'rgba(34,197,94,0.1)', color: '#22C55E' },
-  'Learn Course': { icon: AlertCircle, bg: 'rgba(245,166,11,0.1)', color: '#F5A623' },
-  'Games & Leaderboard': { icon: Gamepad2, bg: 'rgba(16,185,129,0.1)', color: '#10B981' },
-  'Certificates': { icon: Award, bg: 'rgba(236,72,153,0.1)', color: '#EC4899' },
-  'Troubleshooting': { icon: Wrench, bg: 'rgba(107,114,128,0.1)', color: '#6B7280' },
+  'Getting Started': { icon: BookOpen, bg: 'var(--support-getting-bg)', color: 'var(--support-getting)' },
+  'Account & Sign-in': { icon: HelpCircle, bg: 'var(--support-account-bg)', color: 'var(--support-account)' },
+  'Test & Practice': { icon: FileText, bg: 'var(--support-test-bg)', color: 'var(--support-test)' },
+  'Learn Course': { icon: AlertCircle, bg: 'var(--support-learn-bg)', color: 'var(--support-learn)' },
+  'Games & Leaderboard': { icon: Gamepad2, bg: 'var(--support-games-bg)', color: 'var(--support-games)' },
+  'Certificates': { icon: Award, bg: 'var(--support-certs-bg)', color: 'var(--support-certs)' },
+  'Troubleshooting': { icon: Wrench, bg: 'var(--support-trouble-bg)', color: 'var(--support-trouble)' },
 };
 
 export const SUPPORT_CATEGORY_COUNTS: Record<SupportCategory, number> = {
