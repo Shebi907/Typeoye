@@ -1,0 +1,616 @@
+/* ═══════════════════════ Challenge Result Screen ═══════════════════════
+   Animations + visual flourishes for the 1v1 result card. Lives in its own
+   file so the shared tokens / layout in index.css stay untouched. */
+
+@keyframes rr-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rr-fade-up {
+  animation: rr-fade-up 0.45s ease-out both;
+}
+
+@keyframes rr-trophy-bounce {
+  0% {
+    transform: scale(0) rotate(-14deg);
+  }
+  50% {
+    transform: scale(1.28) rotate(3deg);
+  }
+  66% {
+    transform: scale(0.92) rotate(-2deg);
+  }
+  82% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.rr-trophy-bounce {
+  display: inline-block;
+  animation: rr-trophy-bounce 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes rr-confetti-fall {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px) rotate(0deg);
+  }
+  14% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(120px) rotate(300deg);
+  }
+}
+
+.rr-confetti {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 9rem;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.rr-confetti span {
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  animation: rr-confetti-fall 1.7s ease-in infinite;
+}
+
+@keyframes rr-vs-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.32), 0 10px 24px -10px rgba(99, 102, 241, 0.6);
+  }
+  55% {
+    box-shadow: 0 0 0 9px rgba(99, 102, 241, 0), 0 10px 24px -10px rgba(99, 102, 241, 0.6);
+  }
+}
+
+.rr-vs {
+  animation: rr-vs-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes rr-glow-spin {
+  0%,
+  100% {
+    box-shadow: 0 0 0 1px rgba(67, 97, 238, 0.25), 0 14px 34px -14px rgba(99, 102, 241, 0.55);
+  }
+  50% {
+    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.35), 0 18px 44px -16px rgba(124, 58, 237, 0.7);
+  }
+}
+
+.rr-winner-glow {
+  animation: rr-glow-spin 3s ease-in-out infinite;
+}
+
+@keyframes rr-glow-spin-green {
+  0%,
+  100% {
+    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.25), 0 14px 34px -14px rgba(16, 185, 129, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.35), 0 18px 44px -16px rgba(16, 185, 129, 0.65);
+  }
+}
+
+.rr-winner-glow-green {
+  animation: rr-glow-spin-green 3s ease-in-out infinite;
+}
+
+/* The results screen is sized to fit the whole viewport; suppress the
+   persistent site footer while it is active so nothing scrolls below the
+   fold. The class is toggled on <body> by ChallengeRoom for the results
+   phase only. */
+body.challenge-results-active .site-footer {
+  display: none;
+}
+
+/* page-fill normally forces min-height: calc(100vh - 4rem) so the footer
+   stays pinned on short pages — but on the results screen that minimum
+   (plus navbar) spills a few pixels past the viewport. Collapse it so the
+   card's own height defines the page. The padding is also tightened: the
+   navbar→panel gap is pure chrome here and costs real vertical budget. */
+body.challenge-results-active .page-fill {
+  min-height: 0;
+  padding-top: clamp(0.4rem, 1.15dvh, 1.25rem);
+  padding-bottom: clamp(0.3rem, 1dvh, 0.75rem);
+}
+
+/* The app frame is min-h-screen PLUS its own bottom padding, so that padding
+   alone pushes the document past the fold on a short window and the surplus
+   becomes unscrollable (html/body are overflow-x: clip, so it can't even be
+   reached). It is pure chrome — reclaim it while the results screen is up. */
+body.challenge-results-active .app-frame {
+  padding-bottom: 0;
+}
+
+/* The result screen is the one dark-navy surface in the app: a deep indigo
+   backdrop makes the white result panel pop. Scoped to the results phase so
+   no other page is affected. */
+body.challenge-results-active {
+  --color-page: #10142c;
+  background-color: #10142c;
+  background-image:
+    radial-gradient(circle at 18% 0%, rgba(99, 102, 241, 0.28) 0%, transparent 46%),
+    radial-gradient(circle at 84% 8%, rgba(139, 92, 246, 0.26) 0%, transparent 48%),
+    linear-gradient(180deg, #10142c 0%, #0b0f22 100%);
+  background-attachment: fixed;
+}
+
+/* The panel is always the light/white Typeoye surface, even when the visitor
+   is browsing in dark mode: re-declare the LIGHT token values locally so every
+   var(--color-*) descendant inside resolves to the light palette and stays
+   readable on white. */
+.rr-panel {
+  --color-card: #ffffff;
+  --color-border: #e9e9f0;
+  --color-accent-light: #eef1fd;
+  --color-accent-text: #4361ee;
+  --color-text-primary: #17171f;
+  --color-text-secondary: #6b6b76;
+  --color-text-muted: #8a8a94;
+
+  background-color: #ffffff;
+  color: var(--color-text-primary);
+}
+
+/* ═══════════════════════ Celebration characters ═══════════════════════
+   Lightweight inline-SVG characters (no image assets, no animation libs).
+   Each is wrapped in a size-locked box so a swap never shifts layout. */
+
+.rr-char {
+  position: relative;
+  display: block;
+  width: 4.75rem;
+  height: 4.75rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .rr-char {
+    width: 5.5rem;
+    height: 5.5rem;
+  }
+}
+
+/* Only the body SVG scales to the box — the crown's own SVG must keep the
+   crown's fixed size, so it is scoped to the direct child only. */
+.rr-char > svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+}
+
+.rr-crown svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Crown floats just above the head. */
+.rr-crown {
+  position: absolute;
+  top: -0.7rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.75rem;
+  height: 1.75rem;
+  filter: drop-shadow(0 2px 4px rgba(180, 83, 9, 0.35));
+  animation: rr-crown-float 2.4s ease-in-out infinite;
+}
+
+@keyframes rr-crown-float {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-4px) rotate(4deg);
+  }
+}
+
+/* Winner: gentle, continuous party bounce. */
+.rr-char-happy {
+  animation: rr-happy-bounce 1.15s ease-in-out infinite;
+  transform-origin: 50% 92%;
+}
+
+@keyframes rr-happy-bounce {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  35% {
+    transform: translateY(-5px) scale(1.02, 0.98);
+  }
+  65% {
+    transform: translateY(0) scale(0.98, 1.02);
+  }
+}
+
+/* Loser: a small, gentle slump sway — playful, never harsh. */
+.rr-char-sad {
+  transform-origin: 50% 95%;
+  animation: rr-sad-sway 2.9s ease-in-out infinite;
+}
+
+@keyframes rr-sad-sway {
+  0%,
+  100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-2.5deg) translateY(2px);
+  }
+}
+
+/* Tear that swells and falls on the defeated character. */
+.rr-tear {
+  animation: rr-tear-fall 2.9s ease-in infinite;
+}
+
+@keyframes rr-tear-fall {
+  0%,
+  18% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5);
+  }
+  34% {
+    opacity: 1;
+    transform: translateY(1px) scale(1);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: translateY(11px) scale(0.75);
+  }
+}
+
+/* Soft radial glow behind the winning side. */
+.rr-halo {
+  position: absolute;
+  inset: -35%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: rr-halo-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes rr-halo-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.04);
+  }
+}
+
+/* ═══════════════════════ Side confetti ═══════════════════════
+   Scoped to ONE side (the winner), so the loser stays visually calm. */
+
+.rr-confetti-side {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.rr-confetti-side span {
+  position: absolute;
+  top: -12px;
+  opacity: 0;
+  animation: rr-confetti-drop 2.6s linear infinite;
+}
+
+@keyframes rr-confetti-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(0) rotate(0deg);
+  }
+  12% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(190px) rotate(420deg);
+  }
+}
+
+/* Winner ribbon that carries the WINNER badge. */
+.rr-winner-badge {
+  animation: rr-badge-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes rr-badge-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Stat tiles: brief lift as the card settles in. */
+.rr-stat {
+  animation: rr-fade-up 0.45s ease-out both;
+}
+
+/* ═══════════════════════ Viewport-height density ladder ═══════════════════
+   The app sets html { font-size: clamp(16px, 1.25vw, 48px) }, so every rem in
+   this card scales with viewport WIDTH and knows nothing about viewport
+   HEIGHT. On a short-but-wide window the natural card is taller than the
+   fold. These steps reclaim that height by trimming the vertical rhythm —
+   padding, gaps, the trophy, and the illustration — never by clipping,
+   hiding, or making anything scrollable.
+
+   Ladder: >=780px untouched (roomy) → 700px → 620px → 545px. Each step only
+   tightens spacing and illustration size; text, stats, badges and both
+   action buttons are always fully rendered. */
+
+.rr-screen {
+  /* viewports report the *large* viewport height in some mobile browsers;
+     100dvh tracks the real visible box so the budget below stays honest */
+  min-height: 0;
+}
+
+@media (min-height: 780px) {
+  .rr-panel {
+    padding-top: clamp(1.1rem, 2.2dvh, 1.6rem);
+    padding-bottom: clamp(1.1rem, 2.2dvh, 1.6rem);
+  }
+}
+
+@media (max-height: 779px) {
+  .rr-panel {
+    padding-top: clamp(0.85rem, 1.9dvh, 1.25rem);
+    padding-bottom: clamp(0.85rem, 1.9dvh, 1.25rem);
+  }
+
+  .rr-players {
+    margin-top: clamp(0.5rem, 1.4dvh, 1rem);
+    gap: clamp(0.4rem, 1.1dvh, 0.75rem);
+  }
+
+  .rr-char {
+    width: clamp(3.6rem, 9.5dvh, 5.5rem);
+    height: clamp(3.6rem, 9.5dvh, 5.5rem);
+  }
+
+  .rr-crown {
+    top: -0.55rem;
+    width: clamp(1.3rem, 3.4dvh, 1.75rem);
+    height: clamp(1.3rem, 3.4dvh, 1.75rem);
+  }
+
+  .rr-char-wrap,
+  .rr-stats {
+    margin-top: clamp(0.35rem, 0.9dvh, 0.75rem);
+  }
+
+  .rr-card-head {
+    padding-top: clamp(0.5rem, 1.2dvh, 0.875rem);
+  }
+
+  .rr-stats {
+    padding-bottom: clamp(0.5rem, 1.2dvh, 1rem);
+  }
+
+  /* the 2x2 tiles are the densest fixed block — trim their own padding */
+  .rr-stat {
+    padding-top: clamp(0.3rem, 0.75dvh, 0.6rem);
+    padding-bottom: clamp(0.3rem, 0.75dvh, 0.6rem);
+  }
+
+  .rr-details-wrap {
+    margin-top: clamp(0.4rem, 1.1dvh, 0.75rem);
+  }
+
+  .rr-details {
+    padding-top: clamp(0.3rem, 0.7dvh, 0.5rem);
+    padding-bottom: clamp(0.3rem, 0.7dvh, 0.5rem);
+  }
+
+  .rr-actions {
+    margin-top: clamp(0.4rem, 1.1dvh, 0.875rem);
+  }
+}
+
+@media (max-height: 620px) {
+  /* below this height every pixel counts, and the panel already carries its
+     own breathing room — drop the wrapper's bottom padding to nothing */
+  body.challenge-results-active .page-fill {
+    padding-top: clamp(0.3rem, 1dvh, 0.75rem);
+    padding-bottom: 0;
+  }
+
+  .rr-trophy {
+    width: clamp(1.85rem, 5.4dvh, 2.9rem);
+    height: clamp(1.85rem, 5.4dvh, 2.9rem);
+  }
+
+  .rr-heading {
+    font-size: clamp(0.95rem, 2.6dvh, 1.45rem);
+  }
+
+  .rr-panel {
+    padding-top: clamp(0.5rem, 1.6dvh, 0.85rem);
+    padding-bottom: clamp(0.5rem, 1.6dvh, 0.85rem);
+  }
+
+  .rr-players {
+    margin-top: clamp(0.3rem, 1dvh, 0.6rem);
+  }
+
+  .rr-char {
+    width: clamp(2.7rem, 8.4dvh, 3.6rem);
+    height: clamp(2.7rem, 8.4dvh, 3.6rem);
+  }
+
+  .rr-stat b {
+    font-size: clamp(0.82rem, 2dvh, 1.05rem);
+  }
+
+  .rr-details-wrap,
+  .rr-actions {
+    margin-top: clamp(0.25rem, 0.85dvh, 0.45rem);
+  }
+
+  .rr-btn {
+    padding-top: clamp(0.25rem, 0.8dvh, 0.5rem);
+    padding-bottom: clamp(0.25rem, 0.8dvh, 0.5rem);
+  }
+}
+
+/* Phones stack the two cards, which is inherently taller than the side-by-side
+   desktop layout. Tighten just enough for common handset heights to fit
+   without scrolling; stats and buttons stay fully readable. Horizontal
+   overflow is prevented separately by the global overflow-x rule. */
+@media (max-width: 639px) and (max-height: 900px) {
+  .rr-panel {
+    padding-top: clamp(0.6rem, 1.8dvh, 1rem);
+    padding-bottom: clamp(0.6rem, 1.8dvh, 1rem);
+  }
+
+  .rr-players {
+    margin-top: clamp(0.4rem, 1.2dvh, 0.75rem);
+  }
+
+  .rr-char {
+    width: clamp(2.9rem, 8dvh, 4rem);
+    height: clamp(2.9rem, 8dvh, 4rem);
+  }
+
+  .rr-stat {
+    padding-top: clamp(0.25rem, 0.7dvh, 0.5rem);
+    padding-bottom: clamp(0.25rem, 0.7dvh, 0.5rem);
+  }
+
+  .rr-details-wrap,
+  .rr-actions {
+    margin-top: clamp(0.35rem, 1dvh, 0.65rem);
+  }
+}
+
+@media (max-height: 545px) {
+  .rr-trophy {
+    width: clamp(1.6rem, 4.6dvh, 1.9rem);
+    height: clamp(1.6rem, 4.6dvh, 1.9rem);
+  }
+
+  .rr-heading {
+    font-size: clamp(0.9rem, 2.3dvh, 1rem);
+  }
+
+  .rr-subtitle {
+    font-size: clamp(0.6rem, 1.5dvh, 0.7rem);
+  }
+
+  .rr-panel {
+    padding-top: 0.42rem;
+    padding-bottom: 0.42rem;
+  }
+
+  .rr-players {
+    margin-top: 0.28rem;
+    gap: 0.3rem;
+  }
+
+  .rr-char {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+
+  .rr-stat {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
+
+  .rr-stat b {
+    font-size: 0.78rem;
+  }
+
+  .rr-stat span {
+    margin-top: 0.15rem;
+  }
+
+  .rr-char-wrap,
+  .rr-stats {
+    margin-top: 0.2rem;
+  }
+
+  .rr-card-head {
+    padding-top: 0.38rem;
+  }
+
+  .rr-stats {
+    padding-bottom: 0.38rem;
+  }
+
+  .rr-details-wrap,
+  .rr-actions {
+    margin-top: 0.24rem;
+  }
+}
+
+/* ═══════════════════════ Reduced motion ═══════════════════════
+   Keep the RESULT (badges, colours, crown, character) but stop all
+   looping motion. */
+
+@media (prefers-reduced-motion: reduce) {
+  .rr-char-happy,
+  .rr-char-sad,
+  .rr-crown,
+  .rr-halo,
+  .rr-winner-badge,
+  .rr-trophy-bounce,
+  .rr-vs,
+  .rr-winner-glow,
+  .rr-winner-glow-green,
+  .rr-fade-up,
+  .rr-stat {
+    animation: none !important;
+  }
+
+  .rr-confetti,
+  .rr-confetti-side {
+    display: none;
+  }
+
+  .rr-confetti-side span,
+  .rr-confetti span,
+  .rr-tear {
+    animation: none !important;
+    opacity: 0;
+  }
+}

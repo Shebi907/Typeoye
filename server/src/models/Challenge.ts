@@ -27,8 +27,19 @@ export interface ChallengePlayer {
   joinedAt: Date;
   readyAt?: Date;
   rematchReady: boolean;
+  disconnectedAt: Date | null;
   stats: ChallengePlayerStats | null;
 }
+
+/**
+ * How a race ended.
+ *  - completed      : normal finish, a winner is recorded
+ *  - abandoned      : one player stopped submitting (timer forfeit), winner recorded
+ *  - expired        : nobody raced, no contest
+ *  - opponent_left  : NO CONTEST because the other player left mid-race. A
+ *                     leaver never wins and is never beaten: `winner` stays null.
+ */
+export type ChallengeEndReason = 'completed' | 'abandoned' | 'expired' | 'opponent_left';
 
 export interface IChallenge extends Document {
   code: string;
@@ -37,10 +48,12 @@ export interface IChallenge extends Document {
   player1: ChallengePlayer;
   player2: ChallengePlayer | null;
   text: string;
-  paragraphId?: Types.ObjectId;
+  paragraphIds: Types.ObjectId[];
   durationSeconds: number;
   startAt: Date | null;
   winner: 'player1' | 'player2' | 'draw' | null;
+  endedBy: ChallengeEndReason | null;
+  abandonedBy: 'player1' | 'player2' | null;
   createdAt: Date;
   updatedAt: Date;
   expiresAt: Date;
@@ -78,6 +91,7 @@ const playerSchema = new Schema<ChallengePlayer>(
     joinedAt: { type: Date, default: Date.now },
     readyAt: { type: Date },
     rematchReady: { type: Boolean, default: false },
+    disconnectedAt: { type: Date, default: null },
     stats: { type: statsSchema, default: null },
   },
   { _id: false }
@@ -95,10 +109,12 @@ const challengeSchema = new Schema<IChallenge>(
     player2: { type: playerSchema, default: null },
     round: { type: Number, default: 1, min: 1 },
     text: { type: String, required: true, maxlength: 4000 },
-    paragraphId: { type: Schema.Types.ObjectId, ref: 'TestParagraph' },
+    paragraphIds: { type: [Schema.Types.ObjectId], ref: 'TestParagraph', default: [] },
     durationSeconds: { type: Number, required: true, min: 30, max: 300 },
     startAt: { type: Date, default: null },
     winner: { type: String, enum: ['player1', 'player2', 'draw', null], default: null },
+    endedBy: { type: String, enum: ['completed', 'abandoned', 'expired', 'opponent_left', null], default: null },
+    abandonedBy: { type: String, enum: ['player1', 'player2', null], default: null },
     expiresAt: { type: Date, required: true },
   },
   { timestamps: true }

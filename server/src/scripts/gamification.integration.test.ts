@@ -92,6 +92,8 @@ async function registerUser(): Promise<{ token: string; userId: string }> {
     username,
     email: `${username}@typeoye.test`,
     password: 'password123',
+    securityQuestion: 'What is your favorite color?',
+    securityAnswer: 'blue',
   });
   return { token: registered.data.token as string, userId: registered.data.user._id as string };
 }

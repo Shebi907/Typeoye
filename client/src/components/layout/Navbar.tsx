@@ -273,6 +273,17 @@ export function Navbar() {
                   </Link>
                 );
               })}
+              <Link
+                to="/challenge"
+                className={`navbar-mobile-link${location.pathname.startsWith('/challenge') ? ' navbar-mobile-link-active' : ''}`}
+              >
+                Typing Challenge
+                <span aria-hidden="true">›</span>
+              </Link>
+              <span className="navbar-mobile-link navbar-mobile-link-soon" aria-disabled="true">
+                Random Match
+                <span className="text-[0.6rem] font-bold px-1.5 py-0.5 rounded bg-white/15">Soon</span>
+              </span>
               {isAuthenticated && (
                 <>
                   <Link

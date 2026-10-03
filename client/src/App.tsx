@@ -19,6 +19,7 @@ import PracticeSession from './pages/PracticeSession';
 import Analytics from './pages/Analytics';
 import Leaderboard from './pages/Leaderboard';
 import Games from './pages/Games';
+import Challenge from './pages/Challenge';
 import Learn from './pages/Learn';
 import LessonPlayer from './pages/LessonPlayer';
 import Blog from './pages/Blog';
@@ -119,6 +120,8 @@ export default function App() {
             the page content and never remounts the layout. */}
         <Route element={<RequireAuth />}>
           <Route path="/analytics" element={<Analytics />} />
+          <Route path="/challenge" element={<Challenge />} />
+          <Route path="/challenge/:code" element={<Challenge />} />
           <Route path="/progress" element={<ProgressPage />} />
           <Route path="/progress/test" element={<ProgressPage />} />
           <Route path="/progress/practice" element={<ProgressPage />} />

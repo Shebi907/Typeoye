@@ -12,9 +12,10 @@
     "seed:test": "ts-node src/seed/seedTestParagraphs.ts",
     "seed:certificate": "ts-node src/seed/seedCertificateParagraphs.ts",
     "promote:admin": "ts-node src/seed/promoteAdmin.ts",
-    "test": "ts-node src/services/wpm.service.test.ts && ts-node src/services/gamification.service.test.ts && ts-node src/services/recoveryLockout.service.test.ts"
+    "test": "ts-node src/services/wpm.service.test.ts && ts-node src/services/gamification.service.test.ts && ts-node src/services/recoveryLockout.service.test.ts && ts-node src/services/challenge.service.test.ts"
   },
   "dependencies": {
+    "@types/node": "^24.13.4",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -27,9 +28,9 @@
     "nodemailer": "^9.1.0",
     "pdfkit": "^0.19.1",
     "resend": "^6.25.0",
-    "zod": "^3.22.4",
-    "@types/node": "^24.13.4",
-    "typescript": "^5.3.2"
+    "socket.io": "^4.8.3",
+    "typescript": "^5.3.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

@@ -172,6 +172,30 @@ body {
 .char-current { color: var(--color-text-primary); }
 .word-error-bg { background-color: rgba(239, 68, 68, 0.07); border-radius: 4px; }
 
+/* ── Duel screen (challenge typing) refinements ─────────────────── */
+/* Current character — clear but subtle: soft indigo pill + underline
+   accent on top of the positioned caret. Scoped to the duel card so
+   other typing screens keep their default look. */
+.duel-typing-card .char-current {
+  background-color: rgba(67, 97, 238, 0.10);
+  border-radius: 3px;
+  box-shadow: inset 0 -2px 0 rgba(67, 97, 238, 0.4);
+}
+/* Errors — softer red pill instead of the global underline for a
+   cleaner premium feel inside the duel arena. */
+.duel-typing-card .char-error {
+  color: var(--color-error);
+  text-decoration: none;
+  background-color: rgba(239, 68, 68, 0.12);
+  border-radius: 3px;
+}
+/* Premium text shell for the duel typing card. */
+.duel-text-shell {
+  background-image: linear-gradient(180deg, rgba(67, 97, 238, 0.03), rgba(67, 97, 238, 0.07));
+  border-color: rgba(99, 102, 241, 0.16);
+  border-radius: 1rem;
+}
+
 /* Sudden Death — slightly darker/lighter pending text so untyped words
    stay clearly readable against the card surface. */
 .sd-typing .char-pending { color: #62626e; }
@@ -226,6 +250,12 @@ body {
   animation: caretBlink 1s ease-in-out infinite;
 }
 
+/* Duel opponent LIVE dot — gentle red pulse ring. */
+.live-dot { animation: live-dot-pulse 1.2s ease-in-out infinite; }
+@keyframes live-dot-pulse {
+  50% { opacity: 0.35; transform: scale(1.7); }
+}
+
 /* ── Card base ──────────────────────────────────────────────────── */
 .card {
   background-color: var(--color-card);
@@ -239,6 +269,42 @@ body {
 .card-hover:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-card-hover);
+}
+
+/* ── Typing Challenge page ─────────────────────────────────────── */
+.challenge-fade-in {
+  opacity: 0;
+  animation: challenge-fade-up 0.55s ease-out forwards;
+}
+@keyframes challenge-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.challenge-float { animation: challenge-float 6s ease-in-out infinite; }
+@keyframes challenge-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ── Challenge room (lobby) ─────────────────────────────────────── */
+.challenge-vs-pulse {
+  background: linear-gradient(135deg, #4361ee, #7c3aed);
+  animation: challenge-vs-pulse 2.6s ease-in-out infinite;
+}
+@keyframes challenge-vs-pulse {
+  0%, 100% { box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.9), 0 0 18px rgba(124, 58, 237, 0.45); }
+  50% { box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.9), 0 0 36px rgba(124, 58, 237, 0.75); }
+}
+.challenge-waiting-dot { animation: challenge-waiting-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite; }
+@keyframes challenge-waiting-ping {
+  75%, 100% { transform: scale(2.4); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .challenge-fade-in { animation: none; opacity: 1; }
+  .challenge-float { animation: none; }
+  .challenge-vs-pulse { animation: none; }
+  .challenge-waiting-dot { animation: none; }
+  .live-dot { animation: none; }
 }
 
 /* ── Button base ────────────────────────────────────────────────── */

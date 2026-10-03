@@ -3,7 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   Swords, Copy, Check, Link2, Users, Clock, LogOut, RotateCcw, Loader2,
   ArrowLeft, Trophy, Gauge, Target, AlertTriangle, ShieldAlert, ShieldCheck,
-  Keyboard, Zap, Timer, ArrowRight, Globe, Info, Share2, TrendingUp,
+  Keyboard, Zap, Timer, ArrowRight, Globe, Info, Share2, TrendingUp, CheckCircle2,
+  Plus, UserX, WifiOff, Home, Heart,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
@@ -19,6 +20,10 @@ import {
 } from '../services/challenge.socket';
 import { getApiErrorMessage } from '../services/api';
 import { useTypingEngine } from '../hooks/useTypingEngine';
+import { ChallengeChat } from '../components/challenge/ChallengeChat';
+import '../styles/challenge-results.css';
+import '../styles/challenge-waiting.css';
+import '../styles/challenge-rematch-overlay.css';
 import { TypingDisplay } from '../components/typing/TypingDisplay';
 import { VirtualKeyboard } from '../components/typing/VirtualKeyboard';
 import type { ChallengePublic, ChallengePlayerView, ChallengeStatus } from '../types/challenge';
@@ -49,6 +54,27 @@ function liveCorrectCharsFrom(wordStates: Array<{ chars: Array<{ status: string 
     }
   }
   return count;
+}
+
+type LiveEngine = ReturnType<typeof useTypingEngine>;
+
+/* The live snapshot a player publishes to the opponent every ~200ms while the
+   race runs (socket-only fan-out; never persisted per keystroke). */
+function buildLiveProgress(current: LiveEngine) {
+  const correct = current.wordStates.filter((w) => w.status === 'correct').length;
+  const attempted = current.wordStates.filter((w) => w.status !== 'pending').length;
+  const total = current.wordStates.length;
+  const progress = total > 0 ? Math.min(100, Math.round((current.currentWordIndex / total) * 100)) : 0;
+  const typedChars = current.wordStates.reduce((n, w) => n + (w.status !== 'pending' ? w.typed.length : 0), 0);
+  return {
+    correct,
+    attempted,
+    errors: liveErrorsFrom(current.wordStates),
+    typedChars,
+    wpm: current.liveWpm,
+    accuracy: current.liveAccuracy,
+    progress,
+  };
 }
 
 function snapshotTypedWords(wordStates: Array<{ word: string; typed: string; status: string; timeTakenMs?: number }>, currentIndex: number): TypedWord[] {
@@ -202,6 +228,29 @@ export function formatClock(totalSeconds: number): string {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
+const CANONICAL_SITE_URL = 'https://www.typeoye.com';
+
+/* Challenge share links must always point at a real, clickable site. The URL is
+   derived from the ACTUAL serving origin so it is correct on localhost dev
+   (http://localhost:5173/challenge/{code}) and on any deployed/preview host. On
+   the production typeoye.com domain the link is normalized to the canonical
+   https://www.typeoye.com root, so a shared link is identical whether the
+   sender opened the site with or without "www". */
+function buildChallengeLink(code: string): string {
+  const { hostname, origin } = window.location;
+  if (hostname === 'localhost' || hostname === '127.0.0.1' || !hostname.endsWith('typeoye.com')) {
+    return `${origin}/challenge/${code}`;
+  }
+  return `${CANONICAL_SITE_URL}/challenge/${code}`;
+}
+
+function formatCountdown(totalSeconds: number): string {
+  const safe = Math.max(0, Math.floor(totalSeconds));
+  const minutes = Math.floor(safe / 60);
+  const seconds = safe % 60;
+  return `${minutes}:${String(seconds).padStart(2, '0')}`;
+}
+
 function ChallengeHome() {
   useSeo({
     title: 'Typing Challenge – Race a Friend in Real-Time | Typeoye',
@@ -332,23 +381,6 @@ function ChallengeHome() {
               </p>
             </div>
 
-            {/* Decorative preview — visual example only, not wired up. */}
-            <div className="mt-4 rounded-xl border border-dashed p-3.5" style={{ borderColor: 'rgba(99, 102, 241, 0.28)', backgroundColor: 'rgba(67, 97, 238, 0.04)' }}>
-              <div className="flex items-center gap-2.5">
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg" style={{ backgroundColor: 'rgba(67, 97, 238, 0.10)', color: '#4361ee' }}>
-                  <Link2 size={15} />
-                </span>
-                <div className="min-w-0">
-                  <p className="text-[0.65rem] font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Challenge Code</p>
-                  <p className="font-mono text-base font-extrabold tracking-wide" style={{ color: '#4361ee' }}>TY-8K4P2</p>
-                </div>
-              </div>
-              <div className="mt-2.5 flex items-center gap-2 rounded-lg border px-2.5 py-1.5" style={{ borderColor: 'var(--color-border)', backgroundColor: '#ffffff' }}>
-                <Globe size={12} style={{ color: 'var(--color-text-muted)' }} />
-                <span className="truncate font-mono text-xs" style={{ color: 'var(--color-text-secondary)' }}>typeoye.com/challenge/TY-8K4P2</span>
-              </div>
-            </div>
-
             {createError && (
               <p className="mt-3 text-sm" style={{ color: 'var(--color-error)' }}>{createError}</p>
             )}
@@ -450,7 +482,9 @@ function ChallengeHome() {
 
 /* ═══════════════════════════ ROOM ═══════════════════════════ */
 
-type RoomPhase = 'loading' | 'error' | 'expired' | 'lobby' | 'countdown' | 'typing' | 'waitingResults' | 'results';
+type RoomPhase = 'loading' | 'error' | 'expired' | 'lobby' | 'countdown' | 'typing' | 'waitingResults' | 'opponentLeft' | 'results';
+
+type LiveProgressStatus = 'waiting' | 'ready' | 'typing' | 'finished' | 'disconnected';
 
 interface OpponentProgress {
   userId: string;
@@ -463,6 +497,8 @@ interface OpponentProgress {
   wpm: number;
   accuracy: number;
   progress: number;
+  status?: LiveProgressStatus;
+  updatedAt?: string;
 }
 
 interface MySummary {
@@ -482,6 +518,9 @@ function ChallengeRoom({ code }: { code: string }) {
   const [errorBody, setErrorBody] = useState<string>('');
   const [opponentProgress, setOpponentProgress] = useState<OpponentProgress | null>(null);
   const [opponentLeft, setOpponentLeft] = useState(false);
+  const [opponentLeftMessage, setOpponentLeftMessage] = useState<string | null>(null);
+  const [opponentLeaveToast, setOpponentLeaveToast] = useState(false);
+  const [opponentLeaveToastCopy, setOpponentLeaveToastCopy] = useState<{ title: string; body: string } | null>(null);
   const [mySummary, setMySummary] = useState<MySummary | null>(null);
   const [now, setNow] = useState(() => Date.now());
 
@@ -491,14 +530,140 @@ function ChallengeRoom({ code }: { code: string }) {
   const submittedRef = useRef(false);
   const timerIdRef = useRef<number | null>(null);
   const roundRef = useRef<number | null>(null);
+  const rematchPendingRef = useRef(false);
+  const handledOpponentLeaveRef = useRef(false);
+  const opponentLeaveToastTimerRef = useRef<number | null>(null);
+  // Guards the one-shot authoritative re-read we fire the moment the solo
+  // waiting clock hits 0:00, so a slow network can't turn the ticker into a
+  // GET storm.
+  const expiryProbeRef = useRef(false);
+  // One-shot latch for the CASE 1 solo-lobby teardown.
+  const expiredLobbyHandledRef = useRef(false);
+
+  const showOpponentLeftToastAndRedirect = useCallback((copy?: { title: string; body: string }) => {
+    if (handledOpponentLeaveRef.current) return;
+    handledOpponentLeaveRef.current = true;
+    rematchPendingRef.current = false;
+    if (copy) setOpponentLeaveToastCopy(copy);
+    setOpponentLeaveToast(true);
+    if (opponentLeaveToastTimerRef.current !== null) {
+      window.clearTimeout(opponentLeaveToastTimerRef.current);
+    }
+    opponentLeaveToastTimerRef.current = window.setTimeout(() => {
+      opponentLeaveToastTimerRef.current = null;
+      navigate('/challenge');
+    }, 2000);
+  }, [navigate]);
+
+  /* Mid-race departure = NO CONTEST. The server is authoritative and marks the
+     room `endedBy: 'opponent_left'` (winner stays null) the moment the opponent
+     intentionally leaves, or after the reconnection grace lapses on a dropped
+     socket. Every path into that state (socket event, state echo, a refresh
+     re-reading the room) funnels through here so the survivor always gets the
+     same outcome: the race freezes where it stands, no result/winner is ever
+     rendered, and the popup + redirect is shown exactly once. */
+  const endRunForOpponentLeft = useCallback((next: ChallengePublic, message?: string | null) => {
+    // A snapshot from an older round can never void the current race.
+    if (roundRef.current != null && next.round < roundRef.current) return;
+    // Stop the machine first: no auto-submit, no progress publishing, no more
+    // keystrokes counted — the race is over, nothing is being scored.
+    submittedRef.current = true;
+    engagedRef.current = false;
+    setChallenge(next);
+    setOpponentLeft(true);
+    setOpponentLeftMessage(message ?? 'Your opponent has left the challenge.');
+    setPhase('opponentLeft');
+    showOpponentLeftToastAndRedirect({
+      title: '⚠️ Opponent Left the Challenge',
+      body: 'Your opponent has left the challenge.',
+    });
+  }, [showOpponentLeftToastAndRedirect]);
 
   phaseRef.current = phase;
 
   const currentCode = codeRef.current;
 
-  const emitLeave = useCallback(() => {
-    emit('challenge:leave', { code: codeRef.current });
+  const liveOpponent = challenge ? opponentOf(challenge, challenge.me) : null;
+  /* Chat visibility gate: the widget (and its floating button) only exist while
+     a REAL opponent is seated AND connected in this room AND the challenge is
+     actually RUNNING (the authoritative shared status from the server, never a
+     purely local flag). This makes chat an ACTIVE-MATCH feature: it is hidden
+     throughout the lobby (WAITING / PLAYER_JOINED / READY) — before the
+     opponent joins, while waiting for them to ready up, and even when both
+     players are ready — and only appears once the race has started. Before the
+     opponent joins ("Waiting for opponent…"), and again if they leave or their
+     socket drops, chat is fully hidden — no pill, no panel. The recipient is
+     always the actual opponent (slots re-derived from each user's own id). */
+  const chatOpponent = liveOpponent && liveOpponent.connected ? liveOpponent : null;
+  const chatEnabled = Boolean(challenge && chatOpponent && challenge.status === 'RUNNING');
+  /* An abandoned race tells us WHO gave up: the opponent (winner = me) or me.
+     Combined with the live opponentLeft event this drives both the results
+     messaging and the red/amber connection banners. */
+  const abandonedByOpponent = Boolean(
+    challenge && challenge.endedBy === 'abandoned' && challenge.abandonedBy !== challenge.me
+  );
+  /* The opponent is treated as permanently gone when either the room told us
+     (opponentLeft event / abandoned room) OR the authoritative server-side
+     presence reads "left" on the CURRENT, not-yet-advanced round — a page
+     refresh or reconnect echo must never resurrect a departed opponent on the
+     results screen. */
+  const opponentPresenceLeft = Boolean(
+    challenge &&
+      challenge.status === 'COMPLETED' &&
+      liveOpponent &&
+      liveOpponent.presence === 'left'
+  );
+  const showOpponentLeft = opponentLeft || abandonedByOpponent || opponentPresenceLeft;
+  const opponentDisconnected = Boolean(liveOpponent && !liveOpponent.connected);
+
+  /* `exit` is a deliberate player action (Leave / Exit button) and the server
+     ends a live race immediately on it. `unmount` is only the page going away
+     (close, refresh, navigation): that is a PRESENCE event, not an intent, so
+     the server applies the same reconnection grace as any other drop and a
+     refresh can never void a race. */
+  const emitLeave = useCallback((reason: 'exit' | 'unmount') => {
+    emit('challenge:leave', { code: codeRef.current, reason });
   }, []);
+
+  /* CASE 1 — the solo waiting window elapsed with nobody ever having joined.
+     This is NOT an error and NOT a result: the room simply stopped being
+     interesting, so the client tears the whole thing down and returns the
+     player to the main Typing Challenge page (Create / Join) to start again.
+     There is deliberately no "Challenge Expired" card and no error screen —
+     the only visible outcome is being back on the challenge home page.
+     Guarded by a ref so a slow network (the authoritative re-read plus the
+     3s lobby poller) can never fire it twice or race the navigation.
+     Declared AFTER `emitLeave` on purpose: referencing it above its `const`
+     would be a temporal-dead-zone ReferenceError on every render. */
+  const expireSoloLobbyAndReturn = useCallback(() => {
+    if (expiredLobbyHandledRef.current) return;
+    expiredLobbyHandledRef.current = true;
+    // Stop every machine this room owns before we move on.
+    submittedRef.current = true;
+    engagedRef.current = false;
+    rematchPendingRef.current = false;
+    if (timerIdRef.current !== null) {
+      window.clearInterval(timerIdRef.current);
+      timerIdRef.current = null;
+    }
+    if (opponentLeaveToastTimerRef.current !== null) {
+      window.clearTimeout(opponentLeaveToastTimerRef.current);
+      opponentLeaveToastTimerRef.current = null;
+    }
+    // Drop the room-scoped state: opponent, progress, results, error copy.
+    setOpponentProgress(null);
+    setOpponentLeft(false);
+    setOpponentLeftMessage(null);
+    setMySummary(null);
+    setErrorTitle('');
+    setErrorBody('');
+    setChallenge(null);
+    setPhase('expired');
+    // Stop listening to this room, then leave it entirely. The mount effect's
+    // cleanup removes the socket listeners when the component unmounts.
+    emitLeave('exit');
+    navigate('/challenge');
+  }, [emitLeave, navigate]);
 
   const goToError = useCallback((title: string, body: string) => {
     setErrorTitle(title);
@@ -513,27 +678,64 @@ function ChallengeRoom({ code }: { code: string }) {
     roundRef.current = next.round;
     const roundChanged = prevRound != null && next.round > prevRound;
 
-    setChallenge(next);
-    setOpponentLeft(false);
+    // A voided race must be intercepted BEFORE any status mapping: the room is
+    // COMPLETED on the server but nobody won it, so the results screen (and any
+    // winner/trophy messaging) must never be reached.
+    if (next.endedBy === 'opponent_left') {
+      if (prevRound != null && next.round < prevRound) return;
+      endRunForOpponentLeft(next, 'Your opponent has left the challenge.');
+      return;
+    }
 
-    // A brand-new round must never inherit the previous round's live state.
+    setChallenge(next);
+
+    // A brand-new round must never inherit the previous round's live state —
+    // including the opponent-left flag, which only ever applies to the CURRENT
+    // round's results screen. Same-round snapshots (e.g. a reconnect echo with
+    // an updated presence) must NOT wipe it.
     if (roundChanged) {
       setOpponentProgress(null);
       setMySummary(null);
+      setOpponentLeft(false);
+      setOpponentLeftMessage(null);
       submittedRef.current = false;
       engagedRef.current = false;
+      rematchPendingRef.current = false;
+      // A new round starts a completely fresh lifecycle. The opponent-left toast
+      // latch only applies to the round (or the teardown path) where it was
+      // triggered; a subsequent round must be able to emit its own departure
+      // state. Do NOT let it survive the round change.
+      handledOpponentLeaveRef.current = false;
     }
 
     const status = next.status;
     if (status === 'COMPLETED') {
       submittedRef.current = true;
       setPhase('results');
+      const nextOpp = opponentOf(next, next.me);
+      const rematchWasPending = rematchPendingRef.current ||
+        Boolean(challengeRefSafe.current && mePlayer(challengeRefSafe.current)?.rematchReady);
+      if (rematchWasPending && nextOpp && nextOpp.presence === 'left') {
+        showOpponentLeftToastAndRedirect();
+      }
       return;
     }
     if (status === 'RUNNING') {
       const startAt = next.startAt ? new Date(next.startAt).getTime() : Date.now();
-      engagedRef.current = true;
-      setPhase(startAt - Date.now() > 2000 ? 'countdown' : 'typing');
+      // A reconnected/echoed RUNNING snapshot must NOT yank a player who has
+      // already submitted their results back into the typing screen — they stay
+      // on the waiting card (their stats are read from the submitted snapshot).
+      if (phaseRef.current !== 'waitingResults') {
+        engagedRef.current = true;
+        // A snapshot that arrives with little lead time must NOT skip the
+        // countdown: `countdown` renders the shared "Get Ready" clock and flips
+        // to `typing` exactly at startAt, whereas `typing` would mount a live
+        // board before the race began. Anything that reaches `typing` this way
+        // (a refresh, a slow load or a late socket delivery inside the final
+        // seconds) would let that player type while the opponent is still on
+        // the countdown. Keep both players on the same pre-race view instead.
+        setPhase(startAt - Date.now() > 0 ? 'countdown' : 'typing');
+      }
       return;
     }
     if (status === 'WAITING' || status === 'PLAYER_JOINED' || status === 'READY') {
@@ -545,10 +747,59 @@ function ChallengeRoom({ code }: { code: string }) {
       }
       return;
     }
-    setErrorTitle('This challenge has expired.');
-    setErrorBody('Create a new challenge to keep the race going.');
-    setPhase('expired');
-  }, [ownUserId]);
+    /* Two genuinely different endings, and this is the LAST branch on purpose.
+       A room that ever had an opponent — or a client that is already past the
+       waiting lobby — must never be treated as a solo timeout: "no opponent
+       joined" is only true for a room that never had one. Such a snapshot means
+       the opponent is gone, so it is OPPONENT_LEFT. Only a room that sat alone
+       the whole 1-minute window is a silent lobby teardown back to the main
+       Typing Challenge page. */
+    const opponentWasSeated = next.players.some((player) => player.slot === 'player2');
+    const pastLobby = !['loading', 'lobby', 'expired', 'error'].includes(phaseRef.current);
+    if (opponentWasSeated || pastLobby) {
+      endRunForOpponentLeft(next, 'Your opponent has left the challenge.');
+      return;
+    }
+    expireSoloLobbyAndReturn();
+  }, [ownUserId, showOpponentLeftToastAndRedirect, endRunForOpponentLeft, expireSoloLobbyAndReturn]);
+
+  /* Sticky opponent-gone state for the rematch window: the server emits
+     challenge:opponentLeft (with the authoritative post-cancel snapshot) when a
+     pending rematch is cancelled because the opponent is permanently gone. We
+     remember the flag AND the reason so a same-round state echo can never undo
+     it, show the fresh snapshot (both rematchReady flags now false), and pin
+     the results screen with the left-opponent messaging. */
+  const applyOpponentLeftState = (next: ChallengePublic, message?: string | null) => {
+    const prev = challengeRefSafe.current;
+    // Mid-race departure: same no-contest path as the state echo above. This
+    // event is the PRIMARY signal (a dropped socket past the grace window, or
+    // an explicit Leave) so it is handled before the rematch-window logic.
+    if (next.endedBy === 'opponent_left') {
+      endRunForOpponentLeft(next, message ?? 'Your opponent has left the challenge.');
+      return;
+    }
+    const rematchWasPending = rematchPendingRef.current ||
+      Boolean(prev && prev.status === 'COMPLETED' && mePlayer(prev)?.rematchReady);
+    setChallenge(next);
+    setOpponentLeft(true);
+    setOpponentLeftMessage(message ?? null);
+    roundRef.current = next.round;
+    if (next.status === 'COMPLETED') {
+      setPhase('results');
+      if (rematchWasPending) showOpponentLeftToastAndRedirect();
+      return;
+    }
+    if (next.status === 'RUNNING') {
+      const startAt = next.startAt ? new Date(next.startAt).getTime() : Date.now();
+      if (phaseRef.current !== 'waitingResults') {
+        engagedRef.current = true;
+        // Same rule as the live `challenge:started` path: show the shared
+        // countdown whenever the start is still in the future, so a slow load
+        // never drops one player straight into the duel.
+        setPhase(startAt - Date.now() > 0 ? 'countdown' : 'typing');
+      }
+    }
+  };
 
   const loadChallenge = useCallback(async () => {
     let next: ChallengePublic;
@@ -559,9 +810,10 @@ function ChallengeRoom({ code }: { code: string }) {
       return;
     }
     if (next.status === 'EXPIRED') {
-      setErrorTitle('This challenge has expired.');
-      setErrorBody('Create a new challenge to keep the race going.');
-      setPhase('expired');
+      // Loading (or re-reading) a room whose solo window already elapsed —
+      // including a stale link opened after the fact. Same CASE 1 outcome:
+      // tear down and return to the main Typing Challenge page.
+      expireSoloLobbyAndReturn();
       return;
     }
     if (!next.me) {
@@ -579,8 +831,10 @@ function ChallengeRoom({ code }: { code: string }) {
           setErrorTitle('This challenge is already full.');
           setErrorBody('A challenge can only have two players. Ask your friend for a fresh code.');
         } else if (message.includes('expired')) {
-          setErrorTitle('This challenge has expired.');
-          setErrorBody('Create a new challenge to keep the race going.');
+          // The room lapsed between our read and our join attempt: CASE 1, so
+          // return to the main Typing Challenge page rather than show a card.
+          expireSoloLobbyAndReturn();
+          return;
         } else {
           setErrorTitle('Could not join this challenge.');
           setErrorBody(message);
@@ -605,15 +859,14 @@ function ChallengeRoom({ code }: { code: string }) {
       return; // transient network issue — keep polling
     }
     if (next.status === 'EXPIRED') {
-      setErrorTitle('This challenge has expired.');
-      setErrorBody('Create a new challenge to keep the race going.');
-      setPhase('expired');
+      // The lobby poller saw the solo window lapse: CASE 1 teardown.
+      expireSoloLobbyAndReturn();
       return;
     }
     const normalized = applyOwnSlot(next, ownUserId);
     if (roundRef.current != null && normalized.round < roundRef.current) return;
     applyChallenge(normalized);
-  }, [applyChallenge, ownUserId]);
+  }, [applyChallenge, ownUserId, expireSoloLobbyAndReturn]);
 
   useEffect(() => {
     if (phase !== 'lobby') {
@@ -625,18 +878,75 @@ function ChallengeRoom({ code }: { code: string }) {
     return () => window.clearInterval(id);
   }, [phase, challenge, refreshLobbyState]);
 
+  /* An EXPIRED room is a dead end: the server will never move it forward, so
+     drop the realtime subscription and the room-scoped state as soon as the
+     authoritative status arrives. No API leave call — the room is already
+     finished, we just stop listening and let the screen offer the way back to
+     the Typing Challenge page. */
+  useEffect(() => {
+    if (phase !== 'expired') return;
+    engagedRef.current = false;
+    emitLeave('unmount');
+  }, [phase, emitLeave]);
+
+  /* The room is void the moment the opponent leaves: drop out of the socket
+     room, stop the lobby clock and make sure nothing further can be published
+     or submitted. The socket LISTENERS themselves are removed by the mount
+     effect's cleanup when the popup redirects away ~2s later, so no duplicate
+     handler can ever be attached. */
+  useEffect(() => {
+    if (phase !== 'opponentLeft') return;
+    engagedRef.current = false;
+    submittedRef.current = true;
+    emitLeave('unmount');
+    if (timerIdRef.current !== null) {
+      window.clearInterval(timerIdRef.current);
+      timerIdRef.current = null;
+    }
+  }, [phase, emitLeave]);
+
+  /* The results screen is designed to fit entirely in the desktop viewport —
+     the persistent site footer would push it below the fold, so it is hidden
+     for exactly as long as this screen is active (removed again on exit). */
+  useEffect(() => {
+    if (phase !== 'results') return;
+    document.body.classList.add('challenge-results-active');
+    return () => document.body.classList.remove('challenge-results-active');
+  }, [phase]);
+
   useEffect(() => {
     setOpponentProgress(null);
     setOpponentLeft(false);
     setMySummary(null);
+    setOpponentLeaveToast(false);
     submittedRef.current = false;
     engagedRef.current = false;
+    rematchPendingRef.current = false;
+    handledOpponentLeaveRef.current = false;
+    if (opponentLeaveToastTimerRef.current !== null) {
+      window.clearTimeout(opponentLeaveToastTimerRef.current);
+      opponentLeaveToastTimerRef.current = null;
+    }
     setPhase('loading');
 
     if (token) connectChallengeSocket(token);
 
+    /* The challenge socket is a single shared connection, so a broadcast for
+       the room this client just abandoned can still arrive after "New Challenge"
+       has already mounted the replacement room. The round guards below cannot
+       catch that - both rooms are round 1 - so the abandoned room's EXPIRED
+       snapshot would be applied to the fresh lobby and the player would be
+       thrown straight back onto the old expired card. Every payload that
+       carries a room is therefore matched against the mounted room's code
+       first; anything else is not ours. */
+    const forThisRoom = (incoming?: ChallengePublic | null) => {
+      if (!incoming?.code) return true;
+      return normalizeCode(incoming.code) === codeRef.current;
+    };
+
     const onState = (payload: { challenge: ChallengePublic }) => {
       if (!payload?.challenge) return;
+      if (!forThisRoom(payload.challenge)) return;
       const next = applyOwnSlot(payload.challenge, ownUserId);
       // Stale snapshots from an older round must never overwrite the current
       // round's UI (e.g. a delayed round-1 broadcast during round 2).
@@ -645,7 +955,10 @@ function ChallengeRoom({ code }: { code: string }) {
     };
 
     const onStarted = (payload: { startAtMs?: number; durationSeconds?: number; text?: string; challenge?: ChallengePublic }) => {
+      // A voided room can never be (re)started: the departure is terminal.
+      if (phaseRef.current === 'opponentLeft') return;
       if (payload?.challenge) {
+        if (!forThisRoom(payload.challenge)) return;
         const next = applyOwnSlot(payload.challenge, ownUserId);
         if (roundRef.current != null && next.round < roundRef.current) return;
         applyChallenge(next);
@@ -661,21 +974,40 @@ function ChallengeRoom({ code }: { code: string }) {
           text: txt ?? prev.text,
         } : prev);
         engagedRef.current = true;
-        setPhase(startAtMs - Date.now() > 2000 ? 'countdown' : 'typing');
+        // Always show the shared countdown while the start is still ahead;
+        // DuelArea's input lock is what makes a late-arriving start safe.
+        setPhase(startAtMs - Date.now() > 0 ? 'countdown' : 'typing');
       }
     };
 
-    const onOpponentLeft = () => {
-      setOpponentLeft(true);
-      if (phaseRef.current === 'lobby' || phaseRef.current === 'countdown') {
-        setErrorTitle('Your opponent has left the challenge.');
-        setErrorBody('The room is no longer active. Create a fresh challenge to race again.');
-        setPhase('expired');
+    const onOpponentLeft = (payload: { challenge?: ChallengePublic; message?: string } = {}) => {
+      if (payload?.challenge) {
+        if (!forThisRoom(payload.challenge)) return;
+        const next = applyOwnSlot(payload.challenge, ownUserId);
+        if (roundRef.current != null && next.round < roundRef.current) return;
+        applyOpponentLeftState(next, payload.message);
+      } else {
+        // A departure with no snapshot attached. This is still CASE 2 - an
+        // opponent who was IN the room left - so it gets the departure popup
+        // and the automatic return, never an error/expiry card. Fall back to
+        // the last snapshot we hold for this room; if we truly have none there
+        // is no race to freeze, so the popup + redirect is still the outcome.
+        const known = challengeRefSafe.current;
+        if (known) {
+          endRunForOpponentLeft(known, 'Your opponent has left the challenge.');
+        } else {
+          showOpponentLeftToastAndRedirect({
+            title: '⚠️ Opponent Left the Challenge',
+            body: 'Your opponent has left the challenge.',
+          });
+        }
       }
     };
 
     const onOpponentProgress = (payload: OpponentProgress) => {
       if (!payload) return;
+      // The race is void: late progress packets must not animate a frozen board.
+      if (phaseRef.current === 'opponentLeft') return;
       // Round-scoped: a live update tagged for a previous round is stale and
       // must be dropped so round-1 stats can never appear in round 2.
       if (roundRef.current != null && payload.round !== roundRef.current) return;
@@ -685,8 +1017,14 @@ function ChallengeRoom({ code }: { code: string }) {
       setOpponentProgress(payload);
     };
 
+    // Replay of the opponent's LAST published state, sent by the server when a
+    // player (re)joins an already-running race (page refresh / reconnect). Same
+    // guards as the live broadcast; crucially it must NEVER zero out progress.
+    const onOpponentProgressSync = onOpponentProgress;
+
     const onResults = (payload: { challenge: ChallengePublic }) => {
       if (payload?.challenge) {
+        if (!forThisRoom(payload.challenge)) return;
         const next = applyOwnSlot(payload.challenge, ownUserId);
         if (roundRef.current != null && next.round < roundRef.current) return;
         applyChallenge(next);
@@ -695,6 +1033,8 @@ function ChallengeRoom({ code }: { code: string }) {
 
     const onRematch = (payload: { challenge: ChallengePublic }) => {
       if (!payload?.challenge) return;
+      if (phaseRef.current === 'opponentLeft') return;
+      if (!forThisRoom(payload.challenge)) return;
       const next = applyOwnSlot(payload.challenge, ownUserId);
       // Only a genuinely NEWER round starts a rematch; re-hearing the same
       // round (or an echo) is a no-op.
@@ -706,6 +1046,7 @@ function ChallengeRoom({ code }: { code: string }) {
     on('challenge:started', onStarted);
     on('challenge:opponentLeft', onOpponentLeft);
     on('challenge:opponentProgress', onOpponentProgress);
+    on('challenge:progressSync', onOpponentProgressSync);
     on('challenge:results', onResults);
     on('challenge:rematch', onRematch);
 
@@ -731,16 +1072,47 @@ function ChallengeRoom({ code }: { code: string }) {
       off('challenge:started', onStarted);
       off('challenge:opponentLeft', onOpponentLeft);
       off('challenge:opponentProgress', onOpponentProgress);
+      off('challenge:progressSync', onOpponentProgressSync);
       off('challenge:results', onResults);
       off('challenge:rematch', onRematch);
-      if (engagedRef.current) emitLeave();
       engagedRef.current = false;
-      if (timerIdRef.current !== null) {
-        window.clearInterval(timerIdRef.current);
-        timerIdRef.current = null;
-      }
     };
   }, [token, loadChallenge, ownUserId]);
+
+  /* This effect re-runs legitimately (token hydration, loader identity), so its
+     cleanup may only release what IT created. Stopping the room ticker or the
+     popup timer from here would be unrecoverable: the ticker effect keys off
+     `phase` alone, so clearing its interval while the phase stays 'lobby' left
+     the waiting-room countdown frozen at whatever it last showed. Each timer
+     is cleared by the effect that created it. */
+
+  /* Leaving the ROOM is tied to leaving the PAGE, not to this effect re-running.
+     The effect above legitimately re-subscribes whenever the auth identity or
+     the loader identity changes (token hydration), and its cleanup used to emit
+     a leave from that re-run - which, mid-race, reads as "the player pressed
+     Leave" and would void a race they are still playing. The teardown signal
+     therefore lives in its own unmount-only effect.
+
+     That teardown is DEFERRED by a tick on purpose. React StrictMode
+     deliberately mounts, unmounts and remounts every component in development,
+     which used to emit a REAL `challenge:leave` one millisecond after the room
+     was created. The server honours it exactly like a pressed Leave button, so
+     a brand new solo lobby was expired before anybody could join it - "Create
+     Challenge" produced a room that was dead on arrival. Counting mounts lets us
+     tell the simulated unmount (the effect runs again, so the count moves)
+     apart from a real one (nothing remounts, so it is safe to report). */
+  const leaveMountCountRef = useRef(0);
+  useEffect(() => {
+    const thisMount = ++leaveMountCountRef.current;
+    const leftCode = normalizeCode(code);
+    return () => {
+      window.setTimeout(() => {
+        if (leaveMountCountRef.current !== thisMount) return; // remounted: not a real departure
+        if (!leftCode) return;
+        emit('challenge:leave', { code: leftCode, reason: 'unmount' });
+      }, 0);
+    };
+  }, [code]);
 
   const challengeRefSafe = useRef<ChallengePublic | null>(null);
   challengeRefSafe.current = challenge;
@@ -757,9 +1129,11 @@ function ChallengeRoom({ code }: { code: string }) {
   }, [phase, startAtMs, now]);
 
   useEffect(() => {
-    if (phase !== 'countdown' && phase !== 'typing') return;
+    if (phase !== 'lobby' && phase !== 'countdown' && phase !== 'typing') return;
     if (timerIdRef.current !== null) window.clearInterval(timerIdRef.current);
-    const id = window.setInterval(() => setNow(Date.now()), 200);
+    // The lobby only needs a half-second heartbeat to drive the waiting-room
+    // countdown; the race keeps the fast tick for the live clock.
+    const id = window.setInterval(() => setNow(Date.now()), phase === 'lobby' ? 500 : 200);
     timerIdRef.current = id;
     return () => {
       window.clearInterval(id);
@@ -767,33 +1141,96 @@ function ChallengeRoom({ code }: { code: string }) {
     };
   }, [phase]);
 
+  /* Solo-lobby expiry countdown. The deadline is the server's `expiresAt`
+     (stamped at creation, re-stamped to the full match TTL the moment an
+     opponent joins), so this only *renders* the authoritative remaining time —
+     it never decides expiry. That keeps it correct across refreshes, minimized
+     windows and extra tabs, because every re-mount re-reads the server value. */
+  const waitingExpiresAtMs = challenge ? new Date(challenge.expiresAt).getTime() : 0;
+  const waitingForOpponent = Boolean(
+    challenge && !challenge.players.some((player) => player.slot === 'player2'),
+  );
+  const waitingSecondsLeft = waitingExpiresAtMs > 0
+    ? Math.max(0, Math.ceil((waitingExpiresAtMs - now) / 1000))
+    : 0;
+
+  // Reaching 0:00 triggers an immediate authoritative re-read instead of
+  // declaring the room dead locally: the server decides EXPIRED and broadcasts
+  // it. The existing 3s lobby poll remains the fallback if that GET fails.
+  useEffect(() => {
+    if (phase !== 'lobby' || !challenge || !waitingForOpponent) return;
+    if (waitingExpiresAtMs <= 0 || now < waitingExpiresAtMs) return;
+    if (expiryProbeRef.current) return;
+    expiryProbeRef.current = true;
+    void loadChallenge();
+  }, [phase, challenge, now, waitingExpiresAtMs, waitingForOpponent, loadChallenge]);
+
   const handleSubmitDone = useCallback(async (typedWords: TypedWord[]) => {
     if (submittedRef.current) return;
+    // A voided race is never submitted: the opponent left, nothing is scored.
+    if (phaseRef.current === 'opponentLeft') return;
     submittedRef.current = true;
     const submittedCode = codeRef.current;
     const challengeSnapshot = challengeRefSafe.current;
     if (!challengeSnapshot) return;
     const startAtIso = challengeSnapshot.startAt ?? new Date().toISOString();
-    const requested = await challengeService.submitResults(submittedCode, {
-      round: challengeSnapshot.round,
-      startTime: startAtIso,
-      endTime: new Date(Date.now()).toISOString(),
-      typedWords,
-    }).catch((err) => {
+    let requested: Awaited<ReturnType<typeof challengeService.submitResults>> | null = null;
+    try {
+      requested = await challengeService.submitResults(submittedCode, {
+        round: challengeSnapshot.round,
+        startTime: startAtIso,
+        endTime: new Date(Date.now()).toISOString(),
+        typedWords,
+      });
+    } catch (err) {
+      /* A rejected submit is NOT proof that saving failed. The common cause is
+         that the room already closed while we were typing - typically because
+         the OPPONENT LEFT - and the server rightly refuses a result for a race
+         that is no longer RUNNING. Reporting that as a generic "could not
+         submit" error is a lie that also strands the player on a dead screen
+         (and the dead screen survives a New Challenge click). So re-read the
+         authoritative room and render whatever it actually says: opponent_left
+         gets the departure flow, EXPIRED gets the lobby card, and only a room
+         that is genuinely still RUNNING is a real submission failure. */
+      let authoritative: ChallengePublic | null = null;
+      try {
+        authoritative = await challengeService.get(submittedCode);
+      } catch {
+        authoritative = null;
+      }
+      if (authoritative && submittedCode === codeRef.current) {
+        if (authoritative.endedBy === 'opponent_left') {
+          endRunForOpponentLeft(authoritative, 'Your opponent has left the challenge.');
+          return;
+        }
+        if (authoritative.status === 'EXPIRED') {
+          expireSoloLobbyAndReturn();
+          return;
+        }
+        if (authoritative.status === 'COMPLETED') {
+          // Closed as a normal result while we were submitting: show it.
+          setChallenge(authoritative);
+          setPhase('results');
+          return;
+        }
+      }
       setErrorTitle('Could not submit your results.');
       setErrorBody(getApiErrorMessage(err, 'Something went wrong saving the race. Please try again.'));
       setPhase('error');
-      return null;
-    });
+      return;
+    }
     if (!requested) return;
     if (requested.final) {
       setChallenge(requested.challenge);
       setPhase('results');
+    } else if (requested.challenge.status === 'EXPIRED') {
+      // The room was swept while we were submitting: CASE 1 teardown.
+      expireSoloLobbyAndReturn();
     } else {
       const mine = mePlayer(requested.challenge) ?? mePlayer(challengeSnapshot);
       setMySummary({
         wpm: mine?.stats?.wpm ?? 0,
-        accuracy: mine?.stats?.accuracy ?? 100,
+        accuracy: mine?.stats?.accuracy ?? 0,
         correctWords: mine?.stats?.correctWords ?? 0,
         errorsCount: mine?.stats?.errorsCount ?? 0,
       });
@@ -804,14 +1241,26 @@ function ChallengeRoom({ code }: { code: string }) {
   const rematch = useCallback(async () => {
     const submittedCode = codeRef.current;
     try {
-      const { challenge: next, advanced } = await challengeService.rematch(submittedCode);
+      const { challenge: next, advanced, opponentGone } = await challengeService.rematch(submittedCode);
+      if (opponentGone) {
+        // The opponent left (or passed the reconnect grace) before/during my
+        // request — the server cancelled my ask. Surface the gone-opponent
+        // toast and auto-redirect instead of leaving me on "waiting".
+        rematchPendingRef.current = true;
+        const normalized = applyOwnSlot(next, ownUserId);
+        if (roundRef.current != null && normalized.round < roundRef.current) return;
+        applyOpponentLeftState(normalized, 'Your opponent is no longer available.');
+        return;
+      }
       if (advanced || (roundRef.current != null && next.round > roundRef.current)) {
         // Round 2 (or later) is live: reset the previous round's transient
         // state and re-enter the room so the fresh text + startTime flow in.
         submittedRef.current = false;
         engagedRef.current = false;
+        rematchPendingRef.current = false;
         setOpponentProgress(null);
         setOpponentLeft(false);
+        setOpponentLeftMessage(null);
         setMySummary(null);
         void ensureSocketJoined(submittedCode);
         applyChallenge(next);
@@ -819,8 +1268,11 @@ function ChallengeRoom({ code }: { code: string }) {
         // I requested a rematch but the opponent hasn't clicked yet — the room
         // stays COMPLETED; just mirror the authoritative snapshot so the
         // results card shows the "waiting for opponent" state.
+        rematchPendingRef.current = true;
         const normalized = applyOwnSlot(next, ownUserId);
         if (roundRef.current != null && normalized.round < roundRef.current) return;
+        setOpponentLeft(false);
+        setOpponentLeftMessage(null);
         setChallenge(normalized);
       }
     } catch (err) {
@@ -831,12 +1283,12 @@ function ChallengeRoom({ code }: { code: string }) {
   const exitRoom = useCallback(async () => {
     engagedRef.current = false;
     submittedRef.current = true;
-    emitLeave();
+    emitLeave('exit');
     try { await challengeService.leave(codeRef.current); } catch { /* ignore */ }
     navigate('/challenge');
   }, [emitLeave, navigate]);
 
-  const copyableUrl = `${window.location.origin}/challenge/${currentCode}`;
+  const copyableUrl = buildChallengeLink(currentCode);
 
   const render = (() => {
     if (phase === 'loading') {
@@ -850,12 +1302,29 @@ function ChallengeRoom({ code }: { code: string }) {
       );
     }
 
-    if (phase === 'error' || phase === 'expired') {
+    /* `expired` is a TRANSIENT teardown state, not a screen: the solo waiting
+       window lapsed, so we are already navigating back to the main Typing
+       Challenge page. Rendering anything here - least of all the old
+       "Challenge Expired" card - would flash a dead end on the way out. A
+       quiet spinner is the honest placeholder for the moment before the
+       navigation lands. */
+    if (phase === 'expired') {
+      return (
+        <div className="flex items-center justify-center py-24">
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 size={28} className="animate-spin" style={{ color: 'var(--color-accent-text)' }} />
+            <p className="text-sm font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Returning to Typing Challenge…</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (phase === 'error') {
       return (
         <div className="max-w-[30rem] mx-auto w-full">
           <div className="card p-7 text-center">
-            <span className="inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-3" style={{ backgroundColor: phase === 'expired' ? 'rgba(245, 158, 11, 0.16)' : 'rgba(239, 68, 68, 0.12)', color: phase === 'expired' ? '#d97706' : '#dc2626' }}>
-              {phase === 'expired' ? <Clock size={22} /> : <AlertTriangle size={22} />}
+            <span className="inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-3" style={{ backgroundColor: 'rgba(239, 68, 68, 0.12)', color: '#dc2626' }}>
+              <AlertTriangle size={22} />
             </span>
             <h2 className="text-xl font-bold" style={{ color: 'var(--color-text-primary)' }}>{errorTitle}</h2>
             <p className="text-sm mt-2" style={{ color: 'var(--color-text-secondary)' }}>{errorBody}</p>
@@ -884,36 +1353,55 @@ function ChallengeRoom({ code }: { code: string }) {
 
     if (phase === 'waitingResults') {
       return (
-        <div className="max-w-[30rem] mx-auto w-full">
-          <div className="card p-7 text-center">
-            <div className="text-4xl mb-2">⏳</div>
-            <h2 className="text-xl font-bold" style={{ color: 'var(--color-text-primary)' }}>You&apos;re done!</h2>
-            <p className="text-sm mt-2" style={{ color: 'var(--color-text-secondary)' }}>
-              Waiting for your opponent to finish the race…
-            </p>
-            {mySummary && (
-              <div className="grid grid-cols-3 gap-3 mt-5">
-                <StatBox label="WPM" value={String(mySummary.wpm)} tone="#60A5FA" />
-                <StatBox label="Accuracy" value={`${mySummary.accuracy}%`} tone="#F472B6" />
-                <StatBox label="Words" value={String(mySummary.correctWords)} tone="#4ADE80" />
-              </div>
-            )}
-            <div className="mt-6 flex justify-center gap-3">
-              <button
-                onClick={() => void exitRoom()}
-                className="py-2.5 px-5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all duration-150"
-                style={{ border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)', backgroundColor: 'transparent' }}
-              >
-                <LogOut size={15} /> Exit
-              </button>
-            </div>
-          </div>
-        </div>
+        <WaitingCard
+          challenge={challenge}
+          mySummary={mySummary}
+          opponentProgress={opponentProgress}
+          opponentDisconnected={opponentDisconnected && !showOpponentLeft}
+          opponentLeft={showOpponentLeft}
+          onExit={() => void exitRoom()}
+        />
       );
     }
 
     if (phase === 'results') {
-      return <ResultsCard challenge={challenge} opponentLeft={opponentLeft} onRematch={() => void rematch()} onExit={() => void exitRoom()} />;
+      return <ResultsCard challenge={challenge} opponentLeft={showOpponentLeft} opponentLeftMessage={opponentLeftMessage} onRematch={() => void rematch()} onNewChallenge={() => void createAndGo()} onExit={() => void exitRoom()} />;
+    }
+
+    if (phase === 'opponentLeft') {
+      /* The race is void: keep the frozen duel area exactly where it stopped
+         (it is what the player was looking at when the opponent left) with the
+         clock and input locked, and let the popup + redirect own the screen.
+         No ResultsCard, no winner, no trophy — nothing is scored. */
+      return (
+        <div data-testid="challenge-opponent-left-run">
+          <DuelArea
+            key={`${challenge.round}-${startAtMs}`}
+            round={challenge.round}
+            text={challenge.text ?? ''}
+            duration={durationSec}
+            startAtMs={startAtMs}
+            opponentName={opponentOf(challenge, challenge.me)?.username ?? 'Opponent'}
+            opponentProgress={opponentProgress}
+            opponentLeft
+            opponentDisconnected={false}
+            frozen
+            onProgress={() => undefined}
+            onTextDone={() => undefined}
+            onExit={() => void exitRoom()}
+          />
+        </div>
+      );
+    }
+
+    if (phase === 'countdown' && challenge.status === 'RUNNING') {
+      return (
+        <RaceCountdown
+          round={challenge.round}
+          secondsLeft={countdownLeft}
+          opponentName={opponentOf(challenge, challenge.me)?.username ?? 'Opponent'}
+        />
+      );
     }
 
     if (phase === 'typing') {
@@ -926,7 +1414,8 @@ function ChallengeRoom({ code }: { code: string }) {
           startAtMs={startAtMs}
           opponentName={opponentOf(challenge, challenge.me)?.username ?? 'Opponent'}
           opponentProgress={opponentProgress}
-          opponentLeft={opponentLeft}
+          opponentLeft={showOpponentLeft}
+          opponentDisconnected={opponentDisconnected && !showOpponentLeft}
           onProgress={(p) => emit('challenge:progress', { ...p, round: challengeRefSafe.current?.round })}
           onTextDone={(typedWords) => void handleSubmitDone(typedWords)}
           onExit={() => void exitRoom()}
@@ -960,12 +1449,13 @@ function ChallengeRoom({ code }: { code: string }) {
           challenge={challenge}
           code={code}
           shareUrl={copyableUrl}
+          waitingSecondsLeft={waitingSecondsLeft}
           isCreator={Boolean(authUser && challenge.players.some((p) => p.slot === 'player1' && p.userId === String(authUser._id)))}
           onBack={() => navigate('/challenge')}
           onReady={() => void readyNow()}
           onExit={() => void exitRoom()}
         />
-        {opponentLeft && (
+        {showOpponentLeft && (
           <p className="mt-3 text-sm flex items-center justify-center gap-1.5" style={{ color: 'var(--color-error)' }}>
             <ShieldAlert size={14} /> Your opponent has left the challenge.
           </p>
@@ -1003,19 +1493,30 @@ function ChallengeRoom({ code }: { code: string }) {
     }
   }
 
-  return (
-    <PageWrapper fullWidth className="py-8 sm:py-10 px-3 sm:px-4 md:px-6" title={undefined}>
-      <div className="max-w-[106.25rem] mx-auto w-full">{render}</div>
-    </PageWrapper>
-  );
-}
+  const resultsBottomPad = phase === 'results' ? 'pb-2 sm:pb-3 md:pb-3' : 'pb-6 sm:pb-7 md:pb-6';
 
-function StatBox({ label, value, tone }: { label: string; value: string; tone: string }) {
   return (
-    <div className="rounded-xl p-3 flex flex-col items-center" style={{ background: `${tone}1f` }}>
-      <span className="text-xl font-extrabold tabular-nums" style={{ color: '#fff' }}>{value}</span>
-      <span className="text-[0.625rem] font-bold uppercase tracking-wider mt-1" style={{ color: tone }}>{label}</span>
-    </div>
+    <PageWrapper
+      fullWidth
+      className={`px-3 pt-4 ${resultsBottomPad} sm:px-4 sm:pt-5 md:px-6`}
+      title={undefined}
+    >
+      <div className="max-w-[106.25rem] mx-auto w-full">{render}</div>
+      {opponentLeaveToast && (
+        <OpponentLeaveToast
+          title={opponentLeaveToastCopy?.title}
+          body={opponentLeaveToastCopy?.body}
+        />
+      )}
+      {challenge && chatEnabled && phase !== 'results' && phase !== 'opponentLeft' && (
+        <ChallengeChat
+          code={currentCode}
+          round={challenge.round}
+          me={mePlayer(challenge)}
+          opponent={chatOpponent}
+        />
+      )}
+    </PageWrapper>
   );
 }
 
@@ -1046,10 +1547,11 @@ function DuelStat({ icon: Icon, label, value, tone, prominent }: {
 
 /***** LOBBY *****/
 
-function LobbyCard({ challenge, code, shareUrl, isCreator, onReady, onExit, onBack }: {
+function LobbyCard({ challenge, code, shareUrl, waitingSecondsLeft, isCreator, onReady, onExit, onBack }: {
   challenge: ChallengePublic;
   code: string;
   shareUrl: string;
+  waitingSecondsLeft: number;
   isCreator: boolean;
   onReady: () => void;
   onExit: () => void;
@@ -1060,6 +1562,7 @@ function LobbyCard({ challenge, code, shareUrl, isCreator, onReady, onExit, onBa
   const myReady = me?.ready ?? false;
   const hasOpponent = Boolean(opponent);
   const [copied, setCopied] = useState<'code' | 'link' | null>(null);
+  const [readyPending, setReadyPending] = useState(false);
 
   const copy = async (target: 'code' | 'link') => {
     try {
@@ -1071,104 +1574,260 @@ function LobbyCard({ challenge, code, shareUrl, isCreator, onReady, onExit, onBa
 
   const shortLink = shareUrl.replace(/^https?:\/\//, '');
 
+  const opponentConnected = opponent?.connected ?? true;
+
+  const conn = !hasOpponent
+    ? { label: 'Waiting for opponent…', bg: 'rgba(245, 158, 11, 0.12)', fg: '#b45309', dot: '#f59e0b', ping: true }
+    : !opponentConnected
+      ? { label: 'Opponent disconnected', bg: 'rgba(239, 68, 68, 0.08)', fg: '#dc2626', dot: '#ef4444', ping: false }
+      : { label: 'Both players connected', bg: 'rgba(34, 197, 94, 0.10)', fg: '#15803d', dot: '#22c55e', ping: false };
+
+  let info: { icon: string; title: string; body: string; bg: string; fg: string; border: string };
+  if (!hasOpponent) {
+    info = {
+      icon: '⏳',
+      title: 'Waiting for your opponent to join…',
+      body: 'Share your challenge code or link with a friend to get started.',
+      bg: 'rgba(245, 158, 11, 0.10)',
+      fg: '#b45309',
+      border: 'rgba(245, 158, 11, 0.22)',
+    };
+  } else if (!myReady) {
+    const opponentReady = opponent?.ready ?? false;
+    info = opponentReady
+      ? {
+          icon: '🚀',
+          title: 'Your opponent is ready!',
+          body: 'Click "I\'m Ready" below to start the battle.',
+          bg: 'rgba(67, 97, 238, 0.08)',
+          fg: 'var(--color-accent-text)',
+          border: 'rgba(99, 102, 241, 0.20)',
+        }
+      : {
+          icon: '🚀',
+          title: isCreator ? 'Opponent joined!' : 'You\'ve joined the challenge!',
+          body: 'Click "I\'m Ready" when you\'re all set to start.',
+          bg: 'rgba(67, 97, 238, 0.08)',
+          fg: 'var(--color-accent-text)',
+          border: 'rgba(99, 102, 241, 0.20)',
+        };
+  } else if (opponent?.ready) {
+    info = {
+      icon: '⚡',
+      title: 'Both ready — starting the challenge!',
+      body: 'You\'re seconds away from battle.',
+      bg: 'rgba(34, 197, 94, 0.10)',
+      fg: '#15803d',
+      border: 'rgba(34, 197, 94, 0.22)',
+    };
+  } else {
+    info = {
+      icon: '👍',
+      title: 'You\'re ready — waiting for your opponent…',
+      body: 'The race will begin the moment both players click ready.',
+      bg: 'rgba(67, 97, 238, 0.08)',
+      fg: 'var(--color-accent-text)',
+      border: 'rgba(99, 102, 241, 0.20)',
+    };
+  }
+
+  const handleReady = () => {
+    setReadyPending(true);
+    onReady();
+  };
+
   return (
-    <div
-      className="challenge-fade-in relative card p-6 sm:p-8"
-      data-testid="challenge-lobby"
-      style={{
-        borderRadius: '1.75rem',
-        borderColor: 'rgba(99, 102, 241, 0.16)',
-        boxShadow: '0 28px 70px -30px rgba(67, 97, 238, 0.32)',
-      }}
-    >
-      <span
-        aria-hidden
-        className="absolute inset-x-0 top-0 h-1 rounded-t-[1.75rem]"
-        style={{ background: 'linear-gradient(90deg, #4361ee, #7c3aed, #4361ee)' }}
-      />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -top-12 -right-10 h-44 w-44 rounded-full"
-        style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.06) 0%, transparent 70%)' }}
-      />
-      <span aria-hidden className="pointer-events-none absolute bottom-8 left-5 hidden lg:block" style={{ color: 'rgba(124, 58, 237, 0.10)' }}>
-        <Keyboard size={84} />
-      </span>
+    <div className="challenge-fade-in relative" data-testid="challenge-lobby">
+      <button
+        onClick={onBack}
+        className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110"
+        style={{ backgroundColor: 'rgba(139, 92, 246, 0.10)', color: 'var(--color-accent-text)', border: '1px solid rgba(99, 102, 241, 0.20)' }}
+      >
+        <ArrowLeft size={14} /> Back to Games
+      </button>
 
-      <div className="relative">
-        <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+      <div className="mt-5 flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex min-w-0 items-center gap-4">
+          <span
+            className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl"
+            style={{ background: 'linear-gradient(135deg, #4361ee, #7c3aed)', boxShadow: '0 16px 28px -12px rgba(67, 97, 238, 0.6)' }}
+          >
+            <Swords size={26} color="#fff" />
+          </span>
           <div className="min-w-0">
-            <button
-              onClick={onBack}
-              className="inline-flex items-center gap-1.5 text-xs font-bold transition-colors hover:brightness-110"
-              style={{ color: 'var(--color-text-muted)' }}
-            >
-              <ArrowLeft size={14} /> Back to Challenges
-            </button>
-            <div className="mt-4 flex items-center gap-3.5">
-              <span
-                className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl"
-                style={{ background: 'linear-gradient(135deg, #4361ee, #7c3aed)', boxShadow: '0 14px 24px -10px rgba(67, 97, 238, 0.55)' }}
-              >
-                <Swords size={22} color="#fff" />
-              </span>
-              <div className="min-w-0">
-                <h2 className="text-2xl font-extrabold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
-                  {isCreator ? 'Challenge Created!' : 'Challenge Room'}
-                </h2>
-                <p className="mt-0.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-                  {isCreator ? 'Share the code or link with your friend to start the match.' : 'You\'ve joined the challenge!'}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex shrink-0 flex-col items-start gap-2">
-            <span
-              className="inline-flex w-fit items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold"
-              style={{ backgroundColor: 'rgba(139, 92, 246, 0.10)', color: '#7c3aed' }}
-            >
-              <Swords size={13} /> Round {challenge.round}
-            </span>
-            <span
-              className="inline-flex w-fit items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold"
-              style={{ backgroundColor: 'rgba(67, 97, 238, 0.08)', color: 'var(--color-accent-text)' }}
-            >
-              <Timer size={13} /> {durationLabel(challenge.durationSeconds)} Challenge
-            </span>
-            <span
-              className="inline-flex w-fit items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-bold"
-              style={{
-                backgroundColor: isCreator ? (hasOpponent ? 'rgba(34, 197, 94, 0.10)' : 'rgba(245, 158, 11, 0.12)') : 'rgba(34, 197, 94, 0.10)',
-                color: isCreator ? (hasOpponent ? '#15803d' : '#b45309') : '#15803d',
-              }}
-            >
-              <span className="relative flex h-2 w-2">
-                <span
-                  className="challenge-waiting-dot absolute inline-flex h-full w-full rounded-full"
-                  style={{ backgroundColor: isCreator ? (hasOpponent ? '#22c55e' : '#f59e0b') : '#22c55e' }}
-                />
-                <span className="relative inline-flex h-2 w-2 rounded-full" style={{ backgroundColor: isCreator ? (hasOpponent ? '#22c55e' : '#f59e0b') : '#22c55e' }} />
-              </span>
-              {isCreator ? (hasOpponent ? 'Opponent joined' : 'Waiting for opponent…') : 'Both players connected'}
-            </span>
+            <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl" style={{ color: 'var(--color-text-primary)' }}>
+              Challenge Room
+            </h2>
+            <p className="mt-1 text-sm font-bold" style={{ color: 'var(--color-accent-text)' }}>
+              {isCreator ? 'Challenge Created!' : 'You\'ve joined the challenge!'}
+            </p>
+            <p className="mt-1.5 max-w-xl text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              Compete with your friend in a real-time typing battle. Be faster. Be more accurate. Win!
+            </p>
           </div>
         </div>
 
-        <div className={`mt-7 grid grid-cols-1 gap-5 ${isCreator ? 'items-stretch lg:grid-cols-[1.05fr_1fr]' : ''}`}>
-          {isCreator && (
-            <div className="flex flex-col gap-4">
-              <div
-                className="rounded-2xl border p-5"
-                style={{ borderColor: 'rgba(99, 102, 241, 0.18)', background: 'linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(124, 58, 237, 0.05))' }}
-              >
-                <p className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Challenge Code</p>
-                <div
-                  className="mt-3 rounded-xl border px-4 py-3"
-                  style={{ background: 'var(--color-card)', borderColor: 'rgba(99, 102, 241, 0.20)' }}
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <span
+            className="inline-flex w-fit items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold"
+            style={{ backgroundColor: 'rgba(139, 92, 246, 0.10)', color: '#7c3aed' }}
+          >
+            <Swords size={13} /> Round {challenge.round}
+          </span>
+          <span
+            className="inline-flex w-fit items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold"
+            style={{ backgroundColor: 'rgba(67, 97, 238, 0.08)', color: 'var(--color-accent-text)' }}
+          >
+            <Timer size={13} /> {durationLabel(challenge.durationSeconds)} Challenge
+          </span>
+          <span
+            className="inline-flex w-fit items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-bold"
+            style={{ backgroundColor: conn.bg, color: conn.fg }}
+          >
+            <span className="relative flex h-2 w-2">
+              {conn.ping && <span className="challenge-waiting-dot absolute inline-flex h-full w-full rounded-full" style={{ backgroundColor: conn.dot }} />}
+              <span className="relative inline-flex h-2 w-2 rounded-full" style={{ backgroundColor: conn.dot }} />
+            </span>
+            {conn.label}
+          </span>
+        </div>
+      </div>
+
+      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
+        <div
+          className="relative flex flex-col overflow-hidden rounded-[1.75rem] p-6 sm:p-9"
+          style={{ backgroundColor: 'var(--color-card)', border: '1px solid rgba(99, 102, 241, 0.18)', boxShadow: '0 28px 70px -30px rgba(67, 97, 238, 0.3)' }}
+        >
+          <span
+            aria-hidden
+            className="absolute inset-x-0 top-0 h-1"
+            style={{ background: 'linear-gradient(90deg, #4361ee, #7c3aed, #4361ee)' }}
+          />
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -top-16 -right-14 h-52 w-52 rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, transparent 70%)' }}
+          />
+          <span aria-hidden className="pointer-events-none absolute bottom-6 left-5 hidden lg:block" style={{ color: 'rgba(124, 58, 237, 0.10)' }}>
+            <Keyboard size={84} />
+          </span>
+          <span aria-hidden className="absolute right-4 top-4" style={{ color: 'rgba(67, 97, 238, 0.16)' }}><Zap size={18} /></span>
+
+          <div className="relative flex flex-1 flex-col">
+            <p className="text-center text-xs font-extrabold uppercase tracking-[0.22em]" style={{ color: 'var(--color-accent-text)' }}>
+              ⚔ Ready to battle?
+            </p>
+
+            <div className="mt-8 flex flex-1 flex-col items-center gap-5 sm:flex-row sm:items-stretch sm:justify-between sm:gap-2">
+              <div className="flex min-w-0 flex-1 flex-col items-center gap-2 text-center">
+                <span
+                  className="grid h-16 w-16 shrink-0 place-items-center rounded-full text-xl font-bold text-white sm:h-20 sm:w-20 sm:text-2xl"
+                  style={{ background: 'linear-gradient(135deg, #4361ee, #7c3aed)', boxShadow: '0 14px 26px -10px rgba(67, 97, 238, 0.55)' }}
                 >
+                  {(me?.username ?? '?').slice(0, 1).toUpperCase()}
+                </span>
+                <span className="mt-1.5 rounded-full px-2.5 py-0.5 text-[0.625rem] font-extrabold uppercase tracking-wide" style={{ backgroundColor: 'var(--color-accent-light)', color: 'var(--color-accent-text)' }}>You</span>
+                <span className="max-w-full truncate text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>{me?.username ?? 'You'}</span>
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold" style={{ color: myReady ? '#16a34a' : 'var(--color-text-muted)' }}>
+                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: myReady ? '#22c55e' : 'rgba(148, 163, 184, 0.55)' }} />
+                  {myReady ? 'Ready' : 'Not Ready'}
+                </span>
+              </div>
+
+              <div className="flex shrink-0 flex-col items-center justify-center px-1">
+                <span className="relative inline-grid place-items-center">
+                  <span
+                    aria-hidden
+                    className="absolute h-20 w-20 rounded-full"
+                    style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.35), transparent 70%)', filter: 'blur(6px)' }}
+                  />
+                  <span className="challenge-vs-pulse relative grid h-14 w-14 place-items-center rounded-full text-base font-extrabold text-white sm:h-16 sm:w-16">
+                    VS
+                  </span>
+                </span>
+              </div>
+
+              <div className="flex min-w-0 flex-1 flex-col items-center gap-2 text-center">
+                <span
+                  className="grid h-16 w-16 shrink-0 place-items-center rounded-full text-xl font-bold sm:h-20 sm:w-20 sm:text-2xl"
+                  style={{
+                    background: opponent ? 'linear-gradient(135deg, #8b5cf6, #d946ef)' : 'rgba(148, 163, 184, 0.22)',
+                    color: opponent ? '#fff' : 'var(--color-text-muted)',
+                    boxShadow: opponent ? '0 14px 26px -10px rgba(139, 92, 246, 0.55)' : 'none',
+                  }}
+                >
+                  {opponent ? opponent.username.slice(0, 1).toUpperCase() : <Clock size={22} />}
+                </span>
+                <span className="mt-1.5 rounded-full px-2.5 py-0.5 text-[0.625rem] font-extrabold uppercase tracking-wide" style={{ backgroundColor: opponent ? 'rgba(139, 92, 246, 0.12)' : 'rgba(148, 163, 184, 0.15)', color: opponent ? '#7c3aed' : 'var(--color-text-muted)' }}>Opponent</span>
+                <span className="max-w-full truncate text-sm font-bold" style={{ color: opponent ? 'var(--color-text-primary)' : 'var(--color-text-muted)' }}>
+                  {opponent ? opponent.username : 'Waiting…'}
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold" style={{ color: opponent?.ready ? '#16a34a' : 'var(--color-text-muted)' }}>
+                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: opponent?.ready ? '#22c55e' : 'rgba(148, 163, 184, 0.55)' }} />
+                  {opponent ? (opponent.ready ? 'Ready' : 'Not Ready') : 'Waiting'}
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-8 rounded-2xl px-4 py-3.5 text-center" style={{ backgroundColor: info.bg, border: `1px solid ${info.border}` }}>
+              <p className="text-sm font-bold" style={{ color: info.fg }}>
+                {info.icon} {info.title}
+              </p>
+              <p className="mt-1 text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>{info.body}</p>
+              {!hasOpponent && (
+                <div className="mt-3 flex items-center justify-center gap-2 border-t pt-3" style={{ borderColor: info.border }}>
+                  <Clock size={15} style={{ color: info.fg }} />
+                  <span className="text-sm font-bold" style={{ color: info.fg }}>Room expires in</span>
+                  <b
+                    data-testid="challenge-waiting-countdown"
+                    className="text-2xl font-extrabold tabular-nums leading-none"
+                    style={{ color: info.fg, fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}
+                  >
+                    {formatCountdown(waitingSecondsLeft)}
+                  </b>
+                </div>
+              )}
+            </div>
+
+            {myReady ? (
+              <p
+                className="mt-6 flex w-full items-center justify-center gap-1.5 rounded-2xl py-3.5 text-sm font-bold"
+                style={{ backgroundColor: 'rgba(34, 197, 94, 0.10)', color: '#15803d' }}
+              >
+                <Check size={16} /> You&apos;re ready — waiting for your opponent to click ready…
+              </p>
+            ) : (
+              <button
+                data-testid="challenge-ready"
+                onClick={handleReady}
+                disabled={readyPending}
+                className="group mt-6 flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-base font-extrabold text-white transition-all duration-150 hover:-translate-y-0.5 hover:scale-[1.01] hover:brightness-110 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:scale-100"
+                style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', boxShadow: '0 18px 38px -14px rgba(67, 97, 238, 0.7)' }}
+              >
+                {readyPending ? <Loader2 size={19} className="animate-spin" /> : <Zap size={19} />} I&apos;m Ready
+                {!readyPending && <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" />}
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-5">
+          <ChallengeInfoCard challenge={challenge} />
+
+          {isCreator && (
+            <div className="rounded-2xl border p-5" style={{ borderColor: 'rgba(99, 102, 241, 0.18)', backgroundColor: 'var(--color-card)' }}>
+              <p className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
+                <Share2 size={13} /> Invite your friend
+              </p>
+
+              <div
+                className="mt-4 flex items-center justify-between gap-3 rounded-xl border px-4 py-3"
+                style={{ borderColor: 'rgba(99, 102, 241, 0.20)', background: 'linear-gradient(135deg, rgba(67, 97, 238, 0.06), rgba(124, 58, 237, 0.06))' }}
+              >
+                <div className="min-w-0">
+                  <p className="text-[0.625rem] font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Challenge Code</p>
                   <p
-                    className="truncate text-3xl font-extrabold tracking-[0.08em] sm:text-4xl"
+                    className="truncate text-2xl font-extrabold tracking-[0.08em]"
                     style={{ color: 'var(--color-accent-text)', fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}
                   >
                     {code}
@@ -1177,165 +1836,101 @@ function LobbyCard({ challenge, code, shareUrl, isCreator, onReady, onExit, onBa
                 <button
                   onClick={() => void copy('code')}
                   data-testid="copy-code"
-                  className="mt-3.5 inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-bold transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110"
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110"
                   style={{ background: 'linear-gradient(135deg, #4361ee, #7c3aed)', color: '#fff', boxShadow: '0 6px 16px -6px rgba(67, 97, 238, 0.55)' }}
                 >
-                  {copied === 'code' ? <Check size={13} /> : <Copy size={13} />} {copied === 'code' ? 'Copied!' : 'Copy Code'}
+                  {copied === 'code' ? <Check size={13} /> : <Copy size={13} />} {copied === 'code' ? 'Copied!' : 'Copy'}
                 </button>
               </div>
 
-              <div className="rounded-2xl border p-5" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }}>
-                <p className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style={{ color: 'var(--color-text-muted)' }}>
-                  <Link2 size={13} /> Challenge Link
-                </p>
-                <div className="mt-3 flex items-center gap-2 truncate rounded-xl border px-3.5 py-2.5" style={{ borderColor: 'rgba(99, 102, 241, 0.20)', backgroundColor: 'rgba(251, 250, 254, 0.6)' }}>
-                  <Globe size={14} className="shrink-0" style={{ color: 'var(--color-text-muted)' }} />
-                  <span className="truncate font-mono text-sm font-semibold" style={{ color: 'var(--color-text-secondary)' }}>{shortLink}</span>
-                </div>
-                <button
-                  onClick={() => void copy('link')}
-                  data-testid="copy-link"
-                  className="mt-3.5 inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-bold transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110"
-                  style={{ background: 'linear-gradient(135deg, #4361ee, #7c3aed)', color: '#fff', boxShadow: '0 6px 16px -6px rgba(67, 97, 238, 0.55)' }}
-                >
-                  {copied === 'link' ? <Check size={13} /> : <Copy size={13} />} {copied === 'link' ? 'Copied!' : 'Copy Link'}
-                </button>
+              <div className="mt-3 flex items-center gap-2 truncate rounded-xl border px-3.5 py-2.5" style={{ borderColor: 'rgba(99, 102, 241, 0.20)', backgroundColor: 'rgba(251, 250, 254, 0.6)' }}>
+                <Globe size={14} className="shrink-0" style={{ color: 'var(--color-text-muted)' }} />
+                <span className="truncate font-mono text-sm font-semibold" style={{ color: 'var(--color-text-secondary)' }}>{shortLink}</span>
               </div>
-
-              <p className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                <Share2 size={13} /> Share the code or link with your friend.
-              </p>
-
-              <div
-                className="flex items-center gap-2.5 rounded-xl px-4 py-3"
-                style={{ backgroundColor: 'rgba(67, 97, 238, 0.08)', border: '1px solid rgba(99, 102, 241, 0.18)' }}
+              <button
+                onClick={() => void copy('link')}
+                data-testid="copy-link"
+                className="mt-3 inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-bold transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110"
+                style={{ background: 'linear-gradient(135deg, #4361ee, #7c3aed)', color: '#fff', boxShadow: '0 6px 16px -6px rgba(67, 97, 238, 0.55)' }}
               >
-                <Info size={16} className="shrink-0" style={{ color: 'var(--color-accent-text)' }} />
-                <p className="text-xs font-semibold" style={{ color: 'var(--color-accent-text)' }}>
-                  Keep this page open. We&apos;ll notify you when your friend joins.
-                </p>
-              </div>
-
-              <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1.5 px-1 text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                <span className="flex items-center gap-1.5"><Timer size={13} /> {durationLabel(challenge.durationSeconds)} race</span>
-                <span className="flex items-center gap-1.5"><Zap size={13} /> Real-time</span>
-                <span className="flex items-center gap-1.5"><Users size={13} /> 2 Players</span>
-              </div>
+                {copied === 'link' ? <Check size={13} /> : <Copy size={13} />} {copied === 'link' ? 'Copied!' : 'Copy Link'}
+              </button>
             </div>
           )}
+        </div>
+      </div>
 
-          <div
-            className={`relative flex flex-col overflow-hidden rounded-2xl border p-5 sm:p-6 ${isCreator ? '' : 'mx-auto w-full max-w-md'}`}
-            style={{ borderColor: 'rgba(99, 102, 241, 0.18)', backgroundColor: 'rgba(251, 250, 254, 0.6)' }}
-          >
-            <span
-              aria-hidden
-              className="pointer-events-none absolute -top-14 -right-14 h-44 w-44 rounded-full"
-              style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.10) 0%, transparent 70%)' }}
-            />
-            <span aria-hidden className="absolute right-4 top-3" style={{ color: 'rgba(67, 97, 238, 0.16)' }}><Zap size={16} /></span>
-            <span aria-hidden className="absolute bottom-3 left-4" style={{ color: 'rgba(124, 58, 237, 0.16)' }}><Keyboard size={18} /></span>
+      <div className="mt-6 flex flex-col items-center justify-between gap-3 sm:flex-row">
+        <p className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          <Clock size={13} /> ◷ {hasOpponent
+            ? 'Room expires 30 minutes after your opponent joined'
+            : `Room expires in ${formatCountdown(waitingSecondsLeft)} if no one joins`}
+        </p>
+        <button
+          onClick={onExit}
+          data-testid="challenge-exit"
+          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors hover:brightness-110"
+          style={{ color: 'var(--color-error)', backgroundColor: 'rgba(239, 68, 68, 0.06)' }}
+        >
+          <LogOut size={13} /> Leave Challenge
+        </button>
+      </div>
 
-            <p className="mb-6 text-center text-[0.65rem] font-bold uppercase tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
-              <Swords size={12} className="mr-1 inline" style={{ color: 'var(--color-accent-text)' }} /> Ready to battle?
-            </p>
+      <div className="mt-8 hidden select-none items-end justify-between gap-6 xl:flex" aria-hidden>
+        <span className="flex flex-col items-center gap-1">
+          <span className="text-xs italic" style={{ color: 'var(--color-text-muted)' }}>Same text. Same rules. Real competition.</span>
+          <svg width="130" height="8" viewBox="0 0 130 8" fill="none">
+            <path d="M2 5.5 C 22 1.5, 44 7.5, 70 4.5 S 110 2, 128 4.5" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </span>
+        <span className="flex flex-col items-center gap-1">
+          <span className="text-xs italic" style={{ color: 'var(--color-text-muted)' }}>
+            Type Better Every Day <span style={{ color: 'var(--color-accent-text)' }}>♥</span>
+          </span>
+          <svg width="110" height="8" viewBox="0 0 110 8" fill="none">
+            <path d="M2 4.5 C 20 1.5, 40 7.5, 62 4.5 S 92 2, 108 4" stroke="var(--color-accent-text)" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </span>
+      </div>
+    </div>
+  );
+}
 
-            <div className="flex flex-1 flex-col items-center gap-5 sm:flex-row sm:items-stretch sm:justify-between sm:gap-2">
-              <div className="flex min-w-0 flex-1 flex-col items-center gap-1.5 text-center">
-                <span
-                  className="grid h-14 w-14 shrink-0 place-items-center rounded-full text-lg font-bold text-white sm:h-16 sm:w-16 sm:text-xl"
-                  style={{ background: 'linear-gradient(135deg, #4361ee, #7c3aed)', boxShadow: '0 10px 20px -8px rgba(67, 97, 238, 0.5)' }}
-                >
-                  {(me?.username ?? '?').slice(0, 1).toUpperCase()}
-                </span>
-                <span className="mt-1 rounded px-1.5 py-0.5 text-[0.625rem] font-bold uppercase tracking-wide" style={{ backgroundColor: 'var(--color-accent-light)', color: 'var(--color-accent-text)' }}>You</span>
-                <span className="max-w-full truncate text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>{me?.username ?? 'You'}</span>
-                <span className="text-xs font-bold" style={{ color: myReady ? '#16a34a' : 'var(--color-text-muted)' }}>
-                  {myReady ? '🟢 Ready' : '⚪ Not Ready'}
-                </span>
-              </div>
+function ChallengeInfoCard({ challenge }: { challenge: ChallengePublic }) {
+  const rows: { key: string; icon: LucideIcon; label: string; value: string }[] = [
+    { key: 'duration', icon: Timer, label: 'Duration', value: durationLabel(challenge.durationSeconds) },
+    { key: 'mode', icon: Swords, label: 'Mode', value: '1v1 Real-time' },
+    { key: 'goal', icon: Trophy, label: 'Goal', value: 'Higher WPM & Accuracy' },
+  ];
 
-              <div className="flex shrink-0 flex-col items-center justify-center px-0.5">
-                <span className="challenge-vs-pulse grid h-11 w-11 place-items-center rounded-full text-sm font-extrabold text-white sm:h-12 sm:w-12">
-                  VS
-                </span>
-              </div>
+  return (
+    <div
+      className="relative overflow-hidden rounded-2xl border p-5"
+      style={{ borderColor: 'rgba(99, 102, 241, 0.18)', backgroundColor: 'rgba(251, 250, 254, 0.65)' }}
+    >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -top-14 -right-12 h-40 w-40 rounded-full"
+        style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.10) 0%, transparent 70%)' }}
+      />
+      <span aria-hidden className="absolute right-4 top-3" style={{ color: 'rgba(67, 97, 238, 0.16)' }}><Trophy size={16} /></span>
 
-              <div className="flex min-w-0 flex-1 flex-col items-center gap-1.5 text-center">
-                <span
-                  className="grid h-14 w-14 shrink-0 place-items-center rounded-full text-lg font-bold sm:h-16 sm:w-16 sm:text-xl"
-                  style={{
-                    background: opponent ? 'linear-gradient(135deg, #8b5cf6, #d946ef)' : 'rgba(148, 163, 184, 0.22)',
-                    color: opponent ? '#fff' : 'var(--color-text-muted)',
-                    boxShadow: opponent ? '0 10px 20px -8px rgba(139, 92, 246, 0.5)' : 'none',
-                  }}
-                >
-                  {opponent ? opponent.username.slice(0, 1).toUpperCase() : <Clock size={20} />}
-                </span>
-                <span className="mt-1 rounded px-1.5 py-0.5 text-[0.625rem] font-bold uppercase tracking-wide" style={{ backgroundColor: opponent ? 'rgba(139, 92, 246, 0.12)' : 'rgba(148, 163, 184, 0.15)', color: opponent ? '#7c3aed' : 'var(--color-text-muted)' }}>Opponent</span>
-                <span className="max-w-full truncate text-sm font-bold" style={{ color: opponent ? 'var(--color-text-primary)' : 'var(--color-text-muted)' }}>
-                  {opponent ? opponent.username : 'Waiting…'}
-                </span>
-                <span className="text-xs font-bold" style={{ color: opponent?.ready ? '#16a34a' : 'var(--color-text-muted)' }}>
-                  {opponent ? (opponent.ready ? '🟢 Ready' : '⚪ Not Ready') : 'Waiting'}
-                </span>
-              </div>
+      <p className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
+        <Trophy size={14} style={{ color: 'var(--color-accent-text)' }} /> Challenge Info
+      </p>
+
+      <div className="mt-4 flex flex-col">
+        {rows.map((row, i) => (
+          <div key={row.key} className={i > 0 ? 'mt-4 border-t pt-4' : ''} style={i > 0 ? { borderColor: 'rgba(99, 102, 241, 0.12)' } : undefined}>
+            <div className="flex items-center gap-3">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full" style={{ backgroundColor: 'rgba(99, 102, 241, 0.10)', color: 'var(--color-accent-text)' }}>
+                <row.icon size={16} />
+              </span>
+              <span className="flex-1 text-xs font-semibold" style={{ color: 'var(--color-text-muted)' }}>{row.label}</span>
+              <span className="text-sm font-extrabold" style={{ color: 'var(--color-text-primary)' }}>{row.value}</span>
             </div>
-
-            {isCreator ? (
-              hasOpponent ? (
-                <div className="mt-5 flex items-center justify-center gap-2 rounded-xl px-3 py-2.5" style={{ backgroundColor: 'rgba(34, 197, 94, 0.08)' }}>
-                  <p className="text-xs font-bold" style={{ color: '#15803d' }}>🎉 Opponent Joined!</p>
-                </div>
-              ) : (
-                <div className="mt-5 flex flex-col items-center gap-1 rounded-xl px-3 py-2.5" style={{ backgroundColor: 'rgba(245, 158, 11, 0.10)' }}>
-                  <p className="flex items-center gap-1.5 text-xs font-bold" style={{ color: '#b45309' }}>
-                    <Loader2 size={14} className="animate-spin" /> ⏳ Waiting for opponent...
-                  </p>
-                  <p className="text-[0.6875rem] font-semibold" style={{ color: '#b45309' }}>
-                    Share your challenge code or link with a friend.
-                  </p>
-                </div>
-              )
-            ) : (
-              <div className="mt-5 flex items-center justify-center gap-2 rounded-xl px-3 py-2.5" style={{ backgroundColor: 'rgba(34, 197, 94, 0.08)' }}>
-                <p className="text-xs font-bold" style={{ color: '#15803d' }}>🎉 You&apos;ve joined the challenge!</p>
-              </div>
-            )}
-
-            {myReady ? (
-              <p
-                className="mt-5 flex w-full items-center justify-center gap-1.5 rounded-xl py-3 text-sm font-bold"
-                style={{ backgroundColor: 'rgba(34, 197, 94, 0.10)', color: '#15803d' }}
-              >
-                <Check size={15} /> You&apos;re ready — waiting for your opponent to click ready…
-              </p>
-            ) : (
-              <button
-                data-testid="challenge-ready"
-                onClick={onReady}
-                className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-extrabold transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110"
-                style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff', boxShadow: '0 10px 24px -10px rgba(67, 97, 238, 0.6)' }}
-              >
-                <Zap size={17} /> I&apos;m Ready
-              </button>
-            )}
           </div>
-        </div>
-
-        <div className="mt-6 flex flex-col items-center justify-between gap-3 sm:flex-row">
-          <p className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--color-text-muted)' }}>
-            <Clock size={13} /> ◷ Room expires 30 minutes after creation
-          </p>
-          <button
-            onClick={onExit}
-            data-testid="challenge-exit"
-            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors hover:brightness-110"
-            style={{ color: 'var(--color-error)', backgroundColor: 'rgba(239, 68, 68, 0.06)' }}
-          >
-            <LogOut size={13} /> Leave Challenge
-          </button>
-        </div>
+        ))}
       </div>
     </div>
   );
@@ -1343,7 +1938,45 @@ function LobbyCard({ challenge, code, shareUrl, isCreator, onReady, onExit, onBa
 
 /***** DUEL *****/
 
-function DuelArea({ round, text, duration, startAtMs, opponentName, opponentProgress, opponentLeft, onProgress, onTextDone, onExit }: {
+/* The pre-start countdown for a race that is ALREADY scheduled server-side — a
+   rematch skips the "Ready to Battle?" lobby, so this is the only pre-race
+   view either player sees. DuelArea is deliberately NOT mounted here: it only
+   locks input at the END of a race, so mounting it during the lead time would
+   let a player type before the shared startAt. The room flips to 'typing' the
+   moment startAt is reached, which mounts DuelArea for real. */
+function RaceCountdown({ round, secondsLeft, opponentName }: {
+  round: number;
+  secondsLeft: number;
+  opponentName: string;
+}) {
+  return (
+    <div className="mx-auto w-full max-w-[46rem]" data-testid="challenge-countdown">
+      <div className="card p-8 sm:p-10 flex flex-col items-center text-center">
+        <span
+          className="grid w-12 h-12 place-items-center rounded-2xl text-white"
+          style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', boxShadow: '0 10px 24px -12px rgba(99, 102, 241, 0.6)' }}
+        >
+          <Swords size={22} />
+        </span>
+        <p className="mt-3 text-sm font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>Get Ready</p>
+        <div
+          className="mt-1 text-6xl sm:text-7xl font-extrabold tabular-nums"
+          style={{ color: 'var(--color-accent-text)', fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}
+        >
+          {secondsLeft > 0 ? secondsLeft : 'GO!'}
+        </div>
+        <p className="mt-2 text-sm font-semibold" style={{ color: 'var(--color-text-secondary)' }}>
+          Round {round} vs {opponentName}
+        </p>
+        <p className="mt-1 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          No ready-up needed — the race starts as soon as the countdown ends.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function DuelArea({ round, text, duration, startAtMs, opponentName, opponentProgress, opponentLeft, opponentDisconnected, frozen, onProgress, onTextDone, onExit }: {
   round: number;
   text: string;
   duration: number;
@@ -1351,19 +1984,52 @@ function DuelArea({ round, text, duration, startAtMs, opponentName, opponentProg
   opponentName: string;
   opponentProgress: OpponentProgress | null;
   opponentLeft: boolean;
-  onProgress: (p: { correct: number; attempted: number; errors: number; typedChars: number; wpm: number; accuracy: number; progress: number }) => void;
+  opponentDisconnected: boolean;
+  /** The race was voided (opponent left): freeze the clock, kill every timer,
+      block input and never submit. The board is kept on screen, motionless,
+      under the opponent-left popup. */
+  frozen?: boolean;
+  onProgress: (p: { correct: number; attempted: number; errors: number; typedChars: number; wpm: number; accuracy: number; progress: number; status: LiveProgressStatus }) => void;
   onTextDone: (typedWords: TypedWord[]) => void;
   onExit: () => void;
 }) {
   const endAtMs = startAtMs + duration * 1000;
   const [now, setNow] = useState(() => Date.now());
   const doneRef = useRef(false);
+  const textDoneRef = useRef(false);
+  const [textDone, setTextDone] = useState(false);
   const engineRef = useRef<ReturnType<typeof useTypingEngine> | null>(null);
+  // The realtime publish callback is recreated on every ChallengeRoom render
+  // (the room re-renders ~5x/second from its clock tick). If the publish
+  // interval listed it as a dependency it would be torn down and rebuilt
+  // faster than its own delay and almost never fire — the opponent would only
+  // ever see a single stale snapshot. Keeping it behind a ref lets the
+  // interval live for the whole race and always read the latest callback.
+  const onProgressRef = useRef(onProgress);
+  onProgressRef.current = onProgress;
+  const finalSentRef = useRef(false);
+  // Exactly one terminal "finished" broadcast per race (guarded so the submit
+  // path and the publish interval can never send two).
+  const publishFinal = useCallback((current: LiveEngine) => {
+    if (finalSentRef.current) return;
+    finalSentRef.current = true;
+    onProgressRef.current?.({ ...buildLiveProgress(current), status: 'finished' });
+  }, []);
 
   const engine = useTypingEngine({
     text,
+    // +120s gives a hard ceiling far past any challenge duration; the RACE is
+    // decided by the authoritative endAtMs (below), never by this ceiling.
     durationSeconds: duration + 120,
-    onComplete: () => finishNow(),
+    // Exhausting the text does NOT submit: the timer is the judge. The phase
+    // effect below simply records "done" and keeps the clock visible.
+    // Input is gated by the phase machine, not by a clock compare here: every
+    // path into `typing` now requires startAt to have passed, and `countdown`
+    // does not mount DuelArea at all. A client-clock compare against startAt
+    // would instead lock a player out of their own race whenever their clock
+    // runs behind the server's.
+    locked: frozen || now >= endAtMs,
+    onComplete: () => { /* text done: keep racing the clock */ },
   });
   engineRef.current = engine;
 
@@ -1371,56 +2037,78 @@ function DuelArea({ round, text, duration, startAtMs, opponentName, opponentProg
   const myProgress = engine.wordStates.length ? Math.min(100, Math.round((engine.currentWordIndex / engine.wordStates.length) * 100)) : 0;
 
   const finishNow = useCallback(() => {
+    if (frozen) return;
     if (doneRef.current) return;
     const current = engineRef.current;
     if (!current) return;
     doneRef.current = true;
+    // Push the exact final snapshot to the opponent as "finished" so their UI
+    // flips to ✓ Finished immediately (their own timer still races).
+    publishFinal(current);
     const typedWords = snapshotTypedWords(current.wordStates, current.currentWordIndex);
     onTextDone(typedWords);
-  }, [onTextDone]);
+  }, [onTextDone, publishFinal, frozen]);
 
+  // The clock is the race. Once the race is voided it stops dead: no interval,
+  // so the displayed time stays frozen exactly where the opponent left.
   useEffect(() => {
+    if (frozen) return;
     const id = window.setInterval(() => setNow(Date.now()), 250);
     return () => window.clearInterval(id);
-  }, []);
+  }, [frozen]);
+
+  // Text exhaustion is graceful: mark it done (banner + locked input) but keep
+  // the timer running. Only the authoritative endAtMs may submit results.
+  useEffect(() => {
+    if (textDoneRef.current) return;
+    if (engine.phase === 'finished') {
+      textDoneRef.current = true;
+      setTextDone(true);
+    }
+  }, [engine.phase]);
 
   useEffect(() => {
+    if (frozen) return;
     if (doneRef.current) return;
-    if (engine.phase === 'finished') {
-      finishNow();
-      return;
-    }
     if (now >= endAtMs) {
       finishNow();
-      return;
     }
-  }, [engine.phase, now, endAtMs, finishNow]);
+  }, [now, endAtMs, finishNow, frozen]);
 
   useEffect(() => {
-    if (engine.phase !== 'running') return;
-    // Throttled realtime publish (~3x/second): socket-only fan-out, no DB
+    // Created ONCE for the whole race. The running-state check happens inside
+    // each tick against the live engine so a changing engine.phase or a fresh
+    // onProgress identity can never reset this interval.
+    // Throttled realtime publish (~5x/second): socket-only fan-out, no DB
     // writes per keystroke, so the opponent's WPM/accuracy/progress stays live
     // and smooth without hammering the database.
+    if (frozen) return;
     const id = window.setInterval(() => {
       const current = engineRef.current;
       if (!current) return;
-      const correct = current.wordStates.filter((w) => w.status === 'correct').length;
-      const attempted = current.wordStates.filter((w) => w.status !== 'pending').length;
-      const total = current.wordStates.length;
-      const progress = total > 0 ? Math.min(100, Math.round((current.currentWordIndex / total) * 100)) : 0;
-      const typedChars = current.wordStates.reduce((n, w) => n + (w.status !== 'pending' ? w.typed.length : 0), 0);
-      onProgress({
-        correct,
-        attempted,
-        errors: liveErrorsFrom(current.wordStates),
-        typedChars,
-        wpm: current.liveWpm,
-        accuracy: current.liveAccuracy,
-        progress,
-      });
-    }, 300);
+      // Once the player has finished typing OR submitted (doneRef), their
+      // numbers are final: publish a single "finished" snapshot so the
+      // opponent renders ✓ Finished instead of a frozen "typing" state.
+      if (doneRef.current || current.phase === 'finished') {
+        publishFinal(current);
+        return;
+      }
+      onProgressRef.current?.({ ...buildLiveProgress(current), status: 'typing' });
+    }, 200);
     return () => window.clearInterval(id);
-  }, [engine.phase, onProgress]);
+  }, [publishFinal, frozen]);
+
+  useEffect(() => {
+    // Publish the terminal "finished" snapshot at the exact commit where the
+    // engine reports completion — NOT from the interval alone. The opponent
+    // view is replaced the instant the engine flips out of "running", which
+    // clears the publish interval before its next tick, so the finished
+    // snapshot must go out here (idempotent via finalSentRef).
+    if (frozen) return;
+    if (engine.phase === 'finished' && engineRef.current) {
+      publishFinal(engineRef.current);
+    }
+  }, [engine.phase, publishFinal, frozen]);
 
   const active = engine.wordStates[engine.currentWordIndex];
   const nextChar = active?.chars.find((c) => c.status === 'current' || c.status === 'pending');
@@ -1431,6 +2119,11 @@ function DuelArea({ round, text, duration, startAtMs, opponentName, opponentProg
   const liveErrors = liveErrorsFrom(engine.wordStates);
   const liveCorrectChars = liveCorrectCharsFrom(engine.wordStates);
   const timeCritical = syncRemaining <= 10 && engine.phase === 'running';
+
+  const oppStatus = opponentProgress?.status;
+  const oppIdle = !opponentProgress;
+  const oppFinished = !oppIdle && oppStatus === 'finished';
+  const oppTyping = !oppIdle && !oppFinished && oppStatus !== 'disconnected';
 
   return (
     <div className="w-full">
@@ -1445,6 +2138,10 @@ function DuelArea({ round, text, duration, startAtMs, opponentName, opponentProg
             {opponentLeft ? (
               <p className="mt-0.5 text-sm font-semibold" style={{ color: 'var(--color-error)' }}>
                 Your opponent has left the challenge.
+              </p>
+            ) : opponentDisconnected ? (
+              <p className="mt-0.5 text-sm font-semibold" style={{ color: '#b45309' }}>
+                Your opponent lost connection — waiting for them to reconnect…
               </p>
             ) : (
               <p className="mt-0.5 text-sm normal-case" style={{ color: 'var(--color-text-secondary)' }}>
@@ -1504,8 +2201,16 @@ function DuelArea({ round, text, duration, startAtMs, opponentName, opponentProg
             </div>
 
             <div className="mt-5 flex items-center justify-between gap-3">
-              <p className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--color-accent-text)' }}>
-                {timeCritical ? 'Almost done — finish strong!' : 'The clock is ticking.'}
+              <p className="text-sm font-semibold flex items-center gap-2" style={{ color: textDone ? '#16a34a' : 'var(--color-accent-text)' }}>
+                {textDone ? (
+                  <>
+                    <CheckCircle2 size={15} /> Text complete — the clock keeps running. Your pace is locked in!
+                  </>
+                ) : timeCritical ? (
+                  'Almost done — finish strong!'
+                ) : (
+                  'The clock is ticking.'
+                )}
               </p>
               <button onClick={onExit} data-testid="challenge-abandon" className="text-xs font-bold flex items-center gap-1 transition-colors hover:brightness-110" style={{ color: 'var(--color-error)' }}>
                 <LogOut size={13} /> Leave
@@ -1526,32 +2231,34 @@ function DuelArea({ round, text, duration, startAtMs, opponentName, opponentProg
           <div className="card p-4" data-testid="challenge-opponent-card">
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>Opponent</p>
-              <span className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[0.625rem] font-extrabold uppercase tracking-wider" style={{ backgroundColor: opponentProgress ? 'rgba(239, 68, 68, 0.10)' : 'rgba(148, 163, 184, 0.14)', color: opponentProgress ? '#dc2626' : 'var(--color-text-muted)' }}>
+              <span className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[0.625rem] font-extrabold uppercase tracking-wider" style={{ backgroundColor: oppIdle ? 'rgba(148, 163, 184, 0.14)' : oppFinished ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.10)', color: oppIdle ? 'var(--color-text-muted)' : oppFinished ? '#16a34a' : '#dc2626' }}>
                 <span className="relative flex h-1.5 w-1.5">
-                  <span className="live-dot absolute inline-flex h-full w-full rounded-full" style={{ backgroundColor: opponentProgress ? '#dc2626' : 'currentColor' }} />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ backgroundColor: opponentProgress ? '#dc2626' : 'currentColor' }} />
+                  <span className={oppIdle || oppFinished ? 'relative inline-flex h-1.5 w-1.5 rounded-full' : 'live-dot absolute inline-flex h-full w-full rounded-full'} style={{ backgroundColor: oppIdle ? 'currentColor' : oppFinished ? '#16a34a' : '#dc2626' }} />
+                  {!oppIdle && !oppFinished && <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#dc2626' }} />}
                 </span>
-                {opponentProgress ? 'Live' : 'Idle'}
+                {oppIdle ? 'Idle' : oppFinished ? 'Finished' : 'Live'}
               </span>
             </div>
             <div className="flex items-center gap-2.5 mb-3">
-              <span className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0" style={{ background: 'linear-gradient(135deg, #8b5cf6, #d946ef)', boxShadow: '0 8px 16px -6px rgba(139, 92, 246, 0.5)' }}>
+              <span className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0" style={{ background: oppFinished ? 'linear-gradient(135deg, #16a34a, #22c55e)' : 'linear-gradient(135deg, #8b5cf6, #d946ef)', boxShadow: oppFinished ? '0 8px 16px -6px rgba(34, 197, 94, 0.45)' : '0 8px 16px -6px rgba(139, 92, 246, 0.5)' }}>
                 {opponentName.slice(0, 1).toUpperCase()}
               </span>
               <div className="min-w-0">
                 <p className="text-sm font-bold truncate" style={{ color: 'var(--color-text-primary)' }}>{opponentName}</p>
-                <p className="text-xs" style={{ color: opponentProgress ? 'var(--color-accent-text)' : 'var(--color-text-muted)' }}>
-                  {opponentProgress ? (
+                <p className="text-xs" style={{ color: oppIdle ? 'var(--color-text-muted)' : oppFinished ? '#16a34a' : 'var(--color-accent-text)' }}>
+                  {oppIdle ? (
+                    'Waiting…'
+                  ) : oppFinished ? (
+                    <><CheckCircle2 size={13} className="inline -mt-0.5 mr-1" /> Finished</>
+                  ) : (
                     <>
-                      Typing…
-                      {opponentProgress.errors > 0 && (
+                      <span className="inline-flex items-center gap-1"><span className="relative flex h-1.5 w-1.5"><span className="live-dot absolute inline-flex h-full w-full rounded-full" style={{ backgroundColor: '#dc2626' }} /><span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#dc2626' }} /></span> Typing…</span>
+                      {opponentProgress!.errors > 0 && (
                         <span className="font-semibold" style={{ color: 'var(--color-error)' }}>
-                          {' · '}{opponentProgress.errors} error{opponentProgress.errors === 1 ? '' : 's'}
+                          {' · '}{opponentProgress!.errors} error{opponentProgress!.errors === 1 ? '' : 's'}
                         </span>
                       )}
                     </>
-                  ) : (
-                    'Waiting…'
                   )}
                 </p>
               </div>
@@ -1563,7 +2270,7 @@ function DuelArea({ round, text, duration, startAtMs, opponentName, opponentProg
               </div>
               <div className="rounded-xl p-2.5" style={{ backgroundColor: 'rgba(244, 114, 182, 0.10)' }}>
                 <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Accuracy</p>
-                <p className="text-xl font-extrabold tabular-nums" style={{ color: '#F472B6', fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}>{opponentProgress?.accuracy ?? 100}%</p>
+                <p className="text-xl font-extrabold tabular-nums" style={{ color: '#F472B6', fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}>{opponentProgress?.accuracy ?? 0}%</p>
               </div>
             </div>
             <div className="mt-2 flex items-center justify-between text-[0.6875rem] font-semibold" style={{ color: 'var(--color-text-muted)' }}>
@@ -1609,134 +2316,791 @@ function DuelArea({ round, text, duration, startAtMs, opponentName, opponentProg
 
 /***** RESULTS *****/
 
-function ResultsCard({ challenge, opponentLeft, onRematch, onExit }: {
+/* ═══════════════════════ WAITING ═══════════════════════ */
+
+function WaitingCard({ challenge, mySummary, opponentProgress, opponentDisconnected, opponentLeft, onExit }: {
+  challenge: ChallengePublic;
+  mySummary: MySummary | null;
+  opponentProgress: OpponentProgress | null;
+  opponentDisconnected: boolean;
+  opponentLeft: boolean;
+  onExit: () => void;
+}) {
+  const me = mePlayer(challenge);
+  const opponent = opponentOf(challenge, challenge.me);
+  const oppName = opponent?.username ?? opponentProgress?.username ?? 'Your opponent';
+
+  // Authoritative stats: the in-memory summary is preferred, but the submitted
+  // snapshot on the challenge always carries the truth (e.g. after a reconnect
+  // re-reads the URL state and `mySummary` was reset). Never zeroed while
+  // waiting.
+  const wpm = mySummary?.wpm ?? me?.stats?.wpm ?? 0;
+  const accuracy = mySummary?.accuracy ?? me?.stats?.accuracy ?? 0;
+  const words = mySummary?.correctWords ?? me?.stats?.correctWords ?? 0;
+  const errors = mySummary?.errorsCount ?? me?.stats?.errorsCount ?? 0;
+
+  const liveWpm = opponentProgress?.wpm ?? 0;
+  const liveAccuracy = opponentProgress?.accuracy ?? 0;
+  const liveProgress = opponentProgress ? Math.max(0, Math.min(100, opponentProgress.progress)) : 0;
+  const hasLive = Boolean(opponentProgress);
+  const livePct = `${liveProgress}%`;
+
+  const status = opponentLeft
+    ? { dot: '#ef4444', chipBg: 'rgba(239, 68, 68, 0.10)', fg: '#dc2626', label: 'Opponent left', text: 'Your opponent has left the challenge — finishing up the race…' }
+    : opponentDisconnected
+      ? { dot: '#f59e0b', chipBg: 'rgba(245, 158, 11, 0.10)', fg: '#b45309', label: 'Reconnecting…', text: 'Your opponent lost connection — waiting for them to return…' }
+      : opponentProgress?.status === 'finished'
+        ? { dot: '#22c55e', chipBg: 'rgba(34, 197, 94, 0.10)', fg: '#15803d', label: 'Finished', text: `${oppName} has finished — the clock decides the rest.` }
+        : { dot: '#22c55e', chipBg: 'rgba(34, 197, 94, 0.10)', fg: '#15803d', label: 'Still typing', text: hasLive ? `${oppName} is mid-race — live stats below.` : `${oppName} will appear below as they type.` };
+
+  return (
+    <div className="mx-auto w-full max-w-3xl">
+      <div className="card relative overflow-hidden p-5 text-center sm:p-8" data-testid="challenge-waiting">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-20 -left-20 h-56 w-56 rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(245, 158, 11, 0.10) 0%, transparent 70%)', filter: 'blur(26px)' }}
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-24 -right-20 h-64 w-64 rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.14) 0%, transparent 70%)', filter: 'blur(28px)' }}
+        />
+
+        <div className="relative">
+          {/* ── hero ── */}
+          <div className="wr-fade-up">
+            <span
+              className="wr-hourglass wr-halo inline-grid h-16 w-16 place-items-center rounded-2xl text-4xl"
+              style={{ backgroundColor: 'rgba(99, 102, 241, 0.10)', border: '1px solid rgba(99, 102, 241, 0.18)' }}
+              aria-hidden="true"
+            >
+              ⌛
+            </span>
+            <h2 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl" style={{ color: 'var(--color-text-primary)' }}>
+              You&apos;re done!
+            </h2>
+            <p className="mt-1 text-base font-extrabold" style={{ color: 'var(--color-accent-text)' }}>Nice typing!</p>
+            <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              Your result is locked in — your opponent is still racing…
+            </p>
+            <p className="mt-2.5 flex items-center justify-center gap-1.5 text-xs font-bold" style={{ color: 'var(--color-text-muted)' }}>
+              Waiting for {oppName}
+              <span className="wr-dots" aria-hidden="true">
+                <span /><span /><span />
+              </span>
+            </p>
+          </div>
+
+          {/* ── my result / opponent live ── */}
+          <div className="wr-fade-up mt-6 grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2" style={{ animationDelay: '80ms' }}>
+            {/* YOUR RESULT */}
+            <div
+              className="flex flex-col rounded-2xl border p-5 text-left"
+              style={{ borderColor: 'rgba(67, 97, 238, 0.22)', backgroundColor: 'rgba(67, 97, 238, 0.05)' }}
+            >
+              <div className="mb-4 flex items-center justify-between">
+                <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
+                  Your Result
+                </p>
+                <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.6rem] font-extrabold uppercase tracking-wider" style={{ backgroundColor: 'rgba(34, 197, 94, 0.12)', color: '#15803d' }}>
+                  <CheckCircle2 size={11} /> Completed
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-2.5">
+                <ResultMetric value={String(wpm)} label="WPM" color="#60A5FA" />
+                <ResultMetric value={`${accuracy}%`} label="Accuracy" color="#F472B6" />
+                <ResultMetric value={String(words)} label="Words" color="#4ADE80" />
+                <ResultMetric value={String(errors)} label="Errors" color="#F87171" />
+              </div>
+              <p className="mt-auto pt-3 text-xs font-semibold" style={{ color: 'var(--color-text-muted)' }}>
+                Here&apos;s how you finished. Your opponent&apos;s score will settle the winner.
+              </p>
+            </div>
+
+            {/* OPPONENT LIVE */}
+            <div
+              className="flex flex-col rounded-2xl border p-5 text-left"
+              style={{ borderColor: 'rgba(139, 92, 246, 0.22)', backgroundColor: 'rgba(139, 92, 246, 0.05)' }}
+            >
+              <div className="mb-4 flex items-center justify-between gap-2">
+                <div className="flex min-w-0 items-center gap-2">
+                  <span
+                    className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-full text-xs font-extrabold text-white"
+                    style={{ background: 'linear-gradient(135deg, #8b5cf6, #d946ef)' }}
+                  >
+                    {(oppName.trim().slice(0, 1) || '?').toUpperCase()}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-xs font-extrabold truncate" style={{ color: 'var(--color-text-primary)' }}>{oppName}</p>
+                    <p className="text-[0.6rem] font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Opponent</p>
+                  </div>
+                </div>
+                <span className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.6rem] font-extrabold uppercase tracking-wider" style={{ backgroundColor: status.chipBg, color: status.fg }}>
+                  <span className="wr-pulse-dot h-2 w-2 rounded-full" style={{ backgroundColor: status.dot }} />
+                  {status.label}
+                </span>
+              </div>
+
+              {opponentLeft ? (
+                <div
+                  className="flex flex-1 items-center justify-center rounded-xl border px-3 py-4 text-center"
+                  style={{ borderColor: 'rgba(239, 68, 68, 0.18)', backgroundColor: 'rgba(239, 68, 68, 0.04)' }}
+                >
+                  <p className="text-xs font-semibold" style={{ color: status.fg }}>{status.text}</p>
+                </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <DuelStat icon={Gauge} label="Opponent WPM" value={hasLive ? String(liveWpm) : '—'} tone="#60A5FA" />
+                    <DuelStat icon={Target} label="Opponent Accuracy" value={hasLive ? `${liveAccuracy}%` : '—'} tone="#F472B6" />
+                  </div>
+
+                  <div className="mt-3">
+                    <div className="mb-1.5 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5 text-[0.6rem] font-extrabold uppercase tracking-wider" style={{ color: hasLive ? '#4361ee' : 'var(--color-text-muted)' }}>
+                        <TrendingUp size={11} /> Progress
+                      </span>
+                      <span className="text-xs font-extrabold tabular-nums" style={{ color: '#4361ee', fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}>
+                        {hasLive ? livePct : '0%'}
+                      </span>
+                    </div>
+                    <div className="h-2.5 overflow-hidden rounded-full" style={{ backgroundColor: 'rgba(139, 92, 246, 0.12)' }}>
+                      <div
+                        className="wr-progress-fill h-full rounded-full"
+                        style={{
+                          width: hasLive ? livePct : '0%',
+                          background: 'linear-gradient(90deg, #4361ee, #7c3aed)',
+                          boxShadow: '0 0 10px rgba(99, 102, 241, 0.45)',
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <p className="mt-3 flex items-center gap-1.5 text-xs font-semibold" style={{ color: status.fg }}>
+                    <Keyboard size={13} />
+                    {hasLive ? 'Still typing…' : 'Live stats appear as your opponent types.'}
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* ── competition-feel note ── */}
+          <div
+            className="wr-fade-up mt-6 rounded-2xl px-5 py-3.5"
+            style={{ background: 'linear-gradient(135deg, rgba(67, 97, 238, 0.08), rgba(124, 58, 237, 0.11))', border: '1px solid rgba(99, 102, 241, 0.16)' }}
+          >
+            <p className="text-sm font-extrabold" style={{ color: 'var(--color-accent-text)' }}>
+              Your race is complete. The final result is almost ready.
+            </p>
+            <p className="mt-1 text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>
+              Can your opponent beat it?
+            </p>
+          </div>
+
+          {/* ── exit ── */}
+          <div className="wr-fade-up mt-6 flex justify-center" style={{ animationDelay: '120ms' }}>
+            <button
+              onClick={onExit}
+              className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-3 text-sm font-bold transition-all duration-150"
+              style={{ border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)', backgroundColor: 'transparent' }}
+            >
+              <LogOut size={16} /> Exit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════ RESULTS ═══════════════════════ */
+
+function ResultStat({ value, label, color, tint, delay }: {
+  value: string;
+  label: string;
+  color: string;
+  tint: string;
+  delay: string;
+}) {
+  return (
+    <div
+      className="rr-stat rounded-xl px-2 py-1.5 text-center"
+      style={{ backgroundColor: tint, animationDelay: delay }}
+    >
+      <b
+        className="block text-base font-extrabold tabular-nums leading-none sm:text-[1.05rem]"
+        style={{ color, fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}
+      >
+        {value}
+      </b>
+      <span className="mt-1 block text-[0.5rem] font-extrabold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>
+        {label}
+      </span>
+    </div>
+  );
+}
+
+function ResultMetric({ value, label, color }: { value: string; label: string; color: string }) {
+  return (
+    <div
+      className="rounded-lg border px-2 py-2 text-center"
+      style={{ borderColor: 'var(--color-border)', backgroundColor: 'rgba(124, 58, 237, 0.05)' }}
+    >
+      <p className="text-base sm:text-lg font-extrabold tabular-nums leading-none" style={{ color, fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}>
+        {value}
+      </p>
+      <p className="mt-1 text-[0.55rem] font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-secondary)' }}>
+        {label}
+      </p>
+    </div>
+  );
+}
+
+function ResultDetailChip({ icon: Icon, label, value, accent }: {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+  accent?: boolean;
+}) {
+  return (
+    <span className="inline-flex items-center gap-1.5 text-xs">
+      <Icon size={13} style={{ color: 'var(--color-accent-text)' }} />
+      <span className="font-bold" style={{ color: 'var(--color-text-secondary)' }}>{label}</span>
+      <span className="font-extrabold" style={{ color: accent ? 'var(--color-accent-text)' : 'var(--color-text-primary)' }}>{value}</span>
+    </span>
+  );
+}
+
+function VSBadge() {
+  return (
+    <div
+      className="rr-vs mx-auto grid w-9 h-9 sm:w-10 sm:h-10 shrink-0 place-items-center rounded-full"
+      style={{ background: 'linear-gradient(135deg, #4361ee, #7c3aed)', color: '#fff', boxShadow: '0 10px 24px -10px rgba(99, 102, 241, 0.6)' }}
+      aria-hidden="true"
+    >
+      <span className="text-[0.6rem] font-extrabold tracking-wide">VS</span>
+    </div>
+  );
+}
+
+type ResultMood = 'happy' | 'sad' | 'calm';
+
+/* Lightweight inline-SVG cartoon. No image assets and no animation library:
+   the three moods share one body and differ only in the face + arms, so the
+   winner/loser/tie treatments stay visually consistent. Wrapped in a
+   size-locked box (.rr-char) so swapping moods never shifts layout. */
+function ResultCharacter({ mood, uid }: { mood: ResultMood; uid: string }) {
+  const grad = `rr-body-${uid}`;
+  const happy = mood === 'happy';
+  const sad = mood === 'sad';
+
+  return (
+    <span className="rr-char" aria-hidden="true">
+      {happy && (
+        <span className="rr-crown">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 8.5l4.2 3L12 4.5l4.8 7L21 8.5 18.8 19H5.2z" fill="#FBBF24" stroke="#D97706" strokeWidth="1.5" strokeLinejoin="round" />
+            <circle cx="12" cy="3.4" r="1.7" fill="#FDE68A" />
+            <circle cx="3.4" cy="7.4" r="1.5" fill="#FDE68A" />
+            <circle cx="20.6" cy="7.4" r="1.5" fill="#FDE68A" />
+          </svg>
+        </span>
+      )}
+
+      <svg viewBox="0 0 64 64">
+        <defs>
+          <linearGradient id={grad} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#4361EE" />
+            <stop offset="100%" stopColor="#8B5CF6" />
+          </linearGradient>
+        </defs>
+
+        {/* arms — raised and cheering when happy, one raised to wipe a tear
+            when sad, relaxed at the sides when tied */}
+        {happy ? (
+          <g stroke="#4361EE" strokeWidth="4.6" strokeLinecap="round" fill="none">
+            <path d="M19 52 L9 39" />
+            <path d="M45 52 L55 39" />
+          </g>
+        ) : sad ? (
+          <g stroke="#8B5CF6" strokeWidth="4.6" strokeLinecap="round" fill="none">
+            <path d="M19 52 L13 44" />
+            <path d="M45 52 L52 37" />
+          </g>
+        ) : (
+          <g stroke="#7C6BF0" strokeWidth="4.6" strokeLinecap="round" fill="none">
+            <path d="M19 52 L14 44" />
+            <path d="M45 52 L50 44" />
+          </g>
+        )}
+        <circle cx="9" cy="38" r="3.4" fill="#FFD9BC" stroke="#F0B98A" strokeWidth="1.2" />
+        <circle cx={sad ? '52' : '55'} cy={sad ? '36' : '43'} r="3.4" fill="#FFD9BC" stroke="#F0B98A" strokeWidth="1.2" />
+
+        {/* body */}
+        <path d="M15 64c0-11.5 7.6-19 17-19s17 7.5 17 19z" fill={`url(#${grad})`} />
+
+        {/* head */}
+        <circle cx="18" cy="27" r="3.6" fill="#FFD9BC" stroke="#F0B98A" strokeWidth="1.2" />
+        <circle cx="46" cy="27" r="3.6" fill="#FFD9BC" stroke="#F0B98A" strokeWidth="1.2" />
+        <circle cx="32" cy="26" r="14.5" fill="#FFE3C8" stroke="#F0B98A" strokeWidth="1.4" />
+        <path d="M19.5 19.5q12.5-8 25 0-4-7-12.5-7t-12.5 7z" fill="#3B2F57" />
+
+        {happy ? (
+          <>
+            <path d="M23.5 25.5q2.8-3.4 5.6 0" fill="none" stroke="#3B2F2F" strokeWidth="1.9" strokeLinecap="round" />
+            <path d="M34.9 25.5q2.8-3.4 5.6 0" fill="none" stroke="#3B2F2F" strokeWidth="1.9" strokeLinecap="round" />
+            <path d="M25.5 30.5q6.5 7 13 0" fill="none" stroke="#3B2F2F" strokeWidth="1.9" strokeLinecap="round" />
+            <circle cx="22.5" cy="29.5" r="2.6" fill="#FF9AA2" opacity="0.55" />
+            <circle cx="41.5" cy="29.5" r="2.6" fill="#FF9AA2" opacity="0.55" />
+          </>
+        ) : sad ? (
+          <>
+            <path d="M22.5 24.5q3 1.6 5.8-0.6" fill="none" stroke="#3B2F2F" strokeWidth="1.8" strokeLinecap="round" />
+            <path d="M35.7 23.9q2.8 2.2 5.8 0.6" fill="none" stroke="#3B2F2F" strokeWidth="1.8" strokeLinecap="round" />
+            <path d="M27 33.5q5-4.5 10 0" fill="none" stroke="#3B2F2F" strokeWidth="1.8" strokeLinecap="round" />
+            <circle cx="22.5" cy="30" r="2.4" fill="#FF9AA2" opacity="0.4" />
+            <circle cx="41.5" cy="30" r="2.4" fill="#FF9AA2" opacity="0.4" />
+            <circle className="rr-tear" cx="37.5" cy="30.5" r="2.3" fill="#67C7F5" />
+          </>
+        ) : (
+          <>
+            <circle cx="26.4" cy="25.8" r="1.9" fill="#3B2F2F" />
+            <circle cx="37.6" cy="25.8" r="1.9" fill="#3B2F2F" />
+            <path d="M27 31q5 4.5 10 0" fill="none" stroke="#3B2F2F" strokeWidth="1.8" strokeLinecap="round" />
+            <circle cx="22.5" cy="29.5" r="2.5" fill="#FF9AA2" opacity="0.45" />
+            <circle cx="41.5" cy="29.5" r="2.5" fill="#FF9AA2" opacity="0.45" />
+          </>
+        )}
+      </svg>
+    </span>
+  );
+}
+
+type PlayerResultBadge = 'WINNER' | 'DEFEATED' | 'DRAW';
+
+function youResultWord(result: PlayerResultBadge) {
+  return result === 'WINNER' ? 'won' : result === 'DEFEATED' ? 'was defeated' : 'tied';
+}
+
+function ResultPlayerCard({ player, isMe, result, nameFallback, charId }: {
+  player: ChallengePlayerView | null;
+  isMe: boolean;
+  result: PlayerResultBadge;
+  nameFallback: string;
+  charId: string;
+}) {
+  const username = player?.username ?? nameFallback;
+  const initial = (username.trim().slice(0, 1) || '?').toUpperCase();
+  const wpm = player?.stats?.wpm ?? 0;
+  const acc = player?.stats?.accuracy ?? 0;
+  const words = player?.stats?.correctWords ?? 0;
+  const errors = player?.stats?.errorsCount ?? 0;
+  const isWinner = result === 'WINNER';
+  const isLoser = result === 'DEFEATED';
+  const isTie = result === 'DRAW';
+
+  // PERSONALIZATION (the core of this screen): the illustration, the outcome
+  // badge, the crown, the confetti and the highlights belong to the VIEWER'S
+  // OWN card only. The opponent's card is deliberately reduced to identity +
+  // statistics so nobody sees the other person's personal celebration, and a
+  // tie never shows a WINNER/DEFEATED badge at all.
+  // `result` is viewer-relative: the parent derives it from `challenge.me`
+  // (the authenticated user), never from card position or username.
+  const isOwn = isMe;
+  const showArt = isOwn;
+  const showBadge = isOwn && !isTie;
+
+  // Only the viewer's own card carries the outcome tint; the opponent's card
+  // stays neutral so the emphasis always sits on "your" result.
+  const mood: ResultMood = isWinner ? 'happy' : isLoser ? 'sad' : 'calm';
+
+  const accent = isWinner ? '#059669' : isLoser ? '#E11D48' : '#7C3AED';
+  const shell = isWinner
+    ? { background: 'linear-gradient(150deg, #ECFDF5 0%, #F0FDFA 55%, #EFF6FF 100%)', border: '1px solid rgba(16, 185, 129, 0.32)' }
+    : isLoser
+      ? { background: 'linear-gradient(150deg, #FDF2F8 0%, #FAF5FF 60%, #FDF4FF 100%)', border: '1px solid rgba(244, 63, 94, 0.24)' }
+      : { background: 'linear-gradient(150deg, #F8FAFF 0%, #F5F3FF 100%)', border: '1px solid rgba(124, 58, 237, 0.22)' };
+
+  const badge =
+    result === 'WINNER'
+      ? { background: 'linear-gradient(135deg, #10B981, #059669)', color: '#fff', border: '1px solid rgba(255,255,255,0.35)', shadow: '0 6px 14px -6px rgba(5, 150, 105, 0.7)' }
+      : result === 'DEFEATED'
+        ? { background: 'linear-gradient(135deg, #FB7185, #E11D48)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', shadow: '0 6px 14px -6px rgba(225, 29, 72, 0.6)' }
+        : { background: 'rgba(139, 92, 246, 0.14)', color: '#6D28D9', border: '1px solid rgba(139, 92, 246, 0.28)', shadow: 'none' };
+
+  const badgeLabel = result === 'WINNER' ? 'Winner' : result === 'DEFEATED' ? 'Defeated' : 'Draw';
+
+  // Winner → green/blue stat tones, defeated → pink tones, tie → violet.
+  const tint = isWinner
+    ? 'rgba(16, 185, 129, 0.10)'
+    : isLoser
+      ? 'rgba(244, 63, 94, 0.09)'
+      : 'rgba(139, 92, 246, 0.08)';
+  const statColor = (hex: { green: string; pink: string; violet: string }) =>
+    isWinner ? hex.green : isLoser ? hex.pink : hex.violet;
+
+  return (
+    <div
+      className={`rr-card relative flex flex-col overflow-hidden rounded-2xl ${isOwn ? '' : 'justify-center'} ${isOwn && isWinner ? 'rr-winner-glow-green' : ''}`}
+      style={{ ...shell, boxShadow: isOwn && !isTie ? undefined : '0 10px 26px -20px rgba(30, 41, 59, 0.35)' }}
+      data-testid={isMe ? 'challenge-result-me' : 'challenge-result-opponent'}
+      data-result={result}
+      data-own={isOwn ? 'true' : 'false'}
+    >
+      {isOwn && isWinner && <ResultsSideConfetti />}
+
+      {/* header: avatar + identity + outcome badge (own card only) */}
+      <div className="rr-card-head relative z-[3] flex items-center gap-2.5 px-3 pt-3 sm:px-4 sm:pt-3.5">
+        <span
+          className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full text-xs font-extrabold text-white sm:h-10 sm:w-10 sm:text-sm"
+          style={{ background: isMe ? 'linear-gradient(135deg, #4361EE, #7C3AED)' : 'linear-gradient(135deg, #8B5CF6, #D946EF)', boxShadow: '0 6px 14px -8px rgba(79, 70, 229, 0.9)' }}
+        >
+          {initial}
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-[0.82rem] font-extrabold sm:text-[0.9rem]" style={{ color: 'var(--color-text-primary)' }}>{username}</p>
+          <span
+            className="mt-0.5 inline-flex items-center rounded-full px-1.5 py-px text-[0.52rem] font-extrabold uppercase tracking-wider"
+            style={{
+              backgroundColor: isMe ? 'var(--color-accent-light)' : 'rgba(139, 92, 246, 0.12)',
+              color: isMe ? 'var(--color-accent-text)' : '#7C3AED',
+            }}
+          >
+            {isMe ? 'You' : 'Opponent'}
+          </span>
+        </div>
+        {showBadge && (
+          <span className="rr-winner-badge flex flex-shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[0.55rem] font-extrabold uppercase tracking-wider" style={badge}>
+            {result === 'WINNER' && <Trophy size={11} strokeWidth={2.6} />}
+            {result === 'DEFEATED' && <Heart size={11} strokeWidth={2.6} />}
+            {badgeLabel}
+          </span>
+        )}
+      </div>
+
+      {/* celebratory / consoling character — the viewer's own card only */}
+      {showArt && (
+        <div className="rr-char-wrap relative z-[3] mt-1.5">
+          {isWinner && (
+            <span
+              className="rr-halo"
+              style={{ background: 'radial-gradient(circle, rgba(52, 211, 153, 0.30) 0%, rgba(59, 130, 246, 0.16) 45%, transparent 70%)' }}
+            />
+          )}
+          {isLoser && (
+            <span
+              className="rr-halo"
+              style={{ background: 'radial-gradient(circle, rgba(244, 114, 182, 0.22) 0%, transparent 68%)', animationDelay: '-1.3s' }}
+            />
+          )}
+          <span className={`relative ${isWinner ? 'rr-char-happy' : isLoser ? 'rr-char-sad' : ''}`}>
+            <ResultCharacter mood={mood} uid={charId} />
+          </span>
+        </div>
+      )}
+
+      {/* compact 2x2 stats */}
+      <div className="rr-stats relative z-[3] mt-1.5 grid grid-cols-2 gap-1.5 px-3 pb-3 sm:px-4 sm:pb-4">
+        <ResultStat value={String(wpm)} label="WPM" color={statColor({ green: '#059669', pink: '#DB2777', violet: '#6D28D9' })} tint={tint} delay="120ms" />
+        <ResultStat value={`${acc}%`} label="Accuracy" color={statColor({ green: '#0284C7', pink: '#C026D3', violet: '#7C3AED' })} tint={tint} delay="180ms" />
+        <ResultStat value={String(words)} label="Typed Words" color={statColor({ green: '#16A34A', pink: '#E11D48', violet: '#8B5CF6' })} tint={tint} delay="240ms" />
+        <ResultStat value={String(errors)} label="Errors" color={statColor({ green: '#0EA5E9', pink: '#F43F5E', violet: '#A855F7' })} tint={tint} delay="300ms" />
+      </div>
+
+      <span className="sr-only">{`${username}: ${youResultWord(result)}`}</span>
+      {isOwn && <span className="pointer-events-none absolute inset-x-0 bottom-0 h-1" style={{ background: accent, opacity: 0.55 }} aria-hidden="true" />}
+    </div>
+  );
+}
+
+
+function ResultsSideConfetti() {
+  const colors = ['#4361ee', '#7c3aed', '#a78bfa', '#34d399', '#facc15', '#f472b6'];
+  return (
+    <div className="rr-confetti-side" aria-hidden="true">
+      {Array.from({ length: 12 }, (_, i) => (
+        <span
+          key={i}
+          style={{
+            left: `${(i * 8.3 + 4) % 94}%`,
+            width: `${4 + (i % 3) * 2}px`,
+            height: `${8 + (i % 4) * 2}px`,
+            backgroundColor: colors[i % colors.length],
+            borderRadius: i % 2 === 0 ? '3px' : '50%',
+            animationDelay: `${(i % 6) * 0.22}s`,
+            animationDuration: `${2.1 + (i % 4) * 0.22}s`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function OpponentLeaveToast({ title, body }: { title?: string; body?: string }) {
+  return (
+    <div
+      className="challenge-overlay-in fixed inset-0 z-[999] grid place-items-center bg-[rgba(23,23,31,0.45)] px-4 backdrop-blur-[2px]"
+      data-testid="challenge-opponent-left-toast"
+    >
+      <div
+        className="challenge-toast-in relative w-full max-w-sm overflow-hidden rounded-[1.5rem] bg-white p-6 text-center"
+        style={{ boxShadow: '0 30px 70px -24px rgba(67, 97, 238, 0.55), 0 16px 34px -18px rgba(23, 23, 31, 0.42)' }}
+      >
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-1"
+          style={{ background: 'linear-gradient(90deg, #4361ee, #8b5cf6, #4361ee)' }}
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-16 -right-14 h-44 w-44 rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 70%)', filter: 'blur(22px)' }}
+        />
+        <span
+          className="relative mx-auto grid h-14 w-14 place-items-center rounded-2xl text-white"
+          style={{ background: 'linear-gradient(135deg, #4361ee, #7c3aed)', boxShadow: '0 14px 28px -10px rgba(67, 97, 238, 0.55)' }}
+        >
+          <UserX size={26} />
+        </span>
+        <h3 className="mt-3.5 text-lg font-extrabold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
+          {title ?? 'Opponent Left the Challenge'}
+        </h3>
+        <p className="mt-1.5 text-sm font-semibold" style={{ color: 'var(--color-text-secondary)' }}>
+          {body ?? 'Your opponent has left the challenge. Returning you to Typing Challenge...'}
+        </p>
+        <div className="mt-4 h-1 overflow-hidden rounded-full" style={{ backgroundColor: 'rgba(99, 102, 241, 0.15)' }}>
+          <div className="challenge-toast-progress h-full rounded-full" style={{ background: 'linear-gradient(90deg, #4361ee, #8b5cf6)' }} />
+        </div>
+        <p className="mt-2 text-[0.65rem] font-bold uppercase tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
+          Redirecting you to Typing Challenge…
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function ResultsCard({ challenge, opponentLeft, opponentLeftMessage, onRematch, onNewChallenge, onExit }: {
   challenge: ChallengePublic;
   opponentLeft: boolean;
+  opponentLeftMessage?: string | null;
   onRematch: () => void;
+  onNewChallenge: () => void;
   onExit: () => void;
 }) {
   const me = mePlayer(challenge);
   const opponent = opponentOf(challenge, challenge.me);
   const myWon = challenge.winner === challenge.me;
-  const draw = challenge.winner === 'draw';
+  // The server records an equal-WPM result as winner === null ("draw"), the
+  // only path that yields null on a COMPLETED race. Deriving the tie from that
+  // existing state lets the same card render Win / Lose / Tie correctly.
+  const isTie = challenge.winner === null;
   const myRematch = me?.rematchReady ?? false;
   const oppRematch = opponent?.rematchReady ?? false;
+  // Authoritative opponent availability on the results screen: "left" is a
+  // permanent gone (only a create-new/back escape remains), "offline" is a drop
+  // still inside the reconnection grace (give it a moment, don't murder the
+  // pending rematch yet).
+  const oppPresence = opponent?.presence ?? 'left';
+  const oppGone = opponentLeft || oppPresence === 'left';
+  const oppOffline = !oppGone && (oppPresence === 'offline' || !opponent?.connected);
 
-  const headline = opponentLeft
-    ? myWon
-      ? 'You win the race!'
-      : 'Race ended'
-    : myWon
-      ? 'You win — nice typing!'
-      : draw
-        ? 'It\'s a tie — evenly matched!'
-        : 'Solid game — keep practicing!';
+  const abandoned = challenge.endedBy === 'abandoned';
+  const abandonedByMe = abandoned && challenge.abandonedBy === challenge.me;
 
-  const subHeadline = opponentLeft
-    ? 'Your opponent left the challenge.'
-    : myWon
-      ? draw
-        ? 'Both players finished on the same WPM.'
-        : 'You finished with the higher WPM.'
-      : draw
-        ? 'Well raced to the very end.'
-        : 'Your opponent edged you out this time.';
+  // Outcome state is derived ONLY from server data (challenge.winner / me), never
+  // hardcoded: win → WINNER + "You Won", loss → DEFEATED + "You Lost", and the
+  // existing draw path (winner === null) maps to DRAW + "You Tied".
+  const celebrate = myWon && !abandonedByMe;
+  const winnerSlot = isTie || challenge.winner === null ? null : challenge.winner;
+  const meResult: PlayerResultBadge = myWon ? 'WINNER' : isTie ? 'DRAW' : 'DEFEATED';
+  const oppResult: PlayerResultBadge =
+    winnerSlot !== null && winnerSlot !== challenge.me ? 'WINNER' : isTie ? 'DRAW' : 'DEFEATED';
+  const youResult = abandonedByMe ? 'You Forfeited' : myWon ? 'You Won' : isTie ? 'You Tied' : 'You Lost';
+
+  // Dynamic heading driven by the ACTUAL outcome. A departure must never be
+  // dressed up as a win: the opponent-left copy wins outright over celebration.
+  const heading = abandonedByMe
+    ? { title: 'Race Forfeited', sub: 'You left this race before it finished.' }
+    : oppGone
+      ? { title: 'Opponent Left', sub: opponentLeftMessage ?? 'Your opponent left the challenge.' }
+      : isTie
+        ? { title: "It's a Tie!", sub: 'Dead heat — nicely typed by both of you!' }
+        : myWon
+          ? { title: 'Match Finished!', sub: 'Outstanding typing — you took the win!' }
+          : { title: 'Match Finished!', sub: 'Great effort — your opponent took this one.' };
 
   return (
-    <div className="max-w-[46rem] mx-auto w-full">
-      <div className="card p-6 sm:p-8 text-center" data-testid="challenge-results">
-        <div className="text-5xl mb-2">{myWon ? '🏆' : draw ? '🤝' : '💪'}</div>
-        <h2 className="text-2xl font-extrabold" style={{ color: 'var(--color-text-primary)' }}>{headline}</h2>
-        <p className="text-sm mt-1.5" style={{ color: 'var(--color-text-secondary)' }}>{subHeadline}</p>
+    <div className="rr-screen mx-auto w-full max-w-[64rem]">
+      <div
+        className="rr-panel relative overflow-hidden p-3.5 text-center sm:p-5"
+        style={{ borderRadius: '1.5rem', boxShadow: '0 32px 70px -28px rgba(15, 23, 42, 0.55), 0 12px 28px -18px rgba(15, 23, 42, 0.35)' }}
+        data-testid="challenge-results"
+        data-outcome={oppGone ? 'opponent-left' : abandonedByMe ? 'forfeited' : isTie ? 'tie' : myWon ? 'win' : 'loss'}
+        data-my-result={meResult}
+      >
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-20 -left-20 h-56 w-56 rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(67, 97, 238, 0.12) 0%, transparent 70%)', filter: 'blur(26px)' }}
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-24 -right-20 h-64 w-64 rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 70%)', filter: 'blur(28px)' }}
+        />
 
-        <div className="mt-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold" style={{ backgroundColor: 'rgba(139, 92, 246, 0.12)', color: '#7c3aed' }}>
-          <Swords size={13} /> Round {challenge.round} complete
-        </div>
+        <div className="relative">
+          {/* ── dynamic heading ── */}
+          <div className="rr-hero rr-fade-up">
+            <div
+              className={`rr-trophy ${celebrate ? 'rr-trophy-bounce ' : ''}mx-auto grid h-11 w-11 place-items-center rounded-full text-white sm:h-12 sm:w-12`}
+              style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', boxShadow: '0 12px 26px -12px rgba(99, 102, 241, 0.7)' }}
+            >
+              <Trophy size={21} />
+            </div>
+            <h2
+              className="rr-heading mt-2 text-xl font-extrabold tracking-tight sm:text-2xl"
+              style={{ color: 'var(--color-text-primary)' }}
+              data-testid="challenge-result-heading"
+            >
+              {heading.title}
+            </h2>
+            <p
+              className="rr-subtitle mt-0.5 text-xs font-semibold sm:text-[0.8rem]"
+              style={{ color: 'var(--color-text-secondary)' }}
+              data-testid="challenge-result-subtitle"
+            >
+              {heading.sub}
+            </p>
+          </div>
 
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {[me, opponent].filter((p): p is ChallengePlayerView => Boolean(p)).map((player) => {
-            const isMe = player.slot === challenge.me;
-            const isWinner = challenge.winner === player.slot;
-            return (
-              <div
-                key={player.slot}
-                className="rounded-2xl p-5 text-left"
-                style={{
-                  border: isWinner ? '2px solid var(--color-accent)' : '1px solid var(--color-border)',
-                  backgroundColor: isMe ? 'rgba(67, 97, 238, 0.06)' : 'rgba(124, 58, 237, 0.08)',
-                }}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
-                      style={{ background: isMe ? 'linear-gradient(135deg, #4361ee, #7c3aed)' : 'linear-gradient(135deg, #8b5cf6, #d946ef)' }}
-                    >
-                      {player.username.slice(0, 1).toUpperCase()}
-                    </span>
-                    <span className="text-sm font-bold truncate" style={{ color: 'var(--color-text-primary)' }}>
-                      {player.username}
-                      {isMe && <span className="ml-1.5 text-xs font-bold px-1.5 py-0.5 rounded" style={{ backgroundColor: 'var(--color-accent-light)', color: 'var(--color-accent-text)' }}>You</span>}
-                    </span>
-                  </div>
-                  {isWinner && <Trophy size={17} style={{ color: 'var(--color-accent-text)' }} />}
-                </div>
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div>
-                    <p className="text-2xl font-extrabold tabular-nums" style={{ color: '#60A5FA', fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}>{player.stats?.wpm ?? 0}</p>
-                    <p className="text-[0.625rem] font-bold uppercase tracking-wider mt-0.5" style={{ color: 'var(--color-text-muted)' }}>WPM</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-extrabold tabular-nums" style={{ color: '#F472B6', fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}>{player.stats?.accuracy ?? 0}%</p>
-                    <p className="text-[0.625rem] font-bold uppercase tracking-wider mt-0.5" style={{ color: 'var(--color-text-muted)' }}>ACC</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-extrabold tabular-nums" style={{ color: '#4ADE80', fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}>{player.stats?.correctWords ?? 0}</p>
-                    <p className="text-[0.625rem] font-bold uppercase tracking-wider mt-0.5" style={{ color: 'var(--color-text-muted)' }}>WORDS</p>
-                  </div>
-                </div>
-                <p className="text-xs mt-2.5" style={{ color: 'var(--color-text-muted)' }}>
-                  {player.stats?.errorsCount ?? 0} errors · {player.stats?.attemptedWords ?? 0} words attempted
-                </p>
-              </div>
-            );
-          })}
-        </div>
+          {/* ── players ── */}
+          <div className="rr-players rr-fade-up mt-3.5 grid grid-cols-1 items-stretch gap-2.5 sm:mt-4 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:gap-3">
+            <ResultPlayerCard
+              player={me}
+              isMe
+              result={meResult}
+              nameFallback="You"
+              charId="me"
+            />
+            <div className="flex items-center justify-center">
+              <VSBadge />
+            </div>
+            <ResultPlayerCard
+              player={opponent}
+              isMe={false}
+              result={oppResult}
+              nameFallback="Opponent"
+              charId="opp"
+            />
+          </div>
 
-        <div className="mt-7 grid grid-cols-2 gap-3">
-          <button
-            data-testid="challenge-rematch"
-            onClick={onRematch}
-            disabled={myRematch && !oppRematch}
-            className="py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all duration-150 hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed"
-            style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff', boxShadow: '0 6px 18px rgba(67, 97, 238, 0.35)' }}
-          >
-            <RotateCcw size={15} /> {myRematch && !oppRematch ? 'Rematch requested…' : oppRematch && !myRematch ? 'Accept Rematch' : 'Rematch'}
-          </button>
-          <button
-            onClick={onExit}
-            className="py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all duration-150"
-            style={{ border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)', backgroundColor: 'transparent' }}
-          >
-            <LogOut size={15} /> Exit
-          </button>
-        </div>
+          {/* ── single compact challenge-details row ── */}
+          <div className="rr-details-wrap rr-fade-up mt-3" style={{ animationDelay: '200ms' }}>
+            <div
+              className="rr-details flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 rounded-xl border px-3 py-1.5 sm:gap-x-3 sm:py-2"
+              style={{ borderColor: 'var(--color-border)' }}
+              data-testid="challenge-result-details"
+            >
+              <ResultDetailChip icon={Clock} label="Duration" value={durationLabel(challenge.durationSeconds)} />
+              <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>·</span>
+              <ResultDetailChip icon={Swords} label="Round" value={String(challenge.round)} />
+              <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>·</span>
+              <ResultDetailChip icon={Users} label="Opponent" value={opponent?.username ?? '—'} />
+              <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>·</span>
+              <ResultDetailChip icon={Trophy} label="Result" value={youResult} accent />
+            </div>
+          </div>
 
-        {(myRematch || oppRematch) && (
-          <p className="mt-4 text-xs font-semibold flex items-center justify-center gap-1.5 text-center" style={{ color: 'var(--color-text-muted)' }}>
-            {myRematch && !oppRematch ? (
+          {/* ── rematch / back to games ── */}
+          <div className="rr-actions rr-fade-up mt-3 flex flex-col justify-center gap-2 sm:mt-3.5 sm:flex-row">
+            {oppGone ? (
               <>
-                <Loader2 size={13} className="animate-spin" /> Waiting for {opponent?.username ?? 'your opponent'} to rematch…
-              </>
-            ) : oppRematch && !myRematch ? (
-              <>
-                <ShieldCheck size={13} /> {opponent?.username ?? 'Your opponent'} wants a rematch — accept to play Round {challenge.round + 1}!
+                <button
+                  data-testid="create-new-challenge"
+                  onClick={onNewChallenge}
+                  className="rr-btn inline-flex items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-sm font-extrabold transition-all duration-150 hover:brightness-110 hover:-translate-y-0.5 active:translate-y-0"
+                  style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff', boxShadow: '0 10px 24px -10px rgba(67, 97, 238, 0.6)' }}
+                >
+                  <Plus size={16} /> Create New Challenge
+                </button>
+                <button
+                  data-testid="back-to-games"
+                  onClick={onExit}
+                  className="rr-btn inline-flex items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-sm font-bold transition-all duration-150"
+                  style={{ border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)', backgroundColor: 'transparent' }}
+                >
+                  <Home size={15} /> Back to Games
+                </button>
               </>
             ) : (
-              <>&nbsp;</>
+              <>
+                <button
+                  data-testid="challenge-rematch"
+                  onClick={onRematch}
+                  disabled={myRematch && !oppRematch}
+                  className="rr-btn inline-flex items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-sm font-extrabold transition-all duration-150 hover:brightness-110 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed"
+                  style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff', boxShadow: '0 10px 24px -10px rgba(67, 97, 238, 0.6)' }}
+                >
+                  <RotateCcw size={16} />
+                  {myRematch && !oppRematch ? 'Rematch requested…' : oppRematch && !myRematch ? 'Accept Rematch' : 'Rematch'}
+                </button>
+                <button
+                  data-testid="back-to-games"
+                  onClick={onExit}
+                  className="rr-btn inline-flex items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-sm font-bold transition-all duration-150"
+                  style={{ border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)', backgroundColor: 'transparent' }}
+                >
+                  <Home size={15} /> Back to Games
+                </button>
+              </>
             )}
-          </p>
-        )}
+          </div>
+
+          {/* ── rematch status / opponent availability ── */}
+          {oppGone ? (
+            <div className="rr-fade-up mt-2 flex flex-col items-center gap-0.5 text-center" style={{ animationDelay: '280ms' }}>
+              <p className="flex items-center gap-1.5 text-xs font-extrabold" style={{ color: '#F87171' }}>
+                <UserX size={13} /> {opponentLeftMessage ?? 'Your opponent left the challenge.'}
+              </p>
+              <p className="text-xs font-semibold" style={{ color: 'var(--color-text-muted)' }}>
+                Your opponent is no longer available.
+              </p>
+            </div>
+          ) : oppOffline && myRematch ? (
+            <div className="rr-fade-up mt-2 flex flex-col items-center gap-0.5 text-center" style={{ animationDelay: '280ms' }}>
+              <p className="flex items-center gap-1.5 text-xs font-extrabold" style={{ color: '#FBBF24' }}>
+                <WifiOff size={13} /> Opponent disconnected
+              </p>
+              <p className="text-xs font-semibold" style={{ color: 'var(--color-text-muted)' }}>
+                Waiting for opponent to reconnect…
+              </p>
+            </div>
+          ) : ((myRematch || oppRematch) && (
+            <div className="rr-fade-up mt-2 flex flex-col items-center gap-0.5 text-center" style={{ animationDelay: '280ms' }}>
+              {myRematch && !oppRematch ? (
+                <>
+                  <p className="flex items-center gap-1.5 text-xs font-extrabold" style={{ color: 'var(--color-accent-text)' }}>
+                    <CheckCircle2 size={13} /> Your rematch request has been sent.
+                  </p>
+                  <p className="text-xs font-semibold" style={{ color: 'var(--color-text-muted)' }}>
+                    Waiting for your opponent…
+                  </p>
+                </>
+              ) : oppRematch && !myRematch ? (
+                <p className="flex items-center gap-1.5 text-xs font-extrabold" style={{ color: 'var(--color-accent-text)' }}>
+                  <ShieldCheck size={13} /> {opponent?.username ?? 'Your opponent'} wants a rematch — accept to play Round {challenge.round + 1}!
+                </p>
+              ) : (
+                <p className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: 'var(--color-text-muted)' }}>
+                  <Loader2 size={13} className="animate-spin" /> Starting Round {challenge.round + 1}…
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

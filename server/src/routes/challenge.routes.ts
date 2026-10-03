@@ -7,6 +7,7 @@ import {
   resultsHandler,
   rematchHandler,
   leaveHandler,
+  getChallengeChatMessagesHandler,
   createSchema,
   resultsSchema,
 } from '../controllers/challenge.controller';
@@ -17,6 +18,7 @@ const router = Router();
 
 router.post('/', authenticate, validate(createSchema), createChallengeHandler);
 router.get('/:code', authenticate, getChallengeHandler);
+router.get('/:code/messages', authenticate, getChallengeChatMessagesHandler);
 router.post('/:code/join', authenticate, joinChallengeHandler);
 router.post('/:code/ready', authenticate, readyHandler);
 router.post('/:code/results', authenticate, validate(resultsSchema), resultsHandler);

@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import fs from 'fs';
+import { createServer } from 'http';
 import { connectDB } from './config/db';
 import { env } from './config/env';
 import { UPLOADS_DIR, ensureUploadDirs } from './config/uploads';
@@ -10,6 +11,7 @@ import { authLimiter, apiLimiter } from './middleware/rateLimit.middleware';
 import { errorHandler } from './middleware/errorHandler.middleware';
 import { googleOAuthRedirectUri } from './controllers/googleAuth.controller';
 import User from './models/User';
+import { attachChallengeSocket } from './services/challenge.socket';
 
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
@@ -22,6 +24,7 @@ import practiceRoutes from './routes/practice.routes';
 import gamesRoutes from './routes/games.routes';
 import certificateRoutes from './routes/certificate.routes';
 import contactRoutes from './routes/contact.routes';
+import challengeRoutes from './routes/challenge.routes';
 
 export function createApp() {
   const app = express();
@@ -60,6 +63,7 @@ export function createApp() {
   app.use('/api/admin', adminRoutes);
   app.use('/api/practice', practiceRoutes);
   app.use('/api/games', gamesRoutes);
+  app.use('/api/challenge', challengeRoutes);
   app.use('/api/certificates', certificateRoutes);
   app.use('/api/contact', contactRoutes);
 
@@ -100,9 +104,10 @@ if (require.main === module) {
 
       const PORT = Number(process.env.PORT) || 5000;
       const app = createApp();
-      // Diagnostic: print the exact URL Google will be asked to call back on.
+      const server = createServer(app);
+      attachChallengeSocket(server);
       console.log(`   Google OAuth redirect_uri: ${googleOAuthRedirectUri()}`);
-      const server = app.listen(PORT, "0.0.0.0", () => {
+      server.listen(PORT, "0.0.0.0", () => {
         console.log(`🚀 Typeoye server running on port ${PORT}`);
         console.log(`   Environment: ${env.NODE_ENV}`);
       });

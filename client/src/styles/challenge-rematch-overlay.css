@@ -1,0 +1,23 @@
+.challenge-overlay-in {
+  animation: challengeOverlayIn 0.25s ease-out both;
+}
+@keyframes challengeOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.challenge-toast-in {
+  animation: challengeToastIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes challengeToastIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.challenge-toast-progress {
+  animation: challengeToastProgress 2s linear forwards;
+}
+@keyframes challengeToastProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}

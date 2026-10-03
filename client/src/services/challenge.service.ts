@@ -1,7 +1,13 @@
 import api from './api';
 import type { ChallengePublic } from '../types/challenge';
+import type { ChallengeChatMessage } from '../types/chat';
 
 export const challengeService = {
+  async messages(code: string, round: number): Promise<ChallengeChatMessage[]> {
+    const { data } = await api.get(`/challenge/${code}/messages`, { params: { round } });
+    return (data.data as { messages: ChallengeChatMessage[] }).messages;
+  },
+
   async create(durationSeconds?: number): Promise<ChallengePublic> {
     const { data } = await api.post('/challenge', { durationSeconds });
     return (data.data as { challenge: ChallengePublic }).challenge;
@@ -30,9 +36,11 @@ export const challengeService = {
     return data.data as { challenge: ChallengePublic; final: boolean };
   },
 
-  async rematch(code: string): Promise<{ challenge: ChallengePublic; advanced: boolean }> {
+  async rematch(
+    code: string
+  ): Promise<{ challenge: ChallengePublic; advanced: boolean; opponentGone: boolean }> {
     const { data } = await api.post(`/challenge/${code}/rematch`);
-    return data.data as { challenge: ChallengePublic; advanced: boolean };
+    return data.data as { challenge: ChallengePublic; advanced: boolean; opponentGone: boolean };
   },
 
   async leave(code: string): Promise<ChallengePublic> {

@@ -1,11 +1,12 @@
 import React, { useLayoutEffect, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Gamepad2, ChevronDown } from 'lucide-react';
+import { Gamepad2, Swords, Globe, ChevronDown, Lock } from 'lucide-react';
 
 export function GamesDropdown() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
-  const gamesActive = location.pathname.startsWith('/games');
+  const gamesActive = location.pathname.startsWith('/games') || location.pathname.startsWith('/challenge');
+  const challengeActive = location.pathname.startsWith('/challenge');
 
   useLayoutEffect(() => { setOpen(false); }, [location.pathname]);
   useEffect(() => {
@@ -52,6 +53,21 @@ export function GamesDropdown() {
             >
               <Gamepad2 size={15} style={{ color: 'var(--color-accent-text)' }} /> Typing Games
             </Link>
+            <Link
+              to="/challenge"
+              onClick={() => setOpen(false)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors${challengeActive ? ' bg-[var(--color-accent-light)] font-bold text-[var(--color-accent-text)]' : ' hover:bg-[var(--color-accent-light)]'}`}
+            >
+              <Swords size={15} style={{ color: 'var(--color-accent-text)' }} /> Typing Challenge
+              {challengeActive && <span className="ml-auto h-1.5 w-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent-text)' }} />}
+            </Link>
+            <button
+              disabled
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm cursor-not-allowed opacity-50 w-full text-left"
+            >
+              <Globe size={15} style={{ color: 'var(--color-accent-text)' }} /> Random Match
+              <span className="ml-auto text-[0.6rem] font-bold px-1.5 py-0.5 rounded bg-[var(--color-accent-light)] text-[var(--color-accent-text)]">Soon</span>
+            </button>
           </div>
         </>
       )}

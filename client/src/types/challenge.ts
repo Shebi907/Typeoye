@@ -1,5 +1,13 @@
 export type ChallengeStatus = 'WAITING' | 'PLAYER_JOINED' | 'READY' | 'RUNNING' | 'COMPLETED' | 'EXPIRED';
 
+/** `opponent_left` is a NO CONTEST: the room is COMPLETED but `winner` is null,
+    because the leaver is never a winner and never makes anyone else one. */
+export type ChallengeEndReason = 'completed' | 'abandoned' | 'expired' | 'opponent_left';
+
+// Authoritative server-side presence: online (connected), offline (dropped but
+// still within the reconnection grace window) or left (permanently gone).
+export type PlayerPresence = 'online' | 'offline' | 'left';
+
 export interface ChallengePlayerStats {
   wpm: number;
   accuracy: number;
@@ -14,6 +22,7 @@ export interface ChallengePlayerView {
   username: string;
   ready: boolean;
   connected: boolean;
+  presence: PlayerPresence;
   rematchReady: boolean;
   stats: ChallengePlayerStats | null;
 }
@@ -26,6 +35,8 @@ export interface ChallengePublic {
   startAt: string | null;
   text: string;
   winner: 'player1' | 'player2' | 'draw' | null;
+  endedBy: ChallengeEndReason | null;
+  abandonedBy: 'player1' | 'player2' | null;
   players: ChallengePlayerView[];
   me: 'player1' | 'player2' | null;
   createdAt: string;

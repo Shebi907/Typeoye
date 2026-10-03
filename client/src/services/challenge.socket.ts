@@ -1,7 +1,7 @@
 import { io, Socket } from 'socket.io-client';
 
 let socket: Socket | null = null;
-let reconnecting = false;
+let socketToken: string | null = null;
 
 function baseUrl(): string {
   const apiBase = import.meta.env.VITE_API_URL || '/api';
@@ -9,7 +9,22 @@ function baseUrl(): string {
 }
 
 export function connectChallengeSocket(token: string): Socket {
-  if (socket?.connected) return socket;
+  // Idempotent per token: a socket that is still completing its handshake must
+  // be REUSED, never replaced. The page calls this twice per mount (once before
+  // the listeners are registered and once for the post-connect sync), and React
+  // re-runs the effect on strict-mode/token changes. The old `if connected`
+  // guard only short-circuited an ALREADY-connected socket, so a slow handshake
+  // spawned a second socket and orphaned the first - along with every listener
+  // registered on it. The room then contained a socket with no
+  // `challenge:opponentProgress` listener, so the opponent's live progress
+  // silently never arrived (intermittently, depending on handshake timing).
+  if (socket && (socketToken === token || !token)) return socket;
+  if (socket) {
+    socket.removeAllListeners();
+    socket.disconnect();
+    socket = null;
+  }
+  socketToken = token;
   socket = io(baseUrl(), {
     auth: { token },
     transports: ['websocket', 'polling'],
@@ -19,6 +34,9 @@ export function connectChallengeSocket(token: string): Socket {
     reconnectionDelay: 1000,
     reconnectionDelayMax: 5000,
   });
+  if (import.meta.env.DEV) {
+    (window as any).__challengeSocket = socket;
+  }
   return socket;
 }
 
@@ -44,6 +62,7 @@ export function disconnectChallengeSocket(): void {
   socket.removeAllListeners();
   socket.disconnect();
   socket = null;
+  socketToken = null;
 }
 
 export function ensureSocketJoined(

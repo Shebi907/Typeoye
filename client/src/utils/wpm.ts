@@ -13,7 +13,9 @@ export function computeWpm(correctWords: number, elapsedSeconds: number): number
 }
 
 export function computeAccuracy(correctWords: number, attemptedWords: number): number {
-  if (attemptedWords === 0) return 100;
+  // Nothing typed yet is 0% accuracy, never a "perfect" 100%. A player who has
+  // not attempted a word has demonstrated no accuracy at all.
+  if (attemptedWords === 0) return 0;
   return Math.round((correctWords / attemptedWords) * 1000) / 10;
 }
 

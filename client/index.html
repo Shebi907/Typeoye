@@ -60,7 +60,7 @@
         if (meta) {
           document.title = meta.title;
           function setMeta(attr, name, content) {
-            var el = document.querySelector(attr + '="' + name + '"');
+            var el = document.querySelector('meta[' + attr + '="' + name + '"]');
             if (!el) {
               el = document.createElement('meta');
               el.setAttribute(attr, name);

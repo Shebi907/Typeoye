@@ -1,0 +1,107 @@
+/* ═══════════════════════ Challenge Waiting Screen ═══════════════════════
+   Animations + visual flourishes for the "waiting for the opponent" card.
+   Lives in its own file so the shared tokens / layout in index.css stay
+   untouched. Reuses the same visual language as the result screen. */
+
+@keyframes wr-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wr-fade-up {
+  animation: wr-fade-up 0.45s ease-out both;
+}
+
+/* Subtle swing for the hourglass while waiting — never a loud spinner. */
+@keyframes wr-sway {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(9deg);
+  }
+}
+
+.wr-hourglass {
+  display: inline-block;
+  animation: wr-sway 2.2s ease-in-out infinite;
+}
+
+/* Breathe a soft glow behind the hourglass. */
+@keyframes wr-halo {
+  0%,
+  100% {
+    box-shadow: 0 14px 34px -14px rgba(99, 102, 241, 0.45);
+  }
+  50% {
+    box-shadow: 0 16px 40px -12px rgba(139, 92, 246, 0.62);
+  }
+}
+
+.wr-halo {
+  animation: wr-halo 2.4s ease-in-out infinite;
+}
+
+/* The green "online / typing" status dot pulse. */
+@keyframes wr-dot-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.45);
+  }
+  55% {
+    box-shadow: 0 0 0 5px rgba(34, 197, 94, 0);
+  }
+}
+
+.wr-pulse-dot {
+  animation: wr-dot-pulse 1.8s ease-in-out infinite;
+}
+
+/* Waiting-for-opponent animated dots: · · · */
+@keyframes wr-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+.wr-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.wr-dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background-color: currentColor;
+  display: block;
+  animation: wr-dot 1.4s ease-in-out infinite;
+}
+
+.wr-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.wr-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Live opponent progress bar: fill animates smoothly on socket updates. */
+.wr-progress-fill {
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
