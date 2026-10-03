@@ -67,12 +67,14 @@ export function Navbar() {
   // Progress page. Keep the item only for guests (and while the session is
   // still being verified, where Home is the safe default).
   const links = isSessionChecked && isAuthenticated ? navLinks.filter((l) => l.to !== '/') : navLinks;
-  // Show the Games dropdown only in development (import.meta.env.DEV, Vite's
-  // proper dev/prod mechanism). During `vite dev` the dropdown — with its Typing
-  // Challenge / Random Match entries — stays available for feature work. In
-  // production builds DEV is false, the dropdown branch is pruned from the
-  // bundle, and Games renders as a plain link instead.
-  const gamesDropdownEnabled = import.meta.env.DEV;
+  // The Games dropdown is the desktop entry point for the Typing Challenge
+  // (and the other games). It was previously gated to development while those
+  // features were unfinished, which left production desktop users with only a
+  // plain "Games" link and no way to reach /challenge — even though the route,
+  // backend and realtime socket were all deployed. The mobile menu already
+  // linked to /challenge unconditionally, so it now renders in every
+  // environment for consistency.
+  const gamesDropdownEnabled = true;
   const barLinks = gamesDropdownEnabled ? links.filter((l) => l.to !== '/games') : links;
   const gamesIndex = Math.max(0, barLinks.findIndex((l) => l.to === '/games'));
   // Split at Games: links before it (Home…Games / Home…Learn) and links after
