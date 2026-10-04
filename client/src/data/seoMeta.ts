@@ -67,8 +67,9 @@ const STATIC_ROUTES: Record<string, RouteSeoMeta> = {
     description: 'Read the Typeoye terms and conditions covering your use of the typing test, lessons, practice tools, games, and leaderboard.',
   },
   '/challenge': {
-    title: 'Typing Challenge - Race a Friend in Real-Time | Typeoye',
-    description: 'Create a typing challenge, share your code, and race a friend in a real-time one-minute typing battle. Compare WPM and accuracy live on Typeoye.',
+    title: 'Typing Challenge Online – 1v1 Typing Speed Battle | Typeoye',
+    description:
+      'Challenge a friend to a real-time typing battle on Typeoye. Test your typing speed, compare WPM and accuracy, and see who wins the typing challenge.',
   },
   '/login': {
     title: 'Login | Typeoye',
@@ -91,9 +92,14 @@ const STATIC_ROUTES: Record<string, RouteSeoMeta> = {
 const PREFIX_FALLBACKS: Record<string, RouteSeoMeta> = {
   '/blog/*': STATIC_ROUTES['/blog'],
   '/support/*': STATIC_ROUTES['/support'],
-  '/challenge/*': STATIC_ROUTES['/challenge'],
   '/practice/*': STATIC_ROUTES['/practice'],
   '/lessons/*': STATIC_ROUTES['/lessons'],
+  /* '/challenge/*' is intentionally NOT a prefix fallback. Every
+     /challenge/:code is a private match session identified by a share code, so
+     falling back to the landing page's title/keywords would make every invite
+     link a keyword-stuffed near-duplicate of /challenge. Those URLs are handled
+     explicitly in index.html's inline SEO script instead: noindex, nofollow and
+     a canonical pointing at the public landing page. */
 };
 
 const SUPPORT_ARTICLE_ROUTES: Record<string, RouteSeoMeta> = {

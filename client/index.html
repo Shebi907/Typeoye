@@ -46,7 +46,33 @@
 
         var path = window.location.pathname;
         if (path.length > 1 && path.charAt(path.length - 1) === '/') path = path.slice(0, -1);
-        var canonicalUrl = window.location.origin + path;
+
+        /* Private match sessions: /challenge/<share-code>. Each one is a per-match
+           invite link, so it must never inherit the landing page's keywords nor
+           canonicalise to itself (which would make every invite link its own
+           indexable duplicate of the landing page). They are noindex,nofollow and
+           consolidate onto the public landing page. Computed before any metadata
+           below so it wins over both the static tags and SEO_META. */
+        var CHALLENGE_LANDING_PATH = '/challenge';
+        var isPrivateChallengeSession =
+          path.length > CHALLENGE_LANDING_PATH.length + 1 &&
+          path.slice(0, CHALLENGE_LANDING_PATH.length) === CHALLENGE_LANDING_PATH &&
+          path.charAt(CHALLENGE_LANDING_PATH.length) === '/';
+
+        var canonicalUrl = isPrivateChallengeSession
+          ? window.location.origin + CHALLENGE_LANDING_PATH
+          : window.location.origin + path;
+
+        if (isPrivateChallengeSession) {
+          var robotsMeta = document.querySelector('meta[name="robots"]');
+          if (!robotsMeta) {
+            robotsMeta = document.createElement('meta');
+            robotsMeta.setAttribute('name', 'robots');
+            document.head.appendChild(robotsMeta);
+          }
+          robotsMeta.setAttribute('content', 'noindex, nofollow');
+          document.title = 'Typing Challenge | Typeoye';
+        }
 
         var canonical = document.querySelector('link[rel="canonical"]');
         if (!canonical) {
@@ -66,9 +92,10 @@
 
         // Route-specific metadata: exact path match first, then walk up the
         // path segments in case a prefix route covers dynamic segments (e.g.
-        // /blog/* for /blog/some-new-slug, /challenge/* for /challenge/XYZ).
+        // /blog/* for /blog/some-new-slug). Private /challenge/<code> sessions
+        // are excluded: they must never pick up the landing page's metadata.
         var meta = null;
-        if (SEO_META) {
+        if (SEO_META && !isPrivateChallengeSession) {
           meta = SEO_META[path] || null;
           if (!meta) {
             var i = path.lastIndexOf('/');
