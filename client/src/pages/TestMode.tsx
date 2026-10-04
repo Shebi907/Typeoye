@@ -915,6 +915,24 @@ const certEarned =
                     </button>
                   )}
                 </div>
+
+                {/* Contextual next step: a solo score is the baseline for a
+                    head-to-head race. Text-weight only so it never competes
+                    with the primary results action above. */}
+                {!certificateMode && (
+                  <p className="mt-0.5 text-center text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                    Got a score? Put it to the test in a{' '}
+                    <Link
+                      to="/challenge"
+                      data-testid="test-link-challenge"
+                      className="font-semibold underline underline-offset-2"
+                      style={{ color: 'var(--color-accent-text)' }}
+                    >
+                      real-time 1v1 typing challenge
+                    </Link>{' '}
+                    against a friend.
+                  </p>
+                )}
               </div>
             </div>
           </div>

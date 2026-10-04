@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { ProseSection } from '../components/content/ProseSection';
 import TypingRace from '../components/games/TypingRace';
@@ -13,7 +13,7 @@ import { useSeo } from '../hooks/useSeo';
 import {
   Gamepad2, CloudLightning, Zap, LogIn,
   ArrowRight, Trophy, Play, Clock, Star, Sparkles,
-  TrendingUp, Target, Crosshair, Flame,
+  TrendingUp, Target, Crosshair, Flame, Swords,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -197,6 +197,25 @@ export default function Games() {
             Browse freely — sign in after a game to save your score and appear on the leaderboard.
           </p>
         )}
+
+        {/* Every game above is solo. Point anyone who came here for competition
+            at the real head-to-head feature, which the "Challenge" filter chip
+            does not lead to. */}
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl px-4 py-3" style={{ background: 'linear-gradient(135deg, rgba(67,97,238,0.10), rgba(124,58,237,0.10))', border: '1px solid rgba(99,102,241,0.22)' }}>
+          <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+            <Swords size={15} className="inline mr-1.5 align-[-2px]" style={{ color: '#4361ee' }} />
+            Playing solo? Race a friend head-to-head in a real-time 1v1 typing challenge.
+          </p>
+          <Link
+            to="/challenge"
+            data-testid="games-link-challenge"
+            className="inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-bold transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110"
+            style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff' }}
+          >
+            Open Typing Challenge
+            <ArrowRight size={15} />
+          </Link>
+        </div>
 
         {/* ── Category Filters ── */}
         <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
