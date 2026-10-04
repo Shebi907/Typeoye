@@ -12,18 +12,21 @@ import { IUser } from '../models/User';
 
 export const CHALLENGE_DEFAULT_DURATION = 60;
 export const CHALLENGE_TTL_MS = 30 * 60 * 1000;
-// A solo lobby (creator + no opponent yet) is only worth waiting on briefly:
-// ONE minute from creation. This is the AUTHORITATIVE deadline — it is stamped
-// into `expiresAt` at creation and every read/join/sweep compares against it, so
-// the countdown is correct across refreshes, background tabs and stale links.
-// `joinChallenge` replaces it with the full CHALLENGE_TTL_MS the moment a real
-// opponent sits down, which cancels the waiting clock.
-// The LOBBY window only - how long an empty room waits for its first opponent
-// before becoming EXPIRED. This is NOT a typing duration: challenges stay 1/2/5
-// minutes (CHALLENGE_TTL_MS). Once a real opponent sits down, joinChallenge
-// replaces this deadline with the full match TTL, so the lobby clock can never
-// expire a room that has a player in it.
-export const CHALLENGE_WAITING_TTL_MS = 1 * 60 * 1000;
+// The LOBBY window only - how long an empty room (creator, no opponent yet)
+// waits for its first opponent before becoming EXPIRED. This is NOT a typing
+// duration: challenges stay 1/2/5 minutes (CHALLENGE_TTL_MS). This is the
+// AUTHORITATIVE deadline - it is stamped into `expiresAt` at creation and every
+// read/join/sweep compares against it, so the countdown is correct across
+// refreshes, background tabs and stale links. `joinChallenge` replaces it with
+// the full CHALLENGE_TTL_MS the moment a real opponent sits down, which cancels
+// the waiting clock and means the lobby timer can never expire a room that has a
+// player in it.
+// Ten minutes, not one: the invite is normally a link sent over chat, and
+// reading it, opening it and signing in routinely takes longer than a minute.
+// A one-minute room expired mid-conversation and, because the client said
+// nothing at all when it lapsed, that read as "the challenge is broken" rather
+// than "nobody joined in time".
+export const CHALLENGE_WAITING_TTL_MS = 10 * 60 * 1000;
 export const CHALLENGE_GRACE_MS = 15000;
 // After endAt, a connected player who submitted gets CHALLENGE_FINISH_GRACE_MS
 // to let their auto-submission land before the opponent is declared the winner
@@ -398,8 +401,8 @@ export async function joinChallenge(challenge: IChallenge, user: IUser): Promise
     stats: null,
   });
   challenge.set('status', 'PLAYER_JOINED');
-  // Once both players are in the room the one-minute waiting clock no
-  // longer applies: give the actual match a full half hour to start.
+  // Once both players are in the room the solo waiting clock no longer
+  // applies: give the actual match a full half hour to start.
   challenge.set('expiresAt', new Date(Date.now() + CHALLENGE_TTL_MS));
   return challenge.save();
 }

@@ -291,15 +291,16 @@ assert.equal(playerSlotOf(makeChallenge({ player2: { userId: 'u2', username: 'bo
     assert.ok(!['p1', 'p2', 'p3'].includes(String(id)), `rematch text re-used paragraph ${id}`);
   }
 
-  // A solo waiting room expires exactly 1 minute after creation, not the full
-  // half hour — no one should sit on an empty lobby forever.
-  assert.equal(CHALLENGE_WAITING_TTL_MS, 60_000, 'the solo-lobby waiting window must be exactly 1 minute');
+  // A solo waiting room expires 10 minutes after creation, not the full half
+  // hour — long enough that an invite sent over chat can still be opened and
+  // signed into, short enough that an abandoned empty lobby is cleaned up.
+  assert.equal(CHALLENGE_WAITING_TTL_MS, 600_000, 'the solo-lobby waiting window must be exactly 10 minutes');
   const waitingRoom = await createChallenge(alice, 60);
   const waitingTtlSkew = Math.abs(waitingRoom.expiresAt.getTime() - Date.now() - CHALLENGE_WAITING_TTL_MS);
-  assert.ok(waitingTtlSkew < 5_000, `solo room should expire ~1 minute after creation (skew ${waitingTtlSkew}ms)`);
+  assert.ok(waitingTtlSkew < 5_000, `solo room should expire ~10 minutes after creation (skew ${waitingTtlSkew}ms)`);
 
-  // An opponent sitting down cancels the one-minute waiting clock: the room is
-  // promoted to the full match TTL instead of dying a moment later.
+  // An opponent sitting down cancels the waiting clock: the room is promoted to
+  // the full match TTL instead of dying a moment later.
   const soloRoom = await createChallenge(alice, 60);
   const joinedSolo = await joinChallenge(soloRoom, bob);
   const matchTtlSkew = Math.abs(joinedSolo.expiresAt.getTime() - Date.now() - CHALLENGE_TTL_MS);

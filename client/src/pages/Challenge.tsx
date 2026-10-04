@@ -523,6 +523,10 @@ function ChallengeRoom({ code }: { code: string }) {
   const [opponentLeaveToastCopy, setOpponentLeaveToastCopy] = useState<{ title: string; body: string } | null>(null);
   const [mySummary, setMySummary] = useState<MySummary | null>(null);
   const [now, setNow] = useState(() => Date.now());
+  // Whether the room that just lapsed was OURS to invite into (we created it and
+  // nobody ever sat down) or one we arrived at too late. Same server state, very
+  // different explanation, so the expiry card words it for the viewer.
+  const [lapsedAsHost, setLapsedAsHost] = useState(false);
 
   const codeRef = useRef(code);
   const phaseRef = useRef<RoomPhase>(phase);
@@ -625,19 +629,27 @@ function ChallengeRoom({ code }: { code: string }) {
     emit('challenge:leave', { code: codeRef.current, reason });
   }, []);
 
-  /* CASE 1 — the solo waiting window elapsed with nobody ever having joined.
-     This is NOT an error and NOT a result: the room simply stopped being
-     interesting, so the client tears the whole thing down and returns the
-     player to the main Typing Challenge page (Create / Join) to start again.
-     There is deliberately no "Challenge Expired" card and no error screen —
-     the only visible outcome is being back on the challenge home page.
-     Guarded by a ref so a slow network (the authoritative re-read plus the
-     3s lobby poller) can never fire it twice or race the navigation.
+  /* The solo waiting window elapsed before anybody ever sat down. The room is
+     genuinely finished - the server will never move it forward - so every
+     machine this room owns stops here and the viewer gets an explicit card
+     saying the room lapsed and offering a new one. It used to navigate back to
+     the Typing Challenge page silently, which is exactly what made a lapsed
+     invite indistinguishable from a broken site.
+     `snapshot` is the authoritative room when the caller has one (a fresh read,
+     a poll tick, a submit re-check): it is what tells us whether the viewer was
+     the host. Without it we fall back to the last snapshot we applied, so a
+     host who watched the room die in the lobby still reads "your room expired".
+     Guarded by a ref so a slow network (the authoritative re-read plus the 3s
+     lobby poller) can never fire it twice or race the copy.
      Declared AFTER `emitLeave` on purpose: referencing it above its `const`
      would be a temporal-dead-zone ReferenceError on every render. */
-  const expireSoloLobbyAndReturn = useCallback(() => {
+  const expireSoloLobbyAndReturn = useCallback((snapshot?: ChallengePublic | null) => {
     if (expiredLobbyHandledRef.current) return;
     expiredLobbyHandledRef.current = true;
+    const known = snapshot ?? challengeRefSafe.current;
+    // Player 1 is the creator. A viewer with no seat at all (a stale link opened
+    // after the room died) is a guest by definition.
+    setLapsedAsHost(Boolean(known && mePlayer(known)?.slot === 'player1'));
     // Stop every machine this room owns before we move on.
     submittedRef.current = true;
     engagedRef.current = false;
@@ -659,11 +671,10 @@ function ChallengeRoom({ code }: { code: string }) {
     setErrorBody('');
     setChallenge(null);
     setPhase('expired');
-    // Stop listening to this room, then leave it entirely. The mount effect's
-    // cleanup removes the socket listeners when the component unmounts.
-    emitLeave('exit');
-    navigate('/challenge');
-  }, [emitLeave, navigate]);
+    // No navigate() and no API leave call: the `expired` phase effect drops the
+    // socket room with the `unmount` (presence) reason, which is the correct
+    // signal for "the page stopped watching", and the card owns the way out.
+  }, []);
 
   const goToError = useCallback((title: string, body: string) => {
     setErrorTitle(title);
@@ -760,7 +771,7 @@ function ChallengeRoom({ code }: { code: string }) {
       endRunForOpponentLeft(next, 'Your opponent has left the challenge.');
       return;
     }
-    expireSoloLobbyAndReturn();
+    expireSoloLobbyAndReturn(next);
   }, [ownUserId, showOpponentLeftToastAndRedirect, endRunForOpponentLeft, expireSoloLobbyAndReturn]);
 
   /* Sticky opponent-gone state for the rematch window: the server emits
@@ -811,9 +822,9 @@ function ChallengeRoom({ code }: { code: string }) {
     }
     if (next.status === 'EXPIRED') {
       // Loading (or re-reading) a room whose solo window already elapsed —
-      // including a stale link opened after the fact. Same CASE 1 outcome:
-      // tear down and return to the main Typing Challenge page.
-      expireSoloLobbyAndReturn();
+      // including a stale link opened after the fact. Tear the room down and
+      // say so, rather than dropping the visitor back on the home page.
+      expireSoloLobbyAndReturn(next);
       return;
     }
     if (!next.me) {
@@ -831,9 +842,9 @@ function ChallengeRoom({ code }: { code: string }) {
           setErrorTitle('This challenge is already full.');
           setErrorBody('A challenge can only have two players. Ask your friend for a fresh code.');
         } else if (message.includes('expired')) {
-          // The room lapsed between our read and our join attempt: CASE 1, so
-          // return to the main Typing Challenge page rather than show a card.
-          expireSoloLobbyAndReturn();
+          // The room lapsed between our read and our join attempt: same teardown,
+          // and we still hold the read that proves whether we were the host.
+          expireSoloLobbyAndReturn(next);
           return;
         } else {
           setErrorTitle('Could not join this challenge.');
@@ -859,8 +870,9 @@ function ChallengeRoom({ code }: { code: string }) {
       return; // transient network issue — keep polling
     }
     if (next.status === 'EXPIRED') {
-      // The lobby poller saw the solo window lapse: CASE 1 teardown.
-      expireSoloLobbyAndReturn();
+      // The lobby poller saw the solo window lapse: same teardown, with the
+      // polled snapshot so the host/guest wording is right.
+      expireSoloLobbyAndReturn(next);
       return;
     }
     const normalized = applyOwnSlot(next, ownUserId);
@@ -1204,7 +1216,7 @@ function ChallengeRoom({ code }: { code: string }) {
           return;
         }
         if (authoritative.status === 'EXPIRED') {
-          expireSoloLobbyAndReturn();
+          expireSoloLobbyAndReturn(authoritative);
           return;
         }
         if (authoritative.status === 'COMPLETED') {
@@ -1224,8 +1236,8 @@ function ChallengeRoom({ code }: { code: string }) {
       setChallenge(requested.challenge);
       setPhase('results');
     } else if (requested.challenge.status === 'EXPIRED') {
-      // The room was swept while we were submitting: CASE 1 teardown.
-      expireSoloLobbyAndReturn();
+      // The room was swept while we were submitting: same teardown.
+      expireSoloLobbyAndReturn(requested.challenge);
     } else {
       const mine = mePlayer(requested.challenge) ?? mePlayer(challengeSnapshot);
       setMySummary({
@@ -1302,18 +1314,44 @@ function ChallengeRoom({ code }: { code: string }) {
       );
     }
 
-    /* `expired` is a TRANSIENT teardown state, not a screen: the solo waiting
-       window lapsed, so we are already navigating back to the main Typing
-       Challenge page. Rendering anything here - least of all the old
-       "Challenge Expired" card - would flash a dead end on the way out. A
-       quiet spinner is the honest placeholder for the moment before the
-       navigation lands. */
+    /* The room lapsed before anyone ever sat down. This used to be a quiet
+       spinner followed by a silent navigate back to /challenge, so a dead invite
+       looked exactly like a broken site. Say what happened, in the viewer's own
+       terms, and hand back the two useful next steps. */
     if (phase === 'expired') {
       return (
-        <div className="flex items-center justify-center py-24">
-          <div className="flex flex-col items-center gap-3">
-            <Loader2 size={28} className="animate-spin" style={{ color: 'var(--color-accent-text)' }} />
-            <p className="text-sm font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Returning to Typing Challenge…</p>
+        <div className="max-w-[30rem] mx-auto w-full" data-testid="challenge-expired">
+          <div className="card p-7 text-center">
+            <span
+              className="inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-3"
+              style={{ backgroundColor: 'var(--status-warning-bg)', color: 'var(--status-warning)' }}
+            >
+              <Clock size={22} />
+            </span>
+            <h2 className="text-xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
+              {lapsedAsHost ? 'Your room expired' : 'This challenge has expired'}
+            </h2>
+            <p className="text-sm mt-2" style={{ color: 'var(--color-text-secondary)' }}>
+              {lapsedAsHost
+                ? 'Nobody joined your challenge before the waiting timer ran out, so the room was closed.'
+                : 'This room was closed because nobody joined in time. Ask your friend for a fresh code, or start your own.'}
+            </p>
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <Link
+                to="/challenge"
+                className="py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all duration-150"
+                style={{ border: '1px solid var(--color-border)', color: 'var(--color-text-primary)', backgroundColor: 'transparent' }}
+              >
+                <ArrowLeft size={15} /> Back
+              </Link>
+              <button
+                onClick={() => void createAndGo()}
+                className="py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all duration-150 hover:brightness-110"
+                style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff', boxShadow: '0 6px 18px rgba(67, 97, 238, 0.35)' }}
+              >
+                <Swords size={15} /> New Challenge
+              </button>
+            </div>
           </div>
         </div>
       );
