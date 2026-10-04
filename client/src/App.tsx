@@ -115,12 +115,21 @@ export default function App() {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
 
+        {/* Typing Challenge LANDING page — deliberately public (outside the
+            RequireAuth guard below) so search crawlers and guests can render
+            and index it. It only markets the feature; actually creating or
+            joining a challenge still requires an account, and ChallengeHome
+            sends guests to /login before any write. The private match session
+            (/challenge/:code) stays inside the guard below. */}
+        <Route path="/challenge" element={<Challenge />} />
+
         {/* Account pages — sign-in required. The guard is nested INSIDE the
             shared shell, so entering these routes (e.g. My Profile) swaps only
             the page content and never remounts the layout. */}
         <Route element={<RequireAuth />}>
           <Route path="/analytics" element={<Analytics />} />
-          <Route path="/challenge" element={<Challenge />} />
+          {/* Private match sessions: invite links, live lobbies, live stats and
+              per-player results. Auth-gated and noindex. */}
           <Route path="/challenge/:code" element={<Challenge />} />
           <Route path="/progress" element={<ProgressPage />} />
           <Route path="/progress/test" element={<ProgressPage />} />

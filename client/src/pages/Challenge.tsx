@@ -211,6 +211,39 @@ const CREATE_FEATURES = [
   'Start when your friend joins',
 ];
 
+/* Landing-page "how it works" steps. Every claim here maps to something the
+   match flow actually does today — duration picker, shareable code + link,
+   two-sided Ready, synchronized start, live progress + chat, and the WPM /
+   accuracy comparison with a rematch option. Kept in one place so the copy and
+   the section render from the same source. */
+const CHALLENGE_STEPS = [
+  {
+    icon: Link2,
+    title: 'Create the challenge',
+    body: 'Pick a 1, 2, or 5 minute round and press Create Challenge. Typeoye instantly issues a private challenge code for your multiplayer typing test.',
+  },
+  {
+    icon: Users,
+    title: 'Invite your opponent',
+    body: 'Send your friend the shareable link, or read out the code so they can type it in. Only the two of you can take the seat, so compete with friends typing on a link you control.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Both press Ready',
+    body: 'You each confirm you are ready and the race begins on a shared countdown. Nobody starts alone — the typing WPM competition is fair by design.',
+  },
+  {
+    icon: Zap,
+    title: 'Race the same text',
+    body: 'You both type an identical passage at the same moment. Live statistics show your opponent’s WPM, accuracy and progress as you type, and you can chat during the round.',
+  },
+  {
+    icon: Trophy,
+    title: 'Compare and rematch',
+    body: 'When both finish, Typeoye scores the round on typing speed and accuracy, declares the winner, and shows correct words and errors for each player. Settle the score with a rematch.',
+  },
+] as const;
+
 export const DURATION_OPTIONS = [
   { seconds: 60, label: '1 Minute' },
   { seconds: 120, label: '2 Minutes' },
@@ -290,18 +323,44 @@ function formatCountdown(totalSeconds: number): string {
 
 function ChallengeHome() {
   useSeo({
-    title: 'Typing Challenge – Race a Friend in Real-Time | Typeoye',
-    description: 'Create a typing challenge, share your code, and race a friend in a real-time typing battle. Compare WPM and accuracy live on Typeoye.',
+    title: 'Typing Challenge Online – 1v1 Typing Speed Battle | Typeoye',
+    description:
+      'Challenge a friend to a real-time typing battle on Typeoye. Test your typing speed, compare WPM and accuracy, and see who wins the typing challenge.',
     canonicalPath: '/challenge',
+    /* The landing page is intentionally indexable (it is the one public,
+       crawlable URL for this feature). Stated explicitly rather than relying on
+       the absence of a robots tag, so it can never inherit a noindex left by a
+       previously visited account-gated page. */
+    robots: 'index, follow',
   });
   const navigate = useNavigate();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isSessionChecked = useAuthStore((s) => s.isSessionChecked);
   const [creating, setCreating] = useState(false);
   const [createDuration, setCreateDuration] = useState(60);
   const [codeInput, setCodeInput] = useState('');
   const [joinError, setJoinError] = useState<string | null>(null);
   const [createError, setCreateError] = useState<string | null>(null);
 
+  /* The landing page is public so crawlers can render it, but a challenge can
+     only be created by a signed-in account. Guests are sent to sign in with a
+     return path, mirroring what <RequireAuth /> does for every other gated
+     route, so they land straight back here afterwards.
+
+     `isSessionChecked` matters: while the boot-time /auth/me call is still in
+     flight, `isAuthenticated` is false even for a signed-in user, so redirecting
+     on it alone would bounce a returning user to the sign-in page if they clicked
+     fast. Same reasoning as RequireAuth's pending window — stay out of the way
+     until the session verdict is actually known, and let the API reject a genuine
+     guest (surfaced through createError/joinError) instead of guessing. */
+  const requireLogin = (): boolean => {
+    if (!isSessionChecked || isAuthenticated) return false;
+    navigate(`/login?redirect=${encodeURIComponent('/challenge')}`);
+    return true;
+  };
+
   const createChallenge = async () => {
+    if (requireLogin()) return;
     setCreating(true);
     setCreateError(null);
     try {
@@ -320,6 +379,9 @@ function ChallengeHome() {
       setJoinError('Enter a valid challenge code like TY-8K4P2.');
       return;
     }
+    /* Guests are redirected to sign in and returned to the session URL by
+       <RequireAuth />, which guards /challenge/:code. */
+    if (requireLogin()) return;
     navigate(`/challenge/${code}`, { replace: true });
   };
 
@@ -339,10 +401,12 @@ function ChallengeHome() {
               className="mt-5 bg-clip-text text-transparent text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight"
               style={{ backgroundImage: 'linear-gradient(135deg, #4361ee 0%, #7c3aed 100%)' }}
             >
-              Typing Challenge
+              Online Typing Challenge – Challenge a Friend
             </h1>
             <p className="mt-3 text-base sm:text-lg" style={{ color: 'var(--color-text-secondary)' }}>
-              Challenge your friend in a real-time typing battle.
+              Challenge your friend in a real-time typing battle. This 1v1 typing challenge puts you both on the
+              exact same text, starts on a shared countdown, and live-streams each player&apos;s progress so you can
+              watch the multiplayer typing test unfold keystroke by keystroke.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold" style={{ backgroundColor: 'var(--color-accent-light)', color: 'var(--color-accent-text)' }}>
@@ -513,8 +577,153 @@ function ChallengeHome() {
         <p className="mt-6 flex items-center justify-center gap-1.5 text-center text-xs" style={{ color: 'var(--color-text-muted)' }}>
           <Trophy size={13} /> Every race records WPM, accuracy, and correct words for both players.
         </p>
+
+        {/* HOW IT WORKS */}
+        <section className="mt-12 sm:mt-16" aria-labelledby="challenge-how-it-works">
+          <div className="text-center">
+            <h2 id="challenge-how-it-works" className="text-2xl sm:text-3xl font-extrabold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
+              How to play the online typing challenge
+            </h2>
+            <p className="mx-auto mt-2.5 max-w-2xl text-sm sm:text-base" style={{ color: 'var(--color-text-secondary)' }}>
+              Five steps from a fresh code to a finished typing speed battle — no download, no install, and both
+              players race in the same browser tab view at the same time.
+            </p>
+          </div>
+
+          <ol className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {CHALLENGE_STEPS.map((step, index) => (
+              <li
+                key={step.title}
+                className="challenge-fade-in card p-5 flex flex-col"
+                style={{ animationDelay: `${index * 60}ms`, borderRadius: '1.375rem', borderColor: 'rgba(99, 102, 241, 0.16)' }}
+              >
+                <div className="flex items-center gap-3">
+                  <span
+                    className="grid h-10 w-10 shrink-0 place-items-center rounded-xl"
+                    style={{ background: 'linear-gradient(135deg, #4361ee, #7c3aed)', color: '#fff' }}
+                  >
+                    <step.icon size={18} />
+                  </span>
+                  <span className="text-xs font-extrabold uppercase tracking-wider tabular-nums" style={{ color: 'var(--color-text-muted)' }}>
+                    Step {index + 1}
+                  </span>
+                </div>
+                <h3 className="mt-3 text-base font-extrabold" style={{ color: 'var(--color-text-primary)' }}>
+                  {step.title}
+                </h3>
+                <p className="mt-1.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                  {step.body}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        {/* INTERNAL LINKS — connects the challenge to the rest of the product for
+            crawlers and readers who would rather practise solo first. */}
+        <section className="mt-12 sm:mt-14 card p-5 sm:p-6" style={{ borderRadius: '1.375rem', borderColor: 'rgba(99, 102, 241, 0.16)' }}>
+          <h2 className="text-xl font-extrabold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
+            Not ready to race? Measure your baseline first.
+          </h2>
+          <p className="mt-2 max-w-3xl text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+            Knowing your solo typing speed makes a 1v1 typing challenge far more useful. Take a full typing test to
+            record your WPM and accuracy across durations and difficulties, work through the guided lessons to fix
+            weak keys, drill specific patterns in practice mode, or try the solo typing games — then come back and
+            put the number against a friend.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2.5">
+            <Link
+              to="/test"
+              data-testid="challenge-link-test"
+              className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110"
+              style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff' }}
+            >
+              Take a typing test
+              <ArrowRight size={15} />
+            </Link>
+            <Link
+              to="/games"
+              data-testid="challenge-link-games"
+              className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-colors"
+              style={{ border: '1px solid var(--color-border)', backgroundColor: 'var(--color-card)', color: 'var(--color-text-primary)' }}
+            >
+              Play typing games
+              <ArrowRight size={15} />
+            </Link>
+            <Link
+              to="/lessons"
+              data-testid="challenge-link-lessons"
+              className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-colors"
+              style={{ border: '1px solid var(--color-border)', backgroundColor: 'var(--color-card)', color: 'var(--color-text-primary)' }}
+            >
+              Learn touch typing
+              <ArrowRight size={15} />
+            </Link>
+            <Link
+              to="/leaderboard"
+              data-testid="challenge-link-leaderboard"
+              className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-colors"
+              style={{ border: '1px solid var(--color-border)', backgroundColor: 'var(--color-card)', color: 'var(--color-text-primary)' }}
+            >
+              See the leaderboard
+              <ArrowRight size={15} />
+            </Link>
+          </div>
+        </section>
+
+        <ChallengeStructuredData />
       </div>
     </PageWrapper>
+  );
+}
+
+/* WebPage + BreadcrumbList for the public landing page only. Everything
+   asserted here is visible on the page: the title/description come from the
+   useSeo call above, and the breadcrumb trail is Home → Games → this page,
+   which is the real navigation path. No ratings, reviews, prices or other
+   claims are emitted, and this never renders on a private /challenge/:code
+   session (ChallengeRoom does not mount it). */
+function ChallengeStructuredData() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        '@id': `${CANONICAL_SITE_URL}/challenge#webpage`,
+        url: `${CANONICAL_SITE_URL}/challenge`,
+        name: 'Typing Challenge Online – 1v1 Typing Speed Battle | Typeoye',
+        description:
+          'Challenge a friend to a real-time typing battle on Typeoye. Test your typing speed, compare WPM and accuracy, and see who wins the typing challenge.',
+        inLanguage: 'en',
+        isPartOf: {
+          '@type': 'WebSite',
+          '@id': `${CANONICAL_SITE_URL}/#website`,
+          name: 'Typeoye',
+          url: CANONICAL_SITE_URL,
+        },
+        primaryImageOfPage: {
+          '@type': 'ImageObject',
+          url: `${CANONICAL_SITE_URL}/favicon.png`,
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${CANONICAL_SITE_URL}/challenge#breadcrumb`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: CANONICAL_SITE_URL },
+          { '@type': 'ListItem', position: 2, name: 'Games', item: `${CANONICAL_SITE_URL}/games` },
+          { '@type': 'ListItem', position: 3, name: 'Typing Challenge', item: `${CANONICAL_SITE_URL}/challenge` },
+        ],
+      },
+    ],
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      data-testid="challenge-jsonld"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+    />
   );
 }
 
