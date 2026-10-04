@@ -211,39 +211,6 @@ const CREATE_FEATURES = [
   'Start when your friend joins',
 ];
 
-/* Landing-page "how it works" steps. Every claim here maps to something the
-   match flow actually does today — duration picker, shareable code + link,
-   two-sided Ready, synchronized start, live progress + chat, and the WPM /
-   accuracy comparison with a rematch option. Kept in one place so the copy and
-   the section render from the same source. */
-const CHALLENGE_STEPS = [
-  {
-    icon: Link2,
-    title: 'Create the challenge',
-    body: 'Pick a 1, 2, or 5 minute round and press Create Challenge. Typeoye instantly issues a private challenge code for your multiplayer typing test.',
-  },
-  {
-    icon: Users,
-    title: 'Invite your opponent',
-    body: 'Send your friend the shareable link, or read out the code so they can type it in. Only the two of you can take the seat, so compete with friends typing on a link you control.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Both press Ready',
-    body: 'You each confirm you are ready and the race begins on a shared countdown. Nobody starts alone — the typing WPM competition is fair by design.',
-  },
-  {
-    icon: Zap,
-    title: 'Race the same text',
-    body: 'You both type an identical passage at the same moment. Live statistics show your opponent’s WPM, accuracy and progress as you type, and you can chat during the round.',
-  },
-  {
-    icon: Trophy,
-    title: 'Compare and rematch',
-    body: 'When both finish, Typeoye scores the round on typing speed and accuracy, declares the winner, and shows correct words and errors for each player. Settle the score with a rematch.',
-  },
-] as const;
-
 export const DURATION_OPTIONS = [
   { seconds: 60, label: '1 Minute' },
   { seconds: 120, label: '2 Minutes' },
@@ -577,47 +544,6 @@ function ChallengeHome() {
         <p className="mt-6 flex items-center justify-center gap-1.5 text-center text-xs" style={{ color: 'var(--color-text-muted)' }}>
           <Trophy size={13} /> Every race records WPM, accuracy, and correct words for both players.
         </p>
-
-        {/* HOW IT WORKS */}
-        <section className="mt-12 sm:mt-16" aria-labelledby="challenge-how-it-works">
-          <div className="text-center">
-            <h2 id="challenge-how-it-works" className="text-2xl sm:text-3xl font-extrabold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
-              How to play the online typing challenge
-            </h2>
-            <p className="mx-auto mt-2.5 max-w-2xl text-sm sm:text-base" style={{ color: 'var(--color-text-secondary)' }}>
-              Five steps from a fresh code to a finished typing speed battle — no download, no install, and both
-              players race in the same browser tab view at the same time.
-            </p>
-          </div>
-
-          <ol className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {CHALLENGE_STEPS.map((step, index) => (
-              <li
-                key={step.title}
-                className="challenge-fade-in card p-5 flex flex-col"
-                style={{ animationDelay: `${index * 60}ms`, borderRadius: '1.375rem', borderColor: 'rgba(99, 102, 241, 0.16)' }}
-              >
-                <div className="flex items-center gap-3">
-                  <span
-                    className="grid h-10 w-10 shrink-0 place-items-center rounded-xl"
-                    style={{ background: 'linear-gradient(135deg, #4361ee, #7c3aed)', color: '#fff' }}
-                  >
-                    <step.icon size={18} />
-                  </span>
-                  <span className="text-xs font-extrabold uppercase tracking-wider tabular-nums" style={{ color: 'var(--color-text-muted)' }}>
-                    Step {index + 1}
-                  </span>
-                </div>
-                <h3 className="mt-3 text-base font-extrabold" style={{ color: 'var(--color-text-primary)' }}>
-                  {step.title}
-                </h3>
-                <p className="mt-1.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-                  {step.body}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </section>
 
         {/* INTERNAL LINKS — connects the challenge to the rest of the product for
             crawlers and readers who would rather practise solo first. */}
