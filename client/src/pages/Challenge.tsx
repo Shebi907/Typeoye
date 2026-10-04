@@ -244,6 +244,30 @@ function buildChallengeLink(code: string): string {
   return `${CANONICAL_SITE_URL}/challenge/${code}`;
 }
 
+/* Which challenge, if any, did THIS browser tab create?
+
+   A challenge room holds at most two *distinct* accounts. The server cannot
+   tell "the creator reloading their own room" apart from "a second tab of the
+   creator opening their own invite link" — both are player1 with an empty
+   player2 slot — so it used to answer both with a silent no-op and leave the
+   duplicate tab waiting forever for an opponent who was already in the seat.
+   Recording the creating tab lets the room *ask* the server to rule on the
+   duplicate instead of assuming it belongs there.
+
+   Deliberately per-tab (sessionStorage): a duplicate tab must not inherit the
+   marker, because the duplicate is exactly the case to catch. This is a hint
+   for when to ask, never an authorization decision — the server still owns
+   every seat. */
+const CREATED_CHALLENGE_KEY = 'typeoye_created_challenge';
+
+function markCreatedInThisTab(code: string): void {
+  try { window.sessionStorage.setItem(CREATED_CHALLENGE_KEY, code); } catch { /* storage unavailable */ }
+}
+
+function wasCreatedInThisTab(code: string): boolean {
+  try { return window.sessionStorage.getItem(CREATED_CHALLENGE_KEY) === code; } catch { return false; }
+}
+
 function formatCountdown(totalSeconds: number): string {
   const safe = Math.max(0, Math.floor(totalSeconds));
   const minutes = Math.floor(safe / 60);
@@ -269,6 +293,7 @@ function ChallengeHome() {
     setCreateError(null);
     try {
       const challenge = await challengeService.create(createDuration);
+      markCreatedInThisTab(challenge.code);
       navigate(`/challenge/${challenge.code}`, { replace: true });
     } catch (err) {
       setCreateError(getApiErrorMessage(err, 'Could not create a challenge. Please try again.'));
@@ -827,7 +852,17 @@ function ChallengeRoom({ code }: { code: string }) {
       expireSoloLobbyAndReturn(next);
       return;
     }
-    if (!next.me) {
+    const opponentSeated = next.players.some((player) => player.slot === 'player2');
+    /* We hold player1, the second seat is empty, and this tab did not create the
+       room => we are a second window of the account that owns it. Previously
+       `me` alone decided whether to join, so this case silently skipped the
+       join, rendered a normal waiting lobby, and polled "Waiting for your
+       opponent to join…" forever while the opponent chip read "Waiting…" —
+       with player2 never created, so no amount of clicking Ready could ever
+       start the match. Ask the server to rule on it instead of guessing. */
+    const mayBeDuplicateOfCreator = next.me === 'player1' && !opponentSeated && !wasCreatedInThisTab(next.code);
+
+    if (!next.me || mayBeDuplicateOfCreator) {
       if (next.players.length >= 2) {
         setErrorTitle('This challenge is already full.');
         setErrorBody('A challenge can only have two players. Ask your friend for a fresh code.');
@@ -841,6 +876,13 @@ function ChallengeRoom({ code }: { code: string }) {
         if (message.includes('full')) {
           setErrorTitle('This challenge is already full.');
           setErrorBody('A challenge can only have two players. Ask your friend for a fresh code.');
+        } else if (/against yourself|different player/i.test(message)) {
+          // The authoritative ruling: this account already owns the only seat
+          // that can be filled. Say so plainly instead of waiting forever.
+          setErrorTitle('You cannot play against yourself');
+          setErrorBody(
+            'This challenge was created by the account you are signed in as, so there is no second player left to join it. Send the link to a different account, or start a new challenge.',
+          );
         } else if (message.includes('expired')) {
           // The room lapsed between our read and our join attempt: same teardown,
           // and we still hold the read that proves whether we were the host.
@@ -1496,7 +1538,8 @@ function ChallengeRoom({ code }: { code: string }) {
           waitingSecondsLeft={waitingSecondsLeft}
           isCreator={Boolean(authUser && challenge.players.some((p) => p.slot === 'player1' && p.userId === String(authUser._id)))}
           onBack={() => navigate('/challenge')}
-          onReady={() => void readyNow()}
+          onReady={() => readyNow()}
+          onUnready={() => unreadyNow()}
           onExit={() => void exitRoom()}
         />
         {showOpponentLeft && (
@@ -1528,9 +1571,23 @@ function ChallengeRoom({ code }: { code: string }) {
     }
   }
 
+  /* Standing back down. Pressing "I'm Ready" used to be irreversible: the flag
+     was write-only and the button disabled, so a player who readied up before
+     the opponent arrived had no way back into the lobby short of leaving. */
+  async function unreadyNow() {
+    const current = codeRef.current;
+    try {
+      const res = await challengeService.ready(current, false);
+      applyChallenge(res.challenge);
+    } catch (err) {
+      goToError('Could not cancel your ready.', getApiErrorMessage(err, 'Please try again.'));
+    }
+  }
+
   async function createAndGo() {
     try {
       const challenge = await challengeService.create();
+      markCreatedInThisTab(challenge.code);
       navigate(`/challenge/${challenge.code}`, { replace: true });
     } catch {
       // stays on the error card
@@ -1591,13 +1648,14 @@ function DuelStat({ icon: Icon, label, value, tone, prominent }: {
 
 /***** LOBBY *****/
 
-function LobbyCard({ challenge, code, shareUrl, waitingSecondsLeft, isCreator, onReady, onExit, onBack }: {
+function LobbyCard({ challenge, code, shareUrl, waitingSecondsLeft, isCreator, onReady, onUnready, onExit, onBack }: {
   challenge: ChallengePublic;
   code: string;
   shareUrl: string;
   waitingSecondsLeft: number;
   isCreator: boolean;
-  onReady: () => void;
+  onReady: () => Promise<void>;
+  onUnready: () => Promise<void>;
   onExit: () => void;
   onBack: () => void;
 }) {
@@ -1675,9 +1733,18 @@ function LobbyCard({ challenge, code, shareUrl, waitingSecondsLeft, isCreator, o
     };
   }
 
-  const handleReady = () => {
+  /* Both handlers clear `readyPending` in a `finally`, so the control can never
+     be left permanently disabled: the flag used to be set on click and reset
+     only by swapping the whole panel for a non-interactive <p>, which made it a
+     silent one-way door the moment the panel became a real button. */
+  const handleReady = async () => {
     setReadyPending(true);
-    onReady();
+    try { await onReady(); } finally { setReadyPending(false); }
+  };
+
+  const handleUnready = async () => {
+    setReadyPending(true);
+    try { await onUnready(); } finally { setReadyPending(false); }
   };
 
   return (
@@ -1834,12 +1901,18 @@ function LobbyCard({ challenge, code, shareUrl, waitingSecondsLeft, isCreator, o
             </div>
 
             {myReady ? (
-              <p
-                className="mt-6 flex w-full items-center justify-center gap-1.5 rounded-2xl py-3.5 text-sm font-bold"
+              <button
+                data-testid="challenge-unready"
+                onClick={handleUnready}
+                disabled={readyPending}
+                title="Click to stand back down"
+                className="mt-6 flex w-full items-center justify-center gap-1.5 rounded-2xl py-3.5 text-sm font-bold transition-all duration-150 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
                 style={{ backgroundColor: 'rgba(34, 197, 94, 0.10)', color: '#15803d' }}
               >
-                <Check size={16} /> You&apos;re ready — waiting for your opponent to click ready…
-              </p>
+                {readyPending ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
+                You&apos;re ready — waiting for your opponent to click ready…
+                <span className="ml-1 text-xs font-semibold underline underline-offset-2">Cancel</span>
+              </button>
             ) : (
               <button
                 data-testid="challenge-ready"

@@ -385,7 +385,24 @@ export async function createChallenge(user: IUser, durationSeconds = CHALLENGE_D
 
 export async function joinChallenge(challenge: IChallenge, user: IUser): Promise<IChallenge> {
   const slot = playerSlotOf(challenge, user._id.toString());
-  if (slot) return challenge;
+  if (slot) {
+    // Re-entering a room we already hold a seat in is a legitimate no-op: a
+    // refresh, a background tab, or a stale link, all of which must keep
+    // presence and readiness intact. That is only true once the opponent has
+    // actually taken the other seat.
+    //
+    // While player2 is still EMPTY this account can never start the room, so
+    // silently returning an unstartable challenge strands the caller in a
+    // lobby that waits forever for an opponent who is already sitting in this
+    // very seat. Refuse loudly and let the caller say so instead.
+    if (slot === 'player1' && challenge.player2 === null) {
+      throw new ChallengeError(
+        'This challenge is waiting for a different player. You cannot play against yourself.',
+        400,
+      );
+    }
+    return challenge;
+  }
 
   if (isFull(challenge)) throw new ChallengeError('This challenge is already full.', 400);
   if (isExpired(challenge)) throw new ChallengeError('This challenge has expired.', 400);
@@ -407,16 +424,39 @@ export async function joinChallenge(challenge: IChallenge, user: IUser): Promise
   return challenge.save();
 }
 
-export async function markReady(challenge: IChallenge, user: IUser): Promise<{ challenge: IChallenge; bothReady: boolean }> {
+export async function markReady(challenge: IChallenge, user: IUser, ready = true): Promise<{ challenge: IChallenge; bothReady: boolean }> {
   if (isExpired(challenge) || challenge.status === 'EXPIRED') {
     throw new ChallengeError('This challenge has expired.', 400);
   }
   const slot = playerSlotOf(challenge, user._id.toString());
   if (!slot) throw new ChallengeError('You are not part of this challenge.', 403);
 
+  const now = new Date();
+
+  // Standing back down. `ready` used to be write-only, which made the lobby a
+  // one-way door: the moment a player pressed "I'm Ready" the button disabled
+  // and the only way out was to leave, even though the opponent they were
+  // waiting on might never arrive. Clearing the flag also drops the room out
+  // of READY so the start can be re-armed from scratch.
+  if (!ready) {
+    const cleared = await Challenge.findOneAndUpdate(
+      {
+        _id: challenge._id,
+        [`${slot}.userId`]: user._id,
+        startAt: null,
+        status: { $in: ['WAITING', 'PLAYER_JOINED', 'READY'] },
+      },
+      {
+        $set: { [`${slot}.ready`]: false, status: challenge.player2 ? 'PLAYER_JOINED' : 'WAITING' },
+        $unset: { [`${slot}.readyAt`]: '' },
+      },
+      { new: true },
+    );
+    return { challenge: cleared ?? challenge, bothReady: false };
+  }
+
   // Atomic per-slot update: set ONLY this player's ready flag so two players
   // clicking "I'm Ready" at the same time can never overwrite each other.
-  const now = new Date();
   const updated = await Challenge.findOneAndUpdate(
     {
       _id: challenge._id,

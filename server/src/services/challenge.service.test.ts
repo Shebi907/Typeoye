@@ -322,6 +322,23 @@ assert.equal(playerSlotOf(makeChallenge({ player2: { userId: 'u2', username: 'bo
   const expiredRoom = makeChallenge({ code: 'TY-EXPIR', status: 'WAITING', expiresAt: new Date(Date.now() - 1000) });
   await assertRejects(joinChallenge(expiredRoom, bob), 'This challenge has expired.', 400);
 
+  // REGRESSION: a second tab of the account that already holds the only seat
+  // used to get a silent no-op back, leaving it rendering a normal waiting
+  // lobby forever ("Waiting for your opponent to join…" / opponent "Waiting…")
+  // that could never start, because player2 was never created.
+  const selfJoinRoom = makeChallenge({ code: 'TY-SELFJ', status: 'WAITING' });
+  await assertRejects(
+    joinChallenge(selfJoinRoom, alice),
+    'This challenge is waiting for a different player. You cannot play against yourself.',
+    400,
+  );
+  assert.equal(selfJoinRoom.player2, null, 'a refused self-join must not seat a second player');
+  // ...and the legitimate creator re-entering their own room is still fine.
+  const selfJoined = await joinChallenge(selfJoinRoom, { _id: 'u2', username: 'bob' } as any);
+  assert.equal(selfJoined.player2?.username, 'bob');
+  const creatorReentry = await joinChallenge(selfJoined, alice);
+  assert.equal(creatorReentry.player2?.username, 'bob', 'the creator may always re-enter once an opponent is seated');
+
   // markReady — atomic per-slot update, other player's flag never touched
   const readyRoom = makeChallenge({ code: 'TY-READY', status: 'PLAYER_JOINED', player2: { userId: 'u2', username: 'bob', ready: false, connected: true, joinedAt: new Date(), rematchReady: false, stats: null } });
   const p1Ready = await markReady(readyRoom, alice);
@@ -334,6 +351,22 @@ assert.equal(playerSlotOf(makeChallenge({ player2: { userId: 'u2', username: 'bo
   assert.equal(p2Ready.challenge.player1.ready, true);
   assert.equal(p2Ready.challenge.player2?.ready, true);
   assert.equal(p2Ready.challenge.status, 'READY', 'room lifts into shared READY state when both players are ready');
+
+  // REGRESSION: pressing "I'm Ready" was a one-way door — the flag was
+  // write-only and the button disabled, so standing back down was impossible.
+  const standDown = await markReady(readyRoom, bob, false);
+  assert.equal(standDown.bothReady, false);
+  assert.equal(standDown.challenge.player2?.ready, false, 'un-ready must clear only this player flag');
+  assert.equal(standDown.challenge.player1.ready, true, 'un-ready must never touch the opponent flag');
+  assert.equal(
+    standDown.challenge.status,
+    'PLAYER_JOINED',
+    'standing back down must drop the room out of READY so the start can be re-armed',
+  );
+  // ...and the room can then be started again from scratch.
+  const rearmed = await markReady(readyRoom, bob);
+  assert.equal(rearmed.bothReady, true);
+  assert.equal(rearmed.challenge.status, 'READY');
 
   // startChallengeIfReady — exactly ONE authoritative startTime
   const startedOnce = await startChallengeIfReady('TY-READY');

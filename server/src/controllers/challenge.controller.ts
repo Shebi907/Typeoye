@@ -133,8 +133,18 @@ export async function readyHandler(req: Request, res: Response): Promise<void> {
   try {
     const user = req.user!;
     const code = (req.params['code'] ?? '').trim().toUpperCase();
+    // Default to true so an older client that posts no body keeps working;
+    // `{ ready: false }` is the explicit "stand back down" call.
+    const wantsReady = (req.body as { ready?: unknown } | undefined)?.ready !== false;
     const challenge = await loadChallengeOrThrow(code);
-    await markReady(challenge, user);
+    const { challenge: afterReady } = await markReady(challenge, user, wantsReady);
+
+    if (!wantsReady) {
+      const pub = toPublic(afterReady, user._id.toString());
+      emitToChallenge(afterReady.code, 'challenge:state', { challenge: pub });
+      sendSuccess(res, { challenge: pub, bothReady: false });
+      return;
+    }
 
     // startChallengeIfReady is idempotent: only ONE concurrent call can create
     // the startTime (the condition requires startAt === null). If a concurrent

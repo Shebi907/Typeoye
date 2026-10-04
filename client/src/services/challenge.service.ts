@@ -23,8 +23,8 @@ export const challengeService = {
     return (data.data as { challenge: ChallengePublic }).challenge;
   },
 
-  async ready(code: string): Promise<{ challenge: ChallengePublic; bothReady: boolean }> {
-    const { data } = await api.post(`/challenge/${code}/ready`);
+  async ready(code: string, ready = true): Promise<{ challenge: ChallengePublic; bothReady: boolean }> {
+    const { data } = await api.post(`/challenge/${code}/ready`, { ready });
     return data.data as { challenge: ChallengePublic; bothReady: boolean };
   },
 
