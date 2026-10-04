@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   Swords, Copy, Check, Link2, Users, Clock, LogOut, RotateCcw, Loader2,
   ArrowLeft, Trophy, Gauge, Target, AlertTriangle, ShieldAlert, ShieldCheck,
@@ -257,15 +257,28 @@ function buildChallengeLink(code: string): string {
    Deliberately per-tab (sessionStorage): a duplicate tab must not inherit the
    marker, because the duplicate is exactly the case to catch. This is a hint
    for when to ask, never an authorization decision — the server still owns
-   every seat. */
-const CREATED_CHALLENGE_KEY = 'typeoye_created_challenge';
+   every seat.
+
+   The key deliberately avoids the `typeoye_` prefix. The auth store purges
+   every `typeoye_*` sessionStorage entry as a *service cache* reset on
+   setAuth/logout, which lands asynchronously and would race this write away —
+   leaving a genuine creator wrongly ruled a duplicate. This is navigation
+   state, not a cache, so it opts out of that purge. */
+const CREATED_CHALLENGE_KEY = 'challenge_created_code';
 
 function markCreatedInThisTab(code: string): void {
   try { window.sessionStorage.setItem(CREATED_CHALLENGE_KEY, code); } catch { /* storage unavailable */ }
 }
 
-function wasCreatedInThisTab(code: string): boolean {
-  try { return window.sessionStorage.getItem(CREATED_CHALLENGE_KEY) === code; } catch { return false; }
+/* Two independent markers, either of which is enough. sessionStorage is the
+   durable one (survives a reload); the router's own location state is the
+   backup. Neither is an authorization decision — the server still owns every
+   seat — but a false "you are a duplicate" verdict hard-blocks the legitimate
+   creator, so the check is deliberately hard to lose. */
+function wasCreatedInThisTab(code: string, locationState: unknown): boolean {
+  try { if (window.sessionStorage.getItem(CREATED_CHALLENGE_KEY) === code) return true; } catch { /* storage unavailable */ }
+  const state = locationState as { createdChallengeCode?: string } | null | undefined;
+  return state?.createdChallengeCode === code;
 }
 
 function formatCountdown(totalSeconds: number): string {
@@ -294,7 +307,7 @@ function ChallengeHome() {
     try {
       const challenge = await challengeService.create(createDuration);
       markCreatedInThisTab(challenge.code);
-      navigate(`/challenge/${challenge.code}`, { replace: true });
+      navigate(`/challenge/${challenge.code}`, { replace: true, state: { createdChallengeCode: challenge.code } });
     } catch (err) {
       setCreateError(getApiErrorMessage(err, 'Could not create a challenge. Please try again.'));
       setCreating(false);
@@ -535,6 +548,7 @@ interface MySummary {
 
 function ChallengeRoom({ code }: { code: string }) {
   const navigate = useNavigate();
+  const createdRoomState = useLocation().state;
   const { token, user: authUser } = useAuthStore();
   const ownUserId = authUser?._id != null ? String(authUser._id) : undefined;
   const [challenge, setChallenge] = useState<ChallengePublic | null>(null);
@@ -860,7 +874,8 @@ function ChallengeRoom({ code }: { code: string }) {
        opponent to join…" forever while the opponent chip read "Waiting…" —
        with player2 never created, so no amount of clicking Ready could ever
        start the match. Ask the server to rule on it instead of guessing. */
-    const mayBeDuplicateOfCreator = next.me === 'player1' && !opponentSeated && !wasCreatedInThisTab(next.code);
+    const mayBeDuplicateOfCreator =
+      next.me === 'player1' && !opponentSeated && !wasCreatedInThisTab(next.code, createdRoomState);
 
     if (!next.me || mayBeDuplicateOfCreator) {
       if (next.players.length >= 2) {
@@ -898,7 +913,7 @@ function ChallengeRoom({ code }: { code: string }) {
     }
     applyChallenge(next);
     void ensureSocketJoined(codeRef.current);
-  }, [applyChallenge, goToError]);
+  }, [applyChallenge, goToError, createdRoomState]);
 
   /* Lightweight lobby self-heal: re-reads authoritative state every few
      seconds while in the lobby. If a start event was ever missed (socket join
@@ -1588,7 +1603,7 @@ function ChallengeRoom({ code }: { code: string }) {
     try {
       const challenge = await challengeService.create();
       markCreatedInThisTab(challenge.code);
-      navigate(`/challenge/${challenge.code}`, { replace: true });
+      navigate(`/challenge/${challenge.code}`, { replace: true, state: { createdChallengeCode: challenge.code } });
     } catch {
       // stays on the error card
     }
