@@ -935,6 +935,12 @@ function ChallengeRoom({ code }: { code: string }) {
     engagedRef.current = false;
     rematchPendingRef.current = false;
     handledOpponentLeaveRef.current = false;
+    // Re-arm the room's one-shot latches alongside the state above. This effect
+    // also re-runs on token hydration, and it resets `phase` to 'loading' every
+    // time: a latch left latched from an earlier teardown would block the retry
+    // and strand the player on the loading spinner with no way back.
+    expiredLobbyHandledRef.current = false;
+    expiryProbeRef.current = false;
     if (opponentLeaveToastTimerRef.current !== null) {
       window.clearTimeout(opponentLeaveToastTimerRef.current);
       opponentLeaveToastTimerRef.current = null;
