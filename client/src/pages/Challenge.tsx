@@ -545,58 +545,6 @@ function ChallengeHome() {
           <Trophy size={13} /> Every race records WPM, accuracy, and correct words for both players.
         </p>
 
-        {/* INTERNAL LINKS — connects the challenge to the rest of the product for
-            crawlers and readers who would rather practise solo first. */}
-        <section className="mt-12 sm:mt-14 card p-5 sm:p-6" style={{ borderRadius: '1.375rem', borderColor: 'rgba(99, 102, 241, 0.16)' }}>
-          <h2 className="text-xl font-extrabold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
-            Not ready to race? Measure your baseline first.
-          </h2>
-          <p className="mt-2 max-w-3xl text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            Knowing your solo typing speed makes a 1v1 typing challenge far more useful. Take a full typing test to
-            record your WPM and accuracy across durations and difficulties, work through the guided lessons to fix
-            weak keys, drill specific patterns in practice mode, or try the solo typing games — then come back and
-            put the number against a friend.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2.5">
-            <Link
-              to="/test"
-              data-testid="challenge-link-test"
-              className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110"
-              style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff' }}
-            >
-              Take a typing test
-              <ArrowRight size={15} />
-            </Link>
-            <Link
-              to="/games"
-              data-testid="challenge-link-games"
-              className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-colors"
-              style={{ border: '1px solid var(--color-border)', backgroundColor: 'var(--color-card)', color: 'var(--color-text-primary)' }}
-            >
-              Play typing games
-              <ArrowRight size={15} />
-            </Link>
-            <Link
-              to="/lessons"
-              data-testid="challenge-link-lessons"
-              className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-colors"
-              style={{ border: '1px solid var(--color-border)', backgroundColor: 'var(--color-card)', color: 'var(--color-text-primary)' }}
-            >
-              Learn touch typing
-              <ArrowRight size={15} />
-            </Link>
-            <Link
-              to="/leaderboard"
-              data-testid="challenge-link-leaderboard"
-              className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-colors"
-              style={{ border: '1px solid var(--color-border)', backgroundColor: 'var(--color-card)', color: 'var(--color-text-primary)' }}
-            >
-              See the leaderboard
-              <ArrowRight size={15} />
-            </Link>
-          </div>
-        </section>
-
         <ChallengeStructuredData />
       </div>
     </PageWrapper>
