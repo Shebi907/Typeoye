@@ -50,7 +50,7 @@ export const CATEGORY_BADGE: Record<BlogCategory, string> = {
 /** Sidebar category post counts (keep in sync with POSTS). */
 export const CATEGORY_COUNTS: Record<BlogCategory, number> = {
   'Typing Tips': 3,
-  'Guides': 6,
+  'Guides': 7,
   'Practice': 2,
   'Productivity': 3,
   'News & Updates': 1,
@@ -848,6 +848,56 @@ export const POSTS: BlogPost[] = [
       {
         heading: 'The Bottom Line',
         body: 'Typing speed scores aren’t lies, exactly — but they aren’t universal truths either. They’re the output of a formula, and formulas have assumptions baked into them. Understanding what’s being measured (real words vs. character chunks) helps you make sense of why your "speed" seems to shift depending on where you test it, and gives you a more honest picture of where you actually stand.',
+        },
+    ],
+  },
+  {
+    slug: 'how-to-challenge-a-friend-typing-race',
+    title: 'How to Challenge a Friend to a Typing Race on Typeoye',
+    category: 'Guides',
+    description:
+      'Create a private typing race on Typeoye, send the invite link to a friend, and compare WPM and accuracy head-to-head in real time.',
+    metaTitle: 'How to Challenge a Friend to a Typing Race – 1v1 Typing | Typeoye',
+    metaDescription:
+      'Want to race a friend in real-time typing speed? Here’s how to create a challenge, share the link, and compete head-to-head on Typeoye.',
+    intro:
+      'Typing alone has its limits — you can track your WPM over time, but nothing sharpens your speed quite like racing against another real person. Typeoye’s 1v1 Typing Challenge lets you do exactly that: create a private race, invite a friend, and see who types faster in real time.',
+    readTime: 3,
+    publishedAt: '2026-10-05',
+    popular: false,
+    image: '/assets/blog/how-to-challenge-a-friend-typing-race.jpg',
+    imageAlt: 'Two people working on laptops at a table',
+    pullQuote: 'Nothing sharpens your typing speed quite like racing another real person.',
+    cta: {
+      heading: 'Send the first invite',
+      blurb: 'Create a challenge, grab the link, and see who on your team or in your group chat answers first.',
+      label: 'Start a Typing Challenge',
+      to: '/challenge',
+    },
+    content: [
+      {
+        heading: '1. Create a Challenge',
+        body: 'Typing Challenge has its own page on Typeoye, reachable from the Games menu in the navigation bar, from the Games page itself, or straight from your typing-test results. Open it, pick how long you want to race — one, two, or five minutes — and press Create Challenge. You will get a unique challenge code, in the format TY-XXXXX, plus a shareable link built around that code. You need a Typeoye account to create one, and the same goes for whoever you invite.',
+      },
+      {
+        heading: '2. Invite Your Opponent',
+        body: 'Your Challenge Room has an Invite your friend panel with two controls: one to copy the link and one to copy the code. Send whichever suits the situation — the link is easier for chat apps, while the code works fine read aloud across a desk or over a call. The moment your opponent opens that link they land directly in your Challenge Room, signing in first if they are not already logged in. Only two players can ever be seated in a room, and you cannot race yourself, so a second browser profile or a friend’s account is what you need.',
+      },
+      {
+        heading: '3. Get Ready and Race',
+        body: 'Nobody gets a head start. Each of you presses I’m Ready in your own room, and the race only begins once both flags are set, followed by a shared Get Ready countdown so you start on the same beat. From there you are both typing the identical passage at the same moment, and your live WPM, accuracy, and progress are updating side by side for both players to watch. Because your opponent’s numbers are visible while you type, pacing decisions become a real tactical problem instead of guesswork.',
+      },
+      {
+        heading: '4. Chat During the Race',
+        body: 'Once the race is actually running, a Challenge Chat panel appears for both of you — you can talk in real time while you type, so a quick message or a bit of trash talk is never more than a second away. Alongside plain text messages you get an emoji picker for dropping symbols into what you are composing, one-tap quick reactions for the moments when your hands are busy, and a set of tap-to-send stickers for hyping each other up without typing a full message. Worth knowing: the chat belongs to the active race, so it stays hidden in the lobby before the start and disappears again if your opponent disconnects mid-round.',
+      },
+      {
+        heading: '5. See the Results',
+        body: 'When time is up, the results screen puts the two of you side by side and shows exactly how the round went: WPM, accuracy, words typed, and errors for each player, so you can see whether you won on raw speed or on staying clean under pressure. The winner is marked with a clear WINNER badge against DEFEATED for the loser, and an evenly matched round ends as a draw rather than handing anyone a win it did not earn. Details like the duration, round number, opponent, and final result sit alongside the scores. If you want another go straight away, both of you can call a rematch and race again without rebuilding anything.',
+      },
+      {
+        heading: '6. Why Racing a Friend Works',
+        body: 'Solo practice builds consistency, but competition adds pressure — the same kind of pressure you would feel typing under a deadline or during a timed test. Racing someone in real time pushes you to focus harder and type faster than you might on your own, which is exactly the kind of practice that translates to real-world typing speed. There is a social reason too: a score that beats a specific person is far more motivating than one that only has to beat yesterday.',
       },
     ],
   },
