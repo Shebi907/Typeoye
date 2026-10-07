@@ -41,6 +41,11 @@ export function createApp() {
     cors({
       origin: env.CLIENT_URL,
       credentials: true,
+      // The SPA is served from a different origin than this API, so every
+      // mutating request pays for an OPTIONS round-trip first. Without a
+      // freshness hint the browser re-preflights almost every call, and one
+      // slow preflight pushes the total past the client's request timeout.
+      maxAge: 600,
     })
   );
   app.use(express.json({ limit: '2mb' }));
