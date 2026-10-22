@@ -110,7 +110,7 @@ export function Navbar() {
           {beforeGames.map(({ to, label }) => {
             if (to === '/test') return <NavDropdown key={to} label="Test" options={[{label:'English Typing Test', href:'/test'}, {label:'Urdu Typing Test', href:'/urdu-typing-test/setup'}]} />;
             if (to === '/practice') return <NavDropdown key={to} label="Practice" options={[{label:'English Practice', href:'/practice'}, {label:'Urdu Practice', href:'/urdu-practice'}]} />;
-            if (to === '/lessons') return <NavDropdown key={to} label="Learn" options={[{label:'English Learn', href:'/lessons'}, {label:'Urdu Learn', href:'/urdu-lessons'}]} />;
+            if (to === '/lessons') return <NavDropdown key={to} label="Learn" options={[{label:'Learn English', href:'/lessons'}, {label:'Learn Urdu', href:'/urdu-lessons'}]} />;
             const isCertMode = to === '/test' && location.search.includes('cert=1');
             const forceActive = to === '/certificate' && location.search.includes('cert=1');
             return (
@@ -307,7 +307,7 @@ export function Navbar() {
                         className={`navbar-mobile-link${englishActive ? ' navbar-mobile-link-active' : ''}`}
                         onClick={() => setMobileOpen(false)}
                       >
-                        English Learn
+                        Learn English
                         <span aria-hidden="true">›</span>
                       </Link>
                       <Link
@@ -315,7 +315,7 @@ export function Navbar() {
                         className={`navbar-mobile-link${location.pathname.startsWith('/urdu-lessons') ? ' navbar-mobile-link-active' : ''}`}
                         onClick={() => setMobileOpen(false)}
                       >
-                        Urdu Learn
+                        Learn Urdu
                         <span aria-hidden="true">›</span>
                       </Link>
                     </React.Fragment>
