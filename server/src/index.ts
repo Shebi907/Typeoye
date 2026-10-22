@@ -17,6 +17,7 @@ import TypingSession from './models/TypingSession';
 import TypingResult from './models/TypingResult';
 import PracticeSession from './models/PracticeSession';
 import Achievement from './models/Achievement';
+import { seedUrduLessons } from './seed/urduLessons';
 import { attachChallengeSocket } from './services/challenge.socket';
 
 import authRoutes from './routes/auth.routes';
@@ -145,6 +146,13 @@ if (require.main === module) {
         ]);
       } catch (err) {
         console.error('[db] language backfill migration error:', err);
+      }
+
+      try {
+        const urdu = await seedUrduLessons();
+        console.log(`[db] Urdu course ready: ${urdu.lessons} levels, ${urdu.exercises} exercises`);
+      } catch (err) {
+        console.error('[db] Urdu seeding error:', err);
       }
 
       const PORT = Number(process.env.PORT) || 5000;
