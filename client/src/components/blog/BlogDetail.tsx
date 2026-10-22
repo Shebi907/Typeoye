@@ -5,6 +5,8 @@ import { formatDate } from '../../data/blog';
 import type { BlogPost } from '../../data/blog';
 import { cn } from '../../utils/cn';
 import { RelatedArticles } from './RelatedArticles';
+import { UrduKeyboardGuide, UrduTypingLinks } from './UrduKeyboardGuide';
+import { UrduKeyboardLayoutGraphic } from './UrduKeyboardLayoutGraphic';
 
 interface BlogDetailProps {
   post: BlogPost;
@@ -34,6 +36,7 @@ function headingText(heading: string): string {
 
 export function BlogDetail({ post, related }: BlogDetailProps) {
   const sections = post.content;
+  const toolsLinks = post.moreTools ?? TOOLS_LINKS;
 
   const headings = useMemo(
     () =>
@@ -125,10 +128,22 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
           <div className="readable-text">
             {/* Featured image — matched to the text column, never wider */}
             <figure
-              className="relative w-full overflow-hidden rounded-[1.25rem] border"
-              style={{ borderColor: 'var(--color-border)', aspectRatio: '16 / 8' }}
+              className={cn(
+                'relative w-full rounded-[1.25rem] border',
+                post.slug === 'urdu-phonetic-keyboard-layout'
+                  ? 'h-[480px] overflow-x-auto overflow-y-hidden sm:h-auto sm:aspect-[16/8]'
+                  : 'overflow-hidden'
+              )}
+              style={{
+                borderColor: 'var(--color-border)',
+                aspectRatio: post.slug === 'urdu-phonetic-keyboard-layout' ? undefined : post.slug === 'how-to-type-urdu-online-english-keyboard' ? '16 / 9' : '16 / 8',
+              }}
             >
-              <img src={post.image} alt={post.imageAlt} className="absolute inset-0 h-full w-full object-cover" />
+              {post.slug === 'urdu-phonetic-keyboard-layout' ? (
+                <UrduKeyboardLayoutGraphic className="absolute inset-0 min-w-[960px] sm:min-w-0" />
+              ) : (
+                <img src={post.image} alt={post.imageAlt} className="absolute inset-0 h-full w-full object-cover" />
+              )}
             </figure>
 
             {/* Numbered sections + pull-quote */}
@@ -152,6 +167,8 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                       <p className="mt-3 text-[1.0625rem] leading-[1.75]" style={{ color: 'var(--color-text-secondary)' }}>
                         {section.body}
                       </p>
+                      {section.guide === 'urdu-keyboard-map' && <UrduKeyboardGuide />}
+                      {section.guide === 'urdu-typing-links' && <UrduTypingLinks />}
                     </section>
 
                     {index === pullQuoteIndex && post.pullQuote && (
@@ -259,7 +276,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
           <div className="bp-tools-card mt-4 rounded-2xl p-5">
             <p className="bp-tools-heading text-xs font-bold uppercase tracking-widest">More tools</p>
             <ul className="mt-3 flex flex-col gap-2">
-              {TOOLS_LINKS.map((link) => (
+              {toolsLinks.map((link) => (
                 <li key={link.to}>
                   <Link
                     to={link.to}

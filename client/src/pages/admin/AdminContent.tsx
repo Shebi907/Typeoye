@@ -199,12 +199,12 @@ function PoolManager({ config }: { config: PoolConfig }) {
         error={flash?.type === 'error' ? flash.text : null}
         onDismiss={() => setFlash(null)}
       />
-      <div className="flex items-center justify-between gap-3 mb-4">
-        <div>
+      <div className="flex flex-col items-start gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
           <h3 className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>{config.title}</h3>
           <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-muted)' }}>{config.description}</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0 flex-wrap">
           <select className="rounded-lg border px-2.5 py-1.5 text-sm" style={{ backgroundColor: 'var(--color-page)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }} value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
             <option value="">All difficulties</option>
             <option value="beginner">Beginner</option>

@@ -31,6 +31,9 @@ import { L14E1, L14E2, L14E3, L14E4 } from './content/levels-paragraphs';
 import { L15E1, L15E2, L15E3, L15E4, L15E5 } from './content/levels-advanced';
 import { L16E1, L16E2, L16E3, L16E4, L16E5 } from './content/levels-advanced';
 
+import { URDU_VARIANTS } from './content/urdu-levels';
+import type { LessonLanguage } from '../models/Lesson';
+
 // ─── Variant registry ──────────────────────────────────────────────────────────
 // VARIANTS[lessonOrder][exerciseOrder] = string[]  (1-indexed both dimensions)
 // Level 1–5: 3 exercises each
@@ -66,6 +69,23 @@ export function getExerciseVariants(
   baseContent: string,
 ): string[] {
   const pool = VARIANTS[lessonOrder]?.[exerciseOrder];
+  if (pool && pool.length > 0) return pool;
+  return [baseContent];
+}
+
+/**
+ * Language-aware variant pool lookup. English levels use VARIANTS; Urdu levels
+ * use URDU_VARIANTS. Both are keyed by the lesson's own 1..16 order, so the
+ * two courses never share (or shadow) each other's content.
+ */
+export function getVariantsFor(
+  language: LessonLanguage,
+  lessonOrder: number,
+  exerciseOrder: number,
+  baseContent: string,
+): string[] {
+  const registry = language === 'ur' ? URDU_VARIANTS : VARIANTS;
+  const pool = registry[lessonOrder]?.[exerciseOrder];
   if (pool && pool.length > 0) return pool;
   return [baseContent];
 }

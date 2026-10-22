@@ -9,22 +9,42 @@ interface LiveStatsCardProps {
   elapsed: number;
   phase: TypingPhase;
   duration: number;
+  mode?: 'countdown' | 'elapsed';
 }
 
 /**
  * Shared live stats sidebar card — used by both Test and Practice session views.
  * Shows WPM, Accuracy, Time Left with icon rows and a progress bar.
  */
-export function LiveStatsCard({ wpm, accuracy, remaining, elapsed, phase, duration }: LiveStatsCardProps) {
+export function LiveStatsCard({
+  wpm,
+  accuracy,
+  remaining,
+  elapsed,
+  phase,
+  duration,
+  mode = 'countdown',
+}: LiveStatsCardProps) {
   const formatClock = (totalSeconds: number) => {
     const secs = Math.max(0, Math.ceil(totalSeconds));
     const m = Math.floor(secs / 60);
     const s = secs % 60;
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   };
-  const timeDisplay = phase === 'idle' ? formatClock(duration) : formatClock(remaining);
-  const progressPct = duration > 0 ? Math.min(100, (elapsed / duration) * 100) : 0;
-  const timeCritical = remaining <= 10 && phase === 'running';
+  const formatClockElapsed = (totalSeconds: number) => {
+    const secs = Math.max(0, Math.floor(totalSeconds));
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  };
+  const isElapsed = mode === 'elapsed';
+  const timeDisplay = isElapsed
+    ? formatClockElapsed(elapsed)
+    : phase === 'idle'
+      ? formatClock(duration)
+      : formatClock(remaining);
+  const progressPct = duration > 0 && !isElapsed ? Math.min(100, (elapsed / duration) * 100) : 0;
+  const timeCritical = !isElapsed && remaining <= 10 && phase === 'running';
 
   const stats = [
     {
@@ -43,7 +63,7 @@ export function LiveStatsCard({ wpm, accuracy, remaining, elapsed, phase, durati
     },
     {
       icon: Timer,
-      label: 'Time Left',
+      label: isElapsed ? 'Elapsed' : 'Time Left',
       value: timeDisplay,
       tone: timeCritical
         ? { backgroundColor: 'rgba(239, 68, 68, 0.14)', color: '#dc2626' }
@@ -82,15 +102,17 @@ export function LiveStatsCard({ wpm, accuracy, remaining, elapsed, phase, durati
       </div>
 
       {/* Progress strip */}
-      <div className="h-1.5 rounded-full overflow-hidden mt-2.5" style={{ backgroundColor: 'var(--color-border)' }}>
-        <div
-          className="h-full rounded-full transition-all duration-1000 ease-linear"
-          style={{
-            width: `${progressPct}%`,
-            backgroundColor: timeCritical ? 'var(--color-error)' : 'var(--color-accent)',
-          }}
-        />
-      </div>
+      {mode !== 'elapsed' && (
+        <div className="h-1.5 rounded-full overflow-hidden mt-2.5" style={{ backgroundColor: 'var(--color-border)' }}>
+          <div
+            className="h-full rounded-full transition-all duration-1000 ease-linear"
+            style={{
+              width: `${progressPct}%`,
+              backgroundColor: timeCritical ? 'var(--color-error)' : 'var(--color-accent)',
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }

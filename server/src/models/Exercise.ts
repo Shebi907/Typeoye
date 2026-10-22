@@ -1,10 +1,11 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import type { LessonLanguage } from './Lesson';
 
 export interface IExercise extends Document {
   lessonId: mongoose.Types.ObjectId;
   title: string;
   type: 'keys' | 'words' | 'sentences' | 'paragraph' | 'custom';
-  language: 'en';
+  language: LessonLanguage;
   level: number;
   content: string;
   variants: string[];
@@ -19,7 +20,7 @@ const exerciseSchema = new Schema<IExercise>({
   lessonId: { type: Schema.Types.ObjectId, ref: 'Lesson', required: true },
   title: { type: String, required: true, trim: true },
   type: { type: String, enum: ['keys', 'words', 'sentences', 'paragraph', 'custom'], required: true },
-  language: { type: String, enum: ['en'], default: 'en' },
+  language: { type: String, enum: ['en', 'ur'], default: 'en' },
   level: { type: Number, required: true, min: 1, max: 16, default: 1 },
   content: { type: String, required: true },
   variants: [{ type: String }],

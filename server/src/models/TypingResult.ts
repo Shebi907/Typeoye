@@ -9,6 +9,9 @@ export interface ITypingResult extends Document {
   attemptedWords: number;
   errorsCount: number;
   mode: string;
+  // Course language ('en' | 'ur'). Existing rows default to 'en' so no historic
+  // result is lost or reclassified; Urdu results are scoped away from English.
+  language: 'en' | 'ur';
   createdAt: Date;
   certificateParagraphId?: mongoose.Types.ObjectId;
   certificateParagraphText?: string;
@@ -24,6 +27,7 @@ const typingResultSchema = new Schema<ITypingResult>(
     attemptedWords: { type: Number, required: true },
     errorsCount: { type: Number, required: true },
     mode: { type: String, required: true },
+    language: { type: String, enum: ['en', 'ur'], default: 'en', required: true },
     certificateParagraphId: { type: Schema.Types.ObjectId, ref: 'CertificateParagraph' },
     certificateParagraphText: { type: String, maxlength: 4000 },
   },

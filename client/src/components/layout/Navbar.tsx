@@ -1,4 +1,5 @@
 ﻿import React, { useLayoutEffect, useEffect, useState } from 'react';
+import { NavDropdown } from './NavDropdown';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Sun, Monitor, LogOut, User, ShieldCheck, Menu, X } from 'lucide-react';
 import { Logo } from './Logo';
@@ -12,12 +13,16 @@ import { Spinner } from '../ui/Spinner';
 
 const navLinks = [
   { to: '/', label: 'Home' },
+  
+  
+  
   { to: '/test', label: 'Test' },
   { to: '/practice', label: 'Practice' },
   { to: '/lessons', label: 'Learn' },
   { to: '/games', label: 'Games' },
   { to: '/leaderboard', label: 'Leaderboard' },
   { to: '/certificate', label: 'Certificate' },
+  
 ];
 
 export function Navbar() {
@@ -103,6 +108,9 @@ export function Navbar() {
 
         <nav className="hidden lg:flex items-center gap-1.5 ml-6">
           {beforeGames.map(({ to, label }) => {
+            if (to === '/test') return <NavDropdown key={to} label="Test" options={[{label:'English Typing Test', href:'/test'}, {label:'Urdu Typing Test', href:'/urdu-typing-test/setup'}]} />;
+            if (to === '/practice') return <NavDropdown key={to} label="Practice" options={[{label:'English Practice', href:'/practice'}, {label:'Urdu Practice', href:'/urdu-practice'}]} />;
+            if (to === '/lessons') return <NavDropdown key={to} label="Learn" options={[{label:'English Learn', href:'/lessons'}, {label:'Urdu Learn', href:'/urdu-lessons'}]} />;
             const isCertMode = to === '/test' && location.search.includes('cert=1');
             const forceActive = to === '/certificate' && location.search.includes('cert=1');
             return (
@@ -256,7 +264,10 @@ export function Navbar() {
 
         {/* Mobile dropdown panel */}
         {mobileOpen && (
-          <div className="navbar-mobile-panel absolute left-0 right-0 top-full lg:hidden px-4 pt-2 pb-5 z-50">
+          <div
+            className="navbar-mobile-panel absolute left-0 right-0 top-full lg:hidden px-4 pt-2 pb-5 z-50 overflow-y-auto overscroll-contain"
+            style={{ maxHeight: 'calc(100dvh - var(--navbar-h, 4rem))' }}
+          >
             <nav className="flex flex-col gap-1">
               {links.map(({ to, label }) => {
                 const certMode = location.search.includes('cert=1');
@@ -264,6 +275,52 @@ export function Navbar() {
                   : certMode && to === '/test' ? false
                   : certMode && to === '/certificate' ? true
                   : location.pathname.startsWith(to);
+                if (to === '/practice') {
+                  const englishActive = location.pathname.startsWith('/practice') && !location.pathname.startsWith('/urdu-practice');
+                  return (
+                    <React.Fragment key={to}>
+                      <Link
+                        to="/practice"
+                        className={`navbar-mobile-link${englishActive ? ' navbar-mobile-link-active' : ''}`}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        English Practice
+                        <span aria-hidden="true">›</span>
+                      </Link>
+                      <Link
+                        to="/urdu-practice"
+                        className={`navbar-mobile-link${location.pathname.startsWith('/urdu-practice') ? ' navbar-mobile-link-active' : ''}`}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        Urdu Practice
+                        <span aria-hidden="true">›</span>
+                      </Link>
+                    </React.Fragment>
+                  );
+                }
+                if (to === '/lessons') {
+                  const englishActive = location.pathname.startsWith('/lessons');
+                  return (
+                    <React.Fragment key={to}>
+                      <Link
+                        to="/lessons"
+                        className={`navbar-mobile-link${englishActive ? ' navbar-mobile-link-active' : ''}`}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        English Learn
+                        <span aria-hidden="true">›</span>
+                      </Link>
+                      <Link
+                        to="/urdu-lessons"
+                        className={`navbar-mobile-link${location.pathname.startsWith('/urdu-lessons') ? ' navbar-mobile-link-active' : ''}`}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        Urdu Learn
+                        <span aria-hidden="true">›</span>
+                      </Link>
+                    </React.Fragment>
+                  );
+                }
                 return (
                   <Link
                     key={to}
@@ -320,3 +377,11 @@ export function Navbar() {
     </header>
   );
 }
+
+
+
+
+
+
+
+

@@ -1,0 +1,431 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import {
+  Activity, BarChart3, BookOpen, Check, ChevronDown, Clock, Flame, Gauge,
+  History, Keyboard, Languages, ListChecks, Target, Timer, Trophy, Zap,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { PageWrapper } from '../components/layout/PageWrapper';
+import { StatCard } from '../components/ui/StatCard';
+import { WpmChart, AccuracyChart } from '../components/charts/WpmChart';
+import { AchievementsPanel } from '../components/gamification/AchievementsPanel';
+import { analyticsService } from '../services/analytics.service';
+import { URDU_PRACTICE_CATEGORY_BY_SLUG } from '../data/urduPracticeTypes';
+import type {
+  AnalyticsTrend, HistorySession, LessonHistory, ModeStats, ProgressData, ProgressStreak,
+} from '../types';
+
+/**
+ * Urdu Typing Progress — a separate page from the English one. Every number is
+ * read from the Urdu-scoped endpoints (`/analytics/progress/urdu`, achievements
+ * with `language=ur`), so nothing here can show English activity and vice versa.
+ */
+
+const TABS = [
+  { id: 'overview', label: 'Overview', to: '/progress/urdu' },
+  { id: 'test', label: 'Test', to: '/progress/urdu/test' },
+  { id: 'practice', label: 'Practice', to: '/progress/urdu/practice' },
+  { id: 'learn', label: 'Learn', to: '/progress/urdu/learn' },
+  { id: 'achievements', label: 'Achievements', to: '/progress/urdu/achievements' },
+] as const;
+type TabId = (typeof TABS)[number]['id'];
+
+function Empty({ children }: { children: React.ReactNode }) { return <div className="h-40 flex items-center justify-center text-muted text-sm">{children}</div>; }
+
+function SessionsTable({ rows, withMode }: { rows: HistorySession[]; withMode?: boolean }) {
+  if (!rows.length) return <Empty>Nothing here yet — a few Urdu sessions and your history will show up.</Empty>;
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[32rem] text-sm">
+        <thead>
+          <tr className="text-left text-muted">
+            {withMode && <th className="pb-3 text-left whitespace-nowrap">Mode</th>}
+            <th className="pb-3 text-left whitespace-nowrap">WPM</th>
+            <th className="pb-3 text-left whitespace-nowrap">Accuracy</th>
+            <th className="pb-3 text-left whitespace-nowrap">Duration</th>
+            <th className="pb-3 text-left whitespace-nowrap">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row._id} className="border-t border-[var(--color-border)]">
+              {withMode && <td className="py-3 capitalize whitespace-nowrap">{practiceLabel(row.mode)}</td>}
+              <td className="py-3 font-semibold whitespace-nowrap">{row.wpm}</td>
+              <td className="py-3 whitespace-nowrap">{row.accuracy}%</td>
+              <td className="py-3 whitespace-nowrap">{formatDuration(row.durationSeconds)}</td>
+              <td className="py-3 whitespace-nowrap">{new Date(row.createdAt).toLocaleDateString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function LessonsList({ rows }: { rows: LessonHistory[] }) {
+  if (!rows.length) return <Empty>Complete an Urdu level to start tracking your learning progress.</Empty>;
+  return (
+    <div className="space-y-3">
+      {rows.map((item) => (
+        <div key={item._id} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-[var(--color-page)]">
+          <div className="min-w-0">
+            <p className="font-semibold truncate font-urdu" style={{ direction: 'rtl' }}>{item.title}</p>
+            <p className="text-xs text-muted mt-0.5">{item.attempts} attempt{item.attempts === 1 ? '' : 's'} · {formatDuration(item.timeSpentSeconds)} practiced</p>
+          </div>
+          <div className="text-right shrink-0">
+            <p className="font-bold text-[var(--color-correct)]">{item.bestAccuracy}%</p>
+            <p className="text-xs text-muted mt-0.5">{new Date(item.completedAt).toLocaleDateString()}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function formatDuration(seconds: number): string {
+  if (!seconds) return '0 min';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  return `${hours}h ${minutes % 60}m`;
+}
+
+function relativeTime(iso: string): string {
+  const since = Date.now() - new Date(iso).getTime();
+  if (since < 60_000) return 'just now';
+  const m = Math.floor(since / 60_000);
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h / 24);
+  if (d < 7) return `${d}d ago`;
+  return new Date(iso).toLocaleDateString();
+}
+
+function practiceLabel(slug: string): string {
+  const meta = URDU_PRACTICE_CATEGORY_BY_SLUG[slug];
+  if (meta) return meta.labelEn;
+  const replaced = slug.replace(/[-_]/g, ' ');
+  return replaced.charAt(0).toUpperCase() + replaced.slice(1);
+}
+
+function localDateKey(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+const WEEK_DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+function weekDays(active: Set<string>) {
+  const today = new Date();
+  const mondayOffset = today.getDay() === 0 ? -6 : 1 - today.getDay();
+  const monday = new Date(today);
+  monday.setDate(today.getDate() + mondayOffset);
+  const todayKey = localDateKey(today);
+  return WEEK_DAYS.map((label, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    const key = localDateKey(d);
+    return { key, label, active: active.has(key), isToday: key === todayKey };
+  });
+}
+
+const EMPTY_STREAK: ProgressStreak = { current: 0, longest: 0, lastActiveDate: null, activeDates: [] };
+const EMPTY_MODES: { test: ModeStats; practice: ModeStats } = {
+  test: { count: 0, avgWpm: 0, avgAccuracy: 0, bestWpm: 0 },
+  practice: { count: 0, avgWpm: 0, avgAccuracy: 0, bestWpm: 0 },
+};
+
+function ChartCard({ title, icon: Icon, tint, accent, children }: {
+  title: string; icon: LucideIcon; tint: string; accent: string; children: React.ReactNode;
+}) {
+  return (
+    <div className="card p-5">
+      <div className="flex items-center justify-between gap-3 mb-4">
+        <h3 className="font-bold text-sm flex items-center gap-2 min-w-0" style={{ color: 'var(--color-text-primary)' }}>
+          <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: tint, color: accent }}>
+            <Icon size={16} />
+          </span>
+          <span className="min-w-0 truncate">{title}</span>
+        </h3>
+        <span
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border border-[var(--color-border)] bg-[var(--color-page)]"
+          style={{ color: 'var(--color-text-secondary)' }}
+        >
+          30 Days
+          <ChevronDown size={12} />
+        </span>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function StreakCard({ streak }: { streak: ProgressStreak }) {
+  const days = weekDays(new Set(streak.activeDates));
+  return (
+    <div className="card p-5">
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="font-bold text-sm flex items-center gap-2" style={{ color: 'var(--color-text-primary)' }}>
+          <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b' }}>
+            <Flame size={16} />
+          </span>
+          Urdu Streak
+        </h3>
+        <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Best: {streak.longest} days</span>
+      </div>
+      <div className="mt-4 flex items-end gap-1.5">
+        <span className="text-4xl font-extrabold tabular-nums leading-none" style={{ color: 'var(--color-text-primary)' }}>
+          {streak.current}
+        </span>
+        <span className="text-sm font-semibold mb-0.5" style={{ color: 'var(--color-text-secondary)' }}>days</span>
+      </div>
+      <div className="mt-4 grid grid-cols-7 gap-1 sm:gap-1.5">
+        {days.map((d, i) => (
+          <div key={`${d.key}-${i}`} className="flex flex-col items-center gap-1">
+            <span className="text-[0.625rem] font-bold uppercase" style={{ color: d.isToday ? 'var(--color-accent-text)' : 'var(--color-text-muted)' }}>
+              {d.label}
+            </span>
+            <span
+              className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-colors"
+              style={
+                d.active
+                  ? { background: 'linear-gradient(135deg, #f59e0b, #fb923c)', color: '#fff', boxShadow: '0 3px 8px rgba(245, 158, 11, 0.35)' }
+                  : { border: '1px solid var(--color-border)', background: 'transparent' }
+              }
+            >
+              {d.active ? (
+                <Check size={13} strokeWidth={3} />
+              ) : (
+                <span className="w-1 h-1 rounded-full" style={{ background: 'var(--color-text-muted)' }} />
+              )}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RecentActivity({ testRows, practiceRows, lessonRows }: {
+  testRows: HistorySession[]; practiceRows: HistorySession[]; lessonRows: LessonHistory[];
+}) {
+  const items = [
+    ...testRows.map((r) => ({
+      key: `t-${r._id}`, icon: Zap, tint: 'rgba(67, 97, 238, 0.12)', accent: '#4361ee',
+      title: 'Urdu Test Completed', meta: `${r.wpm} WPM · ${r.accuracy}% accuracy`, at: r.createdAt,
+    })),
+    ...practiceRows.map((r) => ({
+      key: `p-${r._id}`, icon: Activity, tint: 'rgba(34, 197, 94, 0.12)', accent: '#16a34a',
+      title: 'Urdu Practice Session', meta: `${practiceLabel(r.mode)} · ${r.wpm} WPM · ${r.accuracy}%`, at: r.createdAt,
+    })),
+    ...lessonRows.map((r) => ({
+      key: `l-${r._id}`, icon: BookOpen, tint: 'rgba(139, 92, 246, 0.12)', accent: '#7c3aed',
+      title: 'Urdu Level Completed', meta: r.title, at: r.completedAt,
+    })),
+  ]
+    .sort((a, b) => +new Date(b.at) - +new Date(a.at))
+    .slice(0, 6);
+
+  return (
+    <div className="card p-5">
+      <h3 className="font-bold text-sm flex items-center gap-2 mb-4" style={{ color: 'var(--color-text-primary)' }}>
+        <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(99, 102, 241, 0.12)', color: '#6366f1' }}>
+          <History size={16} />
+        </span>
+        Recent Urdu Activity
+      </h3>
+      {items.length === 0 ? (
+        <p className="text-sm py-4" style={{ color: 'var(--color-text-muted)' }}>
+          No Urdu activity yet — your recent sessions will appear here.
+        </p>
+      ) : (
+        <ul className="space-y-1">
+          {items.map((item) => {
+            const Icon = item.icon;
+            return (
+              <li key={item.key} className="flex items-center gap-3 py-2">
+                <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: item.tint, color: item.accent }}>
+                  <Icon size={15} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold truncate" style={{ color: 'var(--color-text-primary)' }}>{item.title}</p>
+                  <p className="text-xs truncate mt-0.5" style={{ color: 'var(--color-text-muted)' }}>{item.meta}</p>
+                </div>
+                <span className="text-[0.6875rem] shrink-0" style={{ color: 'var(--color-text-muted)' }}>{relativeTime(item.at)}</span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function PerformanceSummary({ test, practice, totals }: {
+  test: ModeStats; practice: ModeStats; totals: { avgAccuracy: number; keystrokes: number };
+}) {
+  const items = [
+    { label: 'Tests Taken', value: String(test.count), icon: Zap, tint: 'rgba(67, 97, 238, 0.1)', accent: '#4361ee' },
+    { label: 'Practice Sessions', value: String(practice.count), icon: Activity, tint: 'rgba(34, 197, 94, 0.12)', accent: '#16a34a' },
+    { label: 'Avg. Accuracy', value: `${totals.avgAccuracy}%`, icon: Target, tint: 'rgba(139, 92, 246, 0.12)', accent: '#7c3aed' },
+    { label: 'Total Keystrokes', value: totals.keystrokes.toLocaleString(), icon: Keyboard, tint: 'rgba(245, 158, 11, 0.12)', accent: '#d97706' },
+  ];
+  return (
+    <div className="card p-5">
+      <h3 className="font-bold text-sm flex items-center gap-2 mb-4" style={{ color: 'var(--color-text-primary)' }}>
+        <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(67, 97, 238, 0.12)', color: '#4361ee' }}>
+          <BarChart3 size={16} />
+        </span>
+        Performance Summary
+      </h3>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {items.map((item) => {
+          const Icon = item.icon;
+          return (
+            <div key={item.label} className="rounded-xl p-4 min-w-0" style={{ background: item.tint }}>
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="shrink-0" style={{ color: item.accent }}><Icon size={15} /></span>
+                <span className="text-xs font-semibold truncate" style={{ color: 'var(--color-text-secondary)' }}>{item.label}</span>
+              </div>
+              <p className="text-xl sm:text-2xl font-extrabold tabular-nums mt-2 break-words" style={{ color: 'var(--color-text-primary)' }}>{item.value}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export default function UrduProgressPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [data, setData] = useState<ProgressData | null>(analyticsService.getUrduProgressCached());
+  const [accuracyTrend, setAccuracyTrend] = useState<AnalyticsTrend[]>(analyticsService.getUrduAccuracyTrendCached() ?? []);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    setError('');
+    Promise.all([analyticsService.getUrduProgress(), analyticsService.getUrduAccuracyTrend()])
+      .then(([progress, accuracy]) => {
+        setData(progress);
+        setAccuracyTrend(accuracy);
+      })
+      .catch(() => setError('Could not load your Urdu progress. Please try again later.'));
+  }, []);
+
+  const path = location.pathname;
+  const activeTab: TabId =
+    path === '/progress/urdu/test' ? 'test'
+      : path === '/progress/urdu/practice' ? 'practice'
+      : path === '/progress/urdu/learn' ? 'learn'
+      : path === '/progress/urdu/achievements' ? 'achievements'
+      : 'overview';
+
+  // Keep the active tab visible — the strip scrolls horizontally and the
+  // right-hand tabs start off-screen on narrow phones.
+  const activeTabRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    activeTabRef.current?.scrollIntoView({ inline: 'center', block: 'nearest' });
+  }, [activeTab]);
+
+  const test = data?.modes.test ?? EMPTY_MODES.test;
+  const practice = data?.modes.practice ?? EMPTY_MODES.practice;
+  const learn = data?.learn ?? { completedLessons: 0, totalLessons: 0, completedExercises: 0, avgAccuracy: 0, timeSpentSeconds: 0 };
+  const streak = data?.streak ?? EMPTY_STREAK;
+  const totals = data?.totals ?? { avgAccuracy: 0, keystrokes: 0 };
+  const recent = data?.recent ?? { test: [], practice: [], lesson: [] };
+
+  return (
+    <PageWrapper title="Urdu Typing Progress" description="Track your Urdu typing speed, accuracy, and course progress — completely separate from English." icon={Languages} dotGrid descriptionAlignLeft>
+      <div className="flex gap-2 mb-6 border-b border-[var(--color-border)] overflow-x-auto snap-x -mx-4 px-4 sm:mx-0 sm:px-0">
+        {TABS.map((item) => (
+          <button
+            key={item.id}
+            ref={activeTab === item.id ? activeTabRef : undefined}
+            onClick={() => navigate(item.to)}
+            className={`px-4 py-3 font-semibold capitalize whitespace-nowrap shrink-0 snap-start transition-colors ${activeTab === item.id ? 'text-[var(--color-accent-text)] border-b-2 border-[var(--color-accent)]' : 'text-secondary hover:text-primary'}`}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+
+      {error && <div className="card p-8 text-center text-[var(--color-error)] text-sm">{error}</div>}
+
+      {activeTab === 'overview' && (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <StatCard label="Best Urdu Test Speed" value={`${test.bestWpm} WPM`} subtext={`${test.count} test${test.count === 1 ? '' : 's'} · ${test.avgAccuracy}% accuracy`} icon={Gauge} tone="indigo" />
+            <StatCard label="Average Urdu Practice Speed" value={`${practice.avgWpm} WPM`} subtext={`${practice.count} session${practice.count === 1 ? '' : 's'} · ${practice.avgAccuracy}% accuracy`} icon={Activity} tone="green" />
+            <StatCard label="Urdu Levels Completed" value={`${learn.completedLessons}/${learn.totalLessons}`} subtext={`${learn.completedExercises} exercise${learn.completedExercises === 1 ? '' : 's'} done`} icon={BookOpen} tone="violet" />
+            <StatCard label="Total Urdu Time Practiced" value={formatDuration(learn.timeSpentSeconds)} subtext="Across all Urdu sessions" icon={Timer} tone="amber" />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_330px] gap-5 mb-8">
+            <div className="min-w-0 flex flex-col gap-5">
+              <ChartCard title="Urdu WPM Over Time" icon={Gauge} tint="rgba(67, 97, 238, 0.12)" accent="#4361ee">
+                <WpmChart data={data?.trend ?? []} withGradient />
+              </ChartCard>
+              <ChartCard title="Urdu Accuracy Trend" icon={Target} tint="rgba(34, 197, 94, 0.12)" accent="#16a34a">
+                <AccuracyChart data={accuracyTrend} />
+              </ChartCard>
+            </div>
+            <aside className="min-w-0 flex flex-col gap-5">
+              <StreakCard streak={streak} />
+              <RecentActivity testRows={recent.test} practiceRows={recent.practice} lessonRows={recent.lesson} />
+            </aside>
+          </div>
+
+          <PerformanceSummary test={test} practice={practice} totals={totals} />
+        </>
+      )}
+
+      {activeTab === 'test' && (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <StatCard label="Average WPM" value={test.avgWpm} icon={Zap} tone="indigo" />
+            <StatCard label="Average Accuracy" value={`${test.avgAccuracy}%`} icon={Target} tone="green" />
+            <StatCard label="Best WPM" value={test.bestWpm} icon={Trophy} tone="amber" />
+            <StatCard label="Tests Taken" value={test.count} icon={Clock} tone="violet" />
+          </div>
+          <div className="card p-5">
+            <h3 className="font-bold text-lg mb-4">Recent Urdu Tests</h3>
+            <SessionsTable rows={recent.test} />
+          </div>
+        </>
+      )}
+
+      {activeTab === 'practice' && (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <StatCard label="Average WPM" value={practice.avgWpm} icon={Zap} tone="indigo" />
+            <StatCard label="Average Accuracy" value={`${practice.avgAccuracy}%`} icon={Target} tone="green" />
+            <StatCard label="Best WPM" value={practice.bestWpm} icon={Trophy} tone="amber" />
+            <StatCard label="Sessions Completed" value={practice.count} icon={Clock} tone="violet" />
+          </div>
+          <div className="card p-5">
+            <h3 className="font-bold text-lg mb-4">Recent Urdu Practice Sessions</h3>
+            <SessionsTable rows={recent.practice} withMode />
+          </div>
+        </>
+      )}
+
+      {activeTab === 'learn' && (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <StatCard label="Levels Completed" value={`${learn.completedLessons}/${learn.totalLessons}`} icon={Trophy} tone="violet" />
+            <StatCard label="Exercises Completed" value={learn.completedExercises} icon={ListChecks} tone="indigo" />
+            <StatCard label="Average Accuracy" value={`${learn.avgAccuracy}%`} icon={Target} tone="green" />
+            <StatCard label="Time Practiced" value={formatDuration(learn.timeSpentSeconds)} icon={Timer} tone="amber" />
+          </div>
+          <div className="card p-5">
+            <h3 className="font-bold text-lg mb-4">Completed Urdu Levels</h3>
+            <LessonsList rows={recent.lesson} />
+          </div>
+        </>
+      )}
+
+      {activeTab === 'achievements' && <AchievementsPanel language="ur" />}
+    </PageWrapper>
+  );
+}

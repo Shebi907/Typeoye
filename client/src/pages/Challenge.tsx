@@ -122,7 +122,7 @@ function MiniKeyboard({ tone, tilt }: { tone: 'blue' | 'purple'; tilt: number })
   return (
     <div className="flex-1 min-w-0" style={{ transform: `rotate(${tilt}deg)` }}>
       <div
-        className="rounded-xl sm:rounded-2xl p-2 sm:p-2.5 border border-[rgba(99,102,241,0.18)] bg-[#fbfbfe] dark:border-[rgba(124,140,248,0.24)] dark:bg-[#1c1c25]"
+        className="rounded-xl sm:rounded-2xl p-2 sm:p-2.5 overflow-hidden border border-[rgba(99,102,241,0.18)] bg-[#fbfbfe] dark:border-[rgba(124,140,248,0.24)] dark:bg-[#1c1c25]"
         style={{ boxShadow: '0 12px 28px -14px rgba(23, 23, 31, 0.22)' }}
       >
         <div className="flex flex-col gap-1">
@@ -131,7 +131,7 @@ function MiniKeyboard({ tone, tilt }: { tone: 'blue' | 'purple'; tilt: number })
               {row.map((key) => (
                 <span
                   key={key}
-                  className={`grid h-3 w-[1.125rem] sm:h-3.5 sm:w-[1.375rem] place-items-center rounded-[3px] text-[0.4rem] sm:text-[0.5rem] font-bold ${accentClass}`}
+                  className={`grid h-3 w-[clamp(0.7rem,4vw,1.125rem)] sm:h-3.5 sm:w-[1.375rem] place-items-center rounded-[3px] text-[0.4rem] sm:text-[0.5rem] font-bold ${accentClass}`}
                   style={{ backgroundColor: 'color-mix(in srgb, currentColor 12%, transparent)' }}
                 >
                   {key}
@@ -2414,11 +2414,11 @@ function DuelArea({ round, text, duration, startAtMs, opponentName, opponentProg
               </div>
             </div>
 
-            <div className="mt-5 flex items-center justify-between gap-3">
-              <p className="text-sm font-semibold flex items-center gap-2" style={{ color: textDone ? '#16a34a' : 'var(--color-accent-text)' }}>
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+              <p className="text-sm font-semibold flex items-center gap-2 min-w-0 flex-1" style={{ color: textDone ? '#16a34a' : 'var(--color-accent-text)' }}>
                 {textDone ? (
                   <>
-                    <CheckCircle2 size={15} /> Text complete — the clock keeps running. Your pace is locked in!
+                    <CheckCircle2 size={15} className="shrink-0" /> Text complete — the clock keeps running. Your pace is locked in!
                   </>
                 ) : timeCritical ? (
                   'Almost done — finish strong!'
@@ -2426,7 +2426,7 @@ function DuelArea({ round, text, duration, startAtMs, opponentName, opponentProg
                   'The clock is ticking.'
                 )}
               </p>
-              <button onClick={onExit} data-testid="challenge-abandon" className="text-xs font-bold flex items-center gap-1 transition-colors hover:brightness-110" style={{ color: 'var(--color-error)' }}>
+              <button onClick={onExit} data-testid="challenge-abandon" className="text-xs font-bold flex items-center gap-1 shrink-0 transition-colors hover:brightness-110" style={{ color: 'var(--color-error)' }}>
                 <LogOut size={13} /> Leave
               </button>
             </div>
@@ -3055,7 +3055,7 @@ function ResultsSideConfetti() {
 function OpponentLeaveToast({ title, body }: { title?: string; body?: string }) {
   return (
     <div
-      className="challenge-overlay-in fixed inset-0 z-[999] grid place-items-center bg-[rgba(23,23,31,0.45)] px-4 backdrop-blur-[2px]"
+      className="challenge-overlay-in fixed inset-0 z-[999] grid place-items-center min-h-full overflow-y-auto bg-[rgba(23,23,31,0.45)] px-4 py-6 backdrop-blur-[2px]"
       data-testid="challenge-opponent-left-toast"
     >
       <div

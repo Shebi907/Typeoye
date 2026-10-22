@@ -8,6 +8,16 @@ interface TypingDisplayProps {
   fontSize?: number;
   /** Unitless line-height multiplier (default 2.4) */
   lineHeight?: number;
+  /** Text direction. Defaults to LTR (English). */
+  dir?: 'ltr' | 'rtl';
+  /** Font stack for the rendered text (default: monospace). */
+  fontFamily?: string;
+  /**
+   * When false, individual characters are NOT coloured; instead correctness is
+   * shown at the word level only (needed for Urdu so letter joining/shaping is
+   * preserved). Defaults to true (English behaviour).
+   */
+  colorByChar?: boolean;
 }
 
 interface CaretAnchor {
@@ -62,6 +72,9 @@ export function TypingDisplay({
   currentWordIndex,
   fontSize = 22,
   lineHeight = 2.4,
+  dir = 'ltr',
+  fontFamily = '"JetBrains Mono", "Fira Code", monospace',
+  colorByChar = true,
 }: TypingDisplayProps) {
   const currentWordRef = useRef<HTMLSpanElement | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -139,15 +152,22 @@ export function TypingDisplay({
     // Sit the caret's nearest edge flush against the letter it precedes —
     // before the next character while typing, directly after a fully-typed
     // word. No gap, so it reads as "this is the next character to type".
+    // In RTL the text flows right-to-left, so the "before/after" edges mirror.
     const gap = CARET_GAP;
-    let left = charRect.left - contentRect.left - CARET_WIDTH - gap;
-    if (anchor.afterChar) {
-      left = charRect.right - contentRect.left + gap;
+    let left: number;
+    if (dir === 'rtl') {
+      left = anchor.afterChar
+        ? charRect.left - contentRect.left - CARET_WIDTH - gap
+        : charRect.right - contentRect.left + gap;
+    } else {
+      left = anchor.afterChar
+        ? charRect.right - contentRect.left + gap
+        : charRect.left - contentRect.left - CARET_WIDTH - gap;
     }
 
     setCaretStyle({ left, top, height: caretHeight, opacity: 1 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentWordIndex, wordStates, fontSize, repositionTick]);
+  }, [currentWordIndex, wordStates, fontSize, repositionTick, dir, colorByChar]);
 
   // Root-cause fix for the "caret disappears while typing" bug: the blink was a
   // CSS animation running unconditionally on the caret element, so it forced the
@@ -214,15 +234,35 @@ export function TypingDisplay({
     >
       <div
         ref={contentRef}
+        dir={dir}
         className="relative font-mono leading-relaxed flex flex-wrap gap-x-3 gap-y-1"
         style={{
-          fontFamily: '"JetBrains Mono", "Fira Code", monospace',
+          fontFamily,
           fontSize: `${fontSize}px`,
           lineHeight,
         }}
       >
         {wordStates.map((wordState, wordIdx) => {
           const isActive = wordIdx === currentWordIndex;
+
+          // Word-level rendering: the whole word is one text node so Urdu
+          // letter joining/shaping is preserved. Only the word is marked
+          // (error background / active highlight), never individual letters.
+          if (!colorByChar) {
+            return (
+              <span
+                key={wordIdx}
+                ref={isActive ? currentWordRef : undefined}
+                className={cn(
+                  'relative inline-block',
+                  wordState.status === 'error' && 'word-error-bg',
+                  isActive && 'word-active-bg'
+                )}
+              >
+                <span ref={isActive ? anchorRef : undefined}>{wordState.word}</span>
+              </span>
+            );
+          }
 
           return (
             <span

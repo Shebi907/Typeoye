@@ -370,16 +370,16 @@ export default function Games() {
               Recent Races
             </div>
             <div className="overflow-x-auto">
-              <div className="min-w-[25rem]">
+              <div className="min-w-0 sm:min-w-[25rem]">
                 <div className="divide-y" style={{ borderColor: 'var(--color-border)' }}>
                   {recent.map((race) => (
-                    <div key={race._id} className="flex items-center justify-between px-4 py-3 text-sm">
-                      <span className={race.winner === 'user' ? 'font-semibold' : ''} style={{ color: race.winner === 'user' ? 'var(--color-correct)' : 'var(--color-text-secondary)' }}>
+                    <div key={race._id} className="flex items-center justify-between gap-2 px-4 py-3 text-sm">
+                      <span className={`shrink-0 ${race.winner === 'user' ? 'font-semibold' : ''}`} style={{ color: race.winner === 'user' ? 'var(--color-correct)' : 'var(--color-text-secondary)' }}>
                         {race.winner === 'user' ? 'Win' : 'Loss'}
                       </span>
-                      <span style={{ color: 'var(--color-text-primary)' }}>{race.wpm} WPM</span>
-                      <span style={{ color: 'var(--color-text-primary)' }}>{race.accuracy}%</span>
-                      <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{formatDate(race.createdAt)}</span>
+                      <span className="shrink-0" style={{ color: 'var(--color-text-primary)' }}>{race.wpm} WPM</span>
+                      <span className="shrink-0" style={{ color: 'var(--color-text-primary)' }}>{race.accuracy}%</span>
+                      <span className="text-xs shrink-0" style={{ color: 'var(--color-text-muted)' }}>{formatDate(race.createdAt)}</span>
                     </div>
                   ))}
                 </div>

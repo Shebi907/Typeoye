@@ -4,6 +4,7 @@ export type BlogSort = 'latest' | 'oldest' | 'popular';
 export interface BlogSection {
   heading: string;
   body: string;
+  guide?: 'urdu-keyboard-map' | 'urdu-typing-links';
 }
 
 export interface BlogPost {
@@ -26,6 +27,8 @@ export interface BlogPost {
   popular: boolean;
   image: string;
   imageAlt: string;
+  /** Article-specific More Tools links; English-only posts keep the shared defaults. */
+  moreTools?: Array<{ label: string; to: string }>;
   content: BlogSection[];
 }
 
@@ -50,7 +53,7 @@ export const CATEGORY_BADGE: Record<BlogCategory, string> = {
 /** Sidebar category post counts (keep in sync with POSTS). */
 export const CATEGORY_COUNTS: Record<BlogCategory, number> = {
   'Typing Tips': 3,
-  'Guides': 7,
+  'Guides': 9,
   'Practice': 2,
   'Productivity': 3,
   'News & Updates': 1,
@@ -65,6 +68,151 @@ export function formatDate(iso: string): string {
 }
 
 export const POSTS: BlogPost[] = [
+  {
+    slug: 'how-to-type-urdu-online-english-keyboard',
+    title: 'How to Type Urdu Online Using an English Keyboard',
+    category: 'Guides',
+    description: 'Learn how to type Urdu online with a regular English keyboard using Typeoye’s beginner-friendly phonetic key mapping.',
+    metaTitle: 'How to Type Urdu Online Using an English Keyboard | Typeoye',
+    metaDescription: 'Learn how to type Urdu online using an English keyboard. Follow simple steps, see accurate phonetic examples, and practise Urdu typing on Typeoye.',
+    intro: 'You can type Urdu online without buying a separate Urdu keyboard or changing the keys printed on your laptop. Typeoye maps familiar English QWERTY keys to Urdu characters, so you can begin with the keyboard you already use and learn the key sounds as you practise.',
+    readTime: 7,
+    publishedAt: '2026-10-22',
+    popular: false,
+    image: '/assets/blog/urdu-online-typing-keyboard.svg',
+    imageAlt: 'Typing Urdu online using an English keyboard on a laptop.',
+    moreTools: [
+      { label: 'English Typing Test', to: '/test' },
+      { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
+      { label: 'English Typing Practice', to: '/practice' },
+      { label: 'Urdu Typing Practice', to: '/urdu-practice' },
+      { label: 'English Learn', to: '/lessons' },
+      { label: 'Urdu Learn', to: '/urdu-lessons' },
+    ],
+    pullQuote: 'Use the keys you know, learn the Urdu mapping one letter at a time.',
+    cta: {
+      heading: 'Try Urdu typing online',
+      blurb: 'Open Typeoye’s Urdu typing test and practise with the keyboard you already have.',
+      label: 'Start Urdu Typing Test',
+      to: '/urdu-typing-test/setup',
+    },
+    content: [
+      {
+        heading: '1. Type Urdu without a separate Urdu keyboard',
+        body: 'A regular English QWERTY keyboard is enough to start typing Urdu online. Typeoye reads the physical English keys you press and converts each supported key into its mapped Urdu character. You do not need Urdu letters printed on the keycaps, a separate keyboard, or a word-by-word translation service. The Urdu output appears as you type, while your hands stay on the familiar layout.',
+      },
+      {
+        heading: '2. What is Urdu phonetic typing?',
+        body: 'Urdu phonetic typing connects an English key to an Urdu character through a fixed mapping. For example, the lowercase s key produces س and the lowercase k key produces ک in Typeoye. This is direct key conversion, not automatic transliteration: the tool does not infer a whole Urdu word from its usual Roman spelling. Follow the mapped keys, and use Shift when you need a character on the Shift layer.',
+      },
+      {
+        heading: '3. How to type Urdu online on Typeoye',
+        body: 'You can start in a few steps: open an Urdu typing tool, focus the typing area, and type with the English keys shown in the phonetic map. Watch the Urdu text appear from right to left, use Backspace to correct a character, and continue at a comfortable pace. Choose a lesson if you want guided practice, a test to measure a timed run, or a practice drill to work on consistency.',
+        guide: 'urdu-typing-links',
+      },
+      {
+        heading: '4. How English letters produce Urdu characters',
+        body: 'Each lowercase key has a specific output in Typeoye’s Urdu phonetic keyboard. A few verified examples are s → س, a → ا, l → ل, m → م, k → ک, t → ت, and b → ب. The custom keyboard image above shows all lowercase letter mappings used in the examples, directly from the site’s conversion map. Shift selects separate mappings, so refer to the complete Urdu keyboard layout guide when you need an uppercase-layer character or mark.',
+      },
+      {
+        heading: '5. Type Urdu words and sentences',
+        body: 'Because this is a direct key map, the keystrokes may differ from casual Roman Urdu spelling. Type “slam” to produce سلام: s gives س, l gives ل, a gives ا, and m gives م. Type “ktab” for کتاب using k, t, a, and b. For a sentence, “Ap ki ktab” produces آپ کی کتاب; the capital A uses Shift and maps to آ, followed by p for پ. Build words from the key mappings rather than expecting the software to correct or translate the input.',
+      },
+      {
+        heading: '6. Tips for Urdu typing beginners',
+        body: 'Learn a small group of keys at a time and say each Urdu character as you press its English key. Start slowly enough to keep the output accurate, then repeat short words until the finger movements feel familiar. Keep your wrists relaxed, use both hands, and practise for a few focused minutes regularly. When a character is unfamiliar, check its key in the layout chart instead of guessing.',
+      },
+      {
+        heading: '7. Common mistakes and how to avoid them',
+        body: 'A common beginner mistake is typing the full Roman spelling of a word and expecting automatic transliteration. Typeoye maps keys individually, so use the exact key sequence shown in the examples. Another mistake is overlooking Shift: uppercase-layer Urdu characters and marks require Shift even if the English key looks familiar. Also remember that Urdu text reads right to left, and the number row can behave differently by tool: Urdu Learn uses Urdu numerals while Urdu Test and Practice keep Western digits.',
+      },
+      {
+        heading: '8. Frequently asked questions',
+        body: 'Do I need to install an Urdu keyboard? No; Typeoye uses your regular English QWERTY keyboard in the browser. Does English input get translated into Urdu words? No; each supported key produces its mapped character, so enter the phonetic key sequence. Can I use Shift? Yes; Shift produces the separate mapped character shown in the keyboard guide. Can I practise on a phone? Typeoye’s Urdu tools are available on mobile; a physical keyboard can be more comfortable for longer sessions. Are Urdu digits always used? Urdu Learn enables Urdu numerals, while Urdu Test and Practice use 0–9.',
+      },
+      {
+        heading: '9. Start typing Urdu with Typeoye',
+        body: 'You do not need new hardware to begin. Learn a few English-to-Urdu key mappings, type a short word, and build from there. Open Typeoye’s Urdu Typing Test, explore the guided Urdu Learn lessons, or choose an Urdu Practice drill to get comfortable with the layout and improve your accuracy over time.',
+      },
+    ],
+  },
+  {
+    slug: 'urdu-phonetic-keyboard-layout',
+    title: 'Urdu Phonetic Keyboard Layout — Complete Key Mapping Guide',
+    category: 'Guides',
+    description: 'A practical, verified guide to every Urdu character, Shift layer, numeral, and punctuation mapping in Typeoye.',
+    metaTitle: 'Urdu Phonetic Keyboard Layout: Complete Key Mapping Guide | Typeoye',
+    metaDescription: 'Learn the exact Typeoye Urdu phonetic keyboard layout: English-to-Urdu letter keys, Shift combinations, punctuation, numerals, and typing examples.',
+    intro: 'Want to type Urdu with an ordinary English keyboard? This complete Urdu phonetic keyboard guide shows exactly what Typeoye produces for each key, including the Shift layer, punctuation, and the Urdu numerals used in Urdu Learn.',
+    readTime: 8,
+    publishedAt: '2026-10-22',
+    popular: false,
+    image: '/assets/blog/laptop-vs-desktop-keyboard.jpg',
+    imageAlt: 'Complete Typeoye Urdu phonetic keyboard layout with normal and Shift mappings on every character key',
+    moreTools: [
+      { label: 'Urdu Learn', to: '/urdu-lessons' },
+      { label: 'English Learn', to: '/lessons' },
+      { label: 'Urdu Typing Practice', to: '/urdu-practice' },
+      { label: 'English Typing Practice', to: '/practice' },
+      { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
+      { label: 'English Typing Test', to: '/test' },
+    ],
+    pullQuote: 'Learn the key sounds first; steady, accurate practice builds speed.',
+    cta: {
+      heading: 'Ready to practise Urdu typing?',
+      blurb: 'Try a short Urdu typing test and put the key map into practice.',
+      label: 'Start Urdu Typing Test',
+      to: '/urdu-typing-test/setup',
+    },
+    content: [
+      {
+        heading: '1. What is an Urdu phonetic keyboard?',
+        body: 'An Urdu phonetic keyboard lets you type Urdu using a familiar English QWERTY keyboard. Each English key is assigned an Urdu character, so you can learn Urdu typing online without installing a separate physical keyboard layout. Typeoye uses a direct key map: it converts the physical key you press into its configured Urdu character; it does not guess a complete Urdu word from English spelling.',
+      },
+      {
+        heading: '2. How Urdu phonetic typing works',
+        body: 'The Urdu typing keyboard keys follow Typeoye’s phonetic map. Press a lowercase letter for its normal mapping. Hold Shift and press a letter to use the uppercase layer, which includes additional Urdu letters and vowel marks. The map follows the physical key position, so it works even if your operating system is using another keyboard layout. Space stays a space, Backspace deletes, and non-typing keys do not produce a character.',
+      },
+      {
+        heading: '3. Complete Urdu phonetic keyboard mapping chart',
+        body: 'The tables below are generated from Typeoye’s current Urdu conversion maps. They show the key as it is pressed and the corresponding character or symbol. Urdu characters are right-to-left; the English key labels remain left-to-right for quick scanning.',
+        guide: 'urdu-keyboard-map',
+      },
+      {
+        heading: '4. Urdu letters grouped for beginners',
+        body: 'Start with the lowercase letter map and learn a few keys at a time. Many common characters are on the lowercase layer, including ب on B, ک on K, م on M, and ن on N. The Shift layer supplies other Urdu characters such as ث, خ, ڑ, and ں. Several shifted keys produce marks that sit above or below a letter rather than a full-width letter; the chart marks these with a dotted circle so they remain visible. That circle is only a display aid.',
+      },
+      {
+        heading: '5. Special characters and Shift-key combinations',
+        body: 'For letters, Shift selects the uppercase map: for example, A produces آ while a produces ا. Shift also changes punctuation keys where the physical keyboard has a second layer. For example, the period key produces ۔ without Shift and ٫ with Shift; the slash key produces / without Shift and ؟ with Shift. Some symbols such as brackets, quotes, plus, and underscore are passed through as typed. The full supported output for each mapped symbol key appears in the tables.',
+      },
+      {
+        heading: '6. Urdu numbers and punctuation mapping',
+        body: 'In Urdu Learn, the number row can produce Urdu numerals: 1 becomes ۱ and 0 becomes ۰. Urdu Typing Test and Urdu Practice currently use the same phonetic letters and punctuation but keep number-row digits as Western 0–9. Comma becomes the Urdu comma ،, semicolon becomes ؛, period becomes ۔, and question mark becomes ؟. Shift does not change number-row digits.',
+      },
+      {
+        heading: '7. Examples: type common Urdu words and a sentence',
+        body: 'These examples use the exact character-by-character map, with no spelling prediction: type “slam” to produce سلام; “ktab” to produce کتاب; and “pakistan” to produce پاکستان. For a short sentence, type “Ap ki ktab nUi oy.” to produce آپ کی کتاب نئی ہے۔. Notice that capital A and U require Shift. The Urdu output is shown right-to-left even though the English keystrokes are written left-to-right.',
+      },
+      {
+        heading: '8. How to start typing Urdu on Typeoye',
+        body: 'Open Urdu Learn to study the layout lesson by lesson, choose Urdu Typing Test to measure your speed, or visit Urdu Practice for focused drills. The three Urdu tools are linked below. You can keep this guide open in another tab while you practise.',
+        guide: 'urdu-typing-links',
+      },
+      {
+        heading: '9. Tips to improve Urdu typing speed and accuracy',
+        body: 'Learn the lowercase keys before adding the Shift layer. Practise small groups of characters, then type short familiar words without looking down. Keep your hands relaxed and aim for accuracy before speed. Use the on-screen keyboard in Urdu Learn to see the base and Shift characters, and review the key map whenever a mark or punctuation symbol feels unfamiliar. Short, regular sessions make the key positions easier to remember.',
+      },
+      {
+        heading: '10. Urdu phonetic keyboard FAQs',
+        body: 'Do I need a special keyboard? No; Typeoye maps a standard physical QWERTY keyboard. Why does uppercase matter? Shift selects different Urdu characters and marks. Are Urdu numerals always typed? No; Urdu Learn enables them, while Urdu Test and Practice keep Western digits. Does the map transliterate whole words? No; it maps each key directly, so type the keys shown in the examples. Can I use this on a phone? You can use Typeoye’s Urdu typing pages on mobile, though an external keyboard can make longer practice easier.',
+      },
+      {
+        heading: '11. Learn the layout and start typing',
+        body: 'The Typeoye Urdu phonetic keyboard layout gives you a direct way to type Urdu with English keyboard keys. Keep the chart nearby as you practise letters, Shift combinations, punctuation, and numerals. Start with a few accurate words, then build toward full sentences with Urdu Learn, Urdu Typing Test, and Urdu Practice.',
+      },
+    ],
+  },
   {
     slug: 'typing-speed-tips',
     title: '10 Proven Tips to Increase Your Typing Speed',

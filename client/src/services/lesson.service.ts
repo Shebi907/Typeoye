@@ -23,28 +23,47 @@ export interface ExerciseCompletion {
 // cache is refreshed in the background on every visit.
 let lessonsCache: CourseLesson[] | null = null;
 let lessonsRequest: Promise<CourseLesson[]> | null = null;
+let lessonsCacheLoadedAt = 0;
+let lessonsCacheGeneration = 0;
+const LESSONS_CACHE_TTL_MS = 30_000;
 const lessonDetailsCache = new Map<string, { lesson: Lesson; exercises: Exercise[]; progress: LessonProgress | null }>();
 
 export const lessonService = {
   clearCache(): void {
     lessonsCache = null;
+    lessonsCacheLoadedAt = 0;
+    lessonsCacheGeneration += 1;
     lessonsRequest = null;
+    lessonDetailsCache.clear();
   },
   /** Synchronous access to already-fetched lessons (null until first fetch). */
   getLessonsCached(): CourseLesson[] | null {
     return lessonsCache;
   },
   async getLessons(): Promise<CourseLesson[]> {
-    if (lessonsCache) return lessonsCache;
+    if (lessonsCache && Date.now() - lessonsCacheLoadedAt < LESSONS_CACHE_TTL_MS) return lessonsCache;
     if (!lessonsRequest) {
+      const generation = lessonsCacheGeneration;
       lessonsRequest = api
         .get('/lessons')
         .then(({ data }) => {
-          lessonsCache = (data.data as { lessons: CourseLesson[] }).lessons;
-          return lessonsCache;
+          const result = data?.data?.lessons;
+          if (!Array.isArray(result) || result.some((lesson: unknown) => {
+            const item = lesson as Partial<CourseLesson> | null;
+            return !item || typeof item._id !== 'string' || typeof item.category !== 'string'
+              || typeof item.completed !== 'boolean' || typeof item.completedExercises !== 'number'
+              || typeof item.exerciseCount !== 'number';
+          })) {
+            throw new Error('The lessons response was incomplete. Please try again.');
+          }
+          if (generation === lessonsCacheGeneration) {
+            lessonsCache = result as CourseLesson[];
+            lessonsCacheLoadedAt = Date.now();
+          }
+          return result as CourseLesson[];
         })
         .finally(() => {
-          lessonsRequest = null;
+          if (generation === lessonsCacheGeneration) lessonsRequest = null;
         });
     }
     return lessonsRequest;
@@ -65,11 +84,13 @@ export const lessonService = {
     const { data } = await api.post(`/lessons/${lessonId}/exercises/${exerciseId}/complete`, payload);
     const completion = data.data as ExerciseCompletion;
     
-    // If a new lesson was unlocked, invalidate the cache so the Learn page
-    // refetches the course map and shows the next level as unlocked.
-    if (completion.nextLessonUnlocked) {
-      lessonsCache = null;
-    }
+    // Any passed exercise changes the Learn page's completed-exercise counts;
+    // a level completion can also unlock the next lesson. Refresh the map on
+    // every successful completion so the 30-second response cache stays exact.
+    lessonsCache = null;
+    lessonsCacheLoadedAt = 0;
+    lessonsCacheGeneration += 1;
+    lessonsRequest = null;
     
     return completion;
   },

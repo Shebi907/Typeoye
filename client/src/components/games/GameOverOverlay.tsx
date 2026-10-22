@@ -42,9 +42,15 @@ export default function GameOverOverlay({ children, result }: GameOverOverlayPro
       />
 
       {/* 3. Centered result card — fixed to the viewport so it is always
-           horizontally + vertically centered, at a compact width */}
-      <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-        <div className="w-full max-w-[25rem] pointer-events-auto">
+           horizontally + vertically centered, at a compact width. The layer
+           scrolls internally so a card taller than the viewport (small phones,
+           large OS font) stays fully reachable instead of being clipped, since
+           useScrollLock freezes the document behind it. */}
+      <div
+        className="fixed inset-0 z-[60] grid place-items-center overflow-y-auto p-4"
+        style={{ paddingTop: 'calc(var(--navbar-h, 4rem) + 1rem)', paddingBottom: '1rem' }}
+      >
+        <div className="w-full max-w-[25rem] my-auto pointer-events-auto">
           {result}
         </div>
       </div>

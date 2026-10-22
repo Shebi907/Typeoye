@@ -6,11 +6,16 @@ import type {
   AdminLessonInput,
   AdminStats,
   AdminUser,
+  AdminUrduPracticeItem,
+  AdminUrduTestParagraph,
   CertificateParagraph,
   CertificateParagraphDifficulty,
   ContentDifficulty,
   ContentItem,
   PlatformSettings,
+  UrduContentCategory,
+  UrduContentDifficulty,
+  UrduContentDuration,
 } from '../types';
 
 const unwrap = <T,>(promise: Promise<{ data: { success: boolean; data: T } }>): Promise<T> =>
@@ -55,6 +60,35 @@ export const reorderExercises = (orderedIds: string[]) =>
   unwrap<{ message: string }>(api.post('/admin/exercises/reorder', { orderedIds }));
 export const moveExercise = (id: string, direction: 'up' | 'down') =>
   unwrap<{ message: string }>(api.patch(`/admin/exercises/${id}/move`, { direction }));
+
+// ── Urdu Lessons ─────────────────────────────────────────────────────────
+export const listUrduLessons = () => unwrap<{ lessons: AdminLesson[] }>(api.get('/admin/urdu-lessons'));
+export const createUrduLesson = (data: AdminLessonInput) =>
+  unwrap<{ lesson: AdminLesson }>(api.post('/admin/urdu-lessons', data));
+export const updateUrduLesson = (id: string, data: Partial<AdminLessonInput>) =>
+  unwrap<{ lesson: AdminLesson }>(api.patch(`/admin/urdu-lessons/${id}`, data));
+export const deleteUrduLesson = (id: string) =>
+  unwrap<{ message: string }>(api.delete(`/admin/urdu-lessons/${id}`));
+export const reorderUrduLessons = (orderedIds: string[]) =>
+  unwrap<{ message: string }>(api.post('/admin/urdu-lessons/reorder', { orderedIds }));
+export const moveUrduLesson = (id: string, direction: 'up' | 'down') =>
+  unwrap<{ message: string }>(api.patch(`/admin/urdu-lessons/${id}/move`, { direction }));
+export const seedUrduLessons = () =>
+  unwrap<{ lessons: number; exercises: number; achievements: number; curriculum: number; message: string }>(
+    api.post('/admin/urdu-lessons/seed', {}),
+  );
+
+// ── Urdu Exercises ───────────────────────────────────────────────────────
+export const listUrduExercises = (lessonId: string) =>
+  unwrap<{ exercises: import('../types').Exercise[] }>(api.get(`/admin/urdu-lessons/${lessonId}/exercises`));
+export const createUrduExercise = (lessonId: string, data: AdminExerciseInput) =>
+  unwrap<{ exercise: import('../types').Exercise }>(api.post(`/admin/urdu-lessons/${lessonId}/exercises`, data));
+export const updateUrduExercise = (id: string, data: Partial<AdminExerciseInput>) =>
+  unwrap<{ exercise: import('../types').Exercise }>(api.patch(`/admin/urdu-exercises/${id}`, data));
+export const deleteUrduExercise = (id: string) =>
+  unwrap<{ message: string }>(api.delete(`/admin/urdu-exercises/${id}`));
+export const moveUrduExercise = (id: string, direction: 'up' | 'down') =>
+  unwrap<{ message: string }>(api.patch(`/admin/urdu-exercises/${id}/move`, { direction }));
 
 // ── Achievements ─────────────────────────────────────────────────────────
 export const listAchievements = () =>
@@ -110,6 +144,51 @@ export const updateCertificateParagraph = (id: string, data: Partial<Certificate
 
 export const deleteCertificateParagraph = (id: string) =>
   unwrap<{ message: string }>(api.delete(`/admin/certificate-paragraphs/${id}`));
+
+// ── Urdu test passages ───────────────────────────────────────────────────
+export interface UrduTestParagraphInput {
+  content: string;
+  difficulty: UrduContentDifficulty;
+  duration: UrduContentDuration;
+  isActive?: boolean;
+}
+
+export const listUrduTestParagraphs = (
+  params: { search?: string; difficulty?: UrduContentDifficulty; duration?: UrduContentDuration; status?: 'active' | 'inactive' } = {}
+) => unwrap<{ items: AdminUrduTestParagraph[] }>(api.get('/admin/urdu-test-paragraphs', { params }));
+
+export const createUrduTestParagraph = (data: UrduTestParagraphInput) =>
+  unwrap<{ item: AdminUrduTestParagraph }>(api.post('/admin/urdu-test-paragraphs', data));
+
+export const updateUrduTestParagraph = (id: string, data: Partial<UrduTestParagraphInput>) =>
+  unwrap<{ item: AdminUrduTestParagraph }>(api.patch(`/admin/urdu-test-paragraphs/${id}`, data));
+
+export const deleteUrduTestParagraph = (id: string) =>
+  unwrap<{ message: string }>(api.delete(`/admin/urdu-test-paragraphs/${id}`));
+
+// ── Urdu practice content ────────────────────────────────────────────────
+export interface UrduPracticeItemInput {
+  category: UrduContentCategory;
+  difficulty: UrduContentDifficulty;
+  text: string;
+  isActive?: boolean;
+}
+
+export const listUrduPracticeItems = (
+  params: { search?: string; category?: UrduContentCategory; difficulty?: UrduContentDifficulty; status?: 'active' | 'inactive' } = {}
+) => unwrap<{ items: AdminUrduPracticeItem[] }>(api.get('/admin/urdu-practice-items', { params }));
+
+export const createUrduPracticeItem = (data: UrduPracticeItemInput) =>
+  unwrap<{ item: AdminUrduPracticeItem }>(api.post('/admin/urdu-practice-items', data));
+
+export const updateUrduPracticeItem = (id: string, data: Partial<UrduPracticeItemInput>) =>
+  unwrap<{ item: AdminUrduPracticeItem }>(api.patch(`/admin/urdu-practice-items/${id}`, data));
+
+export const deleteUrduPracticeItem = (id: string) =>
+  unwrap<{ message: string }>(api.delete(`/admin/urdu-practice-items/${id}`));
+
+export const moveUrduPracticeItem = (id: string, direction: 'up' | 'down') =>
+  unwrap<{ message: string }>(api.patch(`/admin/urdu-practice-items/${id}/move`, { direction }));
 
 // ── Platform settings ────────────────────────────────────────────────────
 export const getPlatformSettings = () =>

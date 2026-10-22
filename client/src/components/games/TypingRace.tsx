@@ -369,7 +369,7 @@ export default function TypingRace({ onBack }: { onBack?: () => void }) {
       </div>
 
       {/* ── Typing text card ── */}
-      <div className="card relative p-8 mb-8" style={{ minHeight: '240px' }}>
+      <div className="card relative p-5 sm:p-6 lg:p-8 mb-8" style={{ minHeight: '240px' }}>
         {engine.phase === 'idle' && (
           <span
             className="absolute left-8 top-6 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold"

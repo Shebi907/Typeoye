@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type { User, Profile, Settings } from '../types';
 import { analyticsService } from '../services/analytics.service';
 import { lessonService } from '../services/lesson.service';
+import { urduLessonService } from '../services/urduLesson.service';
 import { leaderboardService } from '../services/leaderboard.service';
 import { practiceService } from '../services/practice.service';
 
@@ -44,6 +45,7 @@ function readStoredToken(): string | null {
 function clearAllServiceCaches(): void {
   analyticsService.clearCache();
   lessonService.clearCache();
+  urduLessonService.clearCache();
   leaderboardService.clearCache();
   practiceService.clearCache();
   try {

@@ -61,6 +61,9 @@ function mulberry(seed: string): () => number {
 }
 
 export async function generatePractice(req: Request, res: Response): Promise<void> {
+  // The result can depend on user weakness data, rotation, and session options;
+  // it must always be generated for the current request.
+  res.setHeader('Cache-Control', 'no-store');
   try {
     const rawKeys: string = typeof req.query['targetKeys'] === 'string' ? req.query['targetKeys'] : '';
     const input: Record<string, unknown> = { ...req.query, targetKeys: rawKeys.split(',').map((k) => k.trim()).filter(Boolean) };

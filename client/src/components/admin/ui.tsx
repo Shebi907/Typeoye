@@ -171,8 +171,8 @@ export function ConfirmDialog({
   useScrollLock(open);
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
-      <div className="w-full max-w-sm card p-6" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto bg-black/40">
+      <div className="w-full max-w-sm card p-6 my-auto" role="dialog" aria-modal="true">
         <h3 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)' }}>
           {title}
         </h3>

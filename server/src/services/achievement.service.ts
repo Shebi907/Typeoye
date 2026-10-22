@@ -7,6 +7,8 @@ import TypingResult from '../models/TypingResult';
 import TypingSession from '../models/TypingSession';
 import PracticeSession from '../models/PracticeSession';
 import LessonProgress from '../models/LessonProgress';
+import Lesson from '../models/Lesson';
+import type { LessonLanguage } from '../models/Lesson';
 import Streak from '../models/Streak';
 import UserProgress from '../models/UserProgress';
 import mongoose from 'mongoose';
@@ -23,7 +25,19 @@ export interface AchievementContext {
   bestWpm: number;
   bestTestAccuracy: number;
   currentStreak: number;
+  /** Completed ENGLISH lessons (>=90% accuracy) — drives the existing "lessons" rules. */
   lessonCount: number;
+  /** Completed URDU lessons (>=90% accuracy) — tracked fully independently. */
+  urduLessonCount: number;
+  /** Completed lessons in THIS context's language (>=90% accuracy). */
+  languageLessonCount: number;
+  /** Test/practice counts scoped to THIS context's language. */
+  languageTestCount: number;
+  languagePracticeCount: number;
+  languageBestWpm: number;
+  languageBestTestAccuracy: number;
+  languageTests: TestSnapshot[];
+  /** English test snapshots (drives the original wpm/accuracy rules). */
   tests: TestSnapshot[];
 }
 
@@ -35,19 +49,49 @@ export interface AchievementContext {
  * before per-test durations existed still qualify for time-based rules.
  */
 async function buildContext(
-  userId: mongoose.Types.ObjectId | string
+  userId: mongoose.Types.ObjectId | string,
+  language: LessonLanguage = 'en'
 ): Promise<AchievementContext> {
-  const [testCount, practiceCount, streak, progress, lessonCount, bestTestAccuracy, tests] =
-    await Promise.all([
+  const uid = new mongoose.Types.ObjectId(String(userId));
+  const [
+    testCount,
+    practiceCount,
+    streak,
+    progress,
+    lessonCounts,
+    bestTestAccuracy,
+    tests,
+    languageTestCount,
+    languagePracticeCount,
+    languageBestWpmRow,
+    languageBestAccuracyRow,
+    languageTests,
+  ] = await Promise.all([
       TypingResult.countDocuments({ userId, mode: 'test' }),
       PracticeSession.countDocuments({ userId }),
       Streak.findOne({ userId }),
       UserProgress.findOne({ userId }),
-      LessonProgress.countDocuments({
-        userId,
-        completedAt: { $exists: true },
-        bestAccuracy: { $gte: 90 },
-      }),
+      // Completed lessons split by course language so English and Urdu progress
+      // never bleed into each other's achievements.
+      LessonProgress.aggregate<{ _id: string; count: number }>([
+        {
+          $match: {
+            userId: uid,
+            completedAt: { $exists: true },
+            bestAccuracy: { $gte: 90 },
+          },
+        },
+        {
+          $lookup: {
+            from: Lesson.collection.name,
+            localField: 'lessonId',
+            foreignField: '_id',
+            as: 'lesson',
+          },
+        },
+        { $unwind: '$lesson' },
+        { $group: { _id: '$lesson.language', count: { $sum: 1 } } },
+      ]),
       TypingResult.aggregate([
         { $match: { userId, mode: 'test' } },
         { $group: { _id: null, max: { $max: '$accuracy' } } },
@@ -72,7 +116,41 @@ async function buildContext(
           },
         },
       ]),
+      // Language-scoped test/practice counts (used by Urdu achievements).
+      TypingResult.countDocuments({ userId, mode: 'test', language: language === 'ur' ? 'ur' : 'en' }),
+      PracticeSession.countDocuments({ userId, language: language === 'ur' ? 'ur' : 'en' }),
+      TypingResult.aggregate([
+        { $match: { userId, mode: 'test', language: language === 'ur' ? 'ur' : 'en' } },
+        { $group: { _id: null, max: { $max: '$wpm' } } },
+      ]),
+      TypingResult.aggregate([
+        { $match: { userId, mode: 'test', language: language === 'ur' ? 'ur' : 'en' } },
+        { $group: { _id: null, max: { $max: '$accuracy' } } },
+      ]),
+      TypingResult.aggregate([
+        { $match: { userId, mode: 'test', language: language === 'ur' ? 'ur' : 'en' } },
+        {
+          $lookup: {
+            from: TypingSession.collection.name,
+            localField: 'sessionId',
+            foreignField: '_id',
+            as: 'session',
+          },
+        },
+        {
+          $project: {
+            wpm: 1,
+            accuracy: 1,
+            durationSeconds: {
+              $ifNull: [{ $arrayElemAt: ['$session.durationSeconds', 0] }, 0],
+            },
+          },
+        },
+      ]),
     ]);
+  const countByLanguage = new Map(lessonCounts.map((row) => [row._id, row.count]));
+  const lessonCount = countByLanguage.get('en') ?? 0;
+  const urduLessonCount = countByLanguage.get('ur') ?? 0;
   return {
     testCount,
     practiceCount,
@@ -80,6 +158,13 @@ async function buildContext(
     bestTestAccuracy: bestTestAccuracy[0]?.max ?? 0,
     currentStreak: streak?.currentStreak ?? 0,
     lessonCount,
+    urduLessonCount,
+    languageLessonCount: language === 'ur' ? urduLessonCount : lessonCount,
+    languageTestCount,
+    languagePracticeCount,
+    languageBestWpm: languageBestWpmRow[0]?.max ?? 0,
+    languageBestTestAccuracy: languageBestAccuracyRow[0]?.max ?? 0,
+    languageTests,
     tests,
   };
 }
@@ -122,6 +207,24 @@ function qualifies(
     case 'lessons':
     case 'lesson':
       return ctx.lessonCount >= threshold;
+    case 'urdu_lessons':
+    case 'urdu_lesson':
+      return ctx.urduLessonCount >= threshold;
+    case 'urdu_tests':
+    case 'urdu_test':
+      return ctx.languageTestCount >= threshold;
+    case 'urdu_practice':
+      return ctx.languagePracticeCount >= threshold;
+    case 'urdu_wpm': {
+      const base = { minAccuracy: params?.minAccuracy, minDuration: params?.minDuration };
+      const count = ctx.languageTests.filter((t) => testMeets(t, base) && t.wpm >= threshold).length;
+      return (params?.requiredTests ?? 1) <= count;
+    }
+    case 'urdu_accuracy': {
+      const base = { minWpm: params?.minWpm, minDuration: params?.minDuration };
+      const count = ctx.languageTests.filter((t) => testMeets(t, base) && t.accuracy >= threshold).length;
+      return (params?.requiredTests ?? 1) <= count;
+    }
     default:
       return false;
   }
@@ -158,6 +261,28 @@ function currentValue(
     case 'lessons':
     case 'lesson':
       return ctx.lessonCount;
+    case 'urdu_lessons':
+    case 'urdu_lesson':
+      return ctx.urduLessonCount;
+    case 'urdu_tests':
+    case 'urdu_test':
+      return ctx.languageTestCount;
+    case 'urdu_practice':
+      return ctx.languagePracticeCount;
+    case 'urdu_wpm': {
+      if (params?.minAccuracy || params?.minDuration) {
+        const base = { minAccuracy: params?.minAccuracy, minDuration: params?.minDuration };
+        return Math.max(0, ...ctx.languageTests.filter((t) => testMeets(t, base)).map((t) => t.wpm));
+      }
+      return ctx.languageBestWpm;
+    }
+    case 'urdu_accuracy': {
+      if (params?.minWpm || params?.minDuration) {
+        const base = { minWpm: params?.minWpm, minDuration: params?.minDuration };
+        return Math.max(0, ...ctx.languageTests.filter((t) => testMeets(t, base)).map((t) => t.accuracy));
+      }
+      return ctx.languageBestTestAccuracy;
+    }
     default:
       return 0;
   }
@@ -179,15 +304,21 @@ export interface AchievementStatus {
 }
 
 export async function checkAndAwardAchievements(
-  userId: mongoose.Types.ObjectId | string
+  userId: mongoose.Types.ObjectId | string,
+  language: LessonLanguage = 'en'
 ): Promise<IAchievement[]> {
+  const lang = language === 'ur' ? 'ur' : 'en';
   const [allAchievements, existing] = await Promise.all([
-    Achievement.find({ isActive: true }),
+    Achievement.find({ isActive: true, language: lang }),
     UserAchievement.find({ userId }).select('achievementId'),
   ]);
 
   const unlockedIds = new Set(existing.map((ua) => ua.achievementId.toString()));
-  const ctx = await buildContext(userId);
+  // Context is built for the language whose achievements are being checked, so
+  // English rules read English data and Urdu rules read Urdu data. English
+  // achievements use `lessons`/`wpm`/... against English counts; Urdu ones use
+  // `urdu_*` rule types against the same Urdu-scoped context.
+  const ctx = await buildContext(userId, lang);
   const newlyUnlocked: IAchievement[] = [];
 
   for (const achievement of allAchievements) {
@@ -214,14 +345,16 @@ export async function checkAndAwardAchievements(
  * `unlocked` reflects a real, stored unlock.
  */
 export async function getAchievementsForUser(
-  userId: mongoose.Types.ObjectId | string
+  userId: mongoose.Types.ObjectId | string,
+  language: LessonLanguage = 'en'
 ): Promise<AchievementStatus[]> {
+  const lang = language === 'ur' ? 'ur' : 'en';
   const [all, userAchievements] = await Promise.all([
-    Achievement.find({ isActive: true }),
+    Achievement.find({ isActive: true, language: lang }).sort({ xpReward: 1, name: 1 }),
     UserAchievement.find({ userId }),
   ]);
 
-  const ctx = await buildContext(userId);
+  const ctx = await buildContext(userId, lang);
   const unlockedMap = new Map(
     userAchievements.map((ua) => [ua.achievementId.toString(), ua])
   );

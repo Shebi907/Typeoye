@@ -291,11 +291,12 @@ export default function ProfilePage() {
               </div>
               <div className="min-w-0 text-white">
                 <p className="text-xl sm:text-2xl font-bold leading-tight truncate drop-shadow-sm">{profile.displayName}</p>
-                <p className="text-sm text-white/85 mt-1">
-                  <span className="inline-flex items-center gap-1.5">
-                    <Award size={13} /> Level {progress?.learnLevel ?? '—'} · {progress ? `${progress.completedLessons} of ${progress.totalLessons} lessons` : '—'} · {profile.totalXP} XP earned
-                  </span>
-                </p>
+                <div className="text-sm text-white/85 mt-1">
+                  <p className="inline-flex items-center gap-1.5">
+                    <Award size={13} /> English Learn Level {progress?.learnLevel ?? '—'} · {progress ? `${progress.completedLessons} of ${progress.totalLessons} lessons` : '—'}
+                  </p>
+                  <p className="text-xs text-white/75">{profile.totalXP} total XP earned</p>
+                </div>
               </div>
             </div>
 
@@ -720,9 +721,8 @@ function PasswordField({
           type="button"
           data-testid={`${testid}-toggle`}
           onClick={onToggle}
-          tabIndex={-1}
           aria-label={visible ? 'Hide password' : 'Show password'}
-          className="absolute right-2 top-1/2 -translate-y-1/2 grid place-items-center text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
+          className="absolute right-1 top-1/2 -translate-y-1/2 grid place-items-center rounded-md p-2 text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
         >
           <Icon size={17} />
         </button>

@@ -7,6 +7,8 @@ interface PageWrapperProps {
   children: React.ReactNode;
   title?: string;
   description?: string;
+  /** Optional Urdu (Nastaliq) heading shown on the right of the title row. */
+  titleUrdu?: string;
   className?: string;
   fullWidth?: boolean;
   /** Skip rendering the visible heading block (keeps the document title). */
@@ -15,17 +17,21 @@ interface PageWrapperProps {
   icon?: LucideIcon;
   /** Decorative corner dot-grid for prominent header sections (not typing screens). */
   dotGrid?: boolean;
+  /** Left-align the header description to the title instead of centering the capped block. */
+  descriptionAlignLeft?: boolean;
 }
 
 export function PageWrapper({
   children,
   title,
   description,
+  titleUrdu,
   className,
   fullWidth = false,
   noHeader = false,
   icon: Icon,
   dotGrid = false,
+  descriptionAlignLeft = false,
 }: PageWrapperProps) {
   useEffect(() => {
     if (title) {
@@ -47,18 +53,36 @@ export function PageWrapper({
         <div className="relative mb-8 flex items-start gap-4">
           {dotGrid && <span className="dot-grid dot-grid-tr" aria-hidden="true" />}
           {Icon && <IconBadge icon={Icon} size={44} className="mt-0.5" />}
-          <div>
+          <div className="min-w-0 flex-1">
             {title && (
               <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
                 {title}
               </h1>
             )}
             {description && (
-              <p className="readable-text mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              <p
+                className="readable-text mt-1 text-sm"
+                style={
+                  descriptionAlignLeft
+                    ? { color: 'var(--color-text-secondary)', marginInline: 0 }
+                    : { color: 'var(--color-text-secondary)' }
+                }
+              >
                 {description}
               </p>
             )}
           </div>
+          {titleUrdu && (
+            <p
+              dir="rtl"
+              lang="ur"
+              data-testid="page-title-urdu"
+              className="font-urdu text-2xl font-bold leading-[1.9] text-right sm:shrink-0"
+              style={{ color: 'var(--color-text-primary)' }}
+            >
+              {titleUrdu}
+            </p>
+          )}
         </div>
       )}
       {children}

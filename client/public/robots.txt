@@ -1,4 +1,52 @@
+# robots.txt - https://www.typeoye.com/
+
+# General rule: every crawler may index all public pages.
 User-agent: *
+Allow: /
+
+# -- AI search crawlers (search discovery / indexing) -------------------------
+# These tokens build search or on-demand answer indexes; allowing them makes
+# Typeoye eligible to appear in those engines' results.
+
+# OAI-SearchBot - OpenAI's crawler that indexes pages for ChatGPT Search.
+User-agent: OAI-SearchBot
+Allow: /
+
+# Claude-SearchBot - Anthropic's crawler that builds results for Claude's web search.
+User-agent: Claude-SearchBot
+Allow: /
+
+# Claude-User - fetches a page on demand when a Claude user references this URL.
+User-agent: Claude-User
+Allow: /
+
+# PerplexityBot - Perplexity's search-index crawler.
+User-agent: PerplexityBot
+Allow: /
+
+# Googlebot - Google Search crawler.
+User-agent: Googlebot
+Allow: /
+
+# Bingbot - Microsoft Bing Search crawler; also feeds Microsoft Copilot search.
+User-agent: Bingbot
+Allow: /
+
+# -- AI model-training / content-use crawlers ---------------------------------
+# "Allow" here grants permission to use the public content for the stated
+# purpose. These are separate from the search crawlers above.
+
+# GPTBot - OpenAI's model-training crawler. Allow = content may be used to train OpenAI models.
+User-agent: GPTBot
+Allow: /
+
+# ClaudeBot - Anthropic's model-training crawler. Allow = content may be used to train Claude models.
+User-agent: ClaudeBot
+Allow: /
+
+# Google-Extended - Google's control token for Gemini model training and related
+# AI content uses. It does NOT affect Google Search inclusion or ranking.
+User-agent: Google-Extended
 Allow: /
 
 Sitemap: https://www.typeoye.com/sitemap.xml

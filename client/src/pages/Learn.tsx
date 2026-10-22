@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { 
   CheckCircle2, LockKeyhole, Play, BookOpen, GraduationCap, 
-  Keyboard, Blocks, Waves, Rocket, ArrowRight, Lightbulb 
+  Keyboard, Blocks, Waves, Rocket, ArrowRight, Lightbulb, RefreshCw, AlertCircle 
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { ProseSection } from '../components/content/ProseSection';
@@ -10,6 +10,7 @@ import { useSeo } from '../hooks/useSeo';
 import { Modal } from '../components/ui/Modal';
 import { Skeleton } from '../components/ui/Skeleton';
 import { lessonService } from '../services/lesson.service';
+import { getApiErrorMessage } from '../services/api';
 import { useAuthStore } from '../store/authStore';
 import type { CourseLesson } from '../types';
 import { cn } from '../utils/cn';
@@ -130,6 +131,8 @@ export default function Learn() {
   const isSessionChecked = useAuthStore((state) => state.isSessionChecked);
   const [lessons, setLessons] = useState<CourseLesson[]>(lessonService.getLessonsCached() ?? []);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
+  const [reloadKey, setReloadKey] = useState(0);
   const [lockedPrompt, setLockedPrompt] = useState<CourseLesson | null>(null);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -152,7 +155,23 @@ export default function Learn() {
   // Track the active category to show (defaults to 'all')
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
-  useEffect(() => { lessonService.getLessons().then(setLessons).finally(() => setLoading(false)); }, []);
+  useEffect(() => {
+    if (!isSessionChecked) return;
+    let current = true;
+    setLoading(true);
+    setLoadError('');
+    lessonService.getLessons()
+      .then((result) => { if (current) setLessons(result); })
+      .catch((err) => {
+        if (!current) return;
+        setLessons([]);
+        setLoadError(err?.isAxiosError
+          ? getApiErrorMessage(err, 'Unable to load Learn levels.')
+          : (err instanceof Error ? err.message : 'Unable to load Learn levels.'));
+      })
+      .finally(() => { if (current) setLoading(false); });
+    return () => { current = false; };
+  }, [isSessionChecked, isAuthenticated, reloadKey]);
 
   // Auto-scroll + highlight when ?focus=N is present
   useEffect(() => {
@@ -286,6 +305,23 @@ export default function Learn() {
     );
   }
 
+  if (loadError || lessons.length === 0) {
+    return (
+      <PageWrapper title="Learn to Type" noHeader fullWidth className="py-8 sm:py-12 px-4 sm:px-6 overflow-hidden">
+        <div className="max-w-5xl mx-auto w-full">
+          <div className="card p-6 sm:p-8 text-center" role={loadError ? 'alert' : undefined}>
+            <AlertCircle size={28} className="mx-auto" style={{ color: 'var(--color-accent-text)' }} />
+            <h1 className="text-xl font-bold mt-3">{loadError ? 'Learn levels could not be loaded' : 'No Learn levels are available'}</h1>
+            <p className="text-sm text-secondary mt-2">{loadError || 'Please try again in a moment.'}</p>
+            <button type="button" className="btn btn-primary px-4 py-2 mt-5" onClick={() => { lessonService.clearCache(); setReloadKey((key) => key + 1); }}>
+              <RefreshCw size={15} /> Try again
+            </button>
+          </div>
+        </div>
+      </PageWrapper>
+    );
+  }
+
   return (
     <PageWrapper title="Learn to Type" noHeader fullWidth className="py-8 sm:py-12 px-4 sm:px-6 overflow-hidden">
       <div className="max-w-5xl mx-auto w-full overflow-hidden">
@@ -344,7 +380,7 @@ export default function Learn() {
                  <p className="text-[0.625rem] sm:text-xs font-bold uppercase tracking-widest text-[#FFD98E] mb-1">
                    Recommended Next Lesson
                  </p>
-                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-1.5 truncate">Level {hero.order} — {hero.title}</h2>
+                 <h2 className="text-lg sm:text-2xl font-bold text-white mb-1.5 line-clamp-2">Level {hero.order} — {hero.title}</h2>
                  <p className="text-sm text-white/85 line-clamp-1 mb-3">{hero.description}</p>
                  <div className="flex items-center gap-3">
                    <div className="h-1.5 sm:h-2 rounded-full bg-white/20 flex-1 max-w-[15rem] overflow-hidden">
@@ -405,6 +441,7 @@ export default function Learn() {
           <div className="space-y-12">
             {SECTIONS.map((section, sIndex) => {
               const sLessons = lessons.filter(l => l.category === section.category);
+              if (sLessons.length === 0) return null;
               const sDone = sLessons.filter(l => l.completed).length;
               const StageIconComponent = section.icon;
               return (
@@ -464,7 +501,7 @@ export default function Learn() {
               );
             })}
           </div>
-        ) : activeSectionInfo && (
+        ) : activeSectionInfo && sectionLessons.length > 0 ? (
           <div className="mb-10">
             {/* Stage Header Card */}
             <div className="card p-4 sm:p-6 md:p-8 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden bg-[var(--color-card)] border border-[var(--color-border)]">
@@ -523,6 +560,8 @@ export default function Learn() {
               </div>
             </div>
           </div>
+        ) : (
+          <div className="card p-6 text-center text-sm text-secondary">No levels are currently available in this stage.</div>
         )}
 
         <ProseSection title="About the Learn course" learnMoreLabel="Learn more about the Learn course" icon={GraduationCap}>

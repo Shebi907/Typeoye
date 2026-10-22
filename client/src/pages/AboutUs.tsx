@@ -3,59 +3,75 @@ import { ArrowRight, Gamepad2, GraduationCap, Heart, LineChart, Play, Target } f
 import { useSeo } from '../hooks/useSeo';
 
 const STATS = [
-  { value: '16', label: 'Guided lessons' },
+  { value: '16', label: 'English guided lessons' },
   { value: '100%', label: 'Free, always' },
   { value: '0', label: 'Sign-up required to start' },
 ];
 
 const DIFFERENTIATORS = [
   {
-    title: 'A real curriculum, not just drills',
+    title: 'Structured English typing lessons',
     description:
-      'Sixteen lessons in four stages — Foundation, Building Blocks, Flow & Rhythm, and Advanced — take you from the home row to numbers, symbols, and professional text in a sensible order. You never have to wonder what to do next.',
+      'Sixteen lessons in four stages — Foundation, Building Blocks, Flow & Rhythm, and Advanced — take you from the home row to numbers, symbols, and professional text in a sensible order.',
     icon: GraduationCap,
     color: '#4F46E5',
     bg: 'rgba(79, 70, 229, 0.1)',
   },
   {
+    title: 'Learn and practise Urdu typing',
+    description:
+      'Use Urdu Learn, Urdu typing tests, and focused practice to build speed and accuracy with the phonetic keyboard. Work through guided lessons and grow more confident typing Urdu online.',
+    icon: GraduationCap,
+    color: '#0F9F91',
+    bg: 'rgba(20, 184, 166, 0.12)',
+  },
+  {
     title: 'Practice that targets your actual gaps',
     description:
-      'Drill characters, key combinations, words, sentences, paragraphs, or your own text at easy, medium, or hard difficulty. Quick Practice reads your recent results and recommends a session aimed at exactly what you need.',
+      'Practise English or Urdu with focused exercises, from characters and words to sentences and longer passages. Choose the available drills and difficulty that fit what you want to work on.',
     icon: Target,
     color: '#22C55E',
     bg: 'rgba(34, 197, 94, 0.1)',
   },
   {
-    title: 'Feedback that tells you what to fix',
+    title: 'Typing tests and useful feedback',
     description:
-      'Every session reports your WPM, your accuracy, and the weak keys hiding behind your errors. Your progress is charted over time, so improvement is visible — and so is the one key that still needs work.',
+      'Take English or Urdu typing tests to check your speed and accuracy. Session results and weak-key feedback help you see where to focus next.',
     icon: LineChart,
     color: '#0EA5E9',
     bg: 'rgba(14, 165, 233, 0.12)',
   },
   {
-    title: 'Practice that sometimes feels like play',
+    title: 'Live one-on-one typing challenges',
     description:
-      'Typing Race, Falling Words, and Sudden Death keep the drill playful, and live one-on-one challenges let you race a friend in real time. Consistency is easier when practice doesn’t always feel like practice.',
+      'Create a challenge and invite another player with a code or shareable link. Race in real time, compare speed and accuracy, and make practice more interactive.',
     icon: Gamepad2,
     color: '#F5A623',
     bg: 'rgba(245, 166, 35, 0.12)',
+  },
+  {
+    title: 'Progress, achievements, and milestones',
+    description:
+      'Signed-in users can follow their English and Urdu progress separately and earn achievements. English typing milestones can also qualify for a downloadable certificate.',
+    icon: LineChart,
+    color: '#7C3AED',
+    bg: 'rgba(124, 58, 237, 0.1)',
   },
 ];
 
 const STEPS = [
   { title: 'Take a real test', body: 'A timed test from one to ten minutes gives you an honest WPM and accuracy number.' },
   { title: 'Find your weak spots', body: 'Every result shows the weak keys behind your errors, so you know what to practice.' },
-  { title: 'Learn in order', body: 'Follow the sixteen lessons from Foundation to Advanced, and drill any keys or patterns that trip you up.' },
-  { title: 'Watch the trend move', body: 'With a free account, every session is saved and charted, so progress over weeks is visible.' },
-  { title: 'Earn your certificate', body: 'Pass the 30 WPM / 90% accuracy bar in a single test to unlock a free downloadable certificate.' },
+  { title: 'Learn in either language', body: 'Follow English or Urdu guided lessons, then practise the keys and patterns you want to improve.' },
+  { title: 'Track your progress', body: 'Sign in to review your English and Urdu progress and achievements separately over time.' },
+  { title: 'Reach typing milestones', body: 'Build your English typing skills and work toward an eligible downloadable certificate.' },
 ];
 
 export default function AboutUs() {
   useSeo({
-    title: 'About Typeoye | Free Typing Platform for Tests, Lessons & Practice',
+    title: 'About Typeoye | English and Urdu Typing Practice, Tests & Lessons',
     description:
-      'Typeoye is a free, ad-free typing platform with honest typing tests, 16 guided lessons, focused practice drills, typing games, certificates, and progress tracking.',
+      'Typeoye helps you improve English and Urdu typing with online practice, guided lessons, typing tests, live challenges, separate progress tracking, achievements, and English typing certificates.',
     canonicalPath: '/about',
   });
 
@@ -76,9 +92,8 @@ export default function AboutUs() {
           About Typeoye
         </h1>
         <p className="readable-text mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
-          Typeoye is a free typing platform with one job: to make fast, accurate typing something anyone can
-          learn. Everything here — tests, lessons, practice drills, and games — exists to help you type better,
-          and none of it is locked behind ads or a paywall.
+          Typeoye helps people improve English and Urdu typing through online typing practice, guided learning,
+          and typing tests. Build speed and accuracy, track your progress, and practise in a way that suits you.
         </p>
       </section>
 
@@ -106,18 +121,17 @@ export default function AboutUs() {
         </h2>
         <div className="readable-text mx-auto mt-6 flex max-w-3xl flex-col gap-5 text-base leading-relaxed text-[var(--color-text-secondary)]">
 <p>
-            Typeoye is a complete typing practice platform. A timed test — one to ten minutes — gives you
-            instant WPM and accuracy, measured honestly: one correctly typed word counts, whatever its
-            length. Sixteen guided lessons take you from the home row up to professional text, and focused
-            drills let you practice characters, combinations, words, sentences, paragraphs, or your own
-            pasted text.
+            Typeoye is an online typing practice platform for both English and Urdu. English Learn offers
+            sixteen guided lessons, while Urdu Learn gives learners a dedicated path to practise Urdu typing
+            with a phonetic keyboard. Typing tests in both languages help you assess speed and accuracy, and
+            focused practice exercises give you a place to build those skills at your own pace.
           </p>
           <p>
-            When you want practice that feels like play, there are typing games and one-on-one
-            challenges. And because improvement sticks best when you can see it, accounts save every
-            result, chart it over time, and award a free certificate once you cross the 30 WPM / 90%
-            accuracy bar. Typeoye is for students, job seekers, working professionals, and anyone who
-            has decided to finally learn to touch type.
+            For a more interactive way to practise, create a live one-on-one Typing Challenge and invite
+            another player with a challenge code or shared link. Signed-in users can review English and Urdu
+            progress and achievements separately, and eligible English typing results can earn a downloadable
+            certificate. Typeoye is for learners, students, job seekers, and anyone who wants to type with
+            greater confidence.
           </p>
         </div>
       </section>
@@ -138,9 +152,9 @@ export default function AboutUs() {
             the practice under ads and pop-ups; premium courses lock even basic lessons behind a subscription.
           </p>
           <p>
-            Typeoye exists to be the middle path: a genuinely useful, ad-free place where the product is the
-            practice, not the distraction. Our goal is deliberately uncomplicated — give people a clear path from
-            hunt-and-peck to confident touch typing, and let them watch real, honest progress along the way.
+            Typeoye exists to be a useful, ad-free place to practise both English and Urdu typing. Our goal is
+            to give people clear ways to learn, test their skills, and build confidence, with progress and
+            achievements kept distinct for each language.
           </p>
         </div>
       </section>
@@ -205,10 +219,10 @@ export default function AboutUs() {
         data-testid="about-cta"
       >
         <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl text-[#17171F] dark:text-white">
-          Ready to see what you can actually type?
+          Ready to improve your English or Urdu typing?
         </h2>
         <p className="readable-text mx-auto mt-3 max-w-xl text-base leading-relaxed text-[#3A3A46] dark:text-[#9294B0]">
-          No sign-up required to start — take a real test and get a real number, or begin with the very first lesson.
+          Start with a typing test or explore a guided lesson, then keep practising at your own pace.
         </p>
         <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link

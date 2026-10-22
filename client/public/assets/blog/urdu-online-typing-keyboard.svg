@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Typing Urdu online on a laptop</title>
+  <desc id="desc">A laptop with an English QWERTY keyboard shows phonetic English input becoming the Urdu phrase السلام علیکم.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f7fbff"/><stop offset="1" stop-color="#e9f5f5"/></linearGradient>
+    <linearGradient id="desk" x2="0" y2="1"><stop stop-color="#f4f8fb"/><stop offset="1" stop-color="#e8eef3"/></linearGradient>
+    <linearGradient id="screenFrame" x2="1" y2="1"><stop stop-color="#334155"/><stop offset=".5" stop-color="#17283b"/><stop offset="1" stop-color="#0f1d2e"/></linearGradient>
+    <linearGradient id="screen" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#f9fcff"/></linearGradient>
+    <linearGradient id="base" x2="0" y2="1"><stop stop-color="#e5edf2"/><stop offset="1" stop-color="#aebec9"/></linearGradient>
+    <linearGradient id="accent" x2="1" y2="1"><stop stop-color="#4361ee"/><stop offset="1" stop-color="#14a89a"/></linearGradient>
+    <filter id="shadow" x="-.2" y="-.2" width="1.4" height="1.6"><feGaussianBlur stdDeviation="22"/></filter>
+    <filter id="soft" x="-.2" y="-.2" width="1.4" height="1.5"><feGaussianBlur stdDeviation="8"/></filter>
+    <pattern id="grain" width="80" height="80" patternUnits="userSpaceOnUse"><circle cx="7" cy="11" r="1" fill="#7c9cab" opacity=".12"/><circle cx="51" cy="58" r="1" fill="#7c9cab" opacity=".10"/></pattern>
+    <g id="key"><rect width="51" height="39" rx="6" fill="#26394b"/><path d="M7 2h36" stroke="#718397" stroke-opacity=".38" stroke-width="1.3"/><rect x="1" y="1" width="49" height="37" rx="5" fill="url(#screenFrame)" opacity=".18"/></g>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#grain)"/>
+  <circle cx="1310" cy="185" r="215" fill="#bdebe4" opacity=".27"/>
+  <circle cx="250" cy="694" r="245" fill="#cbd8ff" opacity=".30"/>
+  <path d="M0 650Q320 610 650 650t950-5v255H0Z" fill="url(#desk)"/>
+  <path d="M0 650Q320 610 650 650t950-5" fill="none" stroke="#d9e5ec" stroke-width="3"/>
+  <ellipse cx="815" cy="741" rx="565" ry="88" fill="#536b7a" opacity=".22" filter="url(#shadow)"/>
+
+  <!-- Laptop screen, facing the viewer -->
+  <rect x="375" y="116" width="850" height="504" rx="30" fill="#314556" opacity=".14" filter="url(#soft)"/>
+  <rect x="387" y="94" width="826" height="510" rx="28" fill="url(#screenFrame)" stroke="#526678" stroke-width="3"/>
+  <rect x="408" y="116" width="784" height="466" rx="13" fill="url(#screen)"/>
+  <circle cx="800" cy="104" r="4" fill="#91a3b3"/>
+  <rect x="408" y="116" width="784" height="42" rx="13" fill="#f5f8fb"/>
+  <path d="M408 145v-16a13 13 0 0 1 13-13h758a13 13 0 0 1 13 13v16" fill="#f5f8fb"/>
+  <circle cx="434" cy="137" r="5" fill="#9eb1bd"/><circle cx="451" cy="137" r="5" fill="#9eb1bd"/><circle cx="468" cy="137" r="5" fill="#9eb1bd"/>
+  <rect x="646" y="125" width="410" height="24" rx="12" fill="#e8eef3"/>
+  <circle cx="663" cy="137" r="4" fill="#8da2b1"/>
+  <rect x="408" y="158" width="784" height="424" fill="url(#screen)"/>
+  <rect x="408" y="158" width="784" height="4" fill="url(#accent)" opacity=".8"/>
+
+  <!-- Minimal typing interface: verified phonetic input and real Urdu text -->
+  <text x="800" y="219" text-anchor="middle" fill="#172b3d" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="26" font-weight="700">Type in English. Read in Urdu.</text>
+  <text x="520" y="276" fill="#637789" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" letter-spacing=".4">ENGLISH PHONETIC INPUT</text>
+  <rect x="500" y="291" width="600" height="57" rx="12" fill="#ffffff" stroke="#d9e3ea" stroke-width="2"/>
+  <text x="530" y="328" fill="#34495b" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="500">alslam elikm</text>
+  <rect x="1081" y="306" width="2" height="28" rx="1" fill="#4361ee"/>
+  <text x="520" y="392" fill="#637789" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" letter-spacing=".4">URDU TEXT OUTPUT</text>
+  <rect x="500" y="408" width="600" height="112" rx="14" fill="#f2fbfa" stroke="#ccece7" stroke-width="2"/>
+  <text x="800" y="484" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" fill="#163d4a" font-family="Noto Naskh Arabic, Noto Sans Arabic, Segoe UI, Tahoma, serif" font-size="53" font-weight="600">السلام علیکم</text>
+  <rect x="500" y="541" width="104" height="6" rx="3" fill="#dce5ec"/>
+  <rect x="612" y="541" width="62" height="6" rx="3" fill="#dce5ec"/>
+
+  <!-- Aluminum laptop base and visibly English QWERTY keys -->
+  <path d="M354 602h892l149 178q8 13-13 19l-114 26H331l-113-26q-20-6-12-19Z" fill="url(#base)" stroke="#9aabb7" stroke-width="3"/>
+  <path d="M359 608h882l-47 48H406Z" fill="#b7c7d1" opacity=".58"/>
+  <path d="M397 622h806l-36 34H433Z" fill="#1f3244"/>
+  <g transform="translate(424 626) skewX(-9) scale(1 .72)" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" text-anchor="middle" fill="#e7eef4">
+    <!-- Number row -->
+    <g><use xlink:href="#key" x="0"/><use xlink:href="#key" x="56"/><use xlink:href="#key" x="112"/><use xlink:href="#key" x="168"/><use xlink:href="#key" x="224"/><use xlink:href="#key" x="280"/><use xlink:href="#key" x="336"/><use xlink:href="#key" x="392"/><use xlink:href="#key" x="448"/><use xlink:href="#key" x="504"/><use xlink:href="#key" x="560"/><use xlink:href="#key" x="616"/><use xlink:href="#key" x="672"/><text x="25" y="25">1</text><text x="81" y="25">2</text><text x="137" y="25">3</text><text x="193" y="25">4</text><text x="249" y="25">5</text><text x="305" y="25">6</text><text x="361" y="25">7</text><text x="417" y="25">8</text><text x="473" y="25">9</text><text x="529" y="25">0</text><text x="585" y="25">-</text><text x="641" y="25">=</text><text x="697" y="25">⌫</text></g>
+    <!-- QWERTY -->
+    <g transform="translate(25 48)"><use xlink:href="#key" x="0"/><use xlink:href="#key" x="56"/><use xlink:href="#key" x="112"/><use xlink:href="#key" x="168"/><use xlink:href="#key" x="224"/><use xlink:href="#key" x="280"/><use xlink:href="#key" x="336"/><use xlink:href="#key" x="392"/><use xlink:href="#key" x="448"/><use xlink:href="#key" x="504"/><use xlink:href="#key" x="560"/><text x="25" y="25">Q</text><text x="81" y="25">W</text><text x="137" y="25">E</text><text x="193" y="25">R</text><text x="249" y="25">T</text><text x="305" y="25">Y</text><text x="361" y="25">U</text><text x="417" y="25">I</text><text x="473" y="25">O</text><text x="529" y="25">P</text><text x="585" y="25">[</text><text x="641" y="25">]</text></g>
+    <!-- ASDF -->
+    <g transform="translate(48 96)"><use xlink:href="#key" x="0"/><use xlink:href="#key" x="56"/><use xlink:href="#key" x="112"/><use xlink:href="#key" x="168"/><use xlink:href="#key" x="224"/><use xlink:href="#key" x="280"/><use xlink:href="#key" x="336"/><use xlink:href="#key" x="392"/><use xlink:href="#key" x="448"/><text x="25" y="25">A</text><text x="81" y="25">S</text><text x="137" y="25">D</text><text x="193" y="25">F</text><text x="249" y="25">G</text><text x="305" y="25">H</text><text x="361" y="25">J</text><text x="417" y="25">K</text><text x="473" y="25">L</text></g>
+    <!-- ZXCV -->
+    <g transform="translate(80 144)"><use xlink:href="#key" x="0"/><use xlink:href="#key" x="56"/><use xlink:href="#key" x="112"/><use xlink:href="#key" x="168"/><use xlink:href="#key" x="224"/><use xlink:href="#key" x="280"/><use xlink:href="#key" x="336"/><use xlink:href="#key" x="392"/><use xlink:href="#key" x="448"/><text x="25" y="25">Z</text><text x="81" y="25">X</text><text x="137" y="25">C</text><text x="193" y="25">V</text><text x="249" y="25">B</text><text x="305" y="25">N</text><text x="361" y="25">M</text><text x="417" y="25">,</text><text x="473" y="25">.</text></g>
+    <g transform="translate(215 192)"><rect width="370" height="39" rx="6" fill="#26394b"/><path d="M7 2h356" stroke="#718397" stroke-opacity=".38" stroke-width="1.3"/><text x="185" y="25">SPACE</text></g>
+  </g>
+  <path d="M737 784h126l-10 13H747Z" fill="#95a8b5" opacity=".68"/>
+  <path d="M230 800q570 48 1140 0" fill="none" stroke="#fff" stroke-opacity=".68" stroke-width="3"/>
+
+  <!-- Subtle visual cue from phonetic keys to Urdu output -->
+  <circle cx="1278" cy="401" r="29" fill="#ffffff" opacity=".94"/>
+  <path d="M1266 401h22m-9-9 9 9-9 9" fill="none" stroke="#14a89a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="322" cy="398" r="24" fill="#ffffff" opacity=".8"/>
+  <path d="M312 398h17m-7-7 7 7-7 7" fill="none" stroke="#4361ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

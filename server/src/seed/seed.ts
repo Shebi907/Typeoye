@@ -10,6 +10,7 @@ import UserAchievement from '../models/UserAchievement';
 import LessonProgress from '../models/LessonProgress';
 import { VARIANTS } from '../services/lessonContent.service';
 import { PARAGRAPHS } from './paragraphs';
+import { seedUrduLessons } from './urduLessons';
 
 const MONGODB_URI = process.env['MONGODB_URI'] || 'mongodb://localhost:27017/typeoye';
 
@@ -27,6 +28,11 @@ async function seed(): Promise<void> {
     LessonProgress.deleteMany({}),
   ]);
   console.log('🗑️  Cleared existing seed data');
+
+  // Reconcile indexes after the schema change that scopes Lesson.order
+  // uniqueness per language (drops the old unique `order_1`, builds
+  // `language_1_order_1`).
+  await Lesson.syncIndexes();
 
   // --- REAL TYPING TEST PARAGRAPHS (shared pool: no repeats within challenges) ---
   const paragraphs = PARAGRAPHS.map(([difficulty, topic, content]) => ({ difficulty, topic, content }));
@@ -158,10 +164,6 @@ async function seed(): Promise<void> {
   ]);
   console.log(`✅ Seeded ${achievements.length} achievements`);
 
-  // Remove unlocks that point at achievements no longer in the catalog
-  const activeIds = await Achievement.find({}).select('_id');
-  await UserAchievement.deleteMany({ achievementId: { $nin: activeIds } });
-
   // --- 16 LEARN LEVELS (Foundation → Building Blocks → Flow & Rhythm → Advanced)
   // Exercise base content mirrors variant[0] of each pool in
   // services/lessonContent.service.ts so the fallback always matches.
@@ -183,7 +185,7 @@ async function seed(): Promise<void> {
     { title: 'Numbers & Symbols in Context', category: 'advanced', description: 'Type real-world text mixing figures, currency, dates, and symbols.', targetKeys: ['1','2','3','4','5','6','7','8','9','0','$','%','#','@'], difficulty: 8 },
     { title: 'Advanced Typing', category: 'advanced', description: 'Combine capitalization, code-like text, and professional documents.', targetKeys: [], difficulty: 9 },
   ];
-  const learnLessons = await Lesson.insertMany(curriculum.map((lesson, index) => ({ ...lesson, order: index + 1, accuracyThreshold: 90, isActive: true })));
+  const learnLessons = await Lesson.insertMany(curriculum.map((lesson, index) => ({ ...lesson, language: 'en', order: index + 1, accuracyThreshold: 90, isActive: true })));
   // Exercise sets: 3 exercises for L1-5, 4 exercises for L6-14, 5 exercises for L15-16
   const exerciseSets: [string, string, string, string[]][][] = [
     // Level 1: Keyboard Basics (3 exercises)
@@ -316,6 +318,17 @@ async function seed(): Promise<void> {
 
   const totalExercises = exerciseSets.reduce((sum, set) => sum + set.length, 0);
   console.log(`✅ Seeded ${learnLessons.length} ordered Learn levels with ${totalExercises} exercises`);
+
+  // --- 16 URDU LEARN LEVELS + URDU ACHIEVEMENTS (independent course) ---
+  const urdu = await seedUrduLessons();
+  console.log(`✅ Seeded ${urdu.lessons} Urdu levels with ${urdu.exercises} exercises (${urdu.achievements} achievements)`);
+
+  // Remove unlocks that point at achievements no longer in the catalog. This
+  // runs AFTER both English and Urdu achievements are (re)seeded so Urdu unlock
+  // records are not wiped by a full reseed.
+  const activeIds = await Achievement.find({}).select('_id');
+  await UserAchievement.deleteMany({ achievementId: { $nin: activeIds } });
+
   console.log('🎉 Seed complete!');
   await mongoose.disconnect();
 }

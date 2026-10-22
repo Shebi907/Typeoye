@@ -8,17 +8,31 @@ import { computeStats } from '../services/wpm.service';
 import { updateStreak } from '../services/streak.service';
 import { checkAndAwardAchievements } from '../services/achievement.service';
 import { XP_VALUES, awardXp } from '../services/gamification.service';
-import { getExerciseVariants } from '../services/lessonContent.service';
+import { getVariantsFor } from '../services/lessonContent.service';
 import { sendSuccess, sendError } from '../utils/response';
+import type { LessonLanguage } from '../models/Lesson';
+
+type CourseLanguage = LessonLanguage;
+
+/**
+ * The active course language for this request. Set by the route middleware
+ * (`res.locals.language`): the English lesson routes pin 'en', the Urdu lesson
+ * routes pin 'ur'. Defaults to English so existing callers are unaffected.
+ */
+function requestLanguage(res: Response): CourseLanguage {
+  return res.locals['language'] === 'ur' ? 'ur' : 'en';
+}
 
 const typedWordSchema = z.object({ word: z.string(), typed: z.string(), correct: z.boolean(), timeTakenMs: z.number().min(0) });
 export const completeExerciseSchema = z.object({ startTime: z.string().datetime(), endTime: z.string().datetime(), typedWords: z.array(typedWordSchema).min(1), variantIndex: z.number().int().min(0).max(99).optional() });
 
-async function lessonAccess(userId: unknown, lesson: { order: number; _id: unknown }) {
+async function lessonAccess(userId: unknown, lesson: { order: number; _id: unknown; language: CourseLanguage }) {
   if (lesson.order === 1) return true;
   // Guests have no saved progress, so only the first lesson is open for them.
   if (!userId) return false;
-  const previous = await Lesson.findOne({ isActive: true, order: lesson.order - 1 });
+  // Previous lesson must be in the SAME course language — the two courses are
+  // unlocked completely independently.
+  const previous = await Lesson.findOne({ isActive: true, language: lesson.language, order: lesson.order - 1 });
   if (!previous) return false;
   return Boolean(await LessonProgress.exists({ userId, lessonId: previous._id, completedAt: { $exists: true } }));
 }
@@ -26,8 +40,9 @@ async function lessonAccess(userId: unknown, lesson: { order: number; _id: unkno
 export async function getLessons(req: Request, res: Response): Promise<void> {
   try {
     const userId = req.user?._id;
+    const language = requestLanguage(res);
     const [lessons, progress, exerciseCounts] = await Promise.all([
-      Lesson.find({ isActive: true }).sort({ order: 1 }),
+      Lesson.find({ isActive: true, language }).sort({ order: 1 }),
       userId ? LessonProgress.find({ userId }) : Promise.resolve([] as never[]),
       Exercise.aggregate<{ _id: mongoose.Types.ObjectId; count: number }>([
         { $match: { isActive: true } },
@@ -58,6 +73,9 @@ export async function getLesson(req: Request, res: Response): Promise<void> {
   try {
     const lesson = await Lesson.findById(req.params['id']);
     if (!lesson || !lesson.isActive) { sendError(res, 'Lesson not found', 404); return; }
+    // Keep the two courses strictly separated: an Urdu id is not reachable
+    // through the English route (and vice versa).
+    if (lesson.language !== requestLanguage(res)) { sendError(res, 'Lesson not found', 404); return; }
     if (!await lessonAccess(req.user?._id, lesson)) { sendError(res, 'Complete the previous level to unlock this lesson.', 403); return; }
     const [exerciseDocs, progress] = await Promise.all([
       Exercise.find({ lessonId: lesson._id, isActive: true }).sort({ order: 1 }),
@@ -69,7 +87,7 @@ export async function getLesson(req: Request, res: Response): Promise<void> {
     // completion so the server can regenerate the same text.
     let progressDirty = false;
     const exercises = exerciseDocs.map((exercise) => {
-      const variants = getExerciseVariants(lesson.order, exercise.order, exercise.content);
+      const variants = getVariantsFor(lesson.language, lesson.order, exercise.order, exercise.content);
       let variantIndex: number;
       const attempt = progress?.exercises.find((item) => item.exerciseId.toString() === exercise._id.toString());
       if (progress && attempt) {
@@ -110,11 +128,12 @@ export async function completeExercise(req: Request, res: Response): Promise<voi
     const lesson = await Lesson.findById(req.params['id']);
     const exercise = await Exercise.findOne({ _id: req.params['exerciseId'], lessonId: req.params['id'], isActive: true });
     if (!lesson || !exercise) { sendError(res, 'Lesson exercise not found', 404); return; }
+    if (lesson.language !== requestLanguage(res)) { sendError(res, 'Lesson exercise not found', 404); return; }
     if (!await lessonAccess(req.user!._id, lesson)) { sendError(res, 'Complete the previous level to unlock this lesson.', 403); return; }
     const body = req.body as z.infer<typeof completeExerciseSchema>;
     const candidateTexts = [exercise.content];
     if (typeof body.variantIndex === 'number') {
-      const variant = getExerciseVariants(lesson.order, exercise.order, exercise.content)[body.variantIndex];
+      const variant = getVariantsFor(lesson.language, lesson.order, exercise.order, exercise.content)[body.variantIndex];
       if (variant) candidateTexts.unshift(variant);
     }
     let matchedWords: string[] | null = null;
@@ -159,7 +178,11 @@ export async function completeExercise(req: Request, res: Response): Promise<voi
       xpEarned += XP_VALUES.lessonCompleteBonus;
     }
 
-    const newAchievements = await checkAndAwardAchievements(req.user!._id);
+    // Achievement checks run for the course this request belongs to (English
+    // lessons → English rules; /urdu-lessons → Urdu rules). Without the pinned
+    // language an Urdu lesson could unlock an English achievement.
+    const achievementLanguage: 'en' | 'ur' = res.locals['language'] === 'ur' ? 'ur' : 'en';
+    const newAchievements = await checkAndAwardAchievements(req.user!._id, achievementLanguage);
     const achievementBonus = newAchievements.reduce((sum, a) => sum + a.xpReward, 0);
     xpEarned += achievementBonus;
 

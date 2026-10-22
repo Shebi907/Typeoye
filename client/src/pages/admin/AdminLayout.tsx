@@ -1,14 +1,16 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Users, BookOpen, Layers, Trophy, Settings, ShieldAlert, FileText } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, Layers, Trophy, Settings, ShieldAlert, FileText, Languages } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 
 const tabs = [
   { to: '/admin', label: 'Overview', icon: LayoutDashboard, end: true },
   { to: '/admin/users', label: 'Users', icon: Users },
   { to: '/admin/lessons', label: 'Lessons', icon: BookOpen },
+  { to: '/admin/urdu-lessons', label: 'Urdu Lessons', icon: Languages },
   { to: '/admin/content', label: 'Content', icon: Layers },
   { to: '/admin/certificate-paragraphs', label: 'Cert Paragraphs', icon: FileText },
+  { to: '/admin/urdu-content', label: 'Urdu Content', icon: Languages },
   { to: '/admin/achievements', label: 'Achievements', icon: Trophy },
   { to: '/admin/settings', label: 'Settings', icon: Settings },
 ];

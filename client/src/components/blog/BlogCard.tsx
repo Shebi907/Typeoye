@@ -3,6 +3,7 @@ import { ArrowRight, Calendar, Clock } from 'lucide-react';
 import { formatDate } from '../../data/blog';
 import type { BlogPost } from '../../data/blog';
 import { cn } from '../../utils/cn';
+import { UrduKeyboardLayoutGraphic } from './UrduKeyboardLayoutGraphic';
 
 interface BlogCardProps {
   post: BlogPost;
@@ -30,16 +31,21 @@ export function BlogCard({ post, variant = 'horizontal' }: BlogCardProps) {
             : 'aspect-[16/10] w-full'
         )}
       >
-        <img
-          src={post.image}
-          alt={post.imageAlt}
-          loading="lazy"
-          decoding="async"
-          className={cn(
-            'h-full w-full object-cover transition-transform duration-500 group-hover:scale-105',
-            horizontal && 'absolute inset-0'
-          )}
-        />
+        {post.slug === 'urdu-phonetic-keyboard-layout' ? (
+          <UrduKeyboardLayoutGraphic className={cn('transition-transform duration-500 group-hover:scale-105', horizontal && 'absolute inset-0')} />
+        ) : (
+          <img
+            src={post.image}
+            alt={post.imageAlt}
+            loading="lazy"
+            decoding="async"
+            className={cn(
+              'h-full w-full transition-transform duration-500 group-hover:scale-105',
+              'object-cover',
+              horizontal && 'absolute inset-0'
+            )}
+          />
+        )}
         <span
           className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[0.6875rem] font-bold uppercase tracking-wide text-[#4361ee] shadow-sm dark:bg-[#1c1c25]/90 dark:text-[#8ba2ff]"
         >

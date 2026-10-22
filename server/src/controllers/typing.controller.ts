@@ -30,9 +30,14 @@ export const sessionSchema = z.object({
   // at submit time so later edits to the library never change past history.
   certificateParagraphId: z.string().optional(),
   certificateParagraphText: z.string().max(4000).optional(),
+  // Course language for test/practice submissions. Omitted means English.
+  language: z.enum(['en', 'ur']).optional(),
 });
 
 export async function getRandomParagraph(req: Request, res: Response): Promise<void> {
+  // This endpoint returns a random record; a cached response can serve stale
+  // content after the client starts a new test.
+  res.setHeader('Cache-Control', 'no-store');
   try {
     const difficulty = req.query['difficulty'];
     const match = typeof difficulty === 'string' && ['beginner', 'intermediate', 'advanced'].includes(difficulty) ? { difficulty } : {};

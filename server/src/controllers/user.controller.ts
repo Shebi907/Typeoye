@@ -136,8 +136,11 @@ export async function updateSettings(req: Request, res: Response): Promise<void>
 export async function getAchievements(req: Request, res: Response): Promise<void> {
   try {
     const user = req.user!;
-    // All active achievements with unlock status + live progress (server-derived)
-    const achievements = await getUserAchievements(user._id);
+    // Course scoping: /me/achievements (English by default) vs
+    // /me/achievements?language=ur (Urdu). Each returns only that course's set
+    // with server-derived unlock status + live progress.
+    const language: 'en' | 'ur' = req.query['language'] === 'ur' ? 'ur' : 'en';
+    const achievements = await getUserAchievements(user._id, language);
     sendSuccess(res, { achievements });
   } catch (err) {
     console.error('getAchievements error:', err);

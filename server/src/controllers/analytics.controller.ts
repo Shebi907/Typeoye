@@ -10,8 +10,12 @@ import Streak from '../models/Streak';
 import { getTestBestWpm } from '../services/session.service';
 import { sendSuccess, sendError } from '../utils/response';
 
-/** Daily average WPM over the last 30 days (shared by trend + progress). */
-async function wpmTrend(userId: unknown): Promise<{ date: string; value: number; max: number; count: number }[]> {
+/** Daily average WPM over the last 30 days (shared by trend + progress).
+ *  Scoped by course language so English and Urdu trends never mix. */
+async function wpmTrend(
+  userId: unknown,
+  language: 'en' | 'ur' = 'en'
+): Promise<{ date: string; value: number; max: number; count: number }[]> {
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
@@ -19,6 +23,7 @@ async function wpmTrend(userId: unknown): Promise<{ date: string; value: number;
     {
       $match: {
         userId,
+        language,
         createdAt: { $gte: thirtyDaysAgo },
       },
     },
@@ -45,7 +50,8 @@ async function wpmTrend(userId: unknown): Promise<{ date: string; value: number;
 
 export async function getWpmTrend(req: Request, res: Response): Promise<void> {
   try {
-    const trend = await wpmTrend(req.user!._id);
+    const language: 'en' | 'ur' = req.query['language'] === 'ur' ? 'ur' : 'en';
+    const trend = await wpmTrend(req.user!._id, language);
     sendSuccess(res, { trend });
   } catch (err) {
     console.error('getWpmTrend error:', err);
@@ -56,6 +62,7 @@ export async function getWpmTrend(req: Request, res: Response): Promise<void> {
 export async function getAccuracyTrend(req: Request, res: Response): Promise<void> {
   try {
     const user = req.user!;
+    const language: 'en' | 'ur' = req.query['language'] === 'ur' ? 'ur' : 'en';
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
@@ -63,6 +70,7 @@ export async function getAccuracyTrend(req: Request, res: Response): Promise<voi
       {
         $match: {
           userId: user._id,
+          language,
           createdAt: { $gte: thirtyDaysAgo },
         },
       },
@@ -155,14 +163,18 @@ sendSuccess(res, { progress: dashProgress, streak, charts: { wpm: wpmTrend.map((
 }
 
 /** Per-user progress summary for /progress: per-mode stats, learning totals,
- *  recent sessions per mode, and the 30-day WPM trend. */
+ *  recent sessions per mode, and the 30-day WPM trend. Scoped to the requested
+ *  course language so English (`/progress`) and Urdu (`/progress/urdu`) show
+ *  completely independent data. */
 export async function getProgress(req: Request, res: Response): Promise<void> {
   try {
     const user = req.user!;
+    const language: 'en' | 'ur' = res.locals['language'] === 'ur' ? 'ur' : 'en';
+    const uid = user._id;
 
-    const [modeStats, learnRows, totalLessons, recentSessions, recentLessons, trend, streakDoc, typingTotals] = await Promise.all([
+    const [modeStats, learnRows, totalLessons, recentSessions, recentLessons, trend, streakDoc, typingTotals, activeDates] = await Promise.all([
       TypingResult.aggregate([
-        { $match: { userId: user._id, mode: { $in: ['test', 'practice'] } } },
+        { $match: { userId: uid, language, mode: { $in: ['test', 'practice'] } } },
         {
           $group: {
             _id: '$mode',
@@ -173,8 +185,20 @@ export async function getProgress(req: Request, res: Response): Promise<void> {
           },
         },
       ]),
+      // Lesson totals scoped to this course's lessons only (via a join on
+      // Lesson.language) so English never counts Urdu levels and vice versa.
       LessonProgress.aggregate([
-        { $match: { userId: user._id } },
+        { $match: { userId: uid } },
+        {
+          $lookup: {
+            from: Lesson.collection.name,
+            localField: 'lessonId',
+            foreignField: '_id',
+            as: 'lesson',
+          },
+        },
+        { $unwind: '$lesson' },
+        { $match: { 'lesson.language': language } },
         {
           $group: {
             _id: null,
@@ -185,9 +209,9 @@ export async function getProgress(req: Request, res: Response): Promise<void> {
           },
         },
       ]),
-      Lesson.countDocuments({ isActive: true }),
+      Lesson.countDocuments({ isActive: true, language }),
       TypingSession.aggregate([
-        { $match: { userId: user._id, mode: { $in: ['test', 'practice'] } } },
+        { $match: { userId: uid, language, mode: { $in: ['test', 'practice'] } } },
         { $lookup: { from: 'typingresults', localField: '_id', foreignField: 'sessionId', as: 'result' } },
         { $unwind: '$result' },
         { $lookup: { from: 'practicesessions', localField: '_id', foreignField: 'sessionId', as: 'practice' } },
@@ -197,15 +221,17 @@ export async function getProgress(req: Request, res: Response): Promise<void> {
         { $project: { _id: 1, type: '$mode', mode: { $ifNull: ['$practice.exerciseType', '$mode'] }, wpm: '$result.wpm', accuracy: '$result.accuracy', durationSeconds: 1, createdAt: 1 } },
       ]),
       LessonProgress.aggregate([
-        { $match: { userId: user._id, completedAt: { $exists: true } } },
+        { $match: { userId: uid, completedAt: { $exists: true } } },
         { $sort: { completedAt: -1 } },
-        { $limit: 10 },
         { $lookup: { from: 'lessons', localField: 'lessonId', foreignField: '_id', as: 'lesson' } },
+        { $unwind: '$lesson' },
+        { $match: { 'lesson.language': language } },
+        { $limit: 10 },
       ]),
-      wpmTrend(user._id),
-      Streak.findOne({ userId: user._id }),
+      wpmTrend(uid, language),
+      Streak.findOne({ userId: uid }),
       TypingResult.aggregate([
-        { $match: { userId: user._id, mode: { $in: ['test', 'practice'] } } },
+        { $match: { userId: uid, language, mode: { $in: ['test', 'practice'] } } },
         {
           $group: {
             _id: null,
@@ -215,6 +241,9 @@ export async function getProgress(req: Request, res: Response): Promise<void> {
           },
         },
       ]),
+      // Language-scoped active days (TypingResult + completed lessons) so Urdu
+      // can show its own streak without borrowing English activity.
+      activeDaysAggregate(uid, language),
     ]);
 
     const modes: Record<string, { count: number; avgWpm: number; avgAccuracy: number; bestWpm: number }> = {
@@ -247,7 +276,7 @@ export async function getProgress(req: Request, res: Response): Promise<void> {
       lesson: recentLessons.map((item) => ({
         _id: item._id,
         lessonId: item.lessonId,
-        title: item.lesson?.[0]?.title ?? 'Lesson',
+        title: item.lesson?.title ?? 'Lesson',
         bestAccuracy: item.bestAccuracy,
         attempts: item.attempts,
         timeSpentSeconds: item.timeSpentSeconds,
@@ -270,20 +299,27 @@ export async function getProgress(req: Request, res: Response): Promise<void> {
 
     const totalsRow = typingTotals[0];
 
+    // Urdu streak is derived from Urdu activity only; English keeps using the
+    // shared Streak document (unchanged behaviour).
+    const scopedActive = new Set(activeDates.map((d) => d.date));
+    const streak = language === 'en'
+      ? {
+          current: streakDoc?.currentStreak ?? 0,
+          longest: streakDoc?.longestStreak ?? 0,
+          lastActiveDate: streakDoc?.lastActiveDate ?? null,
+          activeDates: (streakDoc?.streakHistory ?? []).map((h) => {
+            const d = new Date(h.date);
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+          }),
+        }
+      : buildScopedStreak(scopedActive);
+
     sendSuccess(res, {
       modes,
       learn,
       recent,
       trend,
-      streak: {
-        current: streakDoc?.currentStreak ?? 0,
-        longest: streakDoc?.longestStreak ?? 0,
-        lastActiveDate: streakDoc?.lastActiveDate ?? null,
-        activeDates: (streakDoc?.streakHistory ?? []).map((h) => {
-          const d = new Date(h.date);
-          return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-        }),
-      },
+      streak,
       totals: {
         avgAccuracy: totalsRow ? Math.round(totalsRow.avgAccuracy * 10) / 10 : 0,
         keystrokes: totalsRow ? totalsRow.correctWords + totalsRow.errorsCount : 0,
@@ -293,4 +329,69 @@ export async function getProgress(req: Request, res: Response): Promise<void> {
     console.error('getProgress error:', err);
     sendError(res, 'Failed to load progress data', 500);
   }
+}
+
+/** Distinct local-date keys (YYYY-MM-DD) with activity for one course. */
+async function activeDaysAggregate(
+  userId: unknown,
+  language: 'en' | 'ur'
+): Promise<{ date: string }[]> {
+  const [typingDays, lessonDays] = await Promise.all([
+    TypingResult.aggregate<{ _id: string }>([
+      { $match: { userId, language } },
+      { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } } } },
+    ]),
+    LessonProgress.aggregate<{ _id: string }>([
+      { $match: { userId, completedAt: { $exists: true } } },
+      { $lookup: { from: Lesson.collection.name, localField: 'lessonId', foreignField: '_id', as: 'lesson' } },
+      { $unwind: '$lesson' },
+      { $match: { 'lesson.language': language } },
+      { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$completedAt' } } } },
+    ]),
+  ]);
+  const keys = new Set<string>([...typingDays, ...lessonDays].map((r) => r._id));
+  return Array.from(keys).map((date) => ({ date }));
+}
+
+/** Current/longest streak from a set of active local-date keys. */
+function buildScopedStreak(active: Set<string>): {
+  current: number;
+  longest: number;
+  lastActiveDate: Date | null;
+  activeDates: string[];
+} {
+  const dates = Array.from(active).sort();
+  if (dates.length === 0) {
+    return { current: 0, longest: 0, lastActiveDate: null, activeDates: [] };
+  }
+  const key = (d: Date) =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const dayMs = 86_400_000;
+
+  let longest = 1;
+  let run = 1;
+  for (let i = 1; i < dates.length; i++) {
+    const prev = new Date(`${dates[i - 1]}T00:00:00`);
+    const cur = new Date(`${dates[i]}T00:00:00`);
+    if (Math.round((+cur - +prev) / dayMs) === 1) run += 1;
+    else run = 1;
+    longest = Math.max(longest, run);
+  }
+
+  // Current streak: consecutive days ending today or yesterday.
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayKey = key(today);
+  const yesterdayKey = key(new Date(+today - dayMs));
+  let current = 0;
+  if (active.has(todayKey) || active.has(yesterdayKey)) {
+    let cursor = active.has(todayKey) ? today : new Date(+today - dayMs);
+    while (active.has(key(cursor))) {
+      current += 1;
+      cursor = new Date(+cursor - dayMs);
+    }
+  }
+
+  const lastActiveDate = new Date(`${dates[dates.length - 1]}T00:00:00`);
+  return { current, longest, lastActiveDate, activeDates: dates };
 }

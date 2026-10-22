@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Activity, BarChart3, BookOpen, Check, ChevronDown, Clock, Flame, Gauge,
@@ -8,6 +8,7 @@ import type { LucideIcon } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { StatCard } from '../components/ui/StatCard';
 import { WpmChart, AccuracyChart } from '../components/charts/WpmChart';
+import { AchievementsPanel } from '../components/gamification/AchievementsPanel';
 import { analyticsService } from '../services/analytics.service';
 import { PRACTICE_TYPE_BY_SLUG } from '../data/practiceTypes';
 import type {
@@ -19,6 +20,7 @@ const TABS = [
   { id: 'test', label: 'Test', to: '/progress/test' },
   { id: 'practice', label: 'Practice', to: '/progress/practice' },
   { id: 'learn', label: 'Learn', to: '/progress/learn' },
+  { id: 'achievements', label: 'Achievements', to: '/progress/achievements' },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
@@ -28,24 +30,24 @@ function SessionsTable({ rows, withMode }: { rows: HistorySession[]; withMode?: 
   if (!rows.length) return <Empty>Nothing here yet — a few sessions and your history will show up.</Empty>;
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-sm">
+      <table className="w-full min-w-[32rem] text-sm">
         <thead>
           <tr className="text-left text-muted">
-            {withMode && <th className="pb-3 text-left">Mode</th>}
-            <th className="pb-3 text-left">WPM</th>
-            <th className="pb-3 text-left">Accuracy</th>
-            <th className="pb-3 text-left">Duration</th>
-            <th className="pb-3 text-left">Date</th>
+            {withMode && <th className="pb-3 text-left whitespace-nowrap">Mode</th>}
+            <th className="pb-3 text-left whitespace-nowrap">WPM</th>
+            <th className="pb-3 text-left whitespace-nowrap">Accuracy</th>
+            <th className="pb-3 text-left whitespace-nowrap">Duration</th>
+            <th className="pb-3 text-left whitespace-nowrap">Date</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row) => (
             <tr key={row._id} className="border-t border-[var(--color-border)]">
-              {withMode && <td className="py-3 capitalize">{practiceLabel(row.mode)}</td>}
-              <td className="py-3 font-semibold">{row.wpm}</td>
-              <td className="py-3">{row.accuracy}%</td>
-              <td className="py-3">{formatDuration(row.durationSeconds)}</td>
-              <td className="py-3">{new Date(row.createdAt).toLocaleDateString()}</td>
+              {withMode && <td className="py-3 capitalize whitespace-nowrap">{practiceLabel(row.mode)}</td>}
+              <td className="py-3 font-semibold whitespace-nowrap">{row.wpm}</td>
+              <td className="py-3 whitespace-nowrap">{row.accuracy}%</td>
+              <td className="py-3 whitespace-nowrap">{formatDuration(row.durationSeconds)}</td>
+              <td className="py-3 whitespace-nowrap">{new Date(row.createdAt).toLocaleDateString()}</td>
             </tr>
           ))}
         </tbody>
@@ -135,11 +137,11 @@ function ChartCard({ title, icon: Icon, tint, accent, children }: {
   return (
     <div className="card p-5">
       <div className="flex items-center justify-between gap-3 mb-4">
-        <h3 className="font-bold text-sm flex items-center gap-2" style={{ color: 'var(--color-text-primary)' }}>
+        <h3 className="font-bold text-sm flex items-center gap-2 min-w-0" style={{ color: 'var(--color-text-primary)' }}>
           <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: tint, color: accent }}>
             <Icon size={16} />
           </span>
-          {title}
+          <span className="min-w-0 truncate">{title}</span>
         </h3>
         <span
           className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border border-[var(--color-border)] bg-[var(--color-page)]"
@@ -173,14 +175,14 @@ function StreakCard({ streak }: { streak: ProgressStreak }) {
         </span>
         <span className="text-sm font-semibold mb-0.5" style={{ color: 'var(--color-text-secondary)' }}>days</span>
       </div>
-      <div className="mt-4 grid grid-cols-7 gap-1.5">
+      <div className="mt-4 grid grid-cols-7 gap-1 sm:gap-1.5">
         {days.map((d, i) => (
           <div key={`${d.key}-${i}`} className="flex flex-col items-center gap-1">
             <span className="text-[0.625rem] font-bold uppercase" style={{ color: d.isToday ? 'var(--color-accent-text)' : 'var(--color-text-muted)' }}>
               {d.label}
             </span>
             <span
-              className="w-7 h-7 rounded-full flex items-center justify-center transition-colors"
+              className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-colors"
               style={
                 d.active
                   ? { background: 'linear-gradient(135deg, #f59e0b, #fb923c)', color: '#fff', boxShadow: '0 3px 8px rgba(245, 158, 11, 0.35)' }
@@ -291,12 +293,12 @@ function PerformanceSummary({ test, practice, totals }: {
         {items.map((item) => {
           const Icon = item.icon;
           return (
-            <div key={item.label} className="rounded-xl p-4" style={{ background: item.tint }}>
-              <div className="flex items-center gap-2">
-                <span style={{ color: item.accent }}><Icon size={15} /></span>
-                <span className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>{item.label}</span>
+            <div key={item.label} className="rounded-xl p-4 min-w-0" style={{ background: item.tint }}>
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="shrink-0" style={{ color: item.accent }}><Icon size={15} /></span>
+                <span className="text-xs font-semibold truncate" style={{ color: 'var(--color-text-secondary)' }}>{item.label}</span>
               </div>
-              <p className="text-2xl font-extrabold tabular-nums mt-2" style={{ color: 'var(--color-text-primary)' }}>{item.value}</p>
+              <p className="text-xl sm:text-2xl font-extrabold tabular-nums mt-2 break-words" style={{ color: 'var(--color-text-primary)' }}>{item.value}</p>
             </div>
           );
         })}
@@ -332,7 +334,16 @@ export default function ProgressPage() {
     path === '/progress/test' ? 'test'
       : path === '/progress/practice' ? 'practice'
       : path === '/progress/learn' ? 'learn'
+      : path === '/progress/achievements' ? 'achievements'
       : 'overview';
+
+  // Keep the active tab in view. The strip is a horizontal scroller and on a
+  // narrow phone the right-hand tabs (Learn / Achievements) start off-screen,
+  // so without this the page would show no visible active-tab state.
+  const activeTabRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    activeTabRef.current?.scrollIntoView({ inline: 'center', block: 'nearest' });
+  }, [activeTab]);
 
   const test = data?.modes.test ?? EMPTY_MODES.test;
   const practice = data?.modes.practice ?? EMPTY_MODES.practice;
@@ -342,13 +353,14 @@ export default function ProgressPage() {
   const recent = data?.recent ?? { test: [], practice: [], lesson: [] };
 
   return (
-    <PageWrapper title="My Progress" description="Track your typing speed, accuracy, and course progress at a glance." icon={BarChart3} dotGrid>
-      <div className="flex gap-2 mb-6 border-b border-[var(--color-border)] overflow-x-auto">
+    <PageWrapper title="My Progress" description="Track your typing speed, accuracy, and course progress at a glance." icon={BarChart3} dotGrid descriptionAlignLeft>
+      <div className="flex gap-2 mb-6 border-b border-[var(--color-border)] overflow-x-auto snap-x -mx-4 px-4 sm:mx-0 sm:px-0">
         {TABS.map((item) => (
           <button
             key={item.id}
+            ref={activeTab === item.id ? activeTabRef : undefined}
             onClick={() => navigate(item.to)}
-            className={`px-4 py-3 font-semibold capitalize whitespace-nowrap transition-colors ${activeTab === item.id ? 'text-[var(--color-accent-text)] border-b-2 border-[var(--color-accent)]' : 'text-secondary hover:text-primary'}`}
+            className={`px-4 py-3 font-semibold capitalize whitespace-nowrap shrink-0 snap-start transition-colors ${activeTab === item.id ? 'text-[var(--color-accent-text)] border-b-2 border-[var(--color-accent)]' : 'text-secondary hover:text-primary'}`}
           >
             {item.label}
           </button>
@@ -437,6 +449,8 @@ export default function ProgressPage() {
           </div>
         </>
       )}
+
+      {activeTab === 'achievements' && <AchievementsPanel language="en" />}
     </PageWrapper>
   );
 }

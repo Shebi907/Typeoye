@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowLeft, ArrowRight, CheckCircle2, ChevronRight, LockKeyhole,
   RotateCcw, XCircle, Clock, Target, AlertCircle, Pause, Play,
-  SkipForward, Trophy, BookOpen,
+  SkipForward, Trophy, BookOpen, Lightbulb,
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { Modal } from '../components/ui/Modal';
@@ -18,6 +18,14 @@ import { lessonService, type ExerciseCompletion } from '../services/lesson.servi
 import { applySessionRewards } from '../utils/rewards';
 import { useAuthStore } from '../store/authStore';
 import type { CourseLesson, EngineResult, Exercise, Lesson, LessonProgress } from '../types';
+
+const QUICK_TIPS = [
+  'Focus on accuracy before increasing speed.',
+  'Keep your fingers on the correct home-row keys.',
+  'Read ahead while typing.',
+  'Use Backspace to correct mistakes and continue carefully.',
+  'Practise regularly to improve your typing speed.',
+];
 
 export default function LessonPlayer() {
   const { id = '' } = useParams();
@@ -103,9 +111,7 @@ export default function LessonPlayer() {
 
   const currentExercise = exercises[activeExerciseIndex];
   const completedExerciseIds = isAuthenticated ? (progress?.completedExerciseIds ?? []) : guestDone;
-  const completedSet = new Set(completedExerciseIds);
   const isReplay = isAuthenticated && exercises.length > 0 && completedExerciseIds.length === exercises.length;
-  const progressPct = exercises.length ? (completedExerciseIds.length / exercises.length) * 100 : 0;
   const isLastExercise = activeExerciseIndex === exercises.length - 1;
 
   const onComplete = useCallback(async (result: EngineResult) => {
@@ -159,8 +165,6 @@ export default function LessonPlayer() {
   }, [lesson, currentExercise, isAuthenticated]);
 
   const engine = useTypingEngine({ text: currentExercise?.content ?? '', durationSeconds: 999999, onComplete, extendContent: false });
-
-  const mistakeCount = engine.wordStates.filter((w) => w.status === 'error').length;
 
   const handleRestart = useCallback(() => {
     setFeedback(null);
@@ -218,8 +222,13 @@ export default function LessonPlayer() {
   const displayElapsed = isPaused ? pausedElapsedRef.current : engine.elapsed;
   const displayRemaining = Math.max(0, 999999 - displayElapsed);
 
-  // Lock page scroll while the exercise-completion overlay is shown.
-  useScrollLock(engine.phase === 'finished' && !!feedback);
+  // The completion result is rendered as a full-viewport overlay so the card is
+  // always fully visible WITHOUT moving the page: we never scroll the document,
+  // so the user's scroll position stays exactly where it was. When the card is
+  // taller than the viewport the overlay itself scrolls. Background scroll is
+  // locked while the overlay is open and restored on close.
+  const showResult = engine.phase === 'finished' && !!feedback;
+  useScrollLock(showResult);
 
   if (!lesson && error) {
     return <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6 overflow-hidden">
@@ -282,21 +291,21 @@ export default function LessonPlayer() {
   const errorKey = lastChar?.status === 'error' || lastChar?.status === 'extra' ? active?.typed[active.typed.length - 1] : undefined;
 
   return (
-    <PageWrapper title="" fullWidth className="py-4 sm:py-6 px-4 sm:px-6 overflow-hidden">
-      <div className="max-w-[106.25rem] mx-auto w-full overflow-hidden">
+    <PageWrapper title="" fullWidth className="tt-page py-4 sm:py-6 px-4 sm:px-6">
+      <div className="max-w-[106.25rem] mx-auto w-full">
 
         {/* ── Top Navigation ── */}
-        <nav className="flex items-center justify-between mb-5">
+        <nav className="flex items-center justify-between gap-2 mb-5">
           <Link
             to="/lessons"
-            className="flex items-center gap-1.5 text-sm font-semibold transition-colors hover:opacity-80"
+            className="flex items-center gap-1.5 text-sm font-semibold shrink-0 transition-colors hover:opacity-80"
             style={{ color: 'var(--color-accent-text)' }}
           >
             <ArrowLeft size={15} />
             Back to Learn
           </Link>
           {lesson && exercises.length > 0 && (
-            <span className="text-xs font-semibold" style={{ color: 'var(--color-text-muted)' }}>
+            <span className="text-xs font-semibold truncate text-right" style={{ color: 'var(--color-text-muted)' }}>
               Level {lesson.order} &bull; Exercise {activeExerciseIndex + 1} of {exercises.length}
             </span>
           )}
@@ -416,7 +425,7 @@ export default function LessonPlayer() {
 
               {/* Exercise controls */}
               {engine.phase !== 'idle' && !feedback && (
-                <div className="mt-5 flex items-center gap-2">
+                <div className="mt-5 flex flex-wrap items-center gap-2">
                   <button
                     onClick={handleRestart}
                     className="btn btn-ghost px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5"
@@ -443,45 +452,12 @@ export default function LessonPlayer() {
                 </div>
               )}
 
-              {/* Exercise Progress */}
-              {exercises.length > 0 && (
-                <div className="mt-5 pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-semibold" style={{ color: 'var(--color-text-muted)' }}>Exercise progress</span>
-                    <span className="text-xs font-semibold" style={{ color: 'var(--color-text-muted)' }}>
-                      {completedExerciseIds.length} of {exercises.length} exercises
-                    </span>
-                  </div>
-                  <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-border)' }}>
-                    <div
-                      className="h-full rounded-full transition-all duration-500"
-                      style={{
-                        width: `${progressPct}%`,
-                        background: 'linear-gradient(135deg, #4361EE, #8B5CF6)',
-                      }}
-                    />
-                  </div>
-                  <div className="flex justify-between mt-1.5">
-                    {exercises.map((ex, i) => (
-                      <span
-                        key={ex._id}
-                        className="inline-block w-2 h-2 rounded-full transition-colors"
-                        style={{
-                          backgroundColor: completedSet.has(ex._id)
-                            ? '#16a34a'
-                            : i === activeExerciseIndex
-                              ? '#4361ee'
-                              : 'var(--color-border)',
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Exercise completion overlay */}
+              {/* Exercise completion overlay — fixed full-viewport so the card is
+                  always fully visible without scrolling the page. The overlay
+                  scrolls internally when the card is taller than the viewport. */}
               {engine.phase === 'finished' && feedback && (
-                <div className="absolute inset-0 grid place-items-center p-3 sm:p-5 bg-[var(--color-page)]/95 rounded-2xl z-10 overflow-hidden">
+                <div className="fixed inset-0 z-30 overflow-y-auto" style={{ paddingTop: 'calc(var(--navbar-h, 4rem) + 1rem)', paddingBottom: '1rem' }}>
+                  <div className="grid place-items-start sm:place-items-center min-h-full px-3 sm:px-4">
                   <div className="w-full max-w-md card result-card p-4 sm:p-6 text-center shadow-xl border border-[var(--color-border)] overflow-hidden">
                         {feedback.passed ? (
                           <div className="w-14 h-14 rounded-full mx-auto flex items-center justify-center" style={{ backgroundColor: 'rgba(34, 197, 94, 0.12)' }}>
@@ -505,9 +481,9 @@ export default function LessonPlayer() {
                             : `You reached ${feedback.stats.accuracy}% accuracy. You need at least ${lesson!.accuracyThreshold}%.`}
                         </p>
 
-                        <div className="grid grid-cols-3 gap-3 mt-5">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-5">
                           <div className="rounded-xl p-3" style={{ background: 'var(--color-accent-light)' }}>
-                            <div className="text-xl font-bold" style={{ color: 'var(--color-accent-text)' }}>{feedback.stats.wpm}</div>
+                            <div className="text-xl font-bold tabular-nums" style={{ color: 'var(--color-accent-text)' }}>{feedback.stats.wpm}</div>
                             <div className="text-[0.625rem] uppercase tracking-widest font-semibold" style={{ color: 'var(--color-text-muted)' }}>WPM</div>
                           </div>
                           <div className="rounded-xl p-3" style={{ background: 'var(--color-accent-light)' }}>
@@ -539,7 +515,7 @@ export default function LessonPlayer() {
                           </p>
                         )}
 
-                        <div className="flex w-full gap-2.5 mt-6">
+                        <div className="flex flex-col sm:flex-row w-full gap-2.5 mt-6">
                           {feedback.passed ? (
                             isLastExercise ? (
                               <>
@@ -594,6 +570,7 @@ export default function LessonPlayer() {
                           )}
                         </div>
                   </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -613,21 +590,22 @@ export default function LessonPlayer() {
               duration={999999}
             />
 
-            {/* Mistakes card */}
-            <div className="card p-4 tt-stats-card">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--color-error)' }}>
-                    <AlertCircle size={15} />
-                  </div>
-                  <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--color-text-muted)' }}>
-                    Mistakes
-                  </span>
+            {/* Quick Tips card */}
+            <div className="card tt-tips-card p-4">
+              <div className="flex items-center gap-2 mb-2.5">
+                <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(245, 158, 11, 0.16)', color: '#d97706' }}>
+                  <Lightbulb size={14} />
                 </div>
-                <b className="text-2xl font-bold tabular-nums leading-none" style={{ color: 'var(--color-text-primary)' }}>
-                  {engine.phase === 'idle' && !isPaused ? '0' : mistakeCount}
-                </b>
+                <h2 className="text-sm font-bold">Quick Tips</h2>
               </div>
+              <ul className="flex flex-col gap-1.5">
+                {QUICK_TIPS.map((tip) => (
+                  <li key={tip} className="tt-tip-row">
+                    <span className="tt-tip-check" aria-hidden="true">✓</span>
+                    {tip}
+                  </li>
+                ))}
+              </ul>
             </div>
           </aside>
         </div>

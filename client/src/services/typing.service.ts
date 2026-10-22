@@ -1,5 +1,23 @@
 import api from './api';
 import type { TypingResult, Achievement, SessionSubmitPayload, TestParagraph } from '../types';
+
+const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+function isTransientServerFailure(error: unknown): boolean {
+  const status = (error as { response?: { status?: number } })?.response?.status;
+  return status === 408 || status === 429 || status === 500 || status === 502 || status === 503 || status === 504;
+}
+
+function parseRandomParagraph(data: unknown): TestParagraph {
+  const paragraph = (data as { data?: { paragraph?: unknown } } | null)?.data?.paragraph;
+  if (!paragraph || typeof paragraph !== 'object') throw new Error('The server returned invalid typing text. Please try again.');
+  const value = paragraph as Partial<TestParagraph>;
+  if (typeof value._id !== 'string' || typeof value.content !== 'string' || !value.content.trim() ||
+      !['beginner', 'intermediate', 'advanced'].includes(value.difficulty ?? '') || typeof value.topic !== 'string') {
+    throw new Error('The server returned empty or invalid typing text. Please try again.');
+  }
+  return value as TestParagraph;
+}
 interface SubmitResponse {
   result: TypingResult;
   newAchievements: Achievement[];
@@ -28,7 +46,22 @@ export const typingService = {
     return (data.data as { result: TypingResult }).result;
   },
   async getRandomParagraph(difficulty?: string): Promise<TestParagraph> {
-    const { data } = await api.get('/typing/paragraphs/random', { params: difficulty ? { difficulty } : undefined });
-    return (data.data as { paragraph: TestParagraph }).paragraph;
+    for (let attempt = 0; ; attempt += 1) {
+      try {
+        const { data } = await api.get('/typing/paragraphs/random', { params: difficulty ? { difficulty } : undefined });
+        return parseRandomParagraph(data);
+      } catch (error) {
+        if (attempt >= 1 || !isTransientServerFailure(error)) {
+          console.warn('[typing] text request failed', {
+            path: '/typing/paragraphs/random',
+            difficulty: difficulty ?? 'any',
+            status: (error as { response?: { status?: number } })?.response?.status ?? null,
+            attempts: attempt + 1,
+          });
+          throw error;
+        }
+        await wait(500 * (attempt + 1));
+      }
+    }
   },
 };

@@ -10,6 +10,10 @@ export interface ITypedWord {
 export interface ITypingSession extends Document {
   userId: mongoose.Types.ObjectId;
   mode: 'test' | 'practice' | 'lesson' | 'game';
+  // Course language this session belongs to. English and Urdu runs are fully
+  // independent: every read path scopes on this so one course's sessions never
+  // appear in the other's stats, history or achievements.
+  language: 'en' | 'ur';
   startTime: Date;
   endTime: Date;
   durationSeconds: number;
@@ -36,6 +40,7 @@ const typingSessionSchema = new Schema<ITypingSession>(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     mode: { type: String, enum: ['test', 'practice', 'lesson', 'game'], required: true },
+    language: { type: String, enum: ['en', 'ur'], default: 'en', required: true },
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
     durationSeconds: { type: Number, required: true },

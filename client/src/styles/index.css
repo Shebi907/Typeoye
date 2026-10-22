@@ -5,6 +5,12 @@
 /* ── Design System Tokens ───────────────────────────────────────── */
 :root {
   color-scheme: light;
+  /* Height of the sticky navbar (Navbar.tsx uses h-16 = 4rem at every
+     breakpoint). Full-height overlays offset their top padding by this so a
+     taller-than-viewport card never slides under the bar. Declared once here
+     so the five `var(--navbar-h, 4rem)` call-sites stay in sync if the
+     navbar height ever changes. */
+  --navbar-h: 4rem;
   --color-page: #fafafb;
   --color-canvas: #f0f1f5;
   --color-card: #ffffff;
@@ -216,6 +222,9 @@ body {
 .text-secondary { color: var(--color-text-secondary); }
 .text-muted     { color: var(--color-text-muted); }
 
+/* Urdu (Nastaliq) text — generous line-height so ascenders/descenders don't clip. */
+.font-urdu { font-family: 'Noto Nastaliq Urdu', 'Noto Naskh Arabic', serif; }
+
 /* ── Typing display classes ─────────────────────────────────────── */
 .char-pending { color: var(--color-pending); }
 .char-correct { color: var(--color-correct); }
@@ -227,6 +236,45 @@ body {
 }
 .char-current { color: var(--color-text-primary); }
 .word-error-bg { background-color: rgba(239, 68, 68, 0.07); border-radius: 4px; }
+.word-active-bg { background-color: rgba(67, 97, 238, 0.10); border-radius: 4px; }
+.word-correct-bg { background-color: rgba(34, 197, 94, 0.07); border-radius: 4px; }
+
+/* Word-level feedback for the Urdu (Nastaliq) passage. Only whole words are
+   coloured — never individual letters — because any sub-word split or
+   sub-range paint breaks Nastaliq's cursive joins and forces the run onto a
+   separate compositing layer (which is what made the text look blurry/broken).
+   `.word-extra` colours the overflow characters after a word is typed past. */
+.urdu-display .word-correct { color: var(--color-correct); }
+.urdu-display .word-error   { color: var(--color-error); }
+.urdu-display .word-extra   { color: var(--color-error); }
+
+/* Per-character feedback for the word CURRENTLY being typed: each Urdu
+   character turns green the instant it is typed correctly and red the instant
+   it is typed wrong, instead of waiting for the whole word to commit. These are
+   plain INLINE spans (never inline-block) so Nastaliq still joins the letters
+   into one cursive run — verified pixel-identical to the unsplit text. Colour
+   is applied to the text itself: foreground only, no background/glow/shadow. */
+.urdu-display .urdu-char-correct { color: var(--color-correct); }
+.urdu-display .urdu-char-error   { color: var(--color-error); }
+
+/* The Urdu passage reports status with TEXT COLOUR only (green/red) plus the
+   caret for position. It must never paint a background, shadow, glow, or
+   highlight behind a word: the old current-word indigo pill (`.word-active-bg`)
+   filled the whole tall Nastaliq inline-box and read as a soft cloud around the
+   word, moving on every keystroke. Guard the word wrappers (never the caret,
+   which is absolutely positioned and not `.inline-block`) so no such effect can
+   reappear during typing, Backspace corrections, cursor movement, or live
+   updates. */
+.urdu-display > span.inline-block {
+  background: none;
+  box-shadow: none;
+}
+.urdu-display > span.inline-block::before,
+.urdu-display > span.inline-block::after {
+  content: none;
+  background: none;
+  box-shadow: none;
+}
 
 /* ── Duel screen (challenge typing) refinements ─────────────────── */
 /* Current character — clear but subtle: soft indigo pill + underline
@@ -300,6 +348,39 @@ body {
 }
 .typing-caret-abs.blinking {
   animation: caretBlink 1.2s ease-in-out infinite;
+}
+
+/* Urdu (Nastaliq) caret. Urdu letters are cursive and join under the caret, so
+   the shared 3px bar + 4px indigo glow smother the strokes of the character it
+   sits against, making the active word read as fuzzy. Scope a crisp, lighter
+   caret to the Urdu display only: no glow, thinner bar, so it stays clearly
+   visible without covering or haloing the letters. English typing keeps the
+   shared look above. */
+.urdu-display .typing-caret-abs {
+  width: 2px;
+  box-shadow: none;
+}
+
+/* Root cause of the "blurry/broken Urdu" report: the body forces grayscale
+   antialiasing globally (`-webkit-font-smoothing: antialiased`, see body above)
+   and the passage is a cursive script that must not be split. Restore the
+   platform's sub-pixel smoothing for the Urdu passage, pin the text metrics a
+   cursive script needs (no added tracking, kerning/ligatures on, legibility
+   rendering) and keep it on the normal paint path. Scoped to `.urdu-display`
+   so the English test and the rest of the UI are untouched. */
+.urdu-display {
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
+  letter-spacing: 0;
+  word-spacing: normal;
+  font-kerning: normal;
+  font-variant-ligatures: normal;
+  text-rendering: optimizeLegibility;
+  /* Never let a filter/blur/mask/text-shadow/transform on the passage (or an
+     ancestor) soften or offset the glyphs. */
+  filter: none;
+  text-shadow: none;
+  transform: none;
 }
 /* Standalone glowing caret (e.g. game input bars) with the same pulse. */
 .caret-blink {
@@ -438,6 +519,7 @@ body {
   box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.12);
 }
 .input-base.input-error { border-color: var(--color-error); }
+.input-base.font-urdu { font-family: 'Noto Nastaliq Urdu', 'Noto Naskh Arabic', serif; }
 
 /* ── Underline-style input (used by the Contact form) ───────────── */
 .input-underline {
@@ -804,6 +886,10 @@ select:-webkit-autofill {
 .navbar-dropdown {
   animation: navbar-dropdown-in 0.16s ease-out;
   transform-origin: top right;
+}
+.navbar-dropdown-surface {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(24px);
 }
 
 /* -- Guest landing page CTAs — indigo→purple gradient (matches Typeoye palette).

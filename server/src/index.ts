@@ -11,11 +11,18 @@ import { authLimiter, apiLimiter } from './middleware/rateLimit.middleware';
 import { errorHandler } from './middleware/errorHandler.middleware';
 import { googleOAuthRedirectUri } from './controllers/googleAuth.controller';
 import User from './models/User';
+import Lesson from './models/Lesson';
+import Exercise from './models/Exercise';
+import TypingSession from './models/TypingSession';
+import TypingResult from './models/TypingResult';
+import PracticeSession from './models/PracticeSession';
+import Achievement from './models/Achievement';
 import { attachChallengeSocket } from './services/challenge.socket';
 
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
 import lessonRoutes from './routes/lesson.routes';
+import urduLessonRoutes from './routes/urduLesson.routes';
 import typingRoutes from './routes/typing.routes';
 import analyticsRoutes from './routes/analytics.routes';
 import leaderboardRoutes from './routes/leaderboard.routes';
@@ -25,6 +32,7 @@ import gamesRoutes from './routes/games.routes';
 import certificateRoutes from './routes/certificate.routes';
 import contactRoutes from './routes/contact.routes';
 import challengeRoutes from './routes/challenge.routes';
+import urduContentRoutes from './routes/urduContent.routes';
 
 export function createApp() {
   const app = express();
@@ -62,6 +70,7 @@ export function createApp() {
   app.use('/api/auth', authRoutes);
   app.use('/api/users', userRoutes);
   app.use('/api/lessons', lessonRoutes);
+  app.use('/api/urdu-lessons', urduLessonRoutes);
   app.use('/api/typing', typingRoutes);
   app.use('/api/analytics', analyticsRoutes);
   app.use('/api/leaderboard', leaderboardRoutes);
@@ -71,6 +80,7 @@ export function createApp() {
   app.use('/api/challenge', challengeRoutes);
   app.use('/api/certificates', certificateRoutes);
   app.use('/api/contact', contactRoutes);
+  app.use('/api/urdu-content', urduContentRoutes);
 
   // Health check
   app.get('/api/health', (_req, res) => {
@@ -105,6 +115,36 @@ if (require.main === module) {
         );
       } catch (err) {
         console.error('[db] User emailVerified migration error:', err);
+      }
+
+      // Migration: lessons/exercises created before the multi-language course
+      // feature have no `language` field. Default them to English so the
+      // existing course stays intact, then reconcile the Lesson indexes so the
+      // new per-language `{ language, order }` uniqueness can be enforced.
+      try {
+        await Promise.all([
+          Lesson.updateMany({ language: { $exists: false } }, { $set: { language: 'en' } }),
+          Exercise.updateMany({ language: { $exists: false } }, { $set: { language: 'en' } }),
+        ]);
+        await Lesson.collection.dropIndex('order_1').catch(() => undefined);
+        await Lesson.createIndexes();
+      } catch (err) {
+        console.error('[db] Lesson language migration error:', err);
+      }
+
+      // Migration: sessions, results, practice sessions and achievements
+      // created before the language field existed default to English. Without
+      // this backfill the (now language-scoped) queries would silently drop all
+      // historic English data — losing the user's visible progress.
+      try {
+        await Promise.all([
+          TypingSession.updateMany({ language: { $exists: false } }, { $set: { language: 'en' } }),
+          TypingResult.updateMany({ language: { $exists: false } }, { $set: { language: 'en' } }),
+          PracticeSession.updateMany({ language: { $exists: false } }, { $set: { language: 'en' } }),
+          Achievement.updateMany({ language: { $exists: false } }, { $set: { language: 'en' } }),
+        ]);
+      } catch (err) {
+        console.error('[db] language backfill migration error:', err);
       }
 
       const PORT = Number(process.env.PORT) || 5000;

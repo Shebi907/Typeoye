@@ -126,7 +126,7 @@ const [view, setView] = useState<'setup' | 'typing'>(() => (certificateMode ? 't
     if (!paragraph) return '';
     return `${paragraph.content} ${buildNextChunk(readDifficultyParam(searchParams), settings)}`;
   });
-  const [loading, setLoading] = useState(() => (certificateMode ? !peekCertificateParagraphPreload() : true));
+  const [loading, setLoading] = useState(() => (certificateMode ? !peekCertificateParagraphPreload() : false));
   const [duration, setDuration] = useState<number>(() => readDurationParam(searchParams));
   const [difficulty, setDifficulty] = useState<'simple' | 'medium' | 'hard'>(() =>
     readDifficultyParam(searchParams)
@@ -152,36 +152,42 @@ const [downloading, setDownloading] = useState(false);
   const [certError, setCertError] = useState<string | null>(null);
 const resultRef = useRef<EngineResult | null>(null);
   const appending = useRef(false);
+  const textRequestId = useRef(0);
+  const startRequestInFlight = useRef(false);
   // True once any staged certificate passage has been consumed by this mount.
   const preloadHandled = useRef(false);
 
+  useEffect(() => () => {
+    // Invalidate pending requests when navigating away so they cannot update a
+    // later screen or a newly mounted test session.
+    textRequestId.current += 1;
+  }, []);
+
   const newChunk = useCallback((): string => buildNextChunk(difficulty, settings), [difficulty, settings]);
 
-/** Fresh text for this difficulty, guaranteed different from the last one shown. */
-  const loadFreshText = useCallback(async (): Promise<string> => {
+/** Fresh server text for this difficulty, guaranteed different from the last one shown. */
+  const loadFreshText = useCallback(async (selectedDifficulty: 'simple' | 'medium' | 'hard' = difficulty): Promise<string> => {
     if (certificateMode) {
       // Certificate runs use the server library so paragraphs never repeat
       // (server-side history for signed-in users, client `exclude` for guests).
-      const excluded = readCertHistory(difficulty);
-      const paragraph = await getCertificateParagraph(CERT_TO_PARAGRAPH_DIFFICULTY[difficulty], excluded);
+      const excluded = readCertHistory(selectedDifficulty);
+      const paragraph = await getCertificateParagraph(CERT_TO_PARAGRAPH_DIFFICULTY[selectedDifficulty], excluded);
+      if (!paragraph.content?.trim()) throw new Error('The server returned empty typing text. Please try again.');
       certParagraphRef.current = paragraph;
-      recordCertUsed(difficulty, paragraph._id);
-      return `${paragraph.content} ${newChunk()}`;
+      recordCertUsed(selectedDifficulty, paragraph._id);
+      return `${paragraph.content.trim()} ${buildNextChunk(selectedDifficulty, settings)}`;
     }
 
     let candidate = '';
     for (let attempt = 0; attempt < 3; attempt++) {
-      try {
-        const paragraph = await typingService.getRandomParagraph(TEST_TO_PARAGRAPH_DIFFICULTY[difficulty]);
-        candidate = `${paragraph.content} ${newChunk()}`;
-      } catch {
-        candidate = newChunk();
-      }
-      if (candidate !== lastTextByDifficulty.get(difficulty)) break;
+      const paragraph = await typingService.getRandomParagraph(TEST_TO_PARAGRAPH_DIFFICULTY[selectedDifficulty]);
+      candidate = `${paragraph.content.trim()} ${buildNextChunk(selectedDifficulty, settings)}`.trim();
+      if (!candidate.trim()) throw new Error('No typing text was available. Please try again.');
+      if (candidate !== lastTextByDifficulty.get(selectedDifficulty)) break;
     }
-    lastTextByDifficulty.set(difficulty, candidate);
+    lastTextByDifficulty.set(selectedDifficulty, candidate);
     return candidate;
-  }, [newChunk, difficulty, certificateMode]);
+  }, [difficulty, certificateMode, settings]);
 
 useEffect(() => {
     // A passage staged by the Certificate page is already in `text` from the
@@ -198,11 +204,14 @@ useEffect(() => {
     }
     // Already consumed a staged passage on this mount — never refetch.
     if (preloadHandled.current) return;
+    // Ordinary tests fetch only after the user selects settings and starts.
+    if (!certificateMode) return;
     // No staged passage — load fresh text normally (also covers plain tests).
     let mounted = true;
+    const requestId = ++textRequestId.current;
     setLoading(true);
-    void loadFreshText().then((next) => {
-      if (mounted) {
+    void loadFreshText(difficulty).then((next) => {
+      if (mounted && requestId === textRequestId.current) {
         setSummary(null);
         setSaveError(null);
         setLoadError(null);
@@ -210,7 +219,7 @@ useEffect(() => {
         setLoading(false);
       }
     }).catch((err) => {
-      if (mounted) {
+      if (mounted && requestId === textRequestId.current) {
         setLoading(false);
         setLoadError(err instanceof Error ? err.message : 'Could not load test content. Please try again.');
       }
@@ -218,7 +227,7 @@ useEffect(() => {
     return () => {
       mounted = false;
     };
-  }, [loadFreshText, certificateMode, searchParams]);
+  }, [loadFreshText, certificateMode, searchParams, difficulty]);
 
   // Remember selections for later runs this session (and certificate links).
   useEffect(() => {
@@ -292,25 +301,36 @@ const response = await typingService.submitSession({
   useScrollLock(engine.phase === 'finished' && !!summary);
 
 const restart = useCallback(() => {
+    if (startRequestInFlight.current) return;
+    const requestId = ++textRequestId.current;
     setSummary(null);
     setSaveError(null);
     setLoadError(null);
     setDownloaded(false);
     setCertError(null);
     resultRef.current = null;
-    void loadFreshText().then((next) => {
-      setLoadError(null);
+    setLoading(true);
+    engine.resetEngine();
+    void loadFreshText(difficulty).then((next) => {
+      if (requestId !== textRequestId.current) return;
       setText(next);
+      setLoadError(null);
+      setLoading(false);
     }).catch((err) => {
-      setLoadError(err instanceof Error ? err.message : 'Could not load test content.');
+      if (requestId !== textRequestId.current) return;
+      setLoadError(err instanceof Error ? err.message : 'Could not load test content. Please try again.');
+      setLoading(false);
     });
-  }, [loadFreshText]);
+  }, [loadFreshText, difficulty, engine]);
 
   // "Back to Test" returns to the setup screen. We are already on /test, so a
   // <Link to="/test"> pushes the same route and React never remounts us — the
   // results modal must be closed via local state instead (same pattern as Retry).
   // Also abandons any in-progress run so a stale timer/completion can't fire.
 const backToTest = useCallback(() => {
+    textRequestId.current += 1;
+    startRequestInFlight.current = false;
+    setLoading(false);
     setSummary(null);
     setSaveError(null);
     setLoadError(null);
@@ -318,19 +338,22 @@ const backToTest = useCallback(() => {
     setCertError(null);
     resultRef.current = null;
     engine.resetEngine();
-    void loadFreshText().then((next) => {
-      setLoadError(null);
-      setText(next);
-    }).catch((err) => {
-      setLoadError(err instanceof Error ? err.message : 'Could not load test content.');
-    });
     setView('setup');
-  }, [engine, loadFreshText]);
+  }, [engine]);
 
   // Apply the setup-screen choices and enter the typing view.
-const startTest = useCallback(() => {
-    setDuration(pendingDuration);
-    setDifficulty(pendingDifficulty);
+const startTest = useCallback(async () => {
+    if (startRequestInFlight.current) return;
+    startRequestInFlight.current = true;
+    const requestId = ++textRequestId.current;
+    setLoading(true);
+    setLoadError(null);
+    try {
+      const nextText = await loadFreshText(pendingDifficulty);
+      if (requestId !== textRequestId.current) return;
+      setText(nextText);
+      setDuration(pendingDuration);
+      setDifficulty(pendingDifficulty);
     sessionStorage.setItem('typeoye_duration', String(pendingDuration));
     sessionStorage.setItem('typeoye_difficulty', pendingDifficulty);
     setSummary(null);
@@ -340,7 +363,15 @@ const startTest = useCallback(() => {
     resultRef.current = null;
     engine.resetEngine();
     setView('typing');
-  }, [engine, pendingDuration, pendingDifficulty]);
+    } catch (err) {
+      if (requestId === textRequestId.current) {
+        setLoadError(err instanceof Error ? err.message : 'Could not load test content. Please try again.');
+      }
+    } finally {
+      if (requestId === textRequestId.current) setLoading(false);
+      startRequestInFlight.current = false;
+    }
+  }, [engine, pendingDuration, pendingDifficulty, loadFreshText]);
 
 const downloadCertificate = async () => {
     const result = resultRef.current;
@@ -456,13 +487,20 @@ const certEarned =
                     </select>
                   </div>
 
+                  {loadError && (
+                    <p role="alert" className="text-sm mt-4" style={{ color: 'var(--color-error)' }}>
+                      {loadError}
+                    </p>
+                  )}
+
                   <button
                     data-testid="start-test"
                     onClick={startTest}
+                    disabled={loading}
                     className="btn tt-start-btn w-full justify-center px-6 py-4 rounded-full text-base mt-8"
-                    style={{ fontSize: 15, fontWeight: 700, color: '#fff' }}
+                    style={{ fontSize: 15, fontWeight: 700, color: '#fff', opacity: loading ? 0.75 : 1 }}
                   >
-                    Start Test <ArrowRight size={18} />
+                    {loading ? 'Loading text…' : loadError ? 'Try Again' : 'Start Test'} {!loading && <ArrowRight size={18} />}
                   </button>
                 </div>
               </div>
@@ -527,7 +565,7 @@ const certEarned =
             <Link
               to="/certificate"
               data-testid="back-to-certificate-header"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors hover:brightness-105 shrink-0"
+              className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-lg text-sm font-semibold transition-colors hover:brightness-105 shrink-0"
               style={{
                 color: 'var(--color-accent-text)',
                 backgroundColor: 'var(--color-accent-light)',
@@ -544,7 +582,7 @@ const certEarned =
               type="button"
               onClick={backToTest}
               data-testid="back-to-setup"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors hover:brightness-105 shrink-0"
+              className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-lg text-sm font-semibold transition-colors hover:brightness-105 shrink-0"
               style={{
                 color: 'var(--color-accent-text)',
                 backgroundColor: 'var(--color-accent-light)',
@@ -618,7 +656,9 @@ const certEarned =
 
               {/* Typing text area */}
               <div className="tt-text-shell relative">
-                {text && !loading ? (
+                {loading ? (
+                  <div className="h-24 flex items-center justify-center text-muted">Loading test…</div>
+                ) : text ? (
                   <div className="relative pt-1">
                     {engine.phase === 'idle' && <StartTypingHint className="-top-1 left-0" />}
                     <TypingDisplay
@@ -630,11 +670,9 @@ const certEarned =
                 ) : loadError ? (
                   <div className="h-24 flex flex-col items-center justify-center gap-2 text-center p-4">
                     <p className="text-sm font-semibold text-[var(--color-error)]">{loadError}</p>
-                    <button onClick={restart} className="btn btn-secondary text-xs px-3 py-1.5">Try Again</button>
+                    <button onClick={restart} className="btn btn-secondary text-sm px-4 py-2.5">Try Again</button>
                   </div>
-                ) : (
-                  <div className="h-24 flex items-center justify-center text-muted">Loading test…</div>
-                )}
+                ) : <div className="h-24 flex items-center justify-center text-muted">Text is not ready. Go back and try again.</div>}
               </div>
 
               {/* Mid-test status / restart (the run itself starts on first keystroke) */}
@@ -694,7 +732,7 @@ const certEarned =
         <>
           <div className="fixed inset-0 z-20 backdrop-blur-md bg-black/40" aria-hidden="true" />
           <div className="fixed inset-0 z-30 overflow-y-auto" style={{ paddingTop: 'calc(var(--navbar-h, 4rem) + 1rem)', paddingBottom: '1rem' }}>
-            <div className="grid place-items-center min-h-full px-3 sm:px-4">
+            <div className="grid place-items-start sm:place-items-center min-h-full px-3 sm:px-4">
 <div
               className="result-card w-full text-center overflow-hidden max-w-[calc(100vw-1.5rem)] sm:max-w-md"
               data-testid="result-card"
@@ -713,7 +751,7 @@ const certEarned =
               )}
 
               {/* Header section */}
-              <div className="px-6 pt-3 pb-4">
+              <div className="px-4 sm:px-6 pt-3 pb-4">
                 <div className="text-3xl mb-1">{certificateMode ? (certEarned ? '🎉' : '❌') : '🎉'}</div>
                 <h2 className="text-2xl font-extrabold" style={{ color: 'var(--color-text-primary)' }}>
                   {certificateMode
@@ -732,46 +770,46 @@ const certEarned =
               </div>
 
               {/* Stat cards */}
-              <div className="px-6 pb-4">
-                <div className="grid grid-cols-3 gap-3">
+              <div className="px-4 sm:px-6 pb-4">
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
                   {/* WPM */}
                   <div
-                    className="rounded-xl p-3 flex flex-col items-center"
+                    className="rounded-xl p-2 sm:p-3 flex flex-col items-center min-w-0"
                     style={{ background: 'linear-gradient(135deg, rgba(96,165,250,0.12) 0%, rgba(59,130,246,0.08) 100%)' }}
                   >
                     <span
-                      className="text-2xl font-extrabold tabular-nums rs-wpm"
+                      className="text-xl sm:text-2xl font-extrabold tabular-nums rs-wpm"
                       style={{ fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}
                     >
                       {summary!.wpm}
                     </span>
-                    <span className="text-[0.625rem] font-bold uppercase tracking-wider mt-1" style={{ color: '#60A5FA' }}>WPM</span>
+                    <span className="text-[0.5625rem] sm:text-[0.625rem] font-bold uppercase tracking-normal sm:tracking-wider mt-1" style={{ color: '#60A5FA' }}>WPM</span>
                   </div>
                   {/* Accuracy */}
                   <div
-                    className="rounded-xl p-3 flex flex-col items-center"
+                    className="rounded-xl p-2 sm:p-3 flex flex-col items-center min-w-0"
                     style={{ background: 'linear-gradient(135deg, rgba(244,114,182,0.12) 0%, rgba(236,72,153,0.08) 100%)' }}
                   >
                     <span
-                      className="text-2xl font-extrabold tabular-nums rs-acc"
+                      className="text-xl sm:text-2xl font-extrabold tabular-nums rs-acc"
                       style={{ fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}
                     >
                       {summary!.accuracy}%
                     </span>
-                    <span className="text-[0.625rem] font-bold uppercase tracking-wider mt-1" style={{ color: '#F472B6' }}>ACCURACY</span>
+                    <span className="text-[0.5625rem] sm:text-[0.625rem] font-bold uppercase tracking-normal sm:tracking-wider mt-1" style={{ color: '#F472B6' }}>ACCURACY</span>
                   </div>
                   {/* Time */}
                   <div
-                    className="rounded-xl p-3 flex flex-col items-center"
+                    className="rounded-xl p-2 sm:p-3 flex flex-col items-center min-w-0"
                     style={{ background: 'linear-gradient(135deg, rgba(74,222,128,0.12) 0%, rgba(34,197,94,0.08) 100%)' }}
                   >
                     <span
-                      className="text-2xl font-extrabold tabular-nums rs-time"
+                      className="text-xl sm:text-2xl font-extrabold tabular-nums rs-time"
                       style={{ fontFamily: '"JetBrains Mono", "Fira Code", monospace' }}
                     >
                       {Math.round(engine.elapsed)}s
                     </span>
-                    <span className="text-[0.625rem] font-bold uppercase tracking-wider mt-1" style={{ color: '#4ADE80' }}>TIME</span>
+                    <span className="text-[0.5625rem] sm:text-[0.625rem] font-bold uppercase tracking-normal sm:tracking-wider mt-1" style={{ color: '#4ADE80' }}>TIME</span>
                   </div>
                 </div>
                 {certificateMode ? (
@@ -805,26 +843,26 @@ const certEarned =
                     </div>
                   </div>
                 ) : (
-                  <div className="mx-6 border-t border-b py-3" style={{ borderColor: 'var(--color-border)' }}>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div className="flex items-center justify-between">
-                        <span style={{ color: 'var(--color-text-secondary)' }}>Correct words</span>
-                        <span className="font-bold" style={{ color: 'var(--color-text-primary)' }}>{summary!.correctWords}</span>
+                  <div className="mx-2 sm:mx-6 border-t border-b py-3" style={{ borderColor: 'var(--color-border)' }}>
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4 text-sm">
+                      <div className="flex items-center justify-between gap-2 min-w-0">
+                        <span className="truncate" style={{ color: 'var(--color-text-secondary)' }}>Correct words</span>
+                        <span className="font-bold shrink-0" style={{ color: 'var(--color-text-primary)' }}>{summary!.correctWords}</span>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span style={{ color: 'var(--color-text-secondary)' }}>Errors</span>
-                        <span className="font-bold" style={{ color: 'var(--color-text-primary)' }}>{summary!.errorsCount}</span>
+                      <div className="flex items-center justify-between gap-2 min-w-0">
+                        <span className="truncate" style={{ color: 'var(--color-text-secondary)' }}>Errors</span>
+                        <span className="font-bold shrink-0" style={{ color: 'var(--color-text-primary)' }}>{summary!.errorsCount}</span>
                       </div>
                     </div>
                   </div>
                 )}
               </div>
 
-              {saving && <p className="text-sm mt-3" style={{ color: 'var(--color-text-secondary)' }}>Saving your result…</p>}
-              {saveError && <p className="text-sm mt-3" style={{ color: 'var(--color-error)' }}>{saveError}</p>}
+              {saving && <p className="text-sm mt-3 px-4 sm:px-6" style={{ color: 'var(--color-text-secondary)' }}>Saving your result…</p>}
+              {saveError && <p className="text-sm mt-3 px-4 sm:px-6" style={{ color: 'var(--color-error)' }}>{saveError}</p>}
               {!isAuthenticated && !certificateMode && (
                 <p
-                  className="text-sm mt-3 text-center rounded-lg px-3 py-2"
+                  className="text-sm mt-3 text-center rounded-lg px-3 py-2 mx-4 sm:mx-6"
                   style={{ backgroundColor: 'var(--color-accent-light)', color: 'var(--color-accent-text)' }}
                 >
                   This score was not saved — create a free account to save it and see it on the leaderboard.
@@ -833,7 +871,7 @@ const certEarned =
 
               {/* Certificate download */}
 {certificateMode && !saveError && (
-                <div className="px-6 pt-3" data-testid="cert-section">
+                <div className="px-4 sm:px-6 pt-3" data-testid="cert-section">
                   {certError && <p className="text-sm mb-2" style={{ color: 'var(--color-error)' }}>{certError}</p>}
                   {certEarned && downloaded && (
                     <div
@@ -863,7 +901,7 @@ const certEarned =
               )}
 
               {/* Buttons */}
-              <div className="px-6 pt-3 pb-5 flex flex-col gap-2.5">
+              <div className="px-4 sm:px-6 pt-3 pb-5 flex flex-col gap-2.5">
                 {/* Primary action */}
                 {certificateMode ? (
                   /* Certificate primary — handled above via download button */
@@ -879,7 +917,7 @@ const certEarned =
                 ) : (
                   <Link
                     to="/register"
-                    className="w-full py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all duration-150 hover:brightness-110"
+                    className="w-full py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all duration-150 hover:brightness-110 text-center"
                     style={{ background: 'linear-gradient(135deg, #4361EE, #8B5CF6)', color: '#fff', boxShadow: '0 6px 18px rgba(67, 97, 238, 0.35)' }}
                   >
                     <UserPlus size={16} /> Create account & save your results
@@ -887,7 +925,7 @@ const certEarned =
                 )}
 
                 {/* Secondary actions */}
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
                     onClick={restart}
                     className="py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-150"

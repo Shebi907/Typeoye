@@ -35,6 +35,9 @@ export interface SessionInput {
   focusKeys?: string[];
   certificateParagraphId?: string;
   certificateParagraphText?: string;
+  // Course language. English runs omit it (defaults to 'en'); Urdu test/practice
+  // runs pass 'ur' so their sessions/results never mix with English data.
+  language?: 'en' | 'ur';
 }
 
 export interface ProcessedSession {
@@ -103,6 +106,24 @@ export function deriveCurrentLearnLevel(
   return lessons[lessons.length - 1]!.order;
 }
 
+/** English Learn counts and level derived from the English lesson dataset only. */
+export function deriveEnglishLearnSummary(
+  lessons: { _id: unknown; order: number; language: 'en' | 'ur'; isActive?: boolean }[],
+  progress: { lessonId: unknown; completedAt?: unknown }[]
+): { learnLevel: number; completedLessons: number; totalLessons: number } {
+  const englishLessons = lessons.filter((lesson) => lesson.language === 'en' && lesson.isActive !== false);
+  const englishLessonIds = new Set(englishLessons.map((lesson) => String(lesson._id)));
+  const completedLessonIds = Array.from(new Set(progress
+    .filter((record) => record.completedAt && englishLessonIds.has(String(record.lessonId)))
+    .map((record) => String(record.lessonId))));
+
+  return {
+    learnLevel: deriveCurrentLearnLevel(englishLessons, completedLessonIds),
+    completedLessons: completedLessonIds.length,
+    totalLessons: englishLessons.length,
+  };
+}
+
 /**
  * Live profile statistics derived directly from stored records every time they
  * are requested — the database is the source of truth, so the profile always
@@ -126,7 +147,9 @@ export async function getProfileStats(userId: Types.ObjectId | string): Promise<
   const uid = typeof userId === 'string' ? new Types.ObjectId(userId) : userId;
 
   const [lessons, lessonProgressDocs, typingTotals, sessionDurations, bestWpm] = await Promise.all([
-    Lesson.find({ isActive: true }).sort({ order: 1 }),
+    // Profile's Learn summary is specifically the English course. Urdu has its
+    // own progress page and must not inflate the English denominator.
+    Lesson.find({ isActive: true, language: 'en' }).sort({ order: 1 }),
     LessonProgress.find({ userId: uid }),
     TypingResult.aggregate<{ sessions: number; wpmSum: number; correctWords: number; attemptedWords: number }>([
       { $match: { userId: uid, mode: { $in: ['test', 'practice', 'game'] } } },
@@ -168,17 +191,9 @@ export async function getProfileStats(userId: Types.ObjectId | string): Promise<
     }
   }
 
-  const completedLessons = lessonProgressDocs.filter((doc) => doc.completedAt).length;
-  const totalLessons = lessons.length;
-
-  // Current Learn level: first unlocked && not completed lesson by order.
-  // Mirrors the Learn page "hero" logic (order 1 always unlocked; otherwise the
-  // previous lesson must be completed). When every lesson is done, the level is
-  // the last one.
-  const completedLessonIds = lessonProgressDocs
-    .filter((doc) => doc.completedAt)
-    .map((doc) => doc.lessonId.toString());
-  const learnLevel = deriveCurrentLearnLevel(lessons, completedLessonIds);
+  // Lessons are queried as English-only above. The helper also guards against
+  // accidental mixed-language input and excludes Urdu/inactive records.
+  const learnSummary = deriveEnglishLearnSummary(lessons, lessonProgressDocs);
 
   const typing = typingTotals[0];
   const typedSessions = typing?.sessions ?? 0;
@@ -197,9 +212,7 @@ export async function getProfileStats(userId: Types.ObjectId | string): Promise<
     avgWpm,
     avgAccuracy,
     totalMinutesPracticed,
-    learnLevel,
-    completedLessons,
-    totalLessons,
+    ...learnSummary,
   };
 }
 
@@ -220,11 +233,15 @@ export async function processVerifiedTypingSession(
     throw Object.assign(new Error('Invalid session duration'), { statusCode: 400 });
   }
 
+  const language: 'en' | 'ur' = input.language === 'ur' ? 'ur' : 'en';
+  const isUrdu = language === 'ur';
+
   const stats = computeStats(input.typedWords, durationSeconds);
 
   const session = await TypingSession.create({
     userId,
     mode: input.mode,
+    language,
     startTime,
     endTime,
     durationSeconds,
@@ -246,6 +263,7 @@ export async function processVerifiedTypingSession(
     attemptedWords: stats.attemptedWords,
     errorsCount: stats.errorsCount,
     mode: input.mode,
+    language,
     certificateParagraphId: input.certificateParagraphId,
     certificateParagraphText: input.certificateParagraphText,
   });
@@ -262,68 +280,83 @@ export async function processVerifiedTypingSession(
       accuracy: stats.accuracy,
       wpm: stats.wpm,
       mistakes: stats.errorsCount,
+      language,
     });
   }
 
-  // Update UserProgress
-  const progress = await UserProgress.findOne({ userId });
-  const isPersonalBest = progress ? stats.wpm > progress.bestWpm : true;
+  // English-only shared state (UserProgress, Streak, WeakKey) is deliberately
+  // NOT touched by Urdu sessions: those are English-centric gamification
+  // records (levels, XP, streaks, weak keys, leaderboard) and writing Urdu data
+  // into them would corrupt English stats. Urdu progress is derived purely from
+  // its own TypingResult/PracticeSession rows.
+  let isPersonalBest = false;
+  let isFirstActivityToday = false;
+  let streak: any = null;
 
-  if (progress) {
-    const prevTotal = progress.totalSessions;
-    const prevAvgWpm = progress.avgWpm;
-    const prevAvgAccuracy = progress.avgAccuracy;
+  if (!isUrdu) {
+    // Update UserProgress
+    const progress = await UserProgress.findOne({ userId });
+    isPersonalBest = progress ? stats.wpm > progress.bestWpm : true;
 
-    progress.totalSessions += 1;
-    progress.bestWpm = Math.max(progress.bestWpm, stats.wpm);
-    progress.avgWpm = Math.round(
-      (prevAvgWpm * prevTotal + stats.wpm) / progress.totalSessions
+    if (progress) {
+      const prevTotal = progress.totalSessions;
+      const prevAvgWpm = progress.avgWpm;
+      const prevAvgAccuracy = progress.avgAccuracy;
+
+      progress.totalSessions += 1;
+      progress.bestWpm = Math.max(progress.bestWpm, stats.wpm);
+      progress.avgWpm = Math.round(
+        (prevAvgWpm * prevTotal + stats.wpm) / progress.totalSessions
+      );
+      progress.avgAccuracy = Math.round(
+        ((prevAvgAccuracy * prevTotal + stats.accuracy) / progress.totalSessions) * 10
+      ) / 10;
+      progress.totalMinutesPracticed += durationSeconds / 60;
+      await progress.save();
+    }
+
+    // First qualifying activity on this calendar day (drives streak + daily XP)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const streakDoc = await Streak.findOne({ userId });
+    isFirstActivityToday = !streakDoc?.lastActiveDate || !isSameDay(streakDoc.lastActiveDate, today);
+
+    streak = await updateStreak(userId);
+
+    // Update weak keys
+    const weakKeyMap = computeWeakKeys(input.typedWords);
+    const weakKeyOps = Array.from(weakKeyMap.entries()).map(([key, data]) =>
+      WeakKey.findOneAndUpdate(
+        { userId, key },
+        {
+          $inc: { errorCount: data.errors, totalAttempts: data.attempts },
+          lastUpdated: new Date(),
+          ...(data.errors > 0 ? { lastMistakeAt: new Date() } : {}),
+        },
+        { upsert: true, new: true }
+      ).then(async (wk) => {
+        if (wk) {
+          wk.errorRate =
+            wk.totalAttempts > 0
+              ? Math.round((wk.errorCount / wk.totalAttempts) * 1000) / 10
+              : 0;
+          const qualifies = wk.totalAttempts >= WEAK_KEY_MIN_ATTEMPTS && wk.errorRate >= WEAK_KEY_MIN_ERROR_RATE;
+          if (qualifies && !wk.isWeak) wk.qualifiedAt = new Date();
+          wk.isWeak = qualifies;
+          await wk.save();
+        }
+      })
     );
-    progress.avgAccuracy = Math.round(
-      ((prevAvgAccuracy * prevTotal + stats.accuracy) / progress.totalSessions) * 10
-    ) / 10;
-    progress.totalMinutesPracticed += durationSeconds / 60;
-    await progress.save();
+    await Promise.all(weakKeyOps);
   }
 
-  // First qualifying activity on this calendar day (drives streak + daily XP)
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const streakDoc = await Streak.findOne({ userId });
-  const isFirstActivityToday = !streakDoc?.lastActiveDate || !isSameDay(streakDoc.lastActiveDate, today);
+  // Achievements: each course checks only its own language-scoped rule set, so
+  // English activity can never unlock an Urdu achievement and vice versa.
+  const newAchievements = await checkAndAwardAchievements(userId, language);
 
-  const streak = await updateStreak(userId);
-
-  // Update weak keys
-  const weakKeyMap = computeWeakKeys(input.typedWords);
-  const weakKeyOps = Array.from(weakKeyMap.entries()).map(([key, data]) =>
-    WeakKey.findOneAndUpdate(
-      { userId, key },
-      {
-        $inc: { errorCount: data.errors, totalAttempts: data.attempts },
-        lastUpdated: new Date(),
-        ...(data.errors > 0 ? { lastMistakeAt: new Date() } : {}),
-      },
-      { upsert: true, new: true }
-    ).then(async (wk) => {
-      if (wk) {
-        wk.errorRate =
-          wk.totalAttempts > 0
-            ? Math.round((wk.errorCount / wk.totalAttempts) * 1000) / 10
-            : 0;
-        const qualifies = wk.totalAttempts >= WEAK_KEY_MIN_ATTEMPTS && wk.errorRate >= WEAK_KEY_MIN_ERROR_RATE;
-        if (qualifies && !wk.isWeak) wk.qualifiedAt = new Date();
-        wk.isWeak = qualifies;
-        await wk.save();
-      }
-    })
-  );
-  await Promise.all(weakKeyOps);
-
-  // Check achievements from stored data
-  const newAchievements = await checkAndAwardAchievements(userId);
-
-  // Server-derive XP for this verified session (never trust the client)
+  // Server-derive XP for this verified session (never trust the client).
+  // Urdu sessions award XP too, but via the same generic mode-based formula;
+  // they never touch English UserProgress/Streak/leaderboard records.
   const sessionAward = computeSessionXp({
     mode: input.mode,
     stats,

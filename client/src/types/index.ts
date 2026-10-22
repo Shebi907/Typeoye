@@ -36,11 +36,15 @@ export interface Settings {
   includePunctuation: boolean;
 }
 
+export type LessonLanguage = 'en' | 'ur';
+
 export interface Lesson {
   _id: string;
   title: string;
+  titleEn?: string;
   description: string;
   category: string;
+  language: LessonLanguage;
   difficulty: number;
   order: number;
   isActive: boolean;
@@ -62,7 +66,7 @@ export interface Exercise {
   lessonId: string;
   title: string;
   type: 'keys' | 'words' | 'sentences' | 'paragraph' | 'custom';
-  language: 'en';
+  language: LessonLanguage;
   level: number;
   content: string;
   targetKeys: string[];
@@ -116,6 +120,7 @@ export interface Achievement {
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
   condition: { type: string; threshold: number };
   params?: AchievementParams;
+  language?: 'en' | 'ur';
 }
 
 export interface AchievementView extends Achievement {
@@ -291,6 +296,7 @@ export interface AdminLessonInput {
   title: string;
   description: string;
   category: string;
+  language?: LessonLanguage;
   difficulty: number;
   isActive?: boolean;
   accuracyThreshold?: number;
@@ -300,6 +306,7 @@ export interface AdminLessonInput {
 export interface AdminExerciseInput {
   title: string;
   type: 'keys' | 'words' | 'sentences' | 'paragraph' | 'custom';
+  language?: LessonLanguage;
   level: number;
   content: string;
   targetKeys?: string[];
@@ -352,6 +359,50 @@ export interface CertificateParagraph {
   difficulty: CertificateParagraphDifficulty;
 }
 
+// ── Urdu content management (admin + public hydration) ────────────────────
+
+export type UrduContentDifficulty = 'easy' | 'medium' | 'hard';
+export type UrduContentDuration = 1 | 2 | 5;
+export type UrduContentCategory =
+  | 'characters'
+  | 'combinations'
+  | 'words'
+  | 'sentences'
+  | 'paragraphs';
+
+export interface UrduTestPassage {
+  _id: string;
+  content: string;
+  difficulty: UrduContentDifficulty;
+  duration: UrduContentDuration;
+}
+
+export interface AdminUrduTestParagraph extends UrduTestPassage {
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface UrduPracticeItem {
+  _id: string;
+  category: UrduContentCategory;
+  difficulty: UrduContentDifficulty;
+  text: string;
+}
+
+export interface AdminUrduPracticeItem extends UrduPracticeItem {
+  order: number;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+/** Payload of the public GET /urdu-content endpoint. */
+export interface UrduContentBundle {
+  testPassages: UrduTestPassage[];
+  practiceItems: UrduPracticeItem[];
+}
+
 export interface SessionSubmitPayload {
   mode: 'test' | 'practice' | 'lesson' | 'game';
   startTime: string;
@@ -366,4 +417,6 @@ export interface SessionSubmitPayload {
   focusKeys?: string[];
   certificateParagraphId?: string;
   certificateParagraphText?: string;
+  /** Course language. Omitted means English; 'ur' scopes the session to Urdu. */
+  language?: 'en' | 'ur';
 }

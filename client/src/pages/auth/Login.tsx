@@ -67,7 +67,13 @@ export default function Login() {
           placeholder="••••••••"
           prefixIcon={<Lock size={16} />}
           suffixIcon={
-            <button type="button" onClick={() => setShowPass((v) => !v)} tabIndex={-1}>
+            <button
+              type="button"
+              onClick={() => setShowPass((v) => !v)}
+              aria-label={showPass ? 'Hide password' : 'Show password'}
+              className="grid place-items-center p-2 rounded-md transition-colors hover:text-[var(--color-text-primary)]"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
               {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           }
