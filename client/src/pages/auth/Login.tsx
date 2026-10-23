@@ -5,10 +5,12 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { GoogleSignInButton, GoogleDivider } from '../../components/auth/GoogleSignInButton';
 import { useAuth } from '../../hooks/useAuth';
+import { useNoindex } from '../../hooks/useNoindex';
 import { authService } from '../../services/auth.service';
 import { getApiErrorMessage } from '../../services/api';
 
 export default function Login() {
+  useNoindex();
   const location = useLocation();
   const returnTo = new URLSearchParams(location.search).get('redirect');
   const registerLink = returnTo ? `/register?redirect=${encodeURIComponent(returnTo)}` : '/register';

@@ -53,8 +53,8 @@ export const CATEGORY_BADGE: Record<BlogCategory, string> = {
 /** Sidebar category post counts (keep in sync with POSTS). */
 export const CATEGORY_COUNTS: Record<BlogCategory, number> = {
   'Typing Tips': 3,
-  'Guides': 9,
-  'Practice': 2,
+  'Guides': 10,
+  'Practice': 3,
   'Productivity': 3,
   'News & Updates': 1,
 };
@@ -141,7 +141,7 @@ export const POSTS: BlogPost[] = [
     title: 'Urdu Phonetic Keyboard Layout — Complete Key Mapping Guide',
     category: 'Guides',
     description: 'A practical, verified guide to every Urdu character, Shift layer, numeral, and punctuation mapping in Typeoye.',
-    metaTitle: 'Urdu Phonetic Keyboard Layout: Complete Key Mapping Guide | Typeoye',
+    metaTitle: 'Urdu Phonetic Keyboard Layout: Complete Guide | Typeoye',
     metaDescription: 'Learn the exact Typeoye Urdu phonetic keyboard layout: English-to-Urdu letter keys, Shift combinations, punctuation, numerals, and typing examples.',
     intro: 'Want to type Urdu with an ordinary English keyboard? This complete Urdu phonetic keyboard guide shows exactly what Typeoye produces for each key, including the Shift layer, punctuation, and the Urdu numerals used in Urdu Learn.',
     readTime: 8,
@@ -219,9 +219,9 @@ export const POSTS: BlogPost[] = [
     category: 'Typing Tips',
     description:
       'Discover practical techniques that can help you type faster while maintaining accuracy.',
-    metaTitle: 'How to Increase Typing Speed – 10 Proven Tips | Typeoye',
+    metaTitle: 'How to Increase Typing Speed: 10 Proven Tips | Typeoye',
     metaDescription:
-      "Learn how to improve your typing speed with 10 proven speed typing tips. Discover how to type faster while keeping your typing accuracy high, with free practice.",
+      'Learn how to increase typing speed with 10 proven tips. Type faster without losing accuracy, then practise free online with Typeoye.',
     intro:
       "Typing faster is less about willpower and more about technique. These speed typing tips show you how to improve your typing speed and how to increase your WPM without sacrificing accuracy — small, consistent changes to how you sit, move, and practice add up quickly, exactly the way many people first improve their typing speed.",
     readTime: 5,
@@ -277,7 +277,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         heading: '12. The Muscle-Memory Feedback Loop',
-        body: 'Once your fingers know the route, each practice session actually changes your brain: the pathway that translates intention into keystroke gets myelinated — the neural wiring literally gets faster and more reliable. That is why rest matters as much as reps. After a hard session, sleep is where the skill is consolidatedstant.carsconsolidated. Type every day, but keep sessions short enough that you are still fresh — quality reps build the loop, exhaustion defeats it.',
+        body: 'Once your fingers know the route, each practice session actually changes your brain: the pathway that translates intention into keystroke gets myelinated — the neural wiring literally gets faster and more reliable. That is why rest matters as much as reps. After a hard session, sleep is where the skill is consolidated. Type every day, but keep sessions short enough that you are still fresh — quality reps build the loop, exhaustion defeats it.',
       },
       {
         heading: '13. How to Increase Typing Speed with Real Text',
@@ -285,7 +285,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         heading: 'Frequently Asked Questions',
-        body: 'How long does it take to improve typing speed? Most people see a measurable jump in two to four weeks of ten to fifteen minutes of daily practicecars — if they focus on accuracy first. Can I increase typing speed without accuracy dropping? Yes, if you treat accuracy as the foundation: type slowly and correctly at first, then raise the pace only when your clean speed is stable. What is a realistic weekly goal? Adding 3 to 5 WPM per week is a strong, sustainable pace; anything faster usually comes from chasing mistakes. Is speed or accuracy more important? Accuracy wins early — it is the multiplier that makes speed trustworthy — so train accurately first and speed will follow faster than the other way around.',
+        body: 'How long does it take to improve typing speed? Most people see a measurable jump in two to four weeks of ten to fifteen minutes of daily practice — if they focus on accuracy first. Can I increase typing speed without accuracy dropping? Yes, if you treat accuracy as the foundation: type slowly and correctly at first, then raise the pace only when your clean speed is stable. What is a realistic weekly goal? Adding 3 to 5 WPM per week is a strong, sustainable pace; anything faster usually comes from chasing mistakes. Is speed or accuracy more important? Accuracy wins early — it is the multiplier that makes speed trustworthy — so train accurately first and speed will follow faster than the other way around.',
       },
       {
         heading: 'Common Mistakes That Tank Accuracy',
@@ -311,9 +311,9 @@ export const POSTS: BlogPost[] = [
     category: 'Guides',
     description:
       'Learn why the home row is important and how mastering it can improve your typing skills.',
-    metaTitle: 'Home Row Technique – The Foundation of Touch Typing | Typeoye',
+    metaTitle: 'Home Row Technique: The Foundation of Fast Typing | Typeoye',
     metaDescription:
-      'Master the home row technique to type faster without looking at the keyboard. A practical touch typing guide covering finger placement, drills, and common mistakes.',
+      'Master the home row technique to type faster without looking at the keyboard. Practical finger-placement drills and free typing practice.',
     intro:
       'Every fast typist shares one fundamental habit: the home row. This short guide explains what it is, why it matters, and how to build the muscle memory that makes effortless speed possible.',
     readTime: 6,
@@ -358,9 +358,9 @@ export const POSTS: BlogPost[] = [
     title: 'Typing Accuracy Exercises: Improve Your Speed & Accuracy',
     category: 'Practice',
     description: 'Improve your typing accuracy with simple and effective typing exercises.',
-    metaTitle: 'Typing Accuracy Exercises to Increase Speed & Accuracy | Typeoye',
+    metaTitle: 'Typing Accuracy Exercises to Type Faster | Typeoye',
     metaDescription:
-      'Typing accuracy exercises that help you increase typing speed and accuracy. Improve your typing accuracy with targeted drills and learn to type faster without more mistakes.',
+      'Practical typing accuracy exercises that help you type faster with fewer mistakes. Build precision first, then speed, with free online practice.',
     intro:
       'Accuracy is the multiplier that makes speed useful. These typing accuracy exercises train precise finger movement, and pairing them with speed drills is the fastest way to increase your typing speed and accuracy at the same time — turning careful typing into automatic muscle memory.',
     readTime: 7,
@@ -510,7 +510,7 @@ export const POSTS: BlogPost[] = [
     title: 'How to Type Faster on a Laptop vs Desktop Keyboard',
     category: 'Guides',
     description: 'Practical differences in key travel, layout, and hand positioning — plus the adjustments that make you faster on each.',
-    metaTitle: 'Typing on a Laptop vs Desktop Keyboard – What Makes You Faster | Typeoye',
+    metaTitle: 'Laptop vs Desktop Keyboard: What Makes You Faster | Typeoye',
     metaDescription:
       'Compare laptop and desktop keyboards for typing speed. Learn how key travel, layout, and hand position change your WPM and accuracy on each setup.',
     intro:
@@ -559,7 +559,7 @@ export const POSTS: BlogPost[] = [
     title: 'Why Touch Typing Matters for Programmers',
     category: 'Productivity',
     description: 'How typing speed and accuracy affect coding flow, and why symbols and brackets present a uniquely programmer-sized challenge.',
-    metaTitle: 'Touch Typing for Programmers – Better Flow, Fewer Symbol Errors | Typeoye',
+    metaTitle: 'Touch Typing for Programmers: Type Code Faster | Typeoye',
     metaDescription:
       'Why programmers should learn touch typing. Learn how typing speed, accuracy, and symbol handling affect coding flow, focus, and long sessions at the keyboard.',
     intro:
@@ -608,7 +608,7 @@ export const POSTS: BlogPost[] = [
     title: 'How Long Does It Take to Learn Touch Typing?',
     category: 'Guides',
     description: 'Realistic timelines for learning touch typing, what slows people down, and a sample plan that actually works.',
-    metaTitle: 'How Long Does It Take to Learn Touch Typing? A Realistic Timeline | Typeoye',
+    metaTitle: 'How Long Does It Take to Learn Touch Typing? | Typeoye',
     metaDescription:
       'How long does it take to learn touch typing? A realistic timeline based on practice hours, the factors that move it faster or slower, and a six-week plan.',
     intro:
@@ -657,7 +657,7 @@ export const POSTS: BlogPost[] = [
     title: 'Best Typing Games to Learn Typing While Having Fun',
     category: 'Practice',
     description: 'How typing games make practice feel like play, what makes a good one, and where to start on Typeoye.',
-    metaTitle: 'Best Typing Games to Learn to Type Faster – While Having Fun | Typeoye',
+    metaTitle: 'Best Free Typing Games to Learn Faster | Typeoye',
     metaDescription:
       'Typing games turn practice into play. Discover what makes a typing game effective, the common game styles, and free typing games on Typeoye.',
     intro:
@@ -707,9 +707,9 @@ export const POSTS: BlogPost[] = [
     category: 'Guides',
     description:
       'A practical, parent-friendly guide to teaching children typing, with patience, games, and short sessions.',
-    metaTitle: 'How to Teach Kids Touch Typing at Home – A Parent’s Guide | Typeoye',
+    metaTitle: 'How to Teach Kids Touch Typing at Home | Typeoye',
     metaDescription:
-      'Learn how to teach children typing at home with short sessions, playful drills, and the right setup. A practical parent guide covering age, routine, and progress.',
+      'Learn how to teach children typing at home with short, playful sessions and the right setup. A practical parent guide covering age, routine, and progress.',
     intro:
       'Teaching kids touch typing works best when sessions feel like play and never like punishment. This guide covers when to start, how to set your child up to succeed, and the gentle weekly routine that turns typing practice into a habit.',
     readTime: 6,
@@ -758,7 +758,7 @@ export const POSTS: BlogPost[] = [
     description: 'The seven mistakes that keep beginners slow, and the exact corrections that fix each one.',
     metaTitle: '7 Common Typing Mistakes and How to Fix Them | Typeoye',
     metaDescription:
-      'Common typing mistakes beginners make — hunting keys, wrong fingers, mashing, bad posture — and the practical fix for each one on the way to faster, accurate typing.',
+      'Common typing mistakes beginners make — hunting keys, wrong fingers, mashing, bad posture — and the practical fix for each one.',
     intro:
       'Most typing plateaus trace back to a small set of repeatable mistakes. Here are the seven we see most often in new typists, and the concrete fix for each.',
     readTime: 6,
@@ -809,9 +809,9 @@ export const POSTS: BlogPost[] = [
     title: 'How Typing Speed Affects Your Career',
     category: 'Productivity',
     description: 'From data entry to coding to remote freelancing, here is how typing speed and accuracy quietly shape your work.',
-    metaTitle: 'How Typing Speed Affects Your Career – Data, Coding, Remote Work | Typeoye',
+    metaTitle: 'How Typing Speed Affects Your Career | Typeoye',
     metaDescription:
-      'Typing speed and accuracy affect careers in data entry, coding, freelancing, and remote work. Learn the roles where typing matters and how to turn it into an edge.',
+      'Typing speed and accuracy affect careers in data entry, coding, freelancing, and remote work. Learn where typing matters and how to improve your WPM.',
     intro:
       'Typing speed rarely appears on a job description, yet it influences how much you produce, how present you are in meetings, and how many hours you spend on routine text work. Here is where it matters most — and where it barely matters at all.',
     readTime: 7,
@@ -858,7 +858,7 @@ export const POSTS: BlogPost[] = [
     title: 'Typing Tests for Job Interviews: What to Expect',
     category: 'Guides',
     description: 'A practical guide to typing assessments in hiring — what employers test, how to prepare, and what scores they want.',
-    metaTitle: 'Typing Tests for Job Interviews – What to Expect and How to Prepare | Typeoye',
+    metaTitle: 'Typing Tests for Job Interviews: What to Expect | Typeoye',
     metaDescription:
       'Preparing for a typing test in a job interview? Learn what employers test, typical score requirements by role, and how to practice before the assessment.',
     intro:
@@ -907,9 +907,9 @@ export const POSTS: BlogPost[] = [
     title: 'How Accurate Are Online Typing Tests, Really?',
     category: 'Typing Tips',
     description: 'An honest look at how WPM and accuracy are calculated, why scores fluctuate, and how to read the numbers.',
-    metaTitle: 'How Accurate Are Online Typing Tests? WPM Explained Honestly | Typeoye',
+    metaTitle: 'How Accurate Are Online Typing Tests? | Typeoye',
     metaDescription:
-      'Online typing tests measure skill — within limits. Understand how WPM and accuracy are calculated, why scores fluctuate, and how to read your results honestly.',
+      'Online typing tests measure skill within limits. Understand how WPM and accuracy are calculated, why scores fluctuate, and how to read your results.',
     intro:
       'Typing tests produce crisp, precise numbers — 62 WPM, 94 percent accuracy — that feel like laboratory measurements. The truth is more interesting: those numbers are estimates based on conventions, and understanding those conventions lets you read your scores far more honestly.',
     readTime: 7,
@@ -957,10 +957,9 @@ export const POSTS: BlogPost[] = [
     category: 'Guides',
     description:
       'Ever wondered why your WPM changes depending on which typing test you use? Here’s the real math behind typing speed scores — and why it matters more than you think.',
-    metaTitle:
-      'Why Your Typing Speed Looks Different on Every Website (And What WPM Really Means) | Typeoye',
+    metaTitle: 'Why Your WPM Differs Across Typing Sites | Typeoye',
     metaDescription:
-      'Ever wondered why your WPM changes depending on which typing test you use? Here’s the real math behind typing speed scores — and why it matters more than you think.',
+      'Why your WPM changes from one typing test to another, what WPM really measures, and how to compare typing speeds fairly across websites.',
     intro:
       'Open three different typing test websites, type the exact same sentence at the exact same speed, and you’ll likely get three different WPM scores. This isn’t a bug. It’s because "words per minute" isn’t one standardized measurement — it’s a formula, and different sites calculate it differently.',
     readTime: 4,
@@ -1005,7 +1004,7 @@ export const POSTS: BlogPost[] = [
     category: 'Guides',
     description:
       'Create a private typing race on Typeoye, send the invite link to a friend, and compare WPM and accuracy head-to-head in real time.',
-    metaTitle: 'How to Challenge a Friend to a Typing Race – 1v1 Typing | Typeoye',
+    metaTitle: 'How to Challenge a Friend to a Typing Race | Typeoye',
     metaDescription:
       'Want to race a friend in real-time typing speed? Here’s how to create a challenge, share the link, and compete head-to-head on Typeoye.',
     intro:
@@ -1046,6 +1045,155 @@ export const POSTS: BlogPost[] = [
       {
         heading: '6. Why Racing a Friend Works',
         body: 'Solo practice builds consistency, but competition adds pressure — the same kind of pressure you would feel typing under a deadline or during a timed test. Racing someone in real time pushes you to focus harder and type faster than you might on your own, which is exactly the kind of practice that translates to real-world typing speed. There is a social reason too: a score that beats a specific person is far more motivating than one that only has to beat yesterday.',
+      },
+    ],
+  },
+  {
+    slug: 'improve-urdu-typing-speed-and-accuracy',
+    title: 'How to Improve Urdu Typing Speed and Accuracy Online',
+    category: 'Practice',
+    description:
+      'A practical, beginner-friendly guide to improving Urdu typing speed and accuracy with a simple 15-minute daily routine.',
+    metaTitle: 'Improve Urdu Typing Speed and Accuracy | Typeoye',
+    metaDescription:
+      'Learn how to improve Urdu typing speed and accuracy online. Build accuracy first, then speed, with a 15-minute daily routine and free Urdu practice.',
+    pullQuote: 'In Urdu typing, accuracy is the foundation — speed is simply what you build on top of it.',
+    cta: {
+      heading: 'Start improving your Urdu typing today',
+      blurb: 'Put this 15-minute routine into practice with a free Urdu typing test.',
+      label: 'Start Urdu Typing Test',
+      to: '/urdu-typing-test/setup',
+    },
+    intro:
+      'If you can already type Urdu on a regular keyboard, the next step is improving Urdu typing speed without losing accuracy. This guide explains how to practise Urdu typing online, why accuracy must come before speed, and how a short daily routine turns slow, careful typing into confident, fast typing.',
+    readTime: 9,
+    publishedAt: '2026-10-24',
+    popular: false,
+    image: '/assets/blog/improve-urdu-typing-speed-accuracy.svg',
+    imageAlt: 'Urdu typing practice session showing an Urdu phrase, a speed dial, and an accuracy meter',
+    moreTools: [
+      { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
+      { label: 'Urdu Practice', to: '/urdu-practice' },
+      { label: 'Urdu Learn', to: '/urdu-lessons' },
+      { label: 'Urdu Phonetic Keyboard Layout Guide', to: '/blog/urdu-phonetic-keyboard-layout' },
+      { label: 'How to Type Urdu With an English Keyboard', to: '/blog/how-to-type-urdu-online-english-keyboard' },
+    ],
+    content: [
+      {
+        heading: 'Why improving Urdu typing speed is different',
+        body: 'Urdu typing is a phonetic skill: you press familiar English QWERTY keys, and Typeoye maps each key to its Urdu character. That means the muscle memory you build is a fixed key-to-character association, not a word-by-word guess. Because Urdu reads right to left and uses its own letters, vowel marks, and numerals, the habits that help in English typing do not all transfer directly. The good news is that the same principle still applies: clean, repeatable keystrokes at a slow pace are what make fast Urdu typing possible later. Before you worry about Urdu typing speed, make sure you recognise what each key produces — the complete Urdu phonetic keyboard layout guide lists every letter, Shift combination, and punctuation key you will use.',
+      },
+      {
+        heading: 'Build Urdu typing accuracy before speed',
+        body: 'Every typo in Urdu costs more than it looks. A single wrong character can change a word entirely, so fixing a mistake is not a cosmetic correction — it is a second attempt at the same word, which breaks your rhythm and teaches your fingers the wrong movement. That is why accuracy should always come first. Aim to type at a pace where you can hold high accuracy on a familiar passage, and do not raise your speed until that accuracy feels automatic. Practise Urdu typing online at a controlled tempo, correcting each error as it happens, until the correct keystroke sequence becomes the natural one. Speed built on an accurate foundation lasts; speed built on mistakes has to be unlearned.',
+      },
+      {
+        heading: 'Learn the keys in small, ordered steps',
+        body: 'Trying to master the whole Urdu keyboard at once is the fastest way to feel stuck. Introduce keys in small groups instead. Start with the home-row Urdu letters, then add the top row, then the bottom row. Practise the Shift layer — where Urdu characters such as ث, خ, ڑ, and ں live — only after the lowercase letters feel natural. Adding numerals and Urdu punctuation such as ۔ ، ؟ ؛ comes last. If you are new to the layout, the guide on how to type Urdu online using an English keyboard walks through the beginner steps and gives worked examples, so your practice sessions have a clear starting point.',
+      },
+      {
+        heading: 'Practise Urdu typing online with real text',
+        body: 'Random keys and single letters build finger strength, but real vocabulary builds transferable fluency. Once the letters are familiar, type real Urdu words and short sentences so your fingers learn whole patterns instead of isolated keys. This is where Urdu typing practice online shines: a dedicated practice mode lets you drill real words and passages instead of just characters, so what you build in practice shows up in your actual typing. When you meet an awkward combination, slow down and repeat it a handful of times before folding it back into full text.',
+        guide: 'urdu-typing-links',
+      },
+      {
+        heading: 'Use an Urdu typing test to measure progress',
+        body: 'You cannot improve what you do not measure. An Urdu typing test gives you two honest numbers — words per minute and accuracy — plus a sense of which passages slow you down. Run a short timed Urdu typing test at the start of each session, note the result, and compare it with the same test a week later. Focus on the trend across several sessions rather than any single score, because one bad run is just noise. The test is the diagnostic; the practice and lessons are the treatment. Do not simply repeat a test hoping for a better number — when accuracy dips, slow down and rebuild the clean movement first.',
+      },
+      {
+        heading: 'A 15-minute daily Urdu typing routine',
+        body: 'Short, frequent sessions beat long, occasional ones for building muscle memory. Here is a simple routine you can repeat every day: spend the first 2 minutes on a slow warm-up typing a familiar passage accurately, no matter how slow it feels. Spend the next 5 minutes on a targeted drill for your weakest keys or the Shift layer. Spend 4 minutes typing real Urdu words and sentences with complete focus on correctness. Spend the last 2 minutes on a short timed Urdu typing test to log your speed and accuracy. Finish by writing down one number — your accuracy — and one weak spot to focus on tomorrow. Fifteen minutes done daily compounds far faster than an hour once a week.',
+      },
+      {
+        heading: 'Common mistakes that hold Urdu typing back',
+        body: 'The same handful of habits keep Urdu typists slow. Rushing the Shift layer instead of learning it deliberately is the most common. Treating Urdu typing like English typing and assuming the same keys mean the same things is another. Ignoring Urdu punctuation and numerals until a test exposes them is a third. And looking at the keyboard instead of the screen prevents your fingers from learning where each Urdu character lives — the exact opposite of touch typing. Fix these one at a time: slow down on the Shift layer, review the key map whenever a character surprises you, and make a habit of keeping your eyes on the text while you type.',
+      },
+      {
+        heading: 'Frequently asked questions about Urdu typing speed',
+        body: 'How long does it take to improve Urdu typing speed? Most learners see steady gains within two to four weeks of about fifteen focused minutes a day, as long as accuracy is prioritised first. Should I use Urdu numerals or Western digits? Urdu Learn can produce Urdu numerals ۰–۹, while the Urdu typing test and Urdu practice keep number-row digits as 0–9; choose based on what you actually write. Do I need a special Urdu keyboard? No — Typeoye maps a standard English QWERTY keyboard, so you can practise Urdu typing online with the keyboard you already have. Is speed or accuracy more important in Urdu? Accuracy comes first, because a single wrong character can change a word and force a correction that breaks your rhythm. How often should I take an Urdu typing test? Once per session is plenty; use it to track the trend over weeks, not to chase a peak score.',
+      },
+      {
+        heading: 'Turn daily practice into lasting Urdu typing speed',
+        body: 'Improving Urdu typing speed is less about talent and more about a repeatable routine. Build accuracy before speed, learn the keys in small steps, practise with real text, and measure your progress with an occasional test. Follow the 15-minute routine, keep your eyes on the screen, and give your fingers time to internalise the layout. Do that consistently and faster, more accurate Urdu typing follows naturally. When you are ready, take a short Urdu typing test, explore the guided Urdu Learn lessons, or start an Urdu practice drill and put today’s session to work.',
+      },
+    ],
+  },
+  {
+    slug: 'urdu-typing-for-beginners',
+    title: 'Urdu Typing for Beginners: A Step-by-Step Guide to Learning Urdu Typing',
+    category: 'Guides',
+    description:
+      'A step-by-step beginner guide to Urdu typing, including the phonetic layout, simple words and sentences, common mistakes, and a 7-day practice plan.',
+    metaTitle: 'Urdu Typing for Beginners: Step-by-Step Guide | Typeoye',
+    metaDescription:
+      'Learn Urdu typing online with this beginner-friendly guide: the phonetic keyboard, simple words and sentences, and a 7-day practice plan.',
+    pullQuote: 'Start with one small group of Urdu letters, practise it until it feels automatic, then add the next.',
+    cta: {
+      heading: 'Start your first Urdu typing lesson',
+      blurb: 'Begin with structured, beginner-friendly Urdu lessons and practise at your own pace.',
+      label: 'Start Urdu Learn',
+      to: '/urdu-lessons',
+    },
+    intro:
+      'Learning Urdu typing as a beginner does not require a special keyboard or any prior Urdu typing experience. This step-by-step guide shows you how to get started, how to become familiar with Urdu letters and the phonetic keyboard layout, and how to build from single words to full sentences with short, regular practice.',
+    readTime: 10,
+    publishedAt: '2026-10-26',
+    popular: false,
+    image: '/assets/blog/urdu-typing-for-beginners.svg',
+    imageAlt: 'Beginner Urdu typing lesson on a laptop showing English phonetic input becoming Urdu text',
+    moreTools: [
+      { label: 'Urdu Learn (Lessons)', to: '/urdu-lessons' },
+      { label: 'Urdu Typing Practice', to: '/urdu-practice' },
+      { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
+      { label: 'Urdu Phonetic Keyboard Layout Guide', to: '/blog/urdu-phonetic-keyboard-layout' },
+      { label: 'How to Type Urdu With an English Keyboard', to: '/blog/how-to-type-urdu-online-english-keyboard' },
+      { label: 'Improve Urdu Typing Speed and Accuracy', to: '/blog/improve-urdu-typing-speed-and-accuracy' },
+    ],
+    content: [
+      {
+        heading: 'Why learn to type Urdu as a beginner',
+        body: 'Urdu is written right to left and uses its own alphabet, vowel marks, and punctuation. If you can already type on a regular keyboard, you are much closer to Urdu typing than you might think: Typeoye uses a phonetic layout, which means each familiar English QWERTY key produces a fixed Urdu character. You are not learning a new finger system from scratch — you are learning what each key outputs. That makes Urdu typing for beginners genuinely approachable, as long as you build the habit slowly and accurately instead of rushing. This guide walks through getting started, learning the letters, practising words and sentences, avoiding common mistakes, and following a simple seven-day plan.',
+      },
+      {
+        heading: 'How beginners should get started',
+        body: 'Start before you feel ready, but start small. Open a beginner Urdu lesson and work through the first level only, using the on-screen guidance instead of trying to memorise the whole alphabet first. Type a handful of characters, watch the Urdu appear, and stop while you still feel comfortable. Do not worry about speed — the goal of the first sessions is simply to see how the phonetic layout behaves, to get used to Urdu appearing right to left, and to notice which keys your fingers already know. Once the first few letters feel less strange, you are ready for the next step. If you are not sure where the keys are yet, the guide on how to type Urdu online using an English keyboard is a good warm-up companion.',
+      },
+      {
+        heading: 'Become familiar with the Urdu phonetic keyboard',
+        body: 'The phonetic layout is the heart of learning Urdu typing, so spend time understanding it rather than memorising blindly. Each lowercase English key maps to one Urdu character, and holding Shift gives you a second layer with additional letters and vowel marks. For example, the lowercase b key produces ب, while the uppercase B produces a different Urdu character. You do not need to invent or guess any mappings — the complete table of every key is published in the Urdu phonetic keyboard layout guide. Keep that guide open in another tab while you practise, and look up a character whenever one surprises you instead of guessing. Learning the layout deliberately, key by key, is what makes beginner Urdu typing accurate rather than accidental.',
+      },
+      {
+        heading: 'Practise in short daily sessions',
+        body: 'Short, frequent sessions build muscle memory far better than long, occasional ones. Ten to fifteen focused minutes a day is plenty for a beginner, and consistency matters more than duration. Begin each session with a slow warm-up on letters you already know, then spend most of the time on one new group of keys, and finish by typing a few real words that use them. Stop before you get tired or frustrated, because accuracy built at a comfortable pace is what sticks. This is exactly the approach the guided Urdu Learn lessons are built around: each level introduces a small set of keys and gives you exercises to drill them before moving on.',
+      },
+      {
+        heading: 'From letters to simple Urdu words',
+        body: 'Once a few letters feel automatic, start forming real words with them. Type short, familiar Urdu words rather than random characters, because your fingers learn whole patterns faster than isolated keys. When a word feels awkward, slow down and type it slowly and correctly a few times, then fold it back into the drill. For extra repetition, the Urdu practice mode includes dedicated word drills that draw real Urdu words so you can build fluency with vocabulary instead of single letters.',
+        guide: 'urdu-typing-links',
+      },
+      {
+        heading: 'Build up to sentences and then to difficulty',
+        body: 'When single words start to feel natural, move on to short sentences. Sentences add spaces, punctuation such as ۔ ، ؟ ؛, and a natural rhythm that isolated words do not, so they are an important step for a beginner. Start with very short sentences and read ahead as you type so your hands stay in a steady flow. After sentences feel comfortable, gradually increase the difficulty: longer sentences, then paragraphs, then content you actually need to type. Raising difficulty in small steps keeps the practice challenging but never overwhelming, and it is how beginner progress turns into everyday Urdu typing ability.',
+      },
+      {
+        heading: 'Common beginner mistakes and how to fix them',
+        body: 'A few habits trip up almost every beginner. The first is looking at the keyboard instead of the screen, which stops your fingers from learning where the Urdu characters live — keep your eyes on the Urdu text and use the on-screen guide only as a reference. The second is rushing the Shift layer, where extra letters and vowel marks live; slow down and learn those keys deliberately. The third is assuming Urdu works like English and expecting the same keys to produce the same characters, so review the layout whenever a character looks wrong. The fourth is practising the same few letters every day; rotate through new keys and real words so your fingers meet the awkward combinations in practice. Fix these one at a time and accuracy improves quickly.',
+      },
+      {
+        heading: 'A 7-day beginner practice plan',
+        body: 'Here is a simple week to get you started, about fifteen minutes a day. Day 1: open the first Urdu lesson, learn the home-row letters, and type single characters until they feel familiar. Day 2: revise the home row, then add two or three more keys and practise short combinations of letters. Day 3: start typing simple Urdu words built from the keys you know. Day 4: add the top row and practise words that use it, always prioritising correct characters over speed. Day 5: bring in the bottom row and type a mix of short words. Day 6: move to very short sentences, including spaces and basic Urdu punctuation. Day 7: review your weakest keys, then take a short Urdu typing test to record your starting accuracy. Repeat the week with new material and stretch the difficulty slightly each time you finish.',
+      },
+      {
+        heading: 'Practise with Typeoye’s Urdu tools',
+        body: 'Typeoye includes free Urdu tools that support exactly this kind of beginner practice. The Urdu Learn course is a structured path of sixteen levels that introduces keys in order and includes exercises to drill each one, with an on-screen keyboard showing the base and Shift characters. Urdu practice lets you drill characters, combinations, words, sentences, and longer paragraphs, and you can even paste your own Urdu text to practise it. When you want to measure progress, the Urdu typing test gives you words-per-minute and accuracy numbers so you can see your beginner accuracy improve over time. Note one detail worth knowing early: Urdu Learn uses Urdu numerals (۰–۹) on the number row, while the Urdu typing test and Urdu practice keep number-row digits as Western 0–9.',
+      },
+      {
+        heading: 'Frequently asked questions for beginners',
+        body: 'Do I need a special Urdu keyboard to start? No — Typeoye maps a standard English QWERTY keyboard, so you can learn Urdu typing online with the keyboard you already have. How long does it take to learn Urdu typing? In two to four weeks of about fifteen focused minutes a day, most beginners can type simple Urdu words and sentences accurately, though natural speed takes longer. Should I learn the whole alphabet first? No — learn a small group of keys, practise them, and add more as they feel automatic. What if I keep making the same mistake? Slow down and isolate the character or combination you keep getting wrong, type it correctly several times, then fold it back into real words. Is Urdu hard to type because it reads right to left? The reading direction affects how the text looks, not the keys you press, so your fingers use the same physical keys; you simply watch the Urdu build from the right.',
+      },
+      {
+        heading: 'Start learning Urdu typing today',
+        body: 'Learning Urdu typing as a beginner comes down to a few simple habits: understand the phonetic layout, practise a little every day, start with letters and words before sentences, and correct mistakes instead of repeating them. Follow the seven-day plan, keep the keyboard layout guide nearby, and let accuracy lead. As your fingers grow used to the Urdu characters, speed follows on its own. When you are ready, open the Urdu Learn lessons, try an Urdu practice drill, or take a short Urdu typing test to record where you are starting from, then use the guide on improving Urdu typing speed and accuracy to build on that baseline.',
       },
     ],
   },

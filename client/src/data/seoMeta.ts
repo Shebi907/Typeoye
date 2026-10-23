@@ -11,32 +11,48 @@ const STATIC_ROUTES: Record<string, RouteSeoMeta> = {
     description: 'Take a free typing test online with Typeoye. Check your typing speed, WPM and accuracy, then practice to improve your typing skills.',
   },
   '/test': {
-    title: 'Typing Test Online - Test Your Typing Speed | Typeoye',
-    description: 'Take an online typing test to measure your WPM and accuracy. Test your typing speed with different durations and improve your typing skills with Typeoye.',
+    title: 'Free Typing Test – Check Your WPM and Accuracy | Typeoye',
+    description: 'Take a free typing test online and see your WPM and accuracy instantly. Choose a 1 to 15 minute test, then practise to type faster with Typeoye.',
   },
   '/certificate': {
-    title: 'Typing Certificate - Get Your Typing Test Certificate | Typeoye',
-    description: 'Take a typing test and get a typing certificate based on your typing speed and accuracy with Typeoye.',
+    title: 'Typing Certificate – Test Your Speed & Accuracy | Typeoye',
+    description: 'Take a timed typing test and earn a typing certificate based on your WPM and accuracy. See the requirements and get started with Typeoye.',
   },
   '/practice': {
-    title: 'Free Typing Practice Online - Improve Your Typing Speed | Typeoye',
-    description: 'Practice typing online for free with Typeoye. Improve typing speed, accuracy, and touch typing skills with focused typing practice.',
+    title: 'Free Typing Practice Online – Speed & Accuracy | Typeoye',
+    description: 'Practise typing online for free with focused drills: characters, combinations, words, sentences, paragraphs, or your own text. Improve speed and accuracy.',
   },
   '/lessons': {
-    title: 'Learn Touch Typing Online - Typing Lessons | Typeoye',
-    description: 'Learn touch typing online with structured lessons and practice. Build typing accuracy, improve speed, and develop better keyboard skills with Typeoye.',
+    title: 'Learn Touch Typing Online – Free Typing Lessons | Typeoye',
+    description: 'Learn touch typing with free structured lessons from beginner to advanced. Build accuracy and speed across 16 levels with Typeoye.',
+  },
+  '/urdu-lessons': {
+    title: 'Learn Urdu Typing Online – Urdu Typing Lessons | Typeoye',
+    description: 'Learn Urdu typing online with 16 structured levels. Practise Urdu characters, words, and sentences on a phonetic keyboard with Typeoye.',
+  },
+  '/urdu-practice': {
+    title: 'Urdu Typing Practice – Improve Urdu Speed | Typeoye',
+    description: 'Practise Urdu typing free online. Drill Urdu characters, combinations, words, sentences, and paragraphs, or paste your own Urdu text.',
+  },
+  '/urdu-typing-test/setup': {
+    title: 'Urdu Typing Test – Check Urdu Speed & Accuracy | Typeoye',
+    description: 'Take a free Urdu typing test online. Choose 1, 2, or 5 minutes and an easy, medium, or hard passage, then check your Urdu WPM and accuracy.',
+  },
+  '/urdu-typing-test': {
+    title: 'Urdu Typing Test – Measure Urdu WPM | Typeoye',
+    description: 'Measure your Urdu typing speed and accuracy in words per minute using the Typeoye phonetic Urdu keyboard mapping.',
   },
   '/blog': {
-    title: 'Typing Tips & Guides - Improve Your Typing Speed | Typeoye',
-    description: 'Learn typing tips, improve your typing speed and accuracy, and discover useful touch typing guides and techniques on the Typeoye blog.',
+    title: 'Typing Tips & Guides for Faster Typing | Typeoye',
+    description: 'Practical typing tips and guides on touch typing, improving WPM, accuracy, practice routines, and typing tools, from the Typeoye team.',
   },
   '/how-it-works': {
     title: 'How It Works | Typeoye',
     description: 'Learn how Typeoye works - take a typing test, follow guided lessons, practice your weak keys, play typing games, and earn a typing certificate.',
   },
   '/faq': {
-    title: 'Typing FAQ | Typeoye',
-    description: 'Answers to common questions about Typeoye typing tests, lessons, practice drills, WPM and accuracy, certificates, and account management.',
+    title: 'Typing Test FAQ: WPM, Accuracy & Certificates | Typeoye',
+    description: 'Answers to common questions about typing tests, WPM, accuracy, lessons, practice, certificates, leaderboards, and Typeoye accounts.',
   },
   '/support': {
     title: 'Help Center & Support | Typeoye',
@@ -55,8 +71,8 @@ const STATIC_ROUTES: Record<string, RouteSeoMeta> = {
     description: 'Compare your typing speed against the fastest typists on Typeoye. Explore daily, weekly, monthly, and all-time typing leaderboards.',
   },
   '/games': {
-    title: 'Typing Games Online - Improve Your Typing Speed | Typeoye',
-    description: 'Play free typing games online and improve your typing speed, accuracy, and keyboard skills while having fun with Typeoye.',
+    title: 'Free Typing Games Online to Type Faster | Typeoye',
+    description: 'Play free typing games online and improve your typing speed and accuracy. Race, type falling words, and survive sudden-death sprints on Typeoye.',
   },
   '/privacy': {
     title: 'Privacy Policy | Typeoye',
@@ -94,6 +110,8 @@ const PREFIX_FALLBACKS: Record<string, RouteSeoMeta> = {
   '/support/*': STATIC_ROUTES['/support'],
   '/practice/*': STATIC_ROUTES['/practice'],
   '/lessons/*': STATIC_ROUTES['/lessons'],
+  '/urdu-practice/*': STATIC_ROUTES['/urdu-practice'],
+  '/urdu-lessons/*': STATIC_ROUTES['/urdu-lessons'],
   /* '/challenge/*' is intentionally NOT a prefix fallback. Every
      /challenge/:code is a private match session identified by a share code, so
      falling back to the landing page's title/keywords would make every invite

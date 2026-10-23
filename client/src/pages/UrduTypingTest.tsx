@@ -9,6 +9,7 @@ import { UrduStartHint } from '../components/typing/UrduStartHint';
 import { UrduVirtualKeyboard } from '../components/typing/UrduVirtualKeyboard';
 import { useTypingEngine } from '../hooks/useTypingEngine';
 import { useScrollLock } from '../hooks/useScrollLock';
+import { useSeo } from '../hooks/useSeo';
 import { computeUrduSession, type UrduSession } from '../utils/urduStats';
 import { typingService } from '../services/typing.service';
 import { useAuthStore } from '../store/authStore';
@@ -28,6 +29,12 @@ import {
 } from '../utils/urduPhonetic';
 
 export default function UrduTypingTest() {
+  useSeo({
+    title: 'Urdu Typing Test – Measure Urdu WPM | Typeoye',
+    description:
+      'Measure your Urdu typing speed and accuracy in words per minute using the Typeoye phonetic Urdu keyboard mapping.',
+    canonicalPath: '/urdu-typing-test',
+  });
   const [searchParams] = useSearchParams();
   const durationSec = Number(searchParams.get('duration')) || 60;
   const difficulty: 'easy' | 'medium' | 'hard' = (() => {

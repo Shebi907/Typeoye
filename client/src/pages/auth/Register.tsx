@@ -5,6 +5,7 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { GoogleSignInButton, GoogleDivider } from '../../components/auth/GoogleSignInButton';
 import { useAuth } from '../../hooks/useAuth';
+import { useNoindex } from '../../hooks/useNoindex';
 import { getApiErrorMessage } from '../../services/api';
 
 const SECURITY_QUESTIONS = [
@@ -16,6 +17,7 @@ const SECURITY_QUESTIONS = [
 ];
 
 export default function Register() {
+  useNoindex();
   const location = useLocation();
   const returnTo = new URLSearchParams(location.search).get('redirect');
   const loginLink = returnTo ? `/login?redirect=${encodeURIComponent(returnTo)}` : '/login';

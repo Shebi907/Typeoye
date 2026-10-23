@@ -14,6 +14,7 @@ interface BlogDetailProps {
 }
 
 const TOOLS_LINKS = [
+  { label: 'Free Typing Test', to: '/test' },
   { label: 'Typing Practice', to: '/practice' },
   { label: 'Typing Lessons', to: '/lessons' },
   { label: 'Typing Games', to: '/games' },

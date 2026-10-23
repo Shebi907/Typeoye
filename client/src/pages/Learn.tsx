@@ -123,8 +123,8 @@ function LearnSkeleton() {
 
 export default function Learn() {
   useSeo({
-    title: 'Learn Touch Typing Online – Typing Lessons | Typeoye',
-    description: 'Learn touch typing online with structured lessons and practice. Build typing accuracy, improve speed, and develop better keyboard skills with Typeoye.',
+    title: 'Learn Touch Typing Online – Free Typing Lessons | Typeoye',
+    description: 'Learn touch typing with free structured lessons from beginner to advanced. Build accuracy and speed across 16 levels with Typeoye.',
     canonicalPath: '/lessons',
   });
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);

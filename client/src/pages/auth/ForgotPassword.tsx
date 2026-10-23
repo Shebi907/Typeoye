@@ -5,6 +5,7 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { authService } from '../../services/auth.service';
 import { getApiErrorDetails } from '../../services/api';
+import { useNoindex } from '../../hooks/useNoindex';
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -20,6 +21,7 @@ function formatCountdown(totalSeconds: number): string {
 }
 
 export default function ForgotPassword() {
+  useNoindex();
   const [step, setStep] = useState<Step>(1);
   const [identifier, setIdentifier] = useState('');
   const [securityQuestion, setSecurityQuestion] = useState('');

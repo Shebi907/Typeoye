@@ -15,9 +15,9 @@ export default function Blog() {
   const [sort, setSort] = useState<BlogSort>('latest');
 
   useSeo({
-    title: 'Typing Tips & Guides – Improve Your Typing Speed | Typeoye',
+    title: 'Typing Tips & Guides for Faster Typing | Typeoye',
     description:
-      'Learn typing tips, improve your typing speed and accuracy, and discover useful touch typing guides and techniques on the Typeoye blog.',
+      'Practical typing tips and guides on touch typing, improving WPM, accuracy, practice routines, and typing tools, from the Typeoye team.',
     canonicalPath: '/blog',
     image: `${SITE_URL}/favicon.png`,
   });

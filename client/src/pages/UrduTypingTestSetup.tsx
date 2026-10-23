@@ -4,6 +4,7 @@ import { Keyboard, Lightbulb, Timer } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { ProseSection } from '../components/content/ProseSection';
 import { ensureUrduContentLoaded } from '../utils/urduContentSync';
+import { useSeo } from '../hooks/useSeo';
 import {
   UrduSetupInfoCard,
   UrduSetupSelect,
@@ -32,6 +33,12 @@ const tips = [
 ];
 
 export default function UrduTypingTestSetup() {
+  useSeo({
+    title: 'Urdu Typing Test – Check Urdu Speed & Accuracy | Typeoye',
+    description:
+      'Take a free Urdu typing test online. Choose 1, 2, or 5 minutes and an easy, medium, or hard passage, then check your Urdu WPM and accuracy.',
+    canonicalPath: '/urdu-typing-test/setup',
+  });
   const navigate = useNavigate();
   const [duration, setDuration] = useState<number>(300);
   const [difficulty, setDifficulty] = useState<Difficulty>('easy');

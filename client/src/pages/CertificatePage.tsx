@@ -34,9 +34,9 @@ const INCLUDED = [
  */
 export default function CertificatePage() {
   useSeo({
-    title: 'Typing Certificate – Get Your Typing Test Certificate | Typeoye',
+    title: 'Typing Certificate – Test Your Speed & Accuracy | Typeoye',
     description:
-      'Take a typing test and get a typing certificate based on your typing speed and accuracy with Typeoye.',
+      'Take a timed typing test and earn a typing certificate based on your WPM and accuracy. See the requirements and get started with Typeoye.',
     canonicalPath: '/certificate',
   });
 

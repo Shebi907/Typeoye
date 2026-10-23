@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Learning Urdu typing for beginners on a laptop</title>
+  <desc id="desc">A laptop on a desk shows a beginner Urdu typing lesson: an English phonetic input line that becomes Urdu text, with a simple practice progress bar and a lesson counter reading day one.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f7fbff"/><stop offset="1" stop-color="#eef3ff"/></linearGradient>
+    <linearGradient id="screenFrame" x2="1" y2="1"><stop stop-color="#334155"/><stop offset=".5" stop-color="#17283b"/><stop offset="1" stop-color="#0f1d2e"/></linearGradient>
+    <linearGradient id="screen" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#f9fcff"/></linearGradient>
+    <linearGradient id="accent" x2="1" y2="1"><stop stop-color="#4361ee"/><stop offset="1" stop-color="#14a89a"/></linearGradient>
+    <linearGradient id="desk" x2="0" y2="1"><stop stop-color="#f4f8fb"/><stop offset="1" stop-color="#e8eef3"/></linearGradient>
+    <filter id="shadow" x="-.2" y="-.2" width="1.4" height="1.6"><feGaussianBlur stdDeviation="22"/></filter>
+    <filter id="soft" x="-.2" y="-.2" width="1.4" height="1.5"><feGaussianBlur stdDeviation="8"/></filter>
+    <pattern id="grain" width="80" height="80" patternUnits="userSpaceOnUse"><circle cx="7" cy="11" r="1" fill="#7c9cab" opacity=".12"/><circle cx="51" cy="58" r="1" fill="#7c9cab" opacity=".10"/></pattern>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#grain)"/>
+  <circle cx="1320" cy="180" r="210" fill="#bdebe4" opacity=".26"/>
+  <circle cx="250" cy="700" r="245" fill="#cbd8ff" opacity=".30"/>
+  <path d="M0 656Q320 616 650 656t950-5v249H0Z" fill="url(#desk)"/>
+  <path d="M0 656Q320 616 650 656t950-5" fill="none" stroke="#d9e5ec" stroke-width="3"/>
+  <ellipse cx="800" cy="748" rx="590" ry="84" fill="#536b7a" opacity=".20" filter="url(#shadow)"/>
+
+  <!-- Laptop screen, facing the viewer -->
+  <rect x="360" y="122" width="880" height="530" rx="30" fill="#314556" opacity=".14" filter="url(#soft)"/>
+  <rect x="372" y="98" width="856" height="538" rx="28" fill="url(#screenFrame)" stroke="#526678" stroke-width="3"/>
+  <rect x="396" y="122" width="808" height="490" rx="13" fill="url(#screen)"/>
+  <rect x="396" y="122" width="808" height="44" rx="13" fill="#f5f8fb"/>
+  <path d="M396 152v-16a13 13 0 0 1 13-13h782a13 13 0 0 1 13 13v16" fill="#f5f8fb"/>
+  <circle cx="424" cy="144" r="5" fill="#9eb1bd"/><circle cx="443" cy="144" r="5" fill="#9eb1bd"/><circle cx="462" cy="144" r="5" fill="#9eb1bd"/>
+  <rect x="396" y="166" width="808" height="4" fill="url(#accent)" opacity=".85"/>
+
+  <!-- Lesson header -->
+  <text x="436" y="222" fill="#172b3d" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="23" font-weight="700">Urdu Typing for Beginners</text>
+  <rect x="1226" y="200" width="150" height="30" rx="15" fill="#eef3ff" stroke="#d7e2fb" stroke-width="2"/>
+  <text x="1301" y="220" text-anchor="middle" fill="#4361ee" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Day 1 · Lesson 1</text>
+
+  <!-- English phonetic input -->
+  <text x="436" y="280" fill="#637789" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" letter-spacing=".4">TYPE USING YOUR ENGLISH KEYS</text>
+  <rect x="420" y="294" width="760" height="52" rx="12" fill="#ffffff" stroke="#d9e3ea" stroke-width="2"/>
+  <text x="450" y="328" fill="#34495b" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="500">slam</text>
+  <rect x="1035" y="308" width="2" height="26" rx="1" fill="#4361ee"/>
+
+  <!-- Urdu output -->
+  <text x="436" y="392" fill="#637789" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" letter-spacing=".4">READ IT IN URDU</text>
+  <rect x="420" y="406" width="760" height="104" rx="14" fill="#f2fbfa" stroke="#ccece7" stroke-width="2"/>
+  <text x="800" y="472" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" fill="#163d4a" font-family="Noto Naskh Arabic, Noto Sans Arabic, Segoe UI, Tahoma, serif" font-size="50" font-weight="600">سلام</text>
+
+  <!-- Practice progress -->
+  <text x="436" y="556" fill="#637789" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" letter-spacing=".4">PRACTICE PROGRESS</text>
+  <rect x="420" y="570" width="760" height="12" rx="6" fill="#e6edf3"/>
+  <rect x="420" y="570" width="266" height="12" rx="6" fill="url(#accent)"/>
+  <text x="1180" y="582" text-anchor="end" fill="#172b3d" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">35%</text>
+
+  <!-- Laptop base with plain keys (no Urdu labels) -->
+  <path d="M338 636h924l140 150q8 13-13 19l-118 22H330l-118-22q-20-6-12-19Z" fill="url(#desk)" stroke="#9aabb7" stroke-width="3"/>
+  <path d="M344 642h912l-44 46H390Z" fill="#b7c7d1" opacity=".5"/>
+  <path d="M388 656h824l-34 32H424Z" fill="#dfe8ee"/>
+  <g transform="translate(455 662) skewX(-9) scale(1 .72)" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="#8ea1af">
+    <g stroke="#c3d0d9" stroke-width="2">
+      <rect x="0" y="0" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="52" y="0" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="104" y="0" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="156" y="0" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="208" y="0" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="260" y="0" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="312" y="0" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="364" y="0" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="416" y="0" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="468" y="0" width="46" height="30" rx="6" fill="#eef3f6"/>
+      <rect x="20" y="38" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="72" y="38" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="124" y="38" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="176" y="38" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="228" y="38" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="280" y="38" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="332" y="38" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="384" y="38" width="46" height="30" rx="6" fill="#eef3f6"/><rect x="436" y="38" width="46" height="30" rx="6" fill="#eef3f6"/>
+      <rect x="120" y="76" width="360" height="30" rx="6" fill="#eef3f6"/>
+    </g>
+  </g>
+
+  <!-- Monitor stand -->
+  <path d="M770 636h80l-8 38h-64Z" fill="#95a8b5" opacity=".6"/>
+  <rect x="712" y="674" width="196" height="13" rx="6" fill="#aebec9" opacity=".7"/>
+
+  <!-- Notebook and pencil accents -->
+  <g transform="translate(150 560)">
+    <rect x="0" y="0" width="170" height="200" rx="12" fill="#ffffff" stroke="#dbe6ee" stroke-width="3"/>
+    <rect x="24" y="30" width="120" height="9" rx="4" fill="#e6edf3"/>
+    <rect x="24" y="58" width="120" height="9" rx="4" fill="#e6edf3"/>
+    <rect x="24" y="86" width="88" height="9" rx="4" fill="#e6edf3"/>
+    <rect x="24" y="120" width="120" height="9" rx="4" fill="#cbd8ff"/>
+    <rect x="24" y="148" width="104" height="9" rx="4" fill="#cbd8ff"/>
+  </g>
+  <g transform="translate(1435 560) rotate(24)">
+    <rect x="0" y="0" width="14" height="150" rx="4" fill="#4361ee"/>
+    <path d="M0 150h14l-7 22Z" fill="#14a89a"/>
+    <rect x="0" y="0" width="14" height="16" rx="4" fill="#172b3d"/>
+  </g>
+</svg>

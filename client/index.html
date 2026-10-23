@@ -59,11 +59,17 @@
           path.slice(0, CHALLENGE_LANDING_PATH.length) === CHALLENGE_LANDING_PATH &&
           path.charAt(CHALLENGE_LANDING_PATH.length) === '/';
 
+        /* Account/auth screens are not useful search landing pages: keep them out
+           of the index in the served HTML too, not just after the app boots. */
+        var PRIVATE_ACCOUNT_PATHS = ['/login', '/register', '/forgot-password', '/verify-email'];
+        var isPrivateAccountPath = PRIVATE_ACCOUNT_PATHS.indexOf(path) !== -1;
+        var isNoindexPath = isPrivateChallengeSession || isPrivateAccountPath;
+
         var canonicalUrl = isPrivateChallengeSession
           ? window.location.origin + CHALLENGE_LANDING_PATH
           : window.location.origin + path;
 
-        if (isPrivateChallengeSession) {
+        if (isNoindexPath) {
           var robotsMeta = document.querySelector('meta[name="robots"]');
           if (!robotsMeta) {
             robotsMeta = document.createElement('meta');
@@ -71,7 +77,9 @@
             document.head.appendChild(robotsMeta);
           }
           robotsMeta.setAttribute('content', 'noindex, nofollow');
-          document.title = 'Typing Challenge | Typeoye';
+          if (isPrivateChallengeSession) {
+            document.title = 'Typing Challenge | Typeoye';
+          }
         }
 
         var canonical = document.querySelector('link[rel="canonical"]');

@@ -2,8 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle2 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
+import { useNoindex } from '../../hooks/useNoindex';
 
 export default function VerifyEmail() {
+  useNoindex();
   return (
     <div className="text-center py-6">
       <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4" style={{ backgroundColor: 'rgba(34, 197, 94, 0.12)', color: '#16a34a' }}>
