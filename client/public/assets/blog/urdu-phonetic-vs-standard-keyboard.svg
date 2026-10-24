@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">Phonetic and standard Urdu keyboard layouts</title>
+  <desc id="desc">Two keyboards show English sound-based keys and fixed Urdu character keys producing the same Urdu words.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eef2ff"/><stop offset="1" stop-color="#f7f3ff"/></linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#4361ee"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>
+    <filter id="shadow" x="-.1" y="-.1" width="1.2" height="1.3"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#26325a" flood-opacity=".12"/></filter>
+  </defs>
+  <rect width="1200" height="600" rx="32" fill="url(#bg)"/>
+  <circle cx="1060" cy="72" r="150" fill="#4361ee" opacity=".06"/><circle cx="95" cy="535" r="145" fill="#7c3aed" opacity=".06"/>
+  <text x="600" y="72" text-anchor="middle" font-family="Arial,sans-serif" font-size="34" font-weight="700" fill="#202a48">Two layouts, one Urdu script</text>
+  <g filter="url(#shadow)">
+    <rect x="65" y="125" width="510" height="350" rx="24" fill="#fff"/>
+    <rect x="625" y="125" width="510" height="350" rx="24" fill="#fff"/>
+  </g>
+  <text x="320" y="170" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#4361ee">PHONETIC</text>
+  <text x="880" y="170" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#7c3aed">STANDARD URDU</text>
+  <g font-family="Arial,sans-serif" font-size="18" font-weight="700" text-anchor="middle" fill="#27314d">
+    <g><rect x="112" y="205" width="68" height="60" rx="10" fill="#f4f6fd"/><text x="146" y="230">S</text><text x="146" y="253" font-family="serif" font-size="21" fill="#5b3bc4">س</text></g>
+    <g><rect x="190" y="205" width="68" height="60" rx="10" fill="#f4f6fd"/><text x="224" y="230">L</text><text x="224" y="253" font-family="serif" font-size="21" fill="#5b3bc4">ل</text></g>
+    <g><rect x="268" y="205" width="68" height="60" rx="10" fill="#f4f6fd"/><text x="302" y="230">A</text><text x="302" y="253" font-family="serif" font-size="21" fill="#5b3bc4">ا</text></g>
+    <g><rect x="346" y="205" width="68" height="60" rx="10" fill="#f4f6fd"/><text x="380" y="230">M</text><text x="380" y="253" font-family="serif" font-size="21" fill="#5b3bc4">م</text></g>
+    <g><rect x="672" y="205" width="68" height="60" rx="10" fill="#f4f6fd"/><text x="706" y="230">V</text><text x="706" y="253" font-family="serif" font-size="21" fill="#5b3bc4">س</text></g>
+    <g><rect x="750" y="205" width="68" height="60" rx="10" fill="#f4f6fd"/><text x="784" y="230">G</text><text x="784" y="253" font-family="serif" font-size="21" fill="#5b3bc4">ل</text></g>
+    <g><rect x="828" y="205" width="68" height="60" rx="10" fill="#f4f6fd"/><text x="862" y="230">J</text><text x="862" y="253" font-family="serif" font-size="21" fill="#5b3bc4">ا</text></g>
+    <g><rect x="906" y="205" width="68" height="60" rx="10" fill="#f4f6fd"/><text x="940" y="230">A</text><text x="940" y="253" font-family="serif" font-size="21" fill="#5b3bc4">م</text></g>
+  </g>
+  <text x="320" y="304" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#68718a">Keys follow familiar sound associations</text>
+  <text x="880" y="304" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#68718a">Keys follow the Urdu layout map</text>
+  <rect x="112" y="340" width="396" height="90" rx="18" fill="url(#accent)"/>
+  <rect x="672" y="340" width="396" height="90" rx="18" fill="url(#accent)"/>
+  <text x="310" y="402" text-anchor="middle" direction="rtl" font-family="serif" font-size="48" font-weight="700" fill="#fff">سلام</text>
+  <text x="870" y="402" text-anchor="middle" direction="rtl" font-family="serif" font-size="48" font-weight="700" fill="#fff">سلام</text>
+  <text x="600" y="530" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" fill="#5c6680">Different key paths can produce the same Urdu word.</text>
+</svg>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">Urdu typing test preparation</title>
+  <desc id="desc">A candidate practises an Urdu passage at a laptop, with a timer, accuracy check, and seven-day plan beside the screen.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eef2ff"/><stop offset="1" stop-color="#f7f3ff"/></linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#4361ee"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>
+    <filter id="shadow" x="-.1" y="-.1" width="1.2" height="1.3"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#26325a" flood-opacity=".13"/></filter>
+  </defs>
+  <rect width="1200" height="600" rx="32" fill="url(#bg)"/>
+  <circle cx="1080" cy="70" r="155" fill="#4361ee" opacity=".06"/><circle cx="90" cy="550" r="150" fill="#7c3aed" opacity=".06"/>
+  <text x="600" y="66" text-anchor="middle" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#202a48">Prepare with practice, accuracy, and a plan</text>
+  <g filter="url(#shadow)">
+    <rect x="72" y="115" width="700" height="390" rx="24" fill="#fff"/>
+    <rect x="805" y="115" width="320" height="390" rx="24" fill="#fff"/>
+  </g>
+  <rect x="105" y="148" width="634" height="258" rx="14" fill="#f7f8fc" stroke="#e2e6f2" stroke-width="2"/>
+  <rect x="105" y="148" width="634" height="44" rx="14" fill="#e9edfa"/>
+  <circle cx="131" cy="170" r="6" fill="#ef6b6b"/><circle cx="152" cy="170" r="6" fill="#f2bd4a"/><circle cx="173" cy="170" r="6" fill="#40b879"/>
+  <text x="420" y="176" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="600" fill="#525d7c">Urdu passage practice</text>
+  <text x="700" y="177" text-anchor="end" font-family="serif" font-size="22" fill="#4d5880">پاکستان</text>
+  <g fill="#313b5d" font-family="serif" font-size="27" text-anchor="end" direction="rtl">
+    <text x="704" y="242">محنت اور درستگی سے کام کریں۔</text>
+    <text x="704" y="292">ہر روز تھوڑی دیر مشق کریں۔</text>
+    <text x="704" y="342">رفتار کے ساتھ املا بھی دیکھیں۔</text>
+  </g>
+  <rect x="105" y="427" width="634" height="46" rx="12" fill="#eef1fb"/>
+  <rect x="123" y="439" width="110" height="22" rx="11" fill="#fff"/><text x="178" y="455" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#5b3bc4">TIMER  02:00</text>
+  <rect x="245" y="439" width="112" height="22" rx="11" fill="#fff"/><text x="301" y="455" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#22805a">ACCURACY  96%</text>
+  <text x="717" y="456" text-anchor="end" font-family="Arial,sans-serif" font-size="13" fill="#67718c">Review errors after the round</text>
+  <text x="965" y="162" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#202a48">7-day preparation</text>
+  <g font-family="Arial,sans-serif" font-size="14" fill="#525d7c">
+    <circle cx="853" cy="210" r="13" fill="#4361ee"/><text x="853" y="215" text-anchor="middle" fill="#fff" font-weight="700">1</text><text x="881" y="215">Check the vacancy notice</text>
+    <circle cx="853" cy="252" r="13" fill="#5368e8"/><text x="853" y="257" text-anchor="middle" fill="#fff" font-weight="700">2</text><text x="881" y="257">Build spelling accuracy</text>
+    <circle cx="853" cy="294" r="13" fill="#655fe1"/><text x="853" y="299" text-anchor="middle" fill="#fff" font-weight="700">3</text><text x="881" y="299">Practise punctuation</text>
+    <circle cx="853" cy="336" r="13" fill="#7355d7"/><text x="853" y="341" text-anchor="middle" fill="#fff" font-weight="700">4</text><text x="881" y="341">Add timed rounds</text>
+    <circle cx="853" cy="378" r="13" fill="#7c3aed"/><text x="853" y="383" text-anchor="middle" fill="#fff" font-weight="700">5</text><text x="881" y="383">Review progress</text>
+  </g>
+  <rect x="840" y="420" width="250" height="50" rx="14" fill="url(#accent)"/>
+  <text x="965" y="451" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#fff">Steady practice beats guesswork</text>
+</svg>

@@ -4,7 +4,7 @@ export type BlogSort = 'latest' | 'oldest' | 'popular';
 export interface BlogSection {
   heading: string;
   body: string;
-  guide?: 'urdu-keyboard-map' | 'urdu-typing-links';
+  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example';
 }
 
 export interface BlogPost {
@@ -52,8 +52,8 @@ export const CATEGORY_BADGE: Record<BlogCategory, string> = {
 
 /** Sidebar category post counts (keep in sync with POSTS). */
 export const CATEGORY_COUNTS: Record<BlogCategory, number> = {
-  'Typing Tips': 3,
-  'Guides': 10,
+  'Typing Tips': 4,
+  'Guides': 13,
   'Practice': 3,
   'Productivity': 3,
   'News & Updates': 1,
@@ -69,6 +69,295 @@ export function formatDate(iso: string): string {
 
 export const POSTS: BlogPost[] = [
   {
+    slug: 'english-keyboard-urdu-typing-examples',
+    title: 'English Keyboard to Urdu Typing: Common Words and Examples',
+    category: 'Guides',
+    description: 'Learn Typeoye’s English-key phonetic Urdu typing with verified word examples, commonly confused letters, punctuation tips, and a short daily practice plan.',
+    metaTitle: 'English Keyboard Urdu Typing: Common Words & Examples | Typeoye',
+    metaDescription: 'Learn English keyboard Urdu typing with verified phonetic key sequences, common Urdu words, confusing letters, punctuation, and daily practice tips.',
+    intro: 'A familiar English keyboard can be used to enter Urdu script through a phonetic layout. The key idea is to learn which Urdu character each physical key produces, then build correctly spelled Urdu words from those characters. This guide uses Typeoye’s current key map and shows the exact keys for each example.',
+    readTime: 7,
+    publishedAt: '2026-10-24',
+    popular: false,
+    image: '/assets/blog/urdu-online-typing-keyboard.svg',
+    imageAlt: 'Urdu script appearing while a learner types with an English QWERTY keyboard',
+    moreTools: [
+      { label: 'Urdu Typing Practice', to: '/urdu-practice' },
+      { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
+      { label: 'Urdu Learn', to: '/urdu-lessons' },
+      { label: 'Urdu Phonetic Keyboard Layout Guide', to: '/blog/urdu-phonetic-keyboard-layout' },
+      { label: 'How to Type Urdu Online Using an English Keyboard', to: '/blog/how-to-type-urdu-online-english-keyboard' },
+      { label: 'Urdu Typing for Beginners', to: '/blog/urdu-typing-for-beginners' },
+      { label: 'Urdu Keyboard Layout Comparison', to: '/blog/urdu-phonetic-vs-standard-keyboard' },
+    ],
+    pullQuote: 'Think of the English letters as key labels: type the mapped characters that make up the Urdu spelling.',
+    cta: {
+      heading: 'Practise Urdu one word at a time',
+      blurb: 'Use guided Urdu lessons for key familiarity, then practise words and check your progress with a typing test.',
+      label: 'Start Urdu Practice',
+      to: '/urdu-practice',
+    },
+    content: [
+      {
+        heading: 'How phonetic Urdu typing works with English keys',
+        body: 'A phonetic keyboard assigns Urdu characters to familiar English QWERTY key positions. In Typeoye’s current map, s produces س, k produces ک, and b produces ب. This is a direct key-to-character mapping: it does not guess a full Urdu word from ordinary Roman Urdu spelling or automatically correct the spelling for you. Press the keys that match the Urdu characters you need. A capital letter in the examples below means hold Shift for that key.',
+      },
+      {
+        heading: 'Common Urdu words: exact key sequences',
+        body: 'These examples are verified against Typeoye’s current phonetic map. The “keys to press” column shows physical English key labels in order; spaces between labels are only for readability. Uppercase labels require Shift. Since the mapping is direct, some key sequences look different from the way people casually write the same word in Roman Urdu.',
+        guide: 'urdu-word-examples',
+      },
+      {
+        heading: 'Sounds and Urdu letters that are easy to confuse',
+        body: 'Some Urdu letters can sound alike in everyday speech but remain different letters in spelling. On Typeoye, lowercase s gives س, while Shift+S gives ص and Shift+C gives ث. Lowercase z gives ز, Shift+Z gives ذ, Shift+X gives ژ, and Shift+V gives ظ. Use the letter required by the word’s spelling; choosing a similar-sounding letter can produce a different or misspelled word. Other useful contrasts are t → ت and Shift+T → ٹ, d → د and Shift+D → ڈ, and k → ک versus Shift+K → خ. Also distinguish h → ح, o → ہ, and Shift+H → ھ. The exact assignment is specific to this map, so keep the layout guide nearby while learning.',
+      },
+      {
+        heading: 'Build the Urdu spelling instead of guessing a Roman spelling',
+        body: 'Work from the Urdu-script spelling one character at a time. For example, چائے uses چ + ا + ئ + ے, so the Typeoye keys are c, a, Shift+U, and y. The word گھر includes ھ, so its sequence is g, Shift+H, r. These examples show why ordinary Latin spellings are not a reliable conversion recipe: a word written “chai” or “ghar” informally may not map to the required Urdu letters when typed letter for letter. Check unfamiliar spellings in a trusted Urdu reference or lesson, then practise their mapped keys.',
+      },
+      {
+        heading: 'Use spaces and punctuation carefully',
+        body: 'Press Space once between words, just as you would in English; the space stays a word separator in the Urdu text. Typeoye’s current map changes common punctuation to Urdu marks: comma gives ،, period gives ۔, and question mark gives ؟. Semicolon gives ؛, while colon and exclamation mark remain their familiar forms. Keep punctuation attached to the correct sentence and avoid adding spaces before a comma or full stop. Other Urdu tools may map punctuation differently, so check the active tool’s key chart.',
+      },
+      {
+        heading: 'A simple daily practice routine',
+        body: 'Practise for about ten focused minutes: spend three minutes reviewing a small group of keys, four minutes typing familiar words from the examples, two minutes copying a short Urdu sentence with spaces and punctuation, and one minute reviewing every error. Keep a short list of letters you confuse and revisit them in the next session. Start slowly enough to check each character, then build a steadier rhythm once the spelling and key sequence feel familiar. Urdu Practice and Urdu Learn provide places to work through typing and guided lessons; the Urdu Typing Test can give you a timed practice run.',
+      },
+      {
+        heading: 'Choose the right map for the tool you are using',
+        body: '“Phonetic Urdu keyboard” describes a general approach, not one universal key chart. Tools can assign different characters to the same English key, use different Shift layers, or handle numerals and punctuation differently. The examples in this article apply to Typeoye’s current Urdu phonetic map. Before practising on another website, operating system, or exam computer, open its own layout reference and adjust to those mappings. Typeoye’s complete keyboard guide shows the letters and Shift combinations used by its Urdu tools.',
+      },
+      {
+        heading: 'Frequently asked questions',
+        body: 'Does Typeoye turn normal Roman Urdu into Urdu automatically? No; its phonetic Urdu tools map each supported key to a character, so you enter the sequence for the Urdu spelling. Do I need an Urdu keyboard? No; Typeoye’s Urdu typing tools are designed for an English QWERTY keyboard, although the key map still matters. Are these sequences identical on every phonetic keyboard? No; mappings vary by tool, so check its chart. Why do some examples use capital letters? In this guide, capitals mean use Shift to select a different mapped character. How can I improve spelling accuracy? Learn the Urdu word first, type it slowly from its correct script spelling, and review which mapped letters caused errors.',
+      },
+      {
+        heading: 'Continue with Urdu typing practice',
+        body: 'Use the examples as a starting point, then expand to short sentences and new vocabulary. Typeoye’s Urdu Practice, Urdu Learn, and Urdu Typing Test each support a different kind of practice. For a full key chart, read the phonetic keyboard layout guide; for a step-by-step introduction, continue with the guide to typing Urdu online using an English keyboard.',
+      },
+    ],
+  },
+  {
+    slug: 'one-minute-typing-challenge-tips',
+    title: 'How to Prepare for a 1-Minute Typing Challenge',
+    category: 'Typing Tips',
+    description: 'Get ready for a short head-to-head typing race with a focused warm-up, steady rhythm, accuracy-first practice, and simple ways to stay calm.',
+    metaTitle: '1 Minute Typing Challenge: How to Prepare | Typeoye',
+    metaDescription: 'Prepare for a 1 minute typing challenge with a 5-minute warm-up, accuracy and rhythm tips, advice for every level, and a simple guide to WPM.',
+    intro: 'A one-minute typing challenge is short enough for every keystroke to matter. A little preparation can help you settle your hands, find a steady rhythm, and keep avoidable errors from breaking your focus—whether you are new to typing races or already comfortable at the keyboard.',
+    readTime: 6,
+    publishedAt: '2026-10-24',
+    popular: false,
+    image: '/assets/blog/one-minute-typing-challenge-tips.png',
+    imageAlt: 'English typing challenge preparation with a one-minute timer, typing speed, and accuracy indicators',
+    moreTools: [
+      { label: 'Typing Test', to: '/test' },
+      { label: 'Typing Practice', to: '/practice' },
+      { label: 'Typing Challenge', to: '/challenge' },
+      { label: 'How to Challenge a Friend to a Typing Race', to: '/blog/how-to-challenge-a-friend-typing-race' },
+      { label: 'Typing Accuracy Exercises', to: '/blog/typing-accuracy-exercises' },
+      { label: 'How Accurate Are Typing Tests?', to: '/blog/how-accurate-are-typing-tests' },
+    ],
+    pullQuote: 'In a one-minute race, a calm and accurate rhythm is easier to sustain than a frantic burst.',
+    cta: {
+      heading: 'Ready for a quick typing race?',
+      blurb: 'Warm up with practice, then open a Typeoye challenge when you are ready to compete.',
+      label: 'Open Typing Challenge',
+      to: '/challenge',
+    },
+    content: [
+      {
+        heading: 'What makes a 1-minute typing challenge different?',
+        body: 'A short, head-to-head race gives you little time to recover from a rough start. You have to read ahead, press the right keys, and keep your attention on the passage while another person is typing alongside you. The goal is not to begin at your absolute top speed. It is to produce a steady run you can maintain for the full minute, with as few avoidable corrections as possible.',
+      },
+      {
+        heading: 'Set up your hands, posture, and focus',
+        body: 'Sit comfortably with your shoulders relaxed and wrists neutral. Place your fingers on the home row—left hand around A, S, D, F and right hand around J, K, L, semicolon on a standard QWERTY keyboard—and let your thumbs rest near the space bar. Keep your eyes on the text instead of searching for each key. Before the countdown, take one slow breath, read the first few words, and make sure your hands are ready. If the challenge uses a different keyboard, adjust to its layout before the race starts.',
+      },
+      {
+        heading: 'A practical 5-minute warm-up before the challenge',
+        body: 'Keep the warm-up light. Minute 1: sit comfortably, place your fingers near the home row, and take a slow breath. Minute 2: type a few easy letter combinations without rushing. Minute 3: type familiar short words and focus on clean spaces. Minute 4: copy a short sentence with punctuation at a steady pace. Minute 5: do one controlled 60-second typing run, then stop, relax your hands, and begin the challenge. The point is to wake up your fingers and attention, not to tire yourself out.',
+      },
+      {
+        heading: 'Find a rhythm and protect your accuracy',
+        body: 'Type in an even cadence, reading a few characters or words ahead while your fingers finish the current ones. Let common words flow, and ease off slightly when a tricky word or punctuation mark appears. If you make an error, correct it as the challenge allows and return to your rhythm; do not let one slip trigger a frantic burst. A smoother pace often gives you more useful typing over the full minute than racing through a few words and repeatedly stopping to fix them.',
+      },
+      {
+        heading: 'Why typing too fast can hurt your result',
+        body: 'When you push beyond a pace you can control, you may skip letters, transpose characters, miss spaces, or lose your place in the passage. Repeated errors cost attention: you have to notice them, correct them if permitted, and find your spot again. In a one-minute race that interruption can undo the benefit of a brief speed burst. Start at a pace that feels deliberate, then increase it only if your typing stays clean.',
+      },
+      {
+        heading: 'WPM and accuracy in simple terms',
+        body: 'WPM means words per minute: it describes a typing rate over time. For a simple illustration, if a test counts 40 words during a 60-second run, that would be 40 WPM under that test’s counting method. Accuracy describes how much of the typed work matched the expected text; for example, 96 correct units out of 100 counted units would be 96% under that test’s definition. Typing tools can define words, characters, and errors differently, so these examples explain the ideas only. Use the scoring rules shown by the test or challenge you are taking; this article does not assume a particular Typeoye scoring formula.',
+      },
+      {
+        heading: 'Tips for beginners and experienced typists',
+        body: 'Beginners: choose a comfortable pace, keep your fingers near their home positions, and focus on completing the minute accurately. If a race feels stressful, practise a few short passages on your own before joining a head-to-head challenge. Experienced typists: avoid chasing a personal best in the first seconds. Read ahead, stay loose, and use practice rounds to identify which words or key combinations disrupt your flow. Both groups benefit from enough sleep, a comfortable keyboard, and a brief pause between races.',
+      },
+      {
+        heading: 'Use practice and tests to prepare',
+        body: 'A short practice session helps you get used to the keyboard and text entry before you race. Use Typeoye Practice to work on a comfortable rhythm, and try a Typing Test when you want a timed solo run. Typeoye’s Typing Challenge page is where you can enter a head-to-head race. Treat practice and test results as feedback, and check the challenge interface for the rules, duration, and scoring details of the race you join.',
+      },
+      {
+        heading: 'Frequently asked questions',
+        body: 'Should I type as fast as possible from the first second? No; start at a controlled pace and build only while you remain accurate. Is WPM the same as accuracy? No; WPM is a rate, while accuracy describes how much of the typed text matched the target according to the test’s rules. How long should I warm up? Try the five-minute routine above, then start when your hands feel ready rather than continuing until they are tired. Should beginners join a head-to-head race? They can, but solo practice first can make the countdown feel less unfamiliar. Do all typing challenges score errors the same way? No; check the rules displayed by the specific challenge or test.',
+      },
+      {
+        heading: 'Start your next typing challenge with a plan',
+        body: 'Before the countdown, loosen your hands, settle your fingers, and take a breath. During the race, keep your eyes moving ahead and choose a repeatable rhythm over a rushed opening. Afterwards, look at the result and notice one thing to practise before the next round. Typeoye’s typing test, practice page, and typing challenge give you different ways to work on timed typing and friendly competition.',
+      },
+    ],
+  },
+  {
+    slug: 'urdu-typing-test-government-jobs-pakistan',
+    title: 'Urdu Typing Test for Government Jobs in Pakistan: Preparation Guide',
+    category: 'Guides',
+    description: 'Prepare for an Urdu typing test with practical speed, accuracy, spelling, punctuation, and timed-practice strategies—while checking the exact requirements for each vacancy.',
+    metaTitle: 'Urdu Typing Test for Government Jobs in Pakistan | Typeoye',
+    metaDescription: 'Prepare for a Pakistan government Urdu typing test with a 7-day plan, accuracy and spelling tips, timed practice, and guidance to check each official vacancy notice.',
+    intro: 'Some clerical, administrative, stenography, and other computer-based vacancies may include a typing or practical skill test. Use this guide to build Urdu typing skill and a steady practice routine, then check the recruiting department’s official advertisement for the requirements that apply to your vacancy.',
+    readTime: 8,
+    publishedAt: '2026-10-24',
+    popular: false,
+    image: '/assets/blog/urdu-typing-test-government-jobs-pakistan.png',
+    imageAlt: 'Urdu typing practice for government job test preparation in Pakistan',
+    moreTools: [
+      { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
+      { label: 'Urdu Practice', to: '/urdu-practice' },
+      { label: 'Urdu Learn', to: '/urdu-lessons' },
+      { label: 'Urdu Typing for Beginners', to: '/blog/urdu-typing-for-beginners' },
+      { label: 'Improve Urdu Typing Speed and Accuracy', to: '/blog/improve-urdu-typing-speed-and-accuracy' },
+      { label: 'Urdu Phonetic Keyboard Layout Guide', to: '/blog/urdu-phonetic-keyboard-layout' },
+      { label: 'Urdu Keyboard Layout Comparison', to: '/blog/urdu-phonetic-vs-standard-keyboard' },
+    ],
+    pullQuote: 'Practise the skill; use the official vacancy notice to define the target.',
+    cta: {
+      heading: 'Build a steady Urdu typing routine',
+      blurb: 'Practise a passage, check your accuracy, and record each session so you can see your progress.',
+      label: 'Start Urdu Practice',
+      to: '/urdu-practice',
+    },
+    content: [
+      {
+        heading: 'Why some vacancies include an Urdu typing test',
+        body: 'Typing can be a practical part of work that involves preparing records, letters, reports, forms, or other Urdu documents. A recruiting department may include an Urdu typing test for a clerical, administrative, stenography, or other role where that skill is relevant. Other vacancies may test a different language, another computer skill, or no typing at all. Never infer a test from the job title alone: read the current advertisement, syllabus, and candidate instructions for the specific post.',
+      },
+      {
+        heading: 'Check the vacancy requirements before you practise',
+        body: 'Before setting a target, confirm the required language, speed, accuracy, duration, keyboard or software, test format, eligibility conditions, and any document or reporting instructions. Each recruiting department and vacancy may set different conditions, and those details can change. A Typeoye practice result is a personal training measure; it does not certify that you meet an agency’s requirement or predict selection.',
+        guide: 'gov-official-example',
+      },
+      {
+        heading: 'Build speed without sacrificing accuracy',
+        body: 'Start with a comfortable pace and clean keystrokes. Record a baseline using the same kind of Urdu text for several sessions, then work toward the target stated in your vacancy instructions if one is provided. Add speed gradually only while your accuracy stays steady. A burst of fast typing followed by many corrections is less useful than controlled typing you can repeat under time pressure. Do not treat a speed mentioned for one post as a general government-job standard.',
+      },
+      {
+        heading: 'Practise Urdu spelling, letters, and punctuation',
+        body: 'Accuracy includes more than hitting the right key quickly. Read the passage carefully, distinguish Urdu letters that look or sound similar, and review familiar spelling patterns. Practise spaces and punctuation such as Urdu comma ،, full stop ۔, question mark ؟, and semicolon ؛ when they appear in your text. Type the character expected by the passage and the assigned layout. If your practice tool uses a different input method from the exam, learn that difference instead of assuming the keys will behave identically.',
+      },
+      {
+        heading: 'Use timed practice to prepare for test conditions',
+        body: 'Once you can type a passage accurately without a clock, add short timed rounds. Use a timer close to the duration in the official instructions, if it is given. If the format is not yet known, practise a few different short durations without treating any one as the exam format. Keep the passage visible only if the real task allows it, avoid pausing mid-round, and review mistakes after the timer ends. Repeat a measured round rather than taking many tests back-to-back while tired.',
+      },
+      {
+        heading: 'Use online Urdu typing tests and track improvement',
+        body: 'Typeoye’s Urdu typing test and practice tools can help you rehearse Urdu text, build a regular habit, and observe changes in your speed and accuracy. Use Urdu Practice for focused repetition, Urdu Learn for guided lessons, and the Urdu typing test for a timed session. Keep a small log with the date, duration, passage or drill, speed, accuracy, and recurring errors. Online tools are useful for practice, but they may not reproduce a department’s software, keyboard layout, scoring method, or test room. Follow the official instructions for those details.',
+        guide: 'urdu-typing-links',
+      },
+      {
+        heading: 'A practical 7-day Urdu typing preparation plan',
+        body: 'This is a flexible practice schedule, not a promise that seven days is enough for every candidate. Adapt the time and exercises to your starting point and the official test date.',
+        guide: 'gov-prep-plan',
+      },
+      {
+        heading: 'Common preparation mistakes to avoid',
+        body: 'Watch for habits that can undermine an otherwise useful routine.',
+        guide: 'gov-prep-mistakes',
+      },
+      {
+        heading: 'Frequently asked questions',
+        body: 'These answers explain how to use practice tools while keeping each vacancy’s official requirements in view.',
+        guide: 'gov-prep-faqs',
+      },
+      {
+        heading: 'Prepare carefully and follow official instructions',
+        body: 'A consistent routine can help you improve Urdu typing speed, accuracy, spelling, and confidence under a timer. Set your practice around the actual requirements published for your vacancy, and check the recruiting department’s official advertisement and later instructions for updates. Practice is preparation; it cannot guarantee eligibility, passing a test, or selection.',
+      },
+    ],
+  },
+  {
+    slug: 'urdu-phonetic-vs-standard-keyboard',
+    title: 'Urdu Phonetic Keyboard vs Standard Urdu Keyboard: What Is the Difference?',
+    category: 'Guides',
+    description: 'Understand how phonetic and standard Urdu keyboard layouts differ, compare their learning curves, and see verified examples for common Urdu words.',
+    metaTitle: 'Urdu Phonetic vs Standard Keyboard: Key Differences | Typeoye',
+    metaDescription: 'Compare Urdu phonetic vs standard keyboard layouts in simple terms. See key mapping, learning curve, speed, accuracy, and verified typing examples.',
+    intro: 'Both layouts type the same Urdu language and script, but they put the Urdu characters on different keys. A phonetic layout connects familiar English sounds to Urdu letters; a standard layout gives Urdu characters fixed key positions that you learn.',
+    readTime: 7,
+    publishedAt: '2026-10-24',
+    popular: false,
+    image: '/assets/blog/urdu-phonetic-vs-standard-keyboard.svg',
+    imageAlt: 'Illustration comparing an English QWERTY phonetic Urdu keyboard with a standard Urdu character keyboard',
+    moreTools: [
+      { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
+      { label: 'Urdu Practice', to: '/urdu-practice' },
+      { label: 'Urdu Learn', to: '/urdu-lessons' },
+      { label: 'Phonetic Keyboard Layout Guide', to: '/blog/urdu-phonetic-keyboard-layout' },
+      { label: 'How to Type Urdu Online', to: '/blog/how-to-type-urdu-online-english-keyboard' },
+      { label: 'Urdu Typing for Beginners', to: '/blog/urdu-typing-for-beginners' },
+      { label: 'Improve Urdu Typing Speed and Accuracy', to: '/blog/improve-urdu-typing-speed-and-accuracy' },
+    ],
+    pullQuote: 'Choose a layout based on the keys you already know and the typing habits you want to build.',
+    cta: {
+      heading: 'Try Urdu typing with Typeoye',
+      blurb: 'Practise Typeoye’s phonetic key map with guided lessons, focused drills, or a timed test.',
+      label: 'Start Urdu Practice',
+      to: '/urdu-practice',
+    },
+    content: [
+      {
+        heading: 'Urdu phonetic vs standard keyboard: the short answer',
+        body: 'The difference is the key map. With phonetic Urdu typing, familiar English keys produce Urdu letters with related sounds: Typeoye maps s to س, k to ک, and b to ب. With a standard Urdu layout such as the Windows Urdu keyboard, keys have set Urdu characters; you learn where each character sits, whether or not that position resembles its sound in English. The word and script you produce are still Urdu in either case.',
+      },
+      {
+        heading: 'How an Urdu phonetic keyboard works',
+        body: 'A phonetic layout is designed to feel familiar to someone who already types on English QWERTY. Press the English key whose sound or association helps you remember an Urdu character, and the input tool outputs that character. On Typeoye, this is a direct key-to-character map, not automatic Roman Urdu spell-checking or word prediction. For example, Typeoye’s keys s, l, a, m produce سلام. The exact map, including Shift keys, is shown in the site’s phonetic keyboard guide.',
+      },
+      {
+        heading: 'How a standard Urdu keyboard works',
+        body: 'A standard or native Urdu layout assigns Urdu characters to physical keys as a fixed arrangement. You switch your device or input method to Urdu, then learn the key positions from its layout chart. This article uses Microsoft’s Windows Urdu layout as its named standard-layout example, because there can be differences among operating systems, apps, and regional layouts. On that layout, keys are arranged by convention and typing habit, not as an English-sound transliteration. The same word may therefore need a different sequence of physical keys.',
+      },
+      {
+        heading: 'Compare Urdu keyboard types',
+        body: 'Here is a practical comparison of the two common Urdu keyboard types. “Standard” refers to the named Windows Urdu layout in the worked examples below; another device’s standard layout may differ.',
+        guide: 'urdu-layout-comparison',
+      },
+      {
+        heading: 'Examples: the same Urdu word on each layout',
+        body: 'The examples use the exact Typeoye phonetic map and Microsoft’s Windows Urdu key map. Read the keystrokes as physical English key labels; the Urdu characters they produce are shown alongside. A different standard layout can put the same character on another key.',
+        guide: 'urdu-layout-examples',
+      },
+      {
+        heading: 'Keyboard layout and Urdu script are different things',
+        body: 'A keyboard layout is an input map: it decides which character appears when you press a key. Urdu is the language, and the Urdu script is the writing system used to represent it. Changing from phonetic to standard does not translate the language, change Urdu spelling rules, or create a different alphabet. It only changes the route from a physical key press to an Urdu character. The same Urdu text can also be copied between devices even when their keyboard layouts differ.',
+      },
+      {
+        heading: 'Which layout should you choose?',
+        body: 'Choose phonetic if you already use English QWERTY, want an approachable start, or often switch between English and Urdu on a device without Urdu key labels. Choose a standard Urdu layout if you already know its positions, need to match a school or office setup, or type regularly on a device where Urdu is your primary input. If you are unsure, practise the same short Urdu passage in each layout and compare comfort and accuracy over several sessions. Layout familiarity usually matters more than a claim that one option is always faster.',
+      },
+      {
+        heading: 'Frequently asked questions',
+        body: 'These quick answers cover common questions about Urdu keyboard types and switching layouts.',
+        guide: 'urdu-keyboard-faqs',
+      },
+      {
+        heading: 'Try Urdu typing tools and related guides',
+        body: 'Typeoye’s Urdu Typing Test, Urdu Practice, and Urdu Learn use the site’s phonetic map. Start with a short guided lesson or drill, then use the layout guide to check unfamiliar keys. For more detail, read the beginner guide, the complete phonetic keyboard mapping, and the guide to typing Urdu online with an English keyboard.',
+        guide: 'urdu-typing-links',
+      },
+    ],
+  },
+  {
     slug: 'how-to-type-urdu-online-english-keyboard',
     title: 'How to Type Urdu Online Using an English Keyboard',
     category: 'Guides',
@@ -79,8 +368,8 @@ export const POSTS: BlogPost[] = [
     readTime: 7,
     publishedAt: '2026-10-22',
     popular: false,
-    image: '/assets/blog/urdu-online-typing-keyboard.svg',
-    imageAlt: 'Typing Urdu online using an English keyboard on a laptop.',
+    image: '/assets/blog/urdu-typing-for-beginners.svg',
+    imageAlt: 'English phonetic keyboard input “slam” shown converting to the Urdu script word سلام on a laptop screen',
     moreTools: [
       { label: 'English Typing Test', to: '/test' },
       { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
