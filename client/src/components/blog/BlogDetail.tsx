@@ -141,7 +141,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                   ? undefined
                   : post.slug === 'how-to-type-urdu-mobile-pc-guide'
                     ? '3 / 2'
-                    : post.slug === 'how-to-type-urdu-online-english-keyboard' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard'
+                    : post.slug === 'how-to-type-urdu-online-english-keyboard' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' || post.slug === 'free-urdu-typing-website-type-practice-test-online'
                     ? '16 / 9'
                     : '16 / 8',
               }}
@@ -188,6 +188,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                       {section.guide === 'english-typing-links' && <EnglishTypingLinks />}
                       {section.guide === 'typing-accuracy-faqs' && <TypingAccuracyFaqs />}
                       {section.guide === 'urdu-kaise-faqs' && <UrduKaiseFaqs />}
+                      {section.guide === 'post-faqs' && post.faqs && <PostFaqs faqs={post.faqs} />}
                     </section>
 
                     {index === pullQuoteIndex && post.pullQuote && (
@@ -532,6 +533,19 @@ function UrduKaiseFaqs() {
   return (
     <div className="mt-6 space-y-5">
       {faqs.map(([question, answer]) => (
+        <div key={question}>
+          <h3 className="text-base font-bold" style={{ color: 'var(--color-text-primary)' }}>{question}</h3>
+          <p className="mt-1 text-[1.0625rem] leading-[1.75]" style={{ color: 'var(--color-text-secondary)' }}>{answer}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PostFaqs({ faqs }: { faqs: Array<{ question: string; answer: string }> }) {
+  return (
+    <div className="mt-6 space-y-5">
+      {faqs.map(({ question, answer }) => (
         <div key={question}>
           <h3 className="text-base font-bold" style={{ color: 'var(--color-text-primary)' }}>{question}</h3>
           <p className="mt-1 text-[1.0625rem] leading-[1.75]" style={{ color: 'var(--color-text-secondary)' }}>{answer}</p>

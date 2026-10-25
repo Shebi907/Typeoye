@@ -4,7 +4,7 @@ export type BlogSort = 'latest' | 'oldest' | 'popular';
 export interface BlogSection {
   heading: string;
   body: string;
-  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs' | 'urdu-kaise-faqs';
+  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs' | 'urdu-kaise-faqs' | 'post-faqs';
 }
 
 export interface BlogPost {
@@ -30,6 +30,8 @@ export interface BlogPost {
   /** Article-specific More Tools links; English-only posts keep the shared defaults. */
   moreTools?: Array<{ label: string; to: string }>;
   content: BlogSection[];
+  /** Optional visible FAQs, also published as FAQPage structured data on the detail route. */
+  faqs?: Array<{ question: string; answer: string }>;
 }
 
 export const CATEGORIES: ReadonlyArray<'All Posts' | BlogCategory> = [
@@ -53,7 +55,7 @@ export const CATEGORY_BADGE: Record<BlogCategory, string> = {
 /** Sidebar category post counts (keep in sync with POSTS). */
 export const CATEGORY_COUNTS: Record<BlogCategory, number> = {
   'Typing Tips': 5,
-  'Guides': 16,
+  'Guides': 17,
   'Practice': 3,
   'Productivity': 3,
   'News & Updates': 1,
@@ -529,6 +531,75 @@ export const POSTS: BlogPost[] = [
       {
         heading: 'Choose a layout and keep practising',
         body: 'The simplest setup is the one you can use consistently: enable Urdu on Windows, choose an Urdu keyboard on Android or iPhone, or use a phonetic method if you prefer English key sounds. Set right-to-left direction in Word, use a Unicode-capable Urdu font, and check that the final text is in Urdu script. Practise for a few minutes each day, review mistakes, and add speed gradually. For additional examples, visit Typeoye’s Urdu typing guides and tools linked with this article.',
+      },
+    ],
+  },
+  {
+    slug: 'free-urdu-typing-website-type-practice-test-online',
+    title: 'Free Urdu Typing Website – Type, Practice & Test Online',
+    category: 'Guides',
+    description: 'Type Urdu online with Typeoye’s phonetic keyboard, take a timed Urdu typing test, practise focused drills, and learn the keyboard step by step.',
+    metaTitle: 'Free Urdu Typing Website – Type, Practice & Test Online | Typeoye',
+    metaDescription: 'Use Typeoye as a free Urdu typing website. Type Urdu online, measure WPM and accuracy, practise focused drills, and learn with guided lessons.',
+    intro: 'Looking for a free Urdu typing website? Typeoye helps you type Urdu online with a familiar English keyboard, measure your speed and accuracy in a timed test, practise at your own pace, and learn the phonetic layout through structured lessons. Start with the tool that fits your goal, then use the other resources to keep building confidence.',
+    readTime: 6,
+    publishedAt: '2026-10-25',
+    popular: false,
+    image: '/assets/blog/typeoye-urdu-typing-banner.png',
+    imageAlt: 'TypeOye Urdu typing website shown on a laptop with Urdu typing practice, speed, and accuracy test',
+    moreTools: [
+      { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
+      { label: 'Urdu Practice', to: '/urdu-practice' },
+      { label: 'Urdu Learn', to: '/urdu-lessons' },
+      { label: 'Urdu Phonetic Keyboard Layout Guide', to: '/blog/urdu-phonetic-keyboard-layout' },
+      { label: 'How to Type Urdu Online Using an English Keyboard', to: '/blog/how-to-type-urdu-online-english-keyboard' },
+      { label: 'Urdu Typing for Beginners', to: '/blog/urdu-typing-for-beginners' },
+      { label: 'Improve Urdu Typing Speed and Accuracy', to: '/blog/improve-urdu-typing-speed-and-accuracy' },
+    ],
+    pullQuote: 'Type, check your results, and practise the Urdu keys that need more attention—one short session at a time.',
+    cta: {
+      heading: 'Start typing Urdu online',
+      blurb: 'Choose a timed test to measure your current speed, or open Urdu Practice for a focused session.',
+      label: 'Take the Urdu Typing Test',
+      to: '/urdu-typing-test/setup',
+    },
+    faqs: [
+      { question: 'What is a free Urdu typing website?', answer: 'It is a browser-based tool for entering Urdu text and practising keyboard skills. Typeoye includes an Urdu typing test, focused Urdu practice drills, and structured Urdu lessons.' },
+      { question: 'Can I type Urdu online with an English keyboard?', answer: 'Yes. Typeoye’s Urdu test and practice use phonetic mapping: familiar English keys produce their mapped Urdu characters. The on-screen keyboard can help you learn the map.' },
+      { question: 'How does the Urdu typing test online work?', answer: 'Choose a passage, duration, and difficulty, then type the Urdu text during the timed session. At the end, review your WPM and accuracy.' },
+      { question: 'Do I need to install an Urdu keyboard to use Typeoye?', answer: 'No separate Urdu keyboard installation is needed for Typeoye’s phonetic typing sessions. You can use your regular English keyboard in a supported browser.' },
+      { question: 'What can I practise on Typeoye?', answer: 'Urdu Practice offers character, combination, word, sentence, paragraph, and custom-text drills, with session duration and difficulty options.' },
+      { question: 'Where can I learn the Typeoye Urdu phonetic keyboard?', answer: 'Use the Urdu Learn lessons for guided instruction or open the Urdu Phonetic Keyboard Layout Guide for the key-by-key mapping.' },
+    ],
+    content: [
+      {
+        heading: 'Type Urdu online with a familiar keyboard',
+        body: 'Typeoye’s Urdu typing online tools use a phonetic keyboard map. Press a familiar English key and the mapped Urdu character appears in the typing area. You do not need Urdu letters printed on your physical keyboard to begin. The on-screen Urdu keyboard shows the mapping so you can refer to it while learning. Phonetic typing is a direct key-to-character method, not automatic translation of every Roman Urdu spelling: learn the key map and type the sequence for the Urdu word you want. For the full map and examples, see the Urdu Phonetic Keyboard Layout Guide and the guide to typing Urdu with an English keyboard.',
+      },
+      {
+        heading: 'Free Urdu typing test: measure speed and accuracy',
+        body: 'Use the Urdu Typing Test to get a timed Urdu typing test online. Choose from the available passage, duration, and difficulty options, then type the displayed Urdu text. When the session ends, review your words per minute (WPM) and accuracy. Treat a result as feedback from that session: use it to notice which characters or word patterns slow you down, then practise those areas before taking another test. A typing test is most helpful when you focus on the result as well as the timer.',
+      },
+      {
+        heading: 'Urdu typing practice for focused improvement',
+        body: 'Regular, manageable practice helps you become more familiar with Urdu characters, joins, and common words. The Urdu Practice page offers drills for individual characters, combinations, words, sentences, paragraphs, and custom text. Choose a drill, difficulty, and session length that suit your current level. If a test shows you hesitating over a particular character, spend a practice session on that pattern and return to a timed test later. Short focused sessions make it easier to work on accuracy without rushing.',
+      },
+      {
+        heading: 'Learn Urdu typing step by step',
+        body: 'If you are new to Urdu typing, Urdu Learn provides a structured course with lessons that progress from foundational keys to combinations, words, and longer text. The lessons use the same phonetic mapping as Typeoye’s Urdu test and practice, helping you connect the keyboard positions with the characters you see. You can also use the on-screen keyboard and the linked beginner guides when you want to review a specific key or typing method.',
+      },
+      {
+        heading: 'Benefits of using Typeoye for Urdu typing',
+        body: 'Typeoye brings several Urdu typing tools together in one browser-based experience. Use phonetic input with a regular English keyboard, review WPM and accuracy after a timed test, practise with different Urdu text drills, and follow structured Urdu lessons. The test and practice pages display an on-screen Urdu keyboard to support learning the key map. Choose a test when you want a timed measure, practice when you want repetition, or lessons when you want guided progression.',
+      },
+      {
+        heading: 'Frequently asked questions about Urdu typing online',
+        body: 'Find quick answers about Urdu typing websites, phonetic input, tests, practice, and keyboard installation.',
+        guide: 'post-faqs',
+      },
+      {
+        heading: 'Choose a tool and begin',
+        body: 'Whether you want to type Urdu online for the first time, check your current speed, or practise a weak key, Typeoye offers a simple next step. Start with a timed Urdu typing test, use Urdu Practice for repeatable drills, or open Urdu Learn to follow the keyboard in order. You can return to the Urdu typing guides whenever you need a reference for the phonetic layout.',
       },
     ],
   },

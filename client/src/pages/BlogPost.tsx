@@ -41,22 +41,54 @@ export default function BlogPostPage() {
 
   useJsonLd(
     post
-      ? {
+      ? post.faqs?.length
+        ? {
           '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/${post.slug}` },
-          headline: post.title,
-          description: post.metaDescription ?? post.description,
-          image: `${SITE_URL}${post.image}`,
-          author: { '@type': 'Organization', name: 'Typeoye' },
-          publisher: {
-            '@type': 'Organization',
-            name: 'Typeoye',
-            logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.png` },
-          },
-          datePublished: post.publishedAt,
-          inLanguage: 'en',
+          '@graph': [
+            {
+              '@type': 'BlogPosting',
+              mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/${post.slug}` },
+              headline: post.title,
+              description: post.metaDescription ?? post.description,
+              image: `${SITE_URL}${post.image}`,
+              author: { '@type': 'Organization', name: 'Typeoye' },
+              publisher: {
+                '@type': 'Organization',
+                name: 'Typeoye',
+                logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.png` },
+              },
+              datePublished: post.publishedAt,
+              inLanguage: 'en',
+            },
+            ...(post.faqs?.length
+              ? [{
+                  '@type': 'FAQPage',
+                  '@id': `${SITE_URL}/blog/${post.slug}#faq`,
+                  mainEntity: post.faqs.map(({ question, answer }) => ({
+                    '@type': 'Question',
+                    name: question,
+                    acceptedAnswer: { '@type': 'Answer', text: answer },
+                  })),
+                }]
+              : []),
+          ],
         }
+        : {
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/${post.slug}` },
+            headline: post.title,
+            description: post.metaDescription ?? post.description,
+            image: `${SITE_URL}${post.image}`,
+            author: { '@type': 'Organization', name: 'Typeoye' },
+            publisher: {
+              '@type': 'Organization',
+              name: 'Typeoye',
+              logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.png` },
+            },
+            datePublished: post.publishedAt,
+            inLanguage: 'en',
+          }
       : null
   );
 
