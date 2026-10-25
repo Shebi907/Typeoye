@@ -141,7 +141,9 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                   ? undefined
                   : post.slug === 'how-to-type-urdu-mobile-pc-guide'
                     ? '3 / 2'
-                    : post.slug === 'how-to-type-urdu-online-english-keyboard' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' || post.slug === 'free-urdu-typing-website-type-practice-test-online'
+                  : post.slug === 'free-typing-certificate-online' || post.slug === 'typing-certificate-validity-for-jobs'
+                      ? '40 / 21'
+                    : post.slug === 'typing-certificate-wpm-requirements' || post.slug === 'how-to-type-urdu-online-english-keyboard' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' || post.slug === 'free-urdu-typing-website-type-practice-test-online'
                     ? '16 / 9'
                     : '16 / 8',
               }}
@@ -189,6 +191,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                       {section.guide === 'typing-accuracy-faqs' && <TypingAccuracyFaqs />}
                       {section.guide === 'urdu-kaise-faqs' && <UrduKaiseFaqs />}
                       {section.guide === 'post-faqs' && post.faqs && <PostFaqs faqs={post.faqs} />}
+                      {section.guide === 'certificate-steps' && <CertificateSteps />}
                     </section>
 
                     {index === pullQuoteIndex && post.pullQuote && (
@@ -552,6 +555,26 @@ function PostFaqs({ faqs }: { faqs: Array<{ question: string; answer: string }> 
         </div>
       ))}
     </div>
+  );
+}
+
+function CertificateSteps() {
+  const steps = [
+    <>Open the <Link to="/certificate" className="font-semibold underline" style={{ color: 'var(--color-accent-text)' }}>Typing Certificate page</Link>. Enter the name you want printed and select a duration: 1, 2, 5, 10, or 15 minutes.</>,
+    <>Select <strong>Start Certificate Test</strong>. Type the passage shown during the timed run and finish the test.</>,
+    <>Review the result. Typeoye currently requires at least 30 WPM and 90% accuracy in the same attempt. If you fall short, use <Link to="/practice" className="font-semibold underline" style={{ color: 'var(--color-accent-text)' }}>Typing Practice</Link> and try again.</>,
+    <>When the result says <strong>Certificate Earned</strong>, select <strong>Download Certificate</strong> to save the PDF. Sign in first if you also want earned certificates saved to your profile.</>,
+  ];
+
+  return (
+    <ol className="mt-6 space-y-4">
+      {steps.map((step, index) => (
+        <li key={index} className="flex gap-3 rounded-xl border p-4" style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}>
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-sm font-bold" style={{ backgroundColor: 'var(--color-accent-light)', color: 'var(--color-accent-text)' }}>{index + 1}</span>
+          <span className="leading-relaxed">{step}</span>
+        </li>
+      ))}
+    </ol>
   );
 }
 

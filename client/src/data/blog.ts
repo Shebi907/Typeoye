@@ -4,7 +4,7 @@ export type BlogSort = 'latest' | 'oldest' | 'popular';
 export interface BlogSection {
   heading: string;
   body: string;
-  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs' | 'urdu-kaise-faqs' | 'post-faqs';
+  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs' | 'urdu-kaise-faqs' | 'post-faqs' | 'certificate-steps';
 }
 
 export interface BlogPost {
@@ -54,8 +54,8 @@ export const CATEGORY_BADGE: Record<BlogCategory, string> = {
 
 /** Sidebar category post counts (keep in sync with POSTS). */
 export const CATEGORY_COUNTS: Record<BlogCategory, number> = {
-  'Typing Tips': 5,
-  'Guides': 17,
+  'Typing Tips': 6,
+  'Guides': 19,
   'Practice': 3,
   'Productivity': 3,
   'News & Updates': 1,
@@ -600,6 +600,210 @@ export const POSTS: BlogPost[] = [
       {
         heading: 'Choose a tool and begin',
         body: 'Whether you want to type Urdu online for the first time, check your current speed, or practise a weak key, Typeoye offers a simple next step. Start with a timed Urdu typing test, use Urdu Practice for repeatable drills, or open Urdu Learn to follow the keyboard in order. You can return to the Urdu typing guides whenever you need a reference for the phonetic layout.',
+      },
+    ],
+  },
+  {
+    slug: 'free-typing-certificate-online',
+    title: 'How to Get a Free Typing Certificate Online',
+    category: 'Guides',
+    description: 'Learn how Typeoye’s free typing certificate works, what WPM and accuracy mean, how to take the test, and how to download your PDF certificate.',
+    metaTitle: 'Free Typing Certificate Online: Test, Qualify & Download | Typeoye',
+    metaDescription: 'Get a free typing certificate online with Typeoye. Learn the WPM and accuracy requirements, take the timed test, and download your PDF certificate.',
+    intro: 'A free typing certificate online can give you a dated snapshot of your typing performance. With Typeoye, enter the name for the certificate, choose a test duration, and complete a timed typing test. Meet the current speed and accuracy thresholds to download a PDF. This guide explains each step, what the score means, and when you should check whether a certificate is accepted by the organization you have in mind.',
+    readTime: 7,
+    publishedAt: '2026-10-25',
+    popular: false,
+    image: '/assets/blog/free-typing-certificate-online.png',
+    imageAlt: 'Typeoye online typing certificate guide showing a timed typing test with WPM, accuracy, and a certificate download button',
+    moreTools: [
+      { label: 'Free Typing Test', to: '/test' },
+      { label: 'Typing Practice', to: '/practice' },
+      { label: 'Typing Certificate', to: '/certificate' },
+      { label: 'How Accurate Are Online Typing Tests?', to: '/blog/how-accurate-are-typing-tests' },
+      { label: 'What WPM Means and Why Scores Differ', to: '/blog/why-wpm-differs-across-sites' },
+      { label: 'Typing Tests for Job Interviews', to: '/blog/typing-test-job-interview' },
+    ],
+    pullQuote: 'Meet both requirements in the same test, then download a PDF record of that result.',
+    cta: {
+      heading: 'Take the certificate test',
+      blurb: 'Enter the name you want printed and choose a test duration to get started.',
+      label: 'Get Your Typing Certificate',
+      to: '/certificate',
+    },
+    faqs: [
+      { question: 'Is Typeoye’s typing certificate free?', answer: 'The Typeoye certificate flow is available as a free feature. You can take the certificate test and download the PDF when you meet the requirements. A guest download is available; signing in lets you save earned certificates to your profile.' },
+      { question: 'What score do I need to earn a Typeoye certificate?', answer: 'The current Typeoye certificate test requires at least 30 WPM and 90% accuracy in the same test. Both conditions must be met before the certificate download is enabled.' },
+      { question: 'How is WPM calculated for the certificate test?', answer: 'Typeoye calculates certificate WPM from fully correct words during the timed run. The certificate score is Typeoye’s own measure, so it may differ from another website that uses a different formula.' },
+      { question: 'Can I download a typing certificate without creating an account?', answer: 'Yes. Guests can download an earned certificate. The guest certificate is not saved to an account; sign in if you want earned certificates saved to your profile.' },
+      { question: 'What information appears on the certificate?', answer: 'The certificate records the recipient name, typing speed, accuracy, test duration, a certificate ID, and the date of achievement.' },
+      { question: 'Will every employer or school accept this online typing certificate?', answer: 'Acceptance varies by employer, school, application, and jurisdiction. Typeoye’s certificate documents a performance on its own test; it is not an official accreditation. Check the exact requirements with the organization requesting proof.' },
+    ],
+    content: [
+      {
+        heading: 'What is an online typing certificate?',
+        body: 'An online typing certificate is a document that records a typing result from a timed assessment. It usually identifies the test taker and summarizes a measured result such as words per minute (WPM) and accuracy. A free typing speed certificate can be useful as a personal milestone, a practice record, or supporting evidence for a role where typing is relevant. The meaning of a certificate depends on who issued it and what the person reviewing it requires. Typeoye’s certificate is a downloadable record of one Typeoye test; it is not a government qualification or professional accreditation.',
+      },
+      {
+        heading: 'How Typeoye measures WPM and accuracy',
+        body: 'WPM means words per minute. In Typeoye’s certificate test, the score is calculated using fully correct words over the timed test duration. Accuracy is the share of attempted words that are correct. Both measures matter: a fast result with frequent errors may not meet the certificate threshold, and careful typing that is too slow may also fall short. For this certificate, the current requirements are at least 30 WPM and at least 90% accuracy in the same run. Typeoye’s WPM method is specific to its test, so compare progress using the same tool and remember that another site may calculate WPM differently. The related guides “How Accurate Are Online Typing Tests?” and “Why Your Typing Speed Looks Different on Every Website” explain these scoring differences in more detail.',
+      },
+      {
+        heading: 'How to take a typing test with certificate',
+        body: 'Follow these steps to take the Typeoye certificate test and check your result.',
+        guide: 'certificate-steps',
+      },
+      {
+        heading: 'How to meet the certificate requirements',
+        body: 'Practise before starting a certificate attempt. First take a regular Typing Test to see your current speed and accuracy. Use Typing Practice to work on the letter combinations, punctuation, or words that slow you down. Aim for clean, steady typing rather than chasing a high speed for one run. During the certificate test, read ahead a little, keep your hands relaxed, and correct mistakes promptly. You must meet both current thresholds—30 WPM and 90% accuracy—in the same test. If you miss either one, review the result and practise before retaking it. Open the Typing Test and Practice links in the related tools panel beside or below this article.',
+      },
+      {
+        heading: 'Download your typing certificate',
+        body: 'When the result screen confirms that you earned the certificate, use its Download Certificate button. Typeoye generates a PDF on the server and sends it to your browser for download. The file includes the name entered before the test, the measured WPM and accuracy, test duration, certificate ID, and achievement date. If you complete the test as a guest, you can still download the PDF, but it will not be saved to an account. When signed in, earned certificates can be saved to your profile. If the download fails, check your connection and browser download settings, then try again from the result screen.',
+      },
+      {
+        heading: 'Understand what the certificate does and does not show',
+        body: 'A typing test with certificate shows that a particular result met Typeoye’s published threshold under its timed test conditions. It is not a guarantee of job performance, a universal typing score, or official accreditation. Employers and schools set their own rules: they may require a supervised assessment, a specific testing provider, a different speed or accuracy threshold, or a document from an authorized body. Before you submit a free typing certificate online, read the application instructions or ask the organization whether it accepts this kind of record. Our related guide “Typing Tests for Job Interviews: What to Expect” explains how to prepare for employer-run assessments.',
+      },
+      {
+        heading: 'Frequently asked questions about typing certificates',
+        body: 'Quick answers about eligibility, test scores, downloads, and acceptance.',
+        guide: 'post-faqs',
+      },
+    ],
+  },
+  {
+    slug: 'typing-certificate-validity-for-jobs',
+    title: 'Is an Online Typing Certificate Valid for Jobs?',
+    category: 'Guides',
+    description: 'Learn when employers may accept an online typing certificate, how job-test rules differ, and how to prepare for a typing assessment.',
+    metaTitle: 'Is an Online Typing Certificate Valid for Jobs? | Typeoye',
+    metaDescription: 'Understand typing certificate validity for jobs, what employers may require, how WPM and accuracy are assessed, and how to prepare for a recruitment typing test.',
+    intro: 'Typing certificate validity for jobs depends on the employer and the instructions for the specific role. An online typing certificate can document your result, but it may not replace a test an employer requires you to take. Learn how to check acceptance, what WPM and accuracy mean, and how to prepare before you rely on a certificate.',
+    readTime: 7,
+    publishedAt: '2026-10-25',
+    popular: false,
+    image: '/assets/blog/typing-certificate-validity-for-jobs.png',
+    imageAlt: 'Online typing certificate with WPM and accuracy shown beside a job application, illustrating employer acceptance checks',
+    moreTools: [
+      { label: 'Free Typing Test', to: '/test' },
+      { label: 'Typing Practice', to: '/practice' },
+      { label: 'Typeoye Typing Certificate', to: '/certificate' },
+      { label: 'How to Get a Free Typing Certificate Online', to: '/blog/free-typing-certificate-online' },
+      { label: 'How Accurate Are Online Typing Tests?', to: '/blog/how-accurate-are-typing-tests' },
+      { label: 'Typing Tests for Job Interviews', to: '/blog/typing-test-job-interview' },
+    ],
+    pullQuote: 'A certificate can document a result; the employer decides what evidence meets its hiring requirements.',
+    cta: {
+      heading: 'Check your typing skills',
+      blurb: 'Practise first, then take a timed test to review your current speed and accuracy.',
+      label: 'Take a Typing Test',
+      to: '/test',
+    },
+    faqs: [
+      { question: 'Are online typing certificates accepted for jobs?', answer: 'Some employers may accept them as supporting evidence, while others require their own supervised test or a certificate from a specified provider. Check the vacancy instructions or ask the employer before relying on an online certificate.' },
+      { question: 'Does a typing certificate prove that I meet a job’s typing requirement?', answer: 'Only if the employer accepts that certificate and its test format and scoring meet the job’s stated requirements. A certificate from a practice website does not automatically prove eligibility for a separate recruitment test.' },
+      { question: 'What WPM and accuracy do employers require?', answer: 'There is no single requirement for every job. The required speed, accuracy, language, test duration, keyboard layout, and assessment method can vary by employer and vacancy. Use the exact job advertisement or official instructions.' },
+      { question: 'Is Typeoye’s typing certificate officially accredited?', answer: 'Typeoye describes its certificate as a record of performance on a Typeoye timed test, not as official accreditation or a government-recognized qualification. Acceptance is up to the organization reviewing it.' },
+      { question: 'How can I prepare for an employer typing test?', answer: 'Practise with text and a keyboard layout similar to the stated test, focus on accuracy before increasing speed, and take timed practice runs. Confirm the required duration, software, language, layout, and scoring method in advance.' },
+      { question: 'Will a high typing certificate score guarantee a job?', answer: 'No. A typing result only reflects performance on a particular assessment. Hiring decisions may depend on other qualifications, tests, interviews, and employer criteria.' },
+    ],
+    content: [
+      {
+        heading: 'Short answer: typing certificate validity depends on the employer',
+        body: 'An online typing certificate may be useful evidence of your typing speed, but it is not automatically valid for every job application. The employer, organization, job advertisement, and applicable rules determine what documents and tests are accepted. One vacancy may accept a certificate as additional proof; another may require you to sit its own timed test under supervision. Before paying for a course or submitting a certificate, read the exact recruitment instructions or contact the hiring organization. Do not assume that a result from one typing website meets a different employer’s typing test requirements for jobs.',
+      },
+      {
+        heading: 'Practice certificate vs an officially required certificate',
+        body: 'A practice certificate records a result on the test provider’s platform. It can show the date, score, and assessment conditions, and it may help you track your progress or support an application if the employer allows it. An officially required or recognized certificate is different: it is issued by a provider or authority that the employer specifically names, or it follows the process stated in the vacancy or relevant rules. A practice certificate does not become officially recognized just because it displays a score or certificate ID. Check who issued the required credential, whether the employer names an accepted provider, and whether a separate supervised assessment is mandatory.',
+      },
+      {
+        heading: 'How WPM, accuracy, and typing tests are used in recruitment',
+        body: 'WPM means words per minute and is a measure of typing speed. Accuracy describes how much of the typed text matches the prompt under the test’s scoring method. Employers can use a typing test to check whether applicants can enter text at the pace and accuracy needed for a role. Some may specify a minimum speed and accuracy; others may evaluate a broader practical task or use a test administered during recruitment. Scores are not always directly comparable because providers may use different passages, durations, keyboard layouts, error rules, and WPM formulas. Read the test instructions to understand what counts as an error, whether corrections are permitted, and how the result will be judged.',
+      },
+      {
+        heading: 'Typing certificate acceptance: what to check before relying on it',
+        body: 'Before using an online typing certificate for jobs or submitting a typing speed certificate, compare it with the vacancy requirements. Confirm whether the employer accepts online certificates at all, whether a named issuer is required, and whether the certificate must be recent or independently verifiable. Check the required language, keyboard layout, duration, minimum WPM, accuracy threshold, and whether the employer will conduct its own assessment. If any point is unclear, ask the recruiter or hiring office. Keep the certificate as supporting evidence only until you know it satisfies the stated process. Typeoye’s companion guide, “How to Get a Free Typing Certificate Online,” explains what the Typeoye document contains and how to download it.',
+      },
+      {
+        heading: 'What Typeoye’s typing certificate shows',
+        body: 'Typeoye’s certificate feature is a timed typing test with its own current earning thresholds: at least 30 WPM and 90% accuracy in the same attempt. The certificate page lets you enter a name and choose a duration from the options shown there. After the test, the result screen indicates whether you met both thresholds and enables a PDF download when you did. The PDF records the name, WPM, accuracy, test duration, certificate ID, and achievement date. Guests can download an earned certificate; signing in allows earned certificates to be saved to the profile. Typeoye verifies the submitted typing data for certificate generation. This feature documents a result on Typeoye’s test; it does not claim official accreditation, government recognition, or guaranteed acceptance for employment. Review the certificate guide for the full process.',
+      },
+      {
+        heading: 'Prepare for a job typing test and improve your result',
+        body: 'Start by checking the job advertisement for its exact test format. Practise on a similar keyboard and in the required language. Use Typing Practice for focused repetition, then take timed sessions with the Typing Test to observe your speed and accuracy under a clock. Begin at a pace you can control; repeated errors can lower a result even when your raw typing feels fast. Review missed words, practise the troublesome keys or punctuation, and repeat the same type of exercise. Before test day, check the venue or software instructions, allowed equipment, time limit, and whether backspace or corrections are allowed. Typeoye’s test and practice tools can help you build skill, but an employer’s official instructions remain the source for its recruitment assessment.',
+      },
+      {
+        heading: 'Frequently asked questions about typing certificate validity',
+        body: 'Answers to common questions about employer acceptance, certificates, scores, and recruitment tests.',
+        guide: 'post-faqs',
+      },
+    ],
+  },
+  {
+    slug: 'typing-certificate-wpm-requirements',
+    title: 'What Is a Good WPM Score for a Typing Certificate?',
+    category: 'Typing Tips',
+    description: 'Understand WPM, accuracy, Typeoye’s current certificate threshold, and how to set a realistic typing speed goal for work, exams, or personal progress.',
+    metaTitle: 'Typing Certificate WPM Requirements: What Is a Good Score? | Typeoye',
+    metaDescription: 'Learn typing certificate WPM requirements, what is a good typing speed for a certificate, why accuracy matters, and how to prepare for the test.',
+    intro: 'A good WPM score depends on the test and the goal. A job advertisement may set its own typing speed and accuracy requirements, while a practice certificate measures performance on one provider’s test. This guide explains words per minute, Typeoye’s current certificate threshold, and a practical way to build speed without letting accuracy slip.',
+    readTime: 7,
+    publishedAt: '2026-10-25',
+    popular: false,
+    image: '/assets/blog/typing-certificate-wpm-requirements.png',
+    imageAlt: 'Typeoye graphic asking what is a good WPM score for a typing certificate, with a speedometer scale from 0 to 160 WPM',
+    moreTools: [
+      { label: 'Free Typing Test', to: '/test' },
+      { label: 'Typing Practice', to: '/practice' },
+      { label: 'How to Get a Free Typing Certificate Online', to: '/blog/free-typing-certificate-online' },
+      { label: 'Is an Online Typing Certificate Valid for Jobs?', to: '/blog/typing-certificate-validity-for-jobs' },
+      { label: 'Why WPM Scores Differ Across Websites', to: '/blog/why-wpm-differs-across-sites' },
+    ],
+    pullQuote: 'Set your target from the actual test instructions, and build speed on top of reliable accuracy.',
+    cta: {
+      heading: 'Check your current typing speed',
+      blurb: 'Take a timed test, then practise the areas that need more attention.',
+      label: 'Start a Typing Test',
+      to: '/test',
+    },
+    faqs: [
+      { question: 'What is a good WPM score for a typing certificate?', answer: 'There is no universal certificate score. A good target is the one stated by the certificate provider, employer, or exam organizer. Typeoye’s current certificate test requires 30 WPM and 90% accuracy in the same run.' },
+      { question: 'How is WPM calculated on Typeoye?', answer: 'For the Typeoye test, WPM is the number of fully correct words divided by the elapsed test time in minutes, rounded to a whole number. Other sites can use different formulas, so scores may not match exactly across providers.' },
+      { question: 'Is accuracy as important as typing speed?', answer: 'Yes. Typeoye’s certificate flow requires both a minimum speed and a minimum accuracy. An incorrect word does not count as fully correct for its WPM calculation, and accuracy is scored separately.' },
+      { question: 'Are beginner, intermediate, and advanced WPM ranges official standards?', answer: 'No. The ranges in this guide are approximate practice examples to help set a personal goal. Employers, schools, and certificate providers set their own requirements.' },
+      { question: 'Should I aim for 60 WPM for every typing test?', answer: 'No. Aim for the speed specified by the actual job or exam instructions. A 60 WPM target may be unnecessary for one role and insufficient for another; test duration, accuracy, language, and keyboard layout may also matter.' },
+      { question: 'How can I improve my WPM before taking a certificate test?', answer: 'Practise consistently, keep accuracy high, review repeated errors, and use timed tests to measure progress. Typeoye Practice offers focused drills, and the Typing Test lets you check speed and accuracy in a timed session.' },
+    ],
+    content: [
+      {
+        heading: 'What WPM means',
+        body: 'WPM stands for words per minute. It summarizes how many words you can type during a given amount of time, but typing tests do not all calculate it in the same way. Some use a character-based convention; others count whole words. Typeoye’s certificate test counts fully correct words and divides that number by elapsed minutes, then rounds the result to a whole number. For example, 45 fully correct words in a one-minute test gives a Typeoye result of 45 WPM. A different website may report another score from the same typing because its test or formula differs.',
+      },
+      {
+        heading: 'Approximate WPM ranges for personal practice',
+        body: 'The following are informal examples for setting practice goals, not research-based population averages, official levels, or job requirements. A beginner may be working below about 30 WPM while learning consistent finger movement. A developing or intermediate typist might set a gradual target in the 30–50 WPM range. A confident, experienced typist may choose to practise above roughly 50 WPM while keeping errors low. These broad bands are only starting points: typing language, text difficulty, keyboard familiarity, test duration, and scoring rules all affect a result. Use the job, exam, or certificate instructions whenever they provide a specific target.',
+      },
+      {
+        heading: 'Why typing accuracy matters alongside speed',
+        body: 'A high raw pace can be misleading if many words contain errors. Accuracy shows how much of the attempted text was entered correctly, and some tests include only fully correct words in their WPM score. In Typeoye’s certificate flow, speed and accuracy are separate checks: the current thresholds are at least 30 WPM and 90% accuracy in the same test. You need both for that Typeoye certificate. A separate employer or exam can set different thresholds or use its own method, so never treat Typeoye’s target as universal. When practising, first make your typing dependable, then increase pace in small steps.',
+      },
+      {
+        heading: 'Choose the right WPM target for your goal',
+        body: 'For a personal milestone, pick a modest improvement over your current score and keep the test conditions similar when you compare attempts. For a typing certificate, read the provider’s eligibility rules and scoring description. For a job or exam, use the exact advertisement or official test notice: check the required WPM, accuracy, test length, language, keyboard layout, software, and whether the test is supervised. Do not assume that a certificate score automatically replaces an employer’s assessment. If you are weighing whether a certificate is accepted, see the linked guide “Is an Online Typing Certificate Valid for Jobs?” in this article’s related tools.',
+      },
+      {
+        heading: 'How to practise and test on Typeoye',
+        body: 'Use Typeoye Practice to work on focused drills, including characters, combinations, words, sentences, paragraphs, weak keys, quick sessions, and custom text. When you want a timed measure, open the Typing Test, choose an available duration and difficulty, and type the displayed passage. Review both your WPM and accuracy at the end. For a certificate run, the Certificate page collects a name and duration, then opens the timed certificate test; Typeoye currently offers 1, 2, 5, 10, and 15 minute choices. The result screen shows whether you met both of Typeoye’s certificate thresholds. The related guide “How to Get a Free Typing Certificate Online” explains the download steps and what the PDF records.',
+      },
+      {
+        heading: 'A practical 15-minute speed and accuracy routine',
+        body: 'Spend 2 minutes warming up with easy text at a comfortable pace. Use 5 minutes of Practice on words or key combinations where you make repeat errors. Take a 3-minute timed test and aim to keep your accuracy steady instead of rushing. Use the final 5 minutes to review missed words and repeat a short drill on the weakest pattern. Once or twice a week, take a longer test under the duration and layout required by your goal. Record the date, WPM, accuracy, and test type so you can compare like with like. If accuracy drops as speed rises, slow down slightly and rebuild control before trying to go faster.',
+      },
+      {
+        heading: 'Frequently asked questions about typing certificate WPM',
+        body: 'Quick answers about good WPM scores, scoring, accuracy, and certificate eligibility.',
+        guide: 'post-faqs',
       },
     ],
   },

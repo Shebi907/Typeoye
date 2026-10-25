@@ -28,11 +28,11 @@ export function BlogCard({ post, variant = 'horizontal' }: BlogCardProps) {
           'relative block shrink-0 overflow-hidden',
           horizontal
             ? cn(
-                post.slug === 'how-to-type-urdu-mobile-pc-guide' ? 'aspect-[3/2]' : post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' || post.slug === 'free-urdu-typing-website-type-practice-test-online' ? 'aspect-[16/9]' : 'aspect-[16/10]',
+                post.slug === 'how-to-type-urdu-mobile-pc-guide' ? 'aspect-[3/2]' : post.slug === 'free-typing-certificate-online' || post.slug === 'typing-certificate-validity-for-jobs' ? 'aspect-[40/21]' : post.slug === 'typing-certificate-wpm-requirements' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' || post.slug === 'free-urdu-typing-website-type-practice-test-online' ? 'aspect-[16/9]' : 'aspect-[16/10]',
                 'sm:aspect-auto sm:w-56 sm:self-stretch md:w-60 lg:w-72'
               )
             : cn(
-                post.slug === 'how-to-type-urdu-mobile-pc-guide' ? 'aspect-[3/2]' : post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' || post.slug === 'free-urdu-typing-website-type-practice-test-online' ? 'aspect-[16/9]' : 'aspect-[16/10]',
+                post.slug === 'how-to-type-urdu-mobile-pc-guide' ? 'aspect-[3/2]' : post.slug === 'free-typing-certificate-online' || post.slug === 'typing-certificate-validity-for-jobs' ? 'aspect-[40/21]' : post.slug === 'typing-certificate-wpm-requirements' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' || post.slug === 'free-urdu-typing-website-type-practice-test-online' ? 'aspect-[16/9]' : 'aspect-[16/10]',
                 'w-full'
               )
         )}
