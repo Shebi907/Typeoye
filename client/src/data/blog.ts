@@ -4,7 +4,7 @@ export type BlogSort = 'latest' | 'oldest' | 'popular';
 export interface BlogSection {
   heading: string;
   body: string;
-  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example';
+  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs';
 }
 
 export interface BlogPost {
@@ -52,8 +52,8 @@ export const CATEGORY_BADGE: Record<BlogCategory, string> = {
 
 /** Sidebar category post counts (keep in sync with POSTS). */
 export const CATEGORY_COUNTS: Record<BlogCategory, number> = {
-  'Typing Tips': 4,
-  'Guides': 13,
+  'Typing Tips': 5,
+  'Guides': 15,
   'Practice': 3,
   'Productivity': 3,
   'News & Updates': 1,
@@ -79,8 +79,8 @@ export const POSTS: BlogPost[] = [
     readTime: 7,
     publishedAt: '2026-10-24',
     popular: false,
-    image: '/assets/blog/urdu-online-typing-keyboard.svg',
-    imageAlt: 'Urdu script appearing while a learner types with an English QWERTY keyboard',
+    image: '/assets/blog/english-keyboard-urdu-typing-examples.png',
+    imageAlt: 'English keyboard input converting into Urdu script with common Roman Urdu word examples',
     moreTools: [
       { label: 'Urdu Typing Practice', to: '/urdu-practice' },
       { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
@@ -286,6 +286,171 @@ export const POSTS: BlogPost[] = [
     ],
   },
   {
+    slug: 'urdu-typing-test-practice-ppsc-fpsc-pakistan',
+    title: 'Urdu Typing Test Practice for PPSC, FPSC and Other Pakistan Exams: Complete Preparation Guide',
+    category: 'Guides',
+    description: 'Prepare for a Pakistan government-job Urdu typing test with a practical 30-minute routine, Urdu-script drills, and advice on checking each vacancy’s official requirements.',
+    metaTitle: 'Urdu Typing Test Practice for PPSC & FPSC Exams | Typeoye',
+    metaDescription: 'Learn Urdu typing test practice for Pakistan government exams: build speed and accuracy, follow a 30-minute routine, practise Urdu text, and check official vacancy rules.',
+    intro: 'A government-job typing test can feel unfamiliar even when you already use a computer every day. This guide helps Pakistani candidates practise Urdu typing deliberately: understand the keyboard input, measure speed and accuracy, work on common errors, and prepare around the instructions for the exact vacancy you have applied for.',
+    readTime: 10,
+    publishedAt: '2026-10-25',
+    popular: false,
+    image: '/assets/blog/urdu-typing-test-practice-ppsc-fpsc-pakistan.png',
+    imageAlt: 'Pakistani job candidate practising Urdu typing at a computer, with Urdu text displayed on the screen',
+    moreTools: [
+      { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
+      { label: 'Urdu Typing Practice', to: '/urdu-practice' },
+      { label: 'Urdu Learn', to: '/urdu-lessons' },
+      { label: 'Urdu Phonetic Keyboard Layout Guide', to: '/blog/urdu-phonetic-keyboard-layout' },
+      { label: 'Urdu Typing Test for Government Jobs in Pakistan', to: '/blog/urdu-typing-test-government-jobs-pakistan' },
+      { label: 'Improve Urdu Typing Speed and Accuracy', to: '/blog/improve-urdu-typing-speed-and-accuracy' },
+    ],
+    pullQuote: 'Build a repeatable pace with fewer errors, then use the official vacancy instructions to set your test-day target.',
+    cta: {
+      heading: 'Start a focused Urdu typing session',
+      blurb: 'Practise a short passage, review accuracy, and return to your weakest words tomorrow.',
+      label: 'Open Urdu Practice',
+      to: '/urdu-practice',
+    },
+    content: [
+      {
+        heading: 'What an Urdu typing test measures',
+        body: 'An Urdu typing test asks you to enter Urdu text using the input method specified for that assessment. Depending on the vacancy, a test may involve a displayed passage, a fixed time, a required keyboard layout or software, and an evaluation of speed and errors. Those details are not universal. PPSC, FPSC, provincial departments, and other recruiting bodies may publish different instructions for different posts and recruitment cycles. Treat the current advertisement, syllabus, call letter, and later candidate notices as the authority. An Urdu typing speed test online is a useful rehearsal tool, but its timer, text, layout, and scoring may differ from the recruitment test.',
+      },
+      {
+        heading: 'Read the official instructions before setting a target',
+        body: 'Before planning your Urdu typing test for government jobs, identify the exact post and recruiting body, then look for the current official advertisement and any linked syllabus or test notice. Confirm whether Urdu typing is required at all, which keyboard layout or software is named, the required speed if stated, the duration, passage or test format, accuracy rules, and eligibility or document conditions. Check whether later notices update the original advertisement. Do not assume a speed, time limit, layout, or eligibility rule based on another PPSC Urdu typing test, an FPSC typing test preparation article, an older vacancy, or a different job title. If a detail is missing or unclear, use the recruiting body’s official contact or notice process. Build your practice target only after you have checked what applies to your vacancy.',
+      },
+      {
+        heading: 'Get familiar with the keyboard and input method',
+        body: 'Keyboard familiarity reduces hesitation. Sit at a desk in a position you can repeat, keep your wrists relaxed, and learn the location of the letters and punctuation you use most. If the vacancy specifies a layout, practise that layout on a compatible keyboard or software before timed rehearsal. Typeoye’s Urdu learning and practice tools use a phonetic mapping: familiar English-labeled keys correspond to Urdu sounds and characters. This can be approachable for a QWERTY user, but the mapping is specific to the tool. Do not assume it is identical to every Urdu keyboard, operating-system layout, or exam setup. Study the mapping and rehearse the actual input method required for your test.',
+        guide: 'urdu-keyboard-map',
+      },
+      {
+        heading: 'How Urdu phonetic typing works',
+        body: 'With Urdu phonetic typing, you use English keyboard keys associated with Urdu sounds; the input method converts those keystrokes into Urdu script. You are still composing Urdu words, so spelling and letter choice matter. Roman Urdu is not the final answer: typing “kitab” as Latin letters is different from entering کتاب in Urdu script. Learn how the phonetic layout handles letters that sound alike, aspirated sounds, joined forms, and characters that do not map one-to-one to an English letter. Practise complete words and short phrases rather than memorising isolated key presses alone. For a detailed map, see Typeoye’s Urdu Phonetic Keyboard Layout Guide and compare it with the layout described in your vacancy instructions.',
+      },
+      {
+        heading: 'Understand WPM, accuracy, and error control',
+        body: 'WPM means words per minute, a measure of typing pace over a timed interval. Online tools may define a word as a fixed number of characters or use another calculation, so the displayed score is best treated as a practice metric unless the recruiting body explains its own scoring. Accuracy describes how much of the typed text matches the expected text; tools may count errors differently, including omissions, substitutions, extra characters, or corrections. For Urdu typing test WPM and accuracy, record both measures after each round. A higher raw speed is not useful if it comes with many errors or if the official scoring deducts for them. First practise at a pace where you can reproduce the passage correctly. Increase speed in small steps only when your accuracy remains steady, and review the errors that cost you time.',
+      },
+      {
+        heading: 'Use this practical daily 30-minute routine',
+        body: 'Use the same structure most days, adjusting the passage and input method to match official instructions. Minutes 0–3: settle your posture, open the required layout, and warm up with familiar Urdu words without rushing. Minutes 3–10: do a focused drill on weak letters, joins, or frequent words; repeat each correctly typed word several times. Minutes 10–18: type a short Urdu paragraph slowly enough to protect spelling, spaces, and punctuation. Minutes 18–25: complete one timed passage using the duration or format stated in your official instructions when available; if it is not stated, choose a short practice interval only as a training exercise, not as an assumed exam format. Minutes 25–30: compare the result, note speed and accuracy, identify up to three recurring errors, and select tomorrow’s drill. Take a brief pause if your hands feel tense. A steady half-hour with review is more informative than many rushed attempts without learning from mistakes. Keep the log simple enough to maintain: a date, the layout, your score, and one error to work on are sufficient. If a particular word causes trouble repeatedly, write it correctly once, practise it slowly in a short phrase, and return to it the next day before your timed round. This turns the routine into a gradual cycle of practice, feedback, and correction instead of a daily score chase.',
+      },
+      {
+        heading: 'Practise words, punctuation, spacing, and Urdu text',
+        body: 'Begin with short words that exercise different letters, then combine them into sentences. Type each example in Urdu script, check it against the prompt, and notice whether the input method produces the expected characters: گھر، کتاب، پانی، درخواست، دفتر، تعلیم۔ Next practise punctuation and spacing in context. Urdu uses marks such as ، (comma), ۔ (full stop), and ؟ (question mark); the key sequence may vary with the layout. Avoid attaching punctuation to the wrong word, inserting double spaces, omitting a space after a mark, or accidentally leaving Latin characters in the passage. Use the following short practice text as a copy exercise, checking each word rather than racing through it: “میں روزانہ اردو ٹائپنگ کی مشق کرتا ہوں۔ درست الفاظ، مناسب وقفے اور رموزِ اوقاف تحریر کو واضح بناتے ہیں۔ امتحان سے پہلے سرکاری ہدایات غور سے پڑھیں، پھر مقررہ طریقے کے مطابق مشق کریں۔” After typing, compare the original and your output character by character. Repeat only the words or joins you missed.',
+        guide: 'urdu-word-examples',
+      },
+      {
+        heading: 'Add timed practice without building bad habits',
+        body: 'Timed practice teaches you to keep a calm rhythm while the clock is running. Start with a passage short enough to review completely. Keep your eyes moving ahead by a few words, but return to the exact line if you lose your place. Avoid pausing to fix every minor slip unless the real test permits corrections and you know how they are scored. After each round, inspect the text and classify errors: wrong character, spelling, missing or extra space, punctuation, missed word, or hesitation. Work on the most common category in an untimed drill before trying another timed round. As the test approaches, rehearse the specified duration, layout, software, and passage rules only if they are documented. If those details are not published, vary your practice rounds and keep them clearly separate from official requirements. Do not compare one fast attempt with a slower attempt unless the passages and time conditions are similar. A familiar paragraph may produce an easier score because you already know its words, while new text tests recognition and accuracy more honestly. Rotate between both kinds of exercise, and read unfamiliar passages once before entering them at speed. When a test allows review, leave enough attention for a final scan of the typed text; when the rules do not say whether review or corrections are allowed, do not build your preparation around an assumption.',
+      },
+      {
+        heading: 'Practise online and keep a useful progress log',
+        body: 'An Urdu typing practice for jobs in Pakistan should combine focused drills with occasional timed runs. Use Typeoye Urdu Practice to repeat words or passages, Urdu Learn for guided lessons, and the Urdu Typing Test setup for a timed session. Keep a simple log with date, input method, duration, passage or drill, WPM or displayed speed, accuracy, and the errors you noticed. Compare like with like: scores from different tools or layouts may not be directly comparable. A rising score is encouraging, but your notes should also show whether spelling, punctuation, and spaces are becoming more reliable. Typeoye helps you practise; it does not certify eligibility, reproduce every recruiting body’s test environment, or guarantee a passing result. Confirm your test-day setup from official sources.',
+        guide: 'urdu-typing-links',
+      },
+      {
+        heading: 'Common mistakes that slow candidates down',
+        body: 'Changing keyboard layouts repeatedly makes it harder to build dependable recall. Choose the layout that matches the official instructions and practise it consistently. Another common problem is chasing a high WPM while guessing at spelling; slow down and correct the source of the error first. Watch for confusing similar-sounding letters, inconsistent word forms, repeated characters, missing spaces, punctuation placed on the wrong side, and accidental switches between Urdu and English input. Do not spend every session taking a full test: short targeted drills can repair a weak pattern more efficiently. Avoid comparing your practice score with an advertised requirement unless the scoring method and input conditions are comparable. Finally, do not leave official instructions until the last day. Confirm the venue, software, layout, allowed corrections, and required documents from the relevant notice so your preparation matches the actual assessment.',
+      },
+      {
+        heading: 'Frequently asked questions',
+        body: 'These answers are general practice guidance. The current vacancy notice and recruiting body’s instructions determine the requirements for an individual test.',
+        guide: 'gov-prep-faqs',
+      },
+      {
+        heading: 'Prepare for the vacancy you actually applied for',
+        body: 'A reliable preparation plan is specific about practice and careful about official claims. Learn your input method, practise Urdu words and paragraphs, protect accuracy while you build pace, and use timed sessions to rehearse under pressure. Check the exact PPSC, FPSC, or other department notice for speed, test duration, layout, software, eligibility, and any later updates. When a requirement is not stated, do not fill the gap with a number found for another post. Use Typeoye to build your skill, then follow the official directions on test day. Consistent work can improve readiness, but no practice routine can guarantee eligibility, a passing score, or selection.',
+      },
+    ],
+  },
+  {
+    slug: 'how-to-type-urdu-in-ms-word',
+    title: 'How to Type Urdu in MS Word: Complete Guide',
+    category: 'Guides',
+    description: 'Set up an Urdu keyboard, type in Microsoft Word with correct right-to-left direction, choose a Unicode font, and fix common Urdu text problems.',
+    metaTitle: 'How to Type Urdu in MS Word: Complete Guide | Typeoye',
+    metaDescription: 'Learn how to enable an Urdu keyboard in Windows, type Urdu in MS Word, set right-to-left paragraphs, choose fonts, and fix common display issues.',
+    intro: 'You can write Urdu in Microsoft Word without changing the language of Windows or replacing your English keyboard. Add an Urdu input method, select it when you need it, set the paragraph direction to right-to-left, and choose a font that supports Urdu Unicode text. This beginner-friendly guide walks through each step and explains how to fix the problems that most often make Urdu look wrong.',
+    readTime: 9,
+    publishedAt: '2026-10-25',
+    popular: false,
+    image: '/assets/blog/how-to-type-urdu-in-ms-word.png',
+    imageAlt: 'Urdu text in a right-to-left Word document as a learner types at a desktop keyboard',
+    moreTools: [
+      { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
+      { label: 'Urdu Practice', to: '/urdu-practice' },
+      { label: 'Urdu Learn', to: '/urdu-lessons' },
+      { label: 'Urdu Phonetic Keyboard Layout Guide', to: '/blog/urdu-phonetic-keyboard-layout' },
+      { label: 'English Keyboard to Urdu Typing Examples', to: '/blog/english-keyboard-urdu-typing-examples' },
+      { label: 'Urdu Phonetic vs Standard Keyboard', to: '/blog/urdu-phonetic-vs-standard-keyboard' },
+      { label: 'How to Type Urdu Online Using an English Keyboard', to: '/blog/how-to-type-urdu-online-english-keyboard' },
+    ],
+    pullQuote: 'For Urdu to read naturally in Word, choose the Urdu keyboard, right-to-left paragraph direction, and a Unicode-capable font.',
+    cta: {
+      heading: 'Practise Urdu before opening Word',
+      blurb: 'Build familiarity with Urdu words and the phonetic keyboard using Typeoye’s free tools.',
+      label: 'Start Urdu Practice',
+      to: '/urdu-practice',
+    },
+    content: [
+      {
+        heading: 'What you need before typing Urdu',
+        body: 'Urdu typing uses three related settings: an input method that sends Urdu characters, a paragraph direction that sets right-to-left reading order, and a font that can display Urdu glyphs. These are separate controls. Installing an Urdu keyboard does not automatically change Word’s paragraph direction, and aligning text to the right does not change the keyboard or reading order. This guide focuses on Word for Windows with current Microsoft 365-style menus. Labels can vary a little by Word and Windows version, but the same ideas apply: select Urdu as the input language, set the paragraph to right-to-left, then choose a Unicode font. Save the document as a modern .docx file when you plan to share editable text.',
+      },
+      {
+        heading: 'Add an Urdu keyboard in Windows',
+        body: 'In Windows 11, open Start > Settings > Time & language > Language & region. Under Preferred languages, choose Add a language, search for Urdu, select the Urdu option you need, choose Next, then select Install. You may install the language pack if you want Windows language features, but the display language can remain English. If Urdu is already installed, open the three-dot menu beside it, choose Language options, and check the Keyboards list. Choose Add a keyboard and select the available Urdu layout. The precise layout list depends on the language option and Windows setup. Adding Urdu to Windows makes an Urdu input layout available; it does not guarantee that the selected layout is phonetic. To switch layouts while typing, use the taskbar input-language indicator or press Windows key + Space and choose Urdu. Switch back to English the same way. Test the active layout in a blank document before entering a long passage.',
+      },
+      {
+        heading: 'Choose a phonetic keyboard when you prefer English key labels',
+        body: 'A standard Urdu layout assigns Urdu letters to fixed key positions. A phonetic keyboard instead maps familiar English key sounds to Urdu characters, which many QWERTY users find easier to learn. The two layouts can produce the same Urdu script, but their key sequences differ. First check the input method required for your work or exam. If you want phonetic typing in Word, install or enable a trusted Urdu phonetic input method that is compatible with your Windows and Office versions. Once it is active, select its input-language entry from the taskbar or Windows + Space. Type a short word and confirm that Urdu characters appear. Typeoye’s phonetic map is a useful way to practise the key-sound idea online; it does not automatically change Word’s Windows input method. For key-by-key examples, visit the Typeoye Urdu Phonetic Keyboard Layout Guide and the English keyboard Urdu typing examples.',
+      },
+      {
+        heading: 'Prepare Microsoft Word for Urdu text',
+        body: 'Open a new document and click where the Urdu paragraph should begin. Select the Urdu keyboard from the Windows input switcher. In Word, open the Home tab and look in the Paragraph group for the Right-to-left Text Direction control. If the button is visible, select it before typing the paragraph. In some Office installations the right-to-left controls appear only after an Urdu or other right-to-left editing language is enabled. If the control is missing, open File > Options > Language, add Urdu under Office authoring languages if available, and restart Word if prompted. You can keep the Office menus in English. Confirm you are changing the paragraph direction, rather than only setting right alignment, before you start typing.',
+      },
+      {
+        heading: 'Set right-to-left text direction',
+        body: 'With the cursor in the Urdu paragraph, select Home > Paragraph > Right-to-left Text Direction. The insertion point should move to the right side of the paragraph, and new Urdu text should progress toward the left as you type. If you also have English paragraphs, set direction separately for each paragraph; Word can keep English paragraphs left-to-right and Urdu paragraphs right-to-left in the same document. A useful test sentence is: “میں ورڈ میں اردو لکھ رہا ہوں۔” Check that the cursor begins on the right, the Urdu letters join correctly, and the full stop sits in the expected visual position. If the sentence starts on the wrong side, toggle the paragraph direction and test again. Mixed Urdu and English text can follow bidirectional rules, so use clear spaces and punctuation and review how numbers, brackets, and Latin abbreviations appear in the final paragraph.',
+      },
+      {
+        heading: 'Align Urdu paragraphs and adjust spacing',
+        body: 'Paragraph direction and paragraph alignment do different jobs. Direction sets the reading order; alignment places the paragraph relative to the page margins. For a typical Urdu paragraph, place the cursor in it and choose Align Right on the Home tab. You can also use Ctrl+R to align the paragraph right, but remember that this shortcut changes alignment, not the writing direction. Apply direction and alignment to each paragraph that needs them. For a heading, select the heading paragraph and choose the alignment that suits the page; right aligned is common for Urdu, while centered headings can work for a title. Use Word’s paragraph spacing controls to add space before or after paragraphs instead of inserting many empty lines. If a numbered list or bullets appear in the wrong direction, set the paragraph direction before creating the list and check the indentation controls.',
+      },
+      {
+        heading: 'Choose a font that supports Urdu',
+        body: 'Use a Unicode font with Urdu glyphs and shaping support. Noto Nastaliq Urdu is a common Nastaliq-style choice, while Noto Naskh Arabic can be useful when you prefer a more upright Naskh appearance; availability depends on what is installed on your computer. Select the Urdu text and choose the font from Word’s font menu. If a font is not listed, install it from a trusted source and restart Word. A missing font on another person’s computer may cause Word to substitute a different font, changing the appearance. For editable sharing, ask the recipient to use a compatible Urdu font; for a fixed visual copy, export a PDF and inspect it before sending. Use Unicode text for modern documents so the letters remain searchable and copyable. Legacy, non-Unicode text may display as unrelated characters on another system even when a similar font name is selected.',
+      },
+      {
+        heading: 'Type and format a short Urdu passage',
+        body: 'Try this sequence in a blank document: (1) switch the Windows input to Urdu, (2) set the paragraph direction to right-to-left, (3) choose a Unicode Urdu font, (4) type a sentence, and (5) align the paragraph right. For example, enter “اردو زبان سیکھنا آسان ہے۔” If the selected keyboard is phonetic, use the associated key mapping rather than typing the Urdu letters directly. Make a separate left-to-right paragraph for any English translation. When you paste Urdu from another source, select the destination paragraph and confirm its direction and font; pasted formatting can carry different paragraph settings. Use Word’s Styles for repeated headings so font size, spacing, and alignment remain consistent. Save, close, and reopen the .docx once to make sure the Urdu text still displays correctly.',
+      },
+      {
+        heading: 'Fix common Urdu typing and font problems',
+        body: 'If Latin letters appear instead of Urdu, check the taskbar language indicator and switch to the Urdu input method; Word’s font alone does not translate English keystrokes. If text begins at the left or punctuation jumps, set the paragraph to right-to-left direction, then check its alignment and mixed English or number runs. If Urdu letters appear disconnected, use a Unicode-capable Urdu font and make sure the text itself is Unicode rather than legacy encoded content. If you see boxes, the chosen font or the recipient’s computer may lack the needed glyphs; try an installed Urdu font and confirm it displays a known Urdu sentence. If letters look like the wrong characters, check whether you selected the expected Urdu keyboard layout, especially after switching from a phonetic input method. If only one paragraph behaves incorrectly, select that paragraph and reapply direction and alignment instead of changing the entire document. For persistent display issues, test the same Urdu text in a new blank .docx to distinguish document formatting from input-method problems.',
+      },
+      {
+        heading: 'Practice Urdu Typing Online with Typeoye',
+        body: 'Before formatting a long Word document, get comfortable with the Urdu letters and key patterns in a short practice session. Typeoye’s Urdu Typing Test lets you practise timed Urdu text and review your speed and accuracy; Urdu Practice offers focused drills for characters, words, sentences, and longer passages. Use these pages to build confidence, then type directly in Word with the Windows Urdu layout or a compatible phonetic input method. The browser tools do not change Word’s keyboard or paragraph direction, so keep the Windows and Word steps in this guide handy. You can also explore Urdu Learn for guided lessons and the Urdu keyboard guides for layout examples.',
+        guide: 'urdu-typing-links',
+      },
+      {
+        heading: 'Frequently asked questions about typing Urdu in Word',
+        body: 'These quick answers cover common Windows, Word, keyboard, and font questions.',
+        guide: 'ms-word-faqs',
+      },
+      {
+        heading: 'A simple checklist for your next document',
+        body: 'Before you finish, confirm that Windows is using the Urdu keyboard you intended, Word’s Urdu paragraphs are set to right-to-left, and those paragraphs are aligned as you want. Check that your font displays joined Urdu letters and that the document is saved as .docx. If you are sharing the file, reopen it or export a PDF to inspect how the text looks on another device. With these settings in place, you can keep English and Urdu paragraphs together in one document and switch between them as needed.',
+      },
+    ],
+  },
+  {
     slug: 'urdu-phonetic-vs-standard-keyboard',
     title: 'Urdu Phonetic Keyboard vs Standard Urdu Keyboard: What Is the Difference?',
     category: 'Guides',
@@ -368,8 +533,8 @@ export const POSTS: BlogPost[] = [
     readTime: 7,
     publishedAt: '2026-10-22',
     popular: false,
-    image: '/assets/blog/urdu-typing-for-beginners.svg',
-    imageAlt: 'English phonetic keyboard input “slam” shown converting to the Urdu script word سلام on a laptop screen',
+    image: '/assets/blog/how-to-type-urdu-online-english-keyboard.png',
+    imageAlt: 'How to type Urdu online using an English keyboard with Roman Urdu converted into Urdu script',
     moreTools: [
       { label: 'English Typing Test', to: '/test' },
       { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
@@ -715,6 +880,86 @@ export const POSTS: BlogPost[] = [
       {
         heading: 'Frequently Asked Questions',
         body: 'How long does it take to improve typing accuracy? Most people see a measurable shift within two to three weeks of about fifteen focused minutes a day, as long as you correct mistakes instead of repeating them. Can you improve typing accuracy without losing speed? Yes — the accuracy-first reset only slows you temporarily; once the clean movement is automatic, speed returns and then surpasses your old baseline. What is a good typing accuracy target? Hold 97 percent accuracy or above on your normal practice text before you push speed; accuracy below that is where errors become habits. How do I improve typing accuracy on the bottom row? Isolate the Z, X, C, V, B, N, and M keys with slow, deliberate rolls, then integrate them into real words without looking down. Should I practice accuracy or speed first? Accuracy first — speed is the multiplier, but only accuracy makes that multiplier trustworthy.',
+      },
+    ],
+  },
+  {
+    slug: 'improve-typing-accuracy-without-looking-at-keyboard',
+    title: 'How to Improve Typing Accuracy Without Looking at the Keyboard',
+    category: 'Typing Tips',
+    description: 'Learn a beginner-friendly way to keep your eyes on the screen, find the home row by touch, and build accurate typing habits one short practice at a time.',
+    metaTitle: 'How to Improve Typing Accuracy Without Looking | Typeoye',
+    metaDescription: 'Learn how to improve typing accuracy without looking at the keyboard with home-row finger placement, gradual touch typing practice, and a 12-minute routine.',
+    intro: 'If your eyes keep dropping to the keys, typing can feel slow and stop-start. You can build a steadier habit by learning where each finger belongs, using the F and J bumps to orient your hands, and practising short passages while keeping your attention on the text. This guide explains how to practice touch typing for beginners without making speed the first goal.',
+    readTime: 8,
+    publishedAt: '2026-10-25',
+    popular: false,
+    image: '/assets/blog/improve-typing-accuracy-without-looking-at-keyboard.png',
+    imageAlt: 'Learner practicing touch typing with eyes on a computer screen and fingers positioned on the home row',
+    moreTools: [
+      { label: 'English Typing Test', to: '/test' },
+      { label: 'Typing Practice', to: '/practice' },
+      { label: 'Home Row Technique', to: '/blog/home-row-technique' },
+      { label: 'Typing Accuracy Exercises', to: '/blog/typing-accuracy-exercises' },
+      { label: 'How to Increase Typing Speed', to: '/blog/typing-speed-tips' },
+    ],
+    pullQuote: 'Keep your eyes on the text and let accurate finger movements become familiar through calm repetition.',
+    cta: {
+      heading: 'Build a daily typing habit',
+      blurb: 'Practise a short drill, check your accuracy, and repeat the keys that need more attention.',
+      label: 'Open Typing Practice',
+      to: '/practice',
+    },
+    content: [
+      {
+        heading: 'Why practice typing without looking?',
+        body: 'When you look down for each key, your attention has to move between the keyboard and the text. That can interrupt your reading and make it harder to notice a typo as it happens. Touch typing means using a consistent finger map and the feel of the keyboard to find keys while your eyes stay on the text or screen. It is a skill built gradually, not a test of how long you can keep your eyes shut. A brief glance is fine when you are learning a new key; return your gaze to the text, reset your fingers, and continue. The goal is to make ordinary words and key transitions feel more familiar through accurate repetition.',
+      },
+      {
+        heading: 'Set up your hands and posture first',
+        body: 'Sit so you can reach the keys without stretching your shoulders. Keep your back supported, elbows relaxed near your sides, and wrists in a neutral position rather than sharply bent or pressed hard into the desk. Let your fingers curve naturally over the keys. Keep each keystroke light; pressing harder does not make a letter more correct. Adjust your chair or keyboard if your shoulders rise or your hands feel strained. A comfortable position helps you repeat the same movements during practice. If you feel pain or numbness, stop and adjust your setup before continuing.',
+      },
+      {
+        heading: 'Find the home-row keys by touch',
+        body: 'On a standard QWERTY keyboard, rest the fingers of your left hand on A, S, D, and F, and the fingers of your right hand on J, K, L, and the semicolon key. Your thumbs can rest lightly near the space bar. The small raised marks on F and J help your index fingers find their starting points without looking. Start every short drill from this position. After reaching for another key, bring the finger back to its home key so your hand can reorient. The home row is a reference point, not a rigid pose: keep your hands relaxed and let the correct finger move to its assigned key. For a visual walkthrough, see Typeoye’s Home Row Technique guide.',
+      },
+      {
+        heading: 'Use the same finger for each key',
+        body: 'A consistent finger map gives your hands a repeatable route across the keyboard. In the usual touch-typing layout, each finger handles a nearby vertical group of keys: the left little finger reaches the left edge, the left ring and middle fingers cover the next columns, and the left index finger covers the center-left keys. The right index finger handles the center-right group, with the other right fingers covering the remaining columns and punctuation. Thumbs usually share the space bar. Different keyboards and teaching charts can vary slightly, so follow one clear layout instead of changing finger assignments from drill to drill. Practise a few home-row pairs such as “as,” “fd,” “jk,” and “l;” slowly. Focus on returning each finger to its home position and keeping the other fingers relaxed.',
+      },
+      {
+        heading: 'Keep your eyes on the text while you learn',
+        body: 'Begin with a short row or familiar word that uses keys you already know. Read the prompt, place your hands on the home row using the F and J bumps, then type slowly while looking at the text. If you lose a key, pause, feel for the bumps, and reset your fingers rather than searching across the keyboard. You may glance down briefly when learning a new reach, but avoid turning each keystroke into a look-down, look-up cycle. Add one new row or a few new words at a time. Once the movement feels less uncertain, keep your eyes up for a slightly longer phrase. This gradual approach is more useful than covering the keyboard immediately and guessing through an entire paragraph.',
+      },
+      {
+        heading: 'Common typing mistakes that interrupt accuracy',
+        body: 'Looking down after every letter is one common habit, but rushing through familiar text can also create avoidable errors. Other problems include using one finger for many keys, reaching with the wrong hand, failing to return to the home row, hitting neighboring keys with tense fingers, and correcting a typo without noticing what caused it. Changing keyboards or finger maps frequently can make recall less consistent. When you make a mistake, correct it and identify the movement that missed; do not repeat the same incorrect pattern quickly just to finish the line. If your shoulders or wrists tense up, slow down and reset your posture. Short, focused practice lets you work on a specific weak key or transition instead of repeating every typing mistake in a long session.',
+      },
+      {
+        heading: 'A practical 12-minute daily touch typing routine',
+        body: 'Use a short routine that fits into an ordinary day. Minutes 0–2: settle your posture, place your index fingers on F and J, and type a few slow home-row pairs. Minutes 2–5: practise a small group of words that use the keys you are learning; keep your eyes on the prompt and return your fingers to home row between words. Minutes 5–8: type two or three short sentences at a controlled pace, including spaces and punctuation. Minutes 8–10: repeat the key or word pattern that caused the most mistakes, slowly and accurately. Minutes 10–12: take a short typing accuracy test or timed passage and note what went wrong. If you have 15 minutes, spend the final three reviewing the result and repeating the weakest transition. Stop while your hands still feel relaxed. The routine is practice, not a benchmark: adjust the length or difficulty so you can pay attention to each movement.',
+      },
+      {
+        heading: 'Measure accuracy before increasing speed',
+        body: 'A typing accuracy test can show where your practice is helping and where you still hesitate. Use a similar length and difficulty when comparing sessions, and look beyond the overall score: note missed letters, neighboring-key hits, extra spaces, or punctuation errors. Correct the text, then repeat only the problem words or transitions at a slower pace. Accuracy and speed are related but different measures. If speeding up causes a cluster of errors, return to a pace where you can type cleanly and build from there. Do not treat one result as a fixed rating of your ability; it is feedback from one passage, on one keyboard, during one session. A simple log of date, passage, accuracy, and one focus key can help you choose what to practise next.',
+      },
+      {
+        heading: 'Improve typing accuracy and speed gradually',
+        body: 'Once you can type a familiar phrase without frequent glances, add a little more text or a slightly less familiar passage. Keep the same finger assignments and light touch. Raise the pace only when your current speed feels controlled and your accuracy remains steady across more than one attempt. If the new pace leads to repeated errors, slow down and practise the difficult transitions before trying again. This is how to reduce typing errors while still making progress: first make the movement clear, then repeat it, then let speed grow from familiarity. Avoid racing the clock in every session. Some days should focus on clean movement; occasional timed practice helps you learn to maintain that movement under a countdown.',
+      },
+      {
+        heading: 'Practice with Typeoye’s English Typing Test and Practice pages',
+        body: 'Typeoye’s English Typing Test gives you a timed passage and a way to review your accuracy and speed after each attempt. Use it occasionally to check how well you can keep your eyes on the text, then use Typing Practice for shorter, repeatable sessions focused on comfortable key movement. Choose a drill you can complete calmly, record the result, and return to the keys that need work. The test can help you measure practice progress, while regular practice helps you build the underlying habit. Neither result replaces the technique: start with your hands on the home row, look at the prompt, and type with deliberate finger movements.',
+        guide: 'english-typing-links',
+      },
+      {
+        heading: 'Frequently asked questions',
+        body: 'These answers cover common beginner questions about learning touch typing and building accuracy.',
+        guide: 'typing-accuracy-faqs',
+      },
+      {
+        heading: 'Make accurate typing your repeatable habit',
+        body: 'Learning to type without looking takes patience, but each short session gives your hands a chance to practise the same clear movements. Return to the home row, keep your eyes on the text, correct mistakes thoughtfully, and build speed only when your accuracy can keep up. If a key or transition keeps causing trouble, make it the focus of tomorrow’s drill. A calm 10–15 minute routine can fit around school, work, or other practice, and Typeoye’s test and practice pages can help you observe your progress along the way.',
       },
     ],
   },

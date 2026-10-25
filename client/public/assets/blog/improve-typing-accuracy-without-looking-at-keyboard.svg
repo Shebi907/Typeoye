@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Improve typing accuracy without looking at the keyboard</title>
+  <desc id="desc">A learner keeps their eyes on a computer screen while their fingers rest on the home row of a keyboard.</desc>
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eef6ff"/><stop offset="1" stop-color="#dce9f5"/></linearGradient>
+    <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e8c49b"/><stop offset="1" stop-color="#c28c63"/></linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#f3f8fd"/></linearGradient>
+    <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#367db8"/><stop offset="1" stop-color="#28548b"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="145%" height="155%"><feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#213b56" flood-opacity=".18"/></filter>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="18"/></filter>
+  </defs>
+
+  <!-- Soft morning light in a calm home workspace -->
+  <rect width="1600" height="900" fill="url(#wall)"/>
+  <circle cx="1320" cy="76" r="210" fill="#fff" opacity=".35"/>
+  <rect x="72" y="74" width="356" height="442" rx="26" fill="#c7dceb"/>
+  <rect x="91" y="93" width="318" height="404" rx="16" fill="#f2f9ff"/>
+  <path d="M242 93v404M91 291h318" stroke="#c7dceb" stroke-width="13"/>
+  <path d="M100 273c43-81 89-95 141-37v49H100zM255 253c43-72 94-79 144-25v57H255zM99 476c36-73 86-83 142-27v48H99z" fill="#abd4c1"/>
+  <rect y="605" width="1600" height="295" fill="#d8e2e9"/>
+  <ellipse cx="930" cy="731" rx="680" ry="104" fill="#2c4861" opacity=".1" filter="url(#soft)"/>
+
+  <!-- Desk -->
+  <path d="M0 660 1600 623v277H0z" fill="url(#desk)"/>
+  <path d="M0 686 1600 648" stroke="#f3d5af" stroke-width="9" opacity=".68"/>
+  <path d="M0 845 1600 807" stroke="#9d704f" stroke-width="3" opacity=".2"/>
+
+  <!-- Display: eyes stay on the passage, with no distracting score claims -->
+  <g filter="url(#shadow)">
+    <rect x="563" y="91" width="913" height="535" rx="29" fill="#26384e"/>
+    <rect x="582" y="110" width="875" height="496" rx="17" fill="url(#screen)"/>
+    <circle cx="1019" cy="100" r="4" fill="#8ca0b3"/>
+    <rect x="583" y="111" width="873" height="58" rx="17" fill="#f8fbfe"/>
+    <path d="M583 152h873v17H583z" fill="#f8fbfe"/>
+    <circle cx="616" cy="140" r="8" fill="#397bd0"/>
+    <text x="637" y="147" fill="#294563" font-family="Inter,Arial,sans-serif" font-size="18" font-weight="700">Typing practice</text>
+    <rect x="1293" y="126" width="129" height="28" rx="14" fill="#e8f3ff"/>
+    <circle cx="1312" cy="140" r="5" fill="#35a582"/>
+    <text x="1324" y="145" fill="#54738f" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="700">PRACTICE MODE</text>
+    <rect x="627" y="199" width="784" height="353" rx="20" fill="#fff" stroke="#e1eaf2" stroke-width="2"/>
+    <rect x="662" y="225" width="170" height="28" rx="14" fill="#eaf4ff"/>
+    <text x="747" y="244" text-anchor="middle" fill="#4a79a5" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="700" letter-spacing=".7">KEEP A STEADY RHYTHM</text>
+    <text x="684" y="311" fill="#173955" font-family="Inter,Arial,sans-serif" font-size="27" font-weight="600">Keep your eyes on the text.</text>
+    <text x="684" y="367" fill="#345873" font-family="Inter,Arial,sans-serif" font-size="25">Let each finger return to its home key.</text>
+    <text x="684" y="423" fill="#345873" font-family="Inter,Arial,sans-serif" font-size="25">Accuracy grows with calm, careful practice.</text>
+    <path d="M684 455h3v45h-3z" fill="#3288df"/>
+    <path d="M662 519h714" stroke="#edf1f5" stroke-width="2"/>
+    <circle cx="684" cy="538" r="5" fill="#6ba3d5"/>
+    <circle cx="703" cy="538" r="5" fill="#c9d8e6"/>
+    <circle cx="722" cy="538" r="5" fill="#c9d8e6"/>
+    <text x="1368" y="543" text-anchor="end" fill="#8597a8" font-family="Inter,Arial,sans-serif" font-size="13">Sentence 1 of 3</text>
+    <rect x="946" y="627" width="146" height="29" rx="8" fill="#50647a"/>
+    <path d="M876 656h285l45 25H830z" fill="#71869a"/>
+  </g>
+
+  <!-- Learner in profile, looking at the screen -->
+  <g>
+    <!-- chair -->
+    <path d="M266 469c-6-65 27-103 88-111h79c50 10 66 53 57 112l-21 154H282z" fill="#7e94a6"/>
+    <path d="M319 605v91M439 604v92M306 704h163" stroke="#647c91" stroke-width="15" stroke-linecap="round"/>
+    <!-- torso -->
+    <path d="M201 558c38-53 94-76 160-70 81 8 123 53 138 139l10 165H129l19-150c6-37 23-65 53-84z" fill="url(#shirt)"/>
+    <path d="M291 503c12 48 45 80 86 100l-29 65c-51-24-91-62-111-111z" fill="#58a9a5" opacity=".85"/>
+    <!-- neck and face -->
+    <path d="M300 374v105c33 31 78 32 113 2V365z" fill="#bd805f"/>
+    <ellipse cx="350" cy="324" rx="106" ry="127" fill="#ca8b69"/>
+    <path d="M244 322c-14-85 18-158 91-177 62-17 128 12 149 74 14 42 4 100-17 140l-29-9c11-57-3-106-42-121-23 40-69 70-152 77z" fill="#28384c"/>
+    <path d="M258 246c17-73 62-111 127-111 55 0 100 29 116 77-47-15-91-15-131 3-35 16-68 31-112 31z" fill="#28384c"/>
+    <path d="M439 297c17-9 33-10 48-3" fill="none" stroke="#60423a" stroke-width="7" stroke-linecap="round"/>
+    <ellipse cx="463" cy="313" rx="6" ry="5" fill="#233b4d"/>
+    <path d="M478 351c14 9 28 8 39-2" fill="none" stroke="#8b5148" stroke-width="5" stroke-linecap="round"/>
+    <path d="M509 335q13 9 20 1" fill="none" stroke="#b16f53" stroke-width="4" stroke-linecap="round"/>
+    <!-- relaxed arms moving toward home row -->
+    <path d="M251 605c88 5 181 26 286 69l-18 53c-114-25-203-35-300-52z" fill="#ca8b69"/>
+    <path d="M419 631c85-1 174 8 265 29l-14 56c-100-9-172-10-258 1z" fill="#d09572"/>
+    <path d="M657 658c17-7 36-7 56-3l12 6-8 15c-19-1-34 1-51 8l-18-10z" fill="#ca8b69"/>
+    <path d="M606 695c17-6 36-6 54-2l11 7-9 14c-19-1-33 1-49 8l-18-11z" fill="#d09572"/>
+  </g>
+
+  <!-- Keyboard: tactile F and J markers, home row softly highlighted -->
+  <g filter="url(#shadow)" transform="translate(610 714) skewX(-5)">
+    <rect width="705" height="146" rx="19" fill="#26384d"/>
+    <g fill="#dce7f0">
+      <rect x="18" y="16" width="39" height="24" rx="5"/><rect x="63" y="16" width="39" height="24" rx="5"/><rect x="108" y="16" width="39" height="24" rx="5"/><rect x="153" y="16" width="39" height="24" rx="5"/><rect x="198" y="16" width="39" height="24" rx="5"/><rect x="243" y="16" width="39" height="24" rx="5"/><rect x="288" y="16" width="39" height="24" rx="5"/><rect x="333" y="16" width="39" height="24" rx="5"/><rect x="378" y="16" width="39" height="24" rx="5"/><rect x="423" y="16" width="39" height="24" rx="5"/><rect x="468" y="16" width="39" height="24" rx="5"/><rect x="513" y="16" width="39" height="24" rx="5"/><rect x="558" y="16" width="128" height="24" rx="5"/>
+      <rect x="18" y="48" width="57" height="25" rx="5"/><rect x="81" y="48" width="39" height="25" rx="5"/><rect x="126" y="48" width="39" height="25" rx="5"/><rect x="171" y="48" width="39" height="25" rx="5"/><rect x="216" y="48" width="39" height="25" rx="5"/><rect x="261" y="48" width="39" height="25" rx="5"/><rect x="306" y="48" width="39" height="25" rx="5"/><rect x="351" y="48" width="39" height="25" rx="5"/><rect x="396" y="48" width="39" height="25" rx="5"/><rect x="441" y="48" width="39" height="25" rx="5"/><rect x="486" y="48" width="39" height="25" rx="5"/><rect x="531" y="48" width="155" height="25" rx="5"/>
+      <rect x="18" y="81" width="72" height="28" rx="6"/><rect x="96" y="81" width="43" height="28" rx="6" fill="#7cb5e5"/><rect x="145" y="81" width="43" height="28" rx="6" fill="#7cb5e5"/><rect x="194" y="81" width="43" height="28" rx="6" fill="#7cb5e5"/><rect x="243" y="81" width="43" height="28" rx="6" fill="#7cb5e5"/><rect x="292" y="81" width="43" height="28" rx="6" fill="#7cb5e5"/><rect x="341" y="81" width="43" height="28" rx="6" fill="#7cb5e5"/><rect x="390" y="81" width="43" height="28" rx="6" fill="#7cb5e5"/><rect x="439" y="81" width="43" height="28" rx="6" fill="#7cb5e5"/><rect x="488" y="81" width="43" height="28" rx="6" fill="#7cb5e5"/><rect x="537" y="81" width="149" height="28" rx="6"/>
+      <rect x="18" y="117" width="82" height="18" rx="5"/><rect x="106" y="117" width="48" height="18" rx="5"/><rect x="160" y="117" width="48" height="18" rx="5"/><rect x="214" y="117" width="277" height="18" rx="5"/><rect x="497" y="117" width="48" height="18" rx="5"/><rect x="551" y="117" width="48" height="18" rx="5"/><rect x="605" y="117" width="81" height="18" rx="5"/>
+    </g>
+    <g fill="#39566f" font-family="Arial,sans-serif" font-size="12" font-weight="700">
+      <text x="112" y="100">A</text><text x="161" y="100">S</text><text x="210" y="100">D</text><text x="259" y="100">F</text><text x="308" y="100">J</text><text x="357" y="100">K</text><text x="406" y="100">L</text><text x="455" y="100">;</text>
+    </g>
+    <path d="M266 85v5M315 85v5" stroke="#436f98" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <!-- Sleeves and hands rest lightly over the highlighted row -->
+  <path d="M0 744c74-23 131-18 190 10 52 24 98 31 146 17l70-20c25-7 46 2 51 20 4 16-6 29-25 36l-93 33H0z" fill="url(#shirt)"/>
+  <path d="M368 759c22-16 43-18 62-9 14 7 23 15 39 15l45 1c20 1 28 12 23 24-4 12-17 16-36 16h-68c-31 0-53-15-65-47z" fill="#ca8b69"/>
+  <path d="M1290 754c64-36 127-42 195-20 44 15 84 39 115 69v97h-329l-43-70c-9-27 15-58 62-76z" fill="url(#shirt)"/>
+  <path d="M1294 754c-24-7-48-3-63 8-13 10-11 22 2 30l51 27c20 11 45 13 69 5l47-17c16-6 20-18 8-29-15-14-38-17-59-10l-41 12z" fill="#d09572"/>
+</svg>

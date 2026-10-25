@@ -137,7 +137,11 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
               )}
               style={{
                 borderColor: 'var(--color-border)',
-                aspectRatio: post.slug === 'urdu-phonetic-keyboard-layout' ? undefined : post.slug === 'how-to-type-urdu-online-english-keyboard' ? '16 / 9' : '16 / 8',
+                aspectRatio: post.slug === 'urdu-phonetic-keyboard-layout'
+                  ? undefined
+                  : post.slug === 'how-to-type-urdu-online-english-keyboard' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard'
+                    ? '16 / 9'
+                    : '16 / 8',
               }}
             >
               {post.slug === 'urdu-phonetic-keyboard-layout' ? (
@@ -178,6 +182,9 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                       {section.guide === 'gov-prep-mistakes' && <GovernmentTypingMistakes />}
                       {section.guide === 'gov-prep-faqs' && <GovernmentTypingFaqs />}
                       {section.guide === 'gov-official-example' && <GovernmentOfficialExample />}
+                      {section.guide === 'ms-word-faqs' && <MsWordFaqs />}
+                      {section.guide === 'english-typing-links' && <EnglishTypingLinks />}
+                      {section.guide === 'typing-accuracy-faqs' && <TypingAccuracyFaqs />}
                     </section>
 
                     {index === pullQuoteIndex && post.pullQuote && (
@@ -450,6 +457,65 @@ function GovernmentTypingFaqs() {
     <h3 className="text-base font-bold" style={{ color: 'var(--color-text-primary)' }}>{question}</h3>
     <p className="mt-1 text-[1.0625rem] leading-[1.75]" style={{ color: 'var(--color-text-secondary)' }}>{answer}</p>
   </div>)}</div>;
+}
+
+function MsWordFaqs() {
+  const faqs = [
+    ['Can I type Urdu in Word while keeping Windows in English?', 'Yes. Add an Urdu keyboard in Windows and switch to it when you need Urdu. You can keep the Windows display language and Word menus in English.'],
+    ['Does right alignment make a paragraph right-to-left?', 'No. Right alignment places text at the right margin; paragraph direction controls the reading and typing order. Set both for an Urdu paragraph when needed.'],
+    ['Why do my Urdu letters look disconnected in Word?', 'Check that the text is Unicode and that the selected font supports Urdu shaping. A missing or unsuitable font, or text copied from a legacy encoding, can change how letters appear.'],
+    ['Which font should I use for Urdu in Word?', 'Choose an installed Unicode font that supports Urdu glyphs and shaping. Noto Nastaliq Urdu and Noto Naskh Arabic are examples; availability varies by computer.'],
+    ['Is the built-in Windows Urdu keyboard phonetic?', 'Not necessarily. Windows may offer a different Urdu layout. Check the selected layout and key positions, and install a trusted compatible phonetic input method if that is what you want to use.'],
+  ];
+  return (
+    <div className="mt-6 space-y-5">
+      {faqs.map(([question, answer]) => (
+        <div key={question}>
+          <h3 className="text-base font-bold" style={{ color: 'var(--color-text-primary)' }}>{question}</h3>
+          <p className="mt-1 text-[1.0625rem] leading-[1.75]" style={{ color: 'var(--color-text-secondary)' }}>{answer}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function EnglishTypingLinks() {
+  return (
+    <aside className="mt-6 rounded-2xl border p-5 sm:p-6" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }}>
+      <h3 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)' }}>Practise and check your progress</h3>
+      <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+        Use a short drill to focus on clean finger movement, then take a timed test to review accuracy and speed.
+      </p>
+      <div className="mt-4 flex flex-wrap gap-3 text-sm font-semibold">
+        <Link to="/test" className="rounded-lg px-4 py-2 text-white" style={{ background: 'linear-gradient(135deg, #4361EE 0%, #7C3AED 100%)' }}>
+          English Typing Test
+        </Link>
+        <Link to="/practice" className="rounded-lg border px-4 py-2" style={{ borderColor: 'var(--color-border)', color: 'var(--color-accent-text)' }}>
+          Typing Practice
+        </Link>
+      </div>
+    </aside>
+  );
+}
+
+function TypingAccuracyFaqs() {
+  const faqs = [
+    ['How can I practice touch typing as a beginner?', 'Start with the home row and one small group of keys. Use the F and J bumps to place your hands, type slowly while looking at the prompt, and add a few new keys only when the current ones feel familiar.'],
+    ['Should I cover my keyboard to stop looking?', 'You do not need to cover it at the start. Learn the home row and use the tactile F and J markers first. If you later try covering the keys, do it for a short, simple drill and stop if it makes you tense or guess.'],
+    ['How do I reduce typing errors without slowing down permanently?', 'Slow down long enough to practise the correct finger movement, identify repeated mistakes, and work on the problem keys. Increase pace gradually after the movement becomes more reliable.'],
+    ['What is a typing accuracy test useful for?', 'It provides feedback on a particular passage or session. Compare similar practice rounds and review the errors, rather than treating one score as a permanent measure of your ability.'],
+    ['Should I focus on speed or accuracy first?', 'Build a comfortable, accurate rhythm first. If a faster pace causes frequent errors, return to the clean pace and practise the difficult transitions before increasing speed again.'],
+  ];
+  return (
+    <div className="mt-6 space-y-5">
+      {faqs.map(([question, answer]) => (
+        <div key={question}>
+          <h3 className="text-base font-bold" style={{ color: 'var(--color-text-primary)' }}>{question}</h3>
+          <p className="mt-1 text-[1.0625rem] leading-[1.75]" style={{ color: 'var(--color-text-secondary)' }}>{answer}</p>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 function GovernmentOfficialExample() {
