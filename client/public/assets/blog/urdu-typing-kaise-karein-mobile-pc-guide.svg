@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Urdu typing on mobile and PC</title>
+  <desc id="desc">A smartphone and laptop show Urdu script while a learner types with an Urdu keyboard on each device.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#edf6ff"/><stop offset="1" stop-color="#d8e6f2"/></linearGradient>
+    <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e9c89e"/><stop offset="1" stop-color="#c18b61"/></linearGradient>
+    <linearGradient id="phoneFrame" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#384c66"/><stop offset="1" stop-color="#1c2d43"/></linearGradient>
+    <linearGradient id="laptopFrame" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#35475c"/><stop offset="1" stop-color="#1d2a3a"/></linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2=".9" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#f3f8fd"/></linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3185dc"/><stop offset="1" stop-color="#6950e7"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="145%" height="155%"><feDropShadow dx="0" dy="18" stdDeviation="21" flood-color="#243c56" flood-opacity=".2"/></filter>
+    <filter id="soft" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="20"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1300" cy="108" r="240" fill="#fff" opacity=".38"/>
+  <rect y="615" width="1600" height="285" fill="#d7e1e8"/>
+  <ellipse cx="860" cy="740" rx="690" ry="100" fill="#263e55" opacity=".1" filter="url(#soft)"/>
+
+  <!-- Soft window light and a small plant -->
+  <rect x="72" y="74" width="310" height="420" rx="24" fill="#c6dbea"/>
+  <rect x="91" y="93" width="272" height="382" rx="15" fill="#f3faff"/>
+  <path d="M222 93v382M91 279h272" stroke="#c6dbea" stroke-width="12"/>
+  <path d="M101 264c35-71 76-82 121-34v49H101zM234 254c34-61 75-68 119-25v50H234z" fill="#acd5c2"/>
+  <path d="M0 658 1600 621v279H0z" fill="url(#desk)"/>
+  <path d="M0 684 1600 647" stroke="#f5d8b3" stroke-width="9" opacity=".7"/>
+  <g transform="translate(1430 490)">
+    <path d="M58 120c-2-74-11-132-27-182M62 98c32-45 59-67 98-82M53 83C22 48 3 17-14-24M48 59c-6-50 1-85 23-117" fill="none" stroke="#4d8b69" stroke-width="8" stroke-linecap="round"/>
+    <path d="M32 1C-5 0-28-26-24-59 9-61 36-39 32 1zM98 39c6-38 32-66 68-69 0 34-24 62-68 69zM72-35c-28-25-27-57-4-82 29 18 37 50 4 82z" fill="#67a980"/>
+    <path d="M8 113h107l-13 84H21z" fill="#f7fafc"/><ellipse cx="61" cy="114" rx="54" ry="13" fill="#d4dfe6"/><ellipse cx="61" cy="117" rx="42" ry="8" fill="#76583f"/>
+  </g>
+
+  <!-- Smartphone with Urdu keyboard -->
+  <g filter="url(#shadow)" transform="rotate(-5 315 425)">
+    <rect x="108" y="147" width="401" height="568" rx="46" fill="url(#phoneFrame)"/>
+    <rect x="123" y="163" width="371" height="536" rx="35" fill="#101c2c"/>
+    <rect x="137" y="182" width="343" height="500" rx="27" fill="url(#screen)"/>
+    <rect x="245" y="170" width="132" height="15" rx="8" fill="#111d2d"/>
+    <text x="159" y="221" fill="#294760" font-family="Inter,Arial,sans-serif" font-size="15" font-weight="700">MOBILE</text>
+    <circle cx="449" cy="215" r="5" fill="#31a27f"/>
+    <rect x="157" y="243" width="303" height="204" rx="17" fill="#fff" stroke="#e1eaf2" stroke-width="2"/>
+    <rect x="175" y="260" width="108" height="23" rx="12" fill="#e9f4ff"/>
+    <text x="229" y="276" text-anchor="middle" fill="#4777a2" font-family="Inter,Arial,sans-serif" font-size="10" font-weight="700">URDU MESSAGE</text>
+    <text x="432" y="328" text-anchor="end" direction="rtl" fill="#173b62" font-family="'Noto Nastaliq Urdu','Noto Naskh Arabic',serif" font-size="27">السلام علیکم</text>
+    <text x="432" y="373" text-anchor="end" direction="rtl" fill="#345b80" font-family="'Noto Nastaliq Urdu','Noto Naskh Arabic',serif" font-size="22">آپ کیسے ہیں؟</text>
+    <path d="M426 389v24" stroke="#3888d6" stroke-width="2.5" stroke-linecap="round"/>
+    <rect x="153" y="463" width="311" height="196" rx="15" fill="#e8eef5"/>
+    <rect x="168" y="478" width="281" height="30" rx="8" fill="#d8e3ee"/>
+    <text x="307" y="498" text-anchor="middle" fill="#547089" font-family="'Noto Nastaliq Urdu','Noto Naskh Arabic',serif" font-size="17">اردو کی بورڈ</text>
+    <g fill="#fff" stroke="#d1dce6" stroke-width="1">
+      <rect x="168" y="516" width="34" height="29" rx="5"/><rect x="208" y="516" width="34" height="29" rx="5"/><rect x="248" y="516" width="34" height="29" rx="5"/><rect x="288" y="516" width="34" height="29" rx="5"/><rect x="328" y="516" width="34" height="29" rx="5"/><rect x="368" y="516" width="34" height="29" rx="5"/><rect x="408" y="516" width="41" height="29" rx="5"/>
+      <rect x="178" y="552" width="34" height="29" rx="5"/><rect x="218" y="552" width="34" height="29" rx="5"/><rect x="258" y="552" width="34" height="29" rx="5"/><rect x="298" y="552" width="34" height="29" rx="5"/><rect x="338" y="552" width="34" height="29" rx="5"/><rect x="378" y="552" width="34" height="29" rx="5"/><rect x="418" y="552" width="31" height="29" rx="5"/>
+      <rect x="188" y="588" width="41" height="29" rx="5"/><rect x="235" y="588" width="41" height="29" rx="5"/><rect x="282" y="588" width="76" height="29" rx="5"/><rect x="364" y="588" width="41" height="29" rx="5"/><rect x="411" y="588" width="38" height="29" rx="5"/>
+    </g>
+    <text x="307" y="639" text-anchor="middle" fill="#6382a0" font-family="Inter,Arial,sans-serif" font-size="12">space</text>
+  </g>
+
+  <!-- Laptop showing an Urdu document and phonetic example -->
+  <g filter="url(#shadow)">
+    <rect x="575" y="91" width="909" height="543" rx="28" fill="url(#laptopFrame)"/>
+    <rect x="595" y="111" width="869" height="503" rx="17" fill="url(#screen)"/>
+    <circle cx="1029" cy="100" r="4" fill="#8297ab"/>
+    <rect x="595" y="111" width="869" height="54" rx="17" fill="#fff"/>
+    <path d="M595 148h869v17H595z" fill="#fff"/>
+    <circle cx="629" cy="138" r="8" fill="#477fd0"/>
+    <text x="649" y="144" fill="#38546e" font-family="Inter,Arial,sans-serif" font-size="17" font-weight="700">Urdu typing practice</text>
+    <rect x="1281" y="124" width="147" height="27" rx="14" fill="#e8f4ee"/>
+    <circle cx="1299" cy="137" r="5" fill="#32a47d"/>
+    <text x="1311" y="142" fill="#477761" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="700">PC · URDU INPUT</text>
+    <rect x="630" y="191" width="798" height="354" rx="20" fill="#fff" stroke="#e1eaf2" stroke-width="2"/>
+    <rect x="662" y="214" width="145" height="25" rx="12" fill="#edf5ff"/>
+    <text x="734" y="231" text-anchor="middle" fill="#4d7aa3" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing=".5">RIGHT-TO-LEFT TEXT</text>
+    <text x="1393" y="302" text-anchor="end" direction="rtl" fill="#173b61" font-family="'Noto Nastaliq Urdu','Noto Naskh Arabic',serif" font-size="32">اردو لکھنا آسان ہے</text>
+    <text x="1393" y="354" text-anchor="end" direction="rtl" fill="#315a7d" font-family="'Noto Nastaliq Urdu','Noto Naskh Arabic',serif" font-size="25">اپنی پسند کا کی بورڈ منتخب کریں۔</text>
+    <text x="1393" y="402" text-anchor="end" direction="rtl" fill="#315a7d" font-family="'Noto Nastaliq Urdu','Noto Naskh Arabic',serif" font-size="25">روزانہ تھوڑی مشق سے روانی بہتر ہوتی ہے۔</text>
+    <path d="M661 435h733" stroke="#e8eef4" stroke-width="2"/>
+    <text x="667" y="475" fill="#70859a" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700">PHONETIC EXAMPLE</text>
+    <rect x="662" y="489" width="326" height="38" rx="10" fill="#edf5ff"/>
+    <text x="679" y="514" fill="#527394" font-family="Inter,Arial,sans-serif" font-size="16">slam</text>
+    <path d="M755 508h48m-12-10 12 10-12 10" fill="none" stroke="#4285d1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="959" y="518" text-anchor="end" direction="rtl" fill="#17456e" font-family="'Noto Nastaliq Urdu','Noto Naskh Arabic',serif" font-size="23">سلام</text>
+    <rect x="982" y="489" width="122" height="38" rx="10" fill="#eaf5ef"/>
+    <text x="1043" y="514" text-anchor="middle" fill="#408065" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="700">KEY MAP</text>
+    <rect x="958" y="634" width="139" height="24" rx="7" fill="#53687d"/>
+    <path d="M831 658h394l52 25H778z" fill="#71869a"/>
+  </g>
+
+  <!-- Full keyboard in front of the laptop -->
+  <g filter="url(#shadow)" transform="translate(740 704) skewX(-5)">
+    <rect width="632" height="142" rx="18" fill="#27384d"/>
+    <g fill="#e0e9f1">
+      <rect x="17" y="15" width="35" height="23" rx="5"/><rect x="57" y="15" width="35" height="23" rx="5"/><rect x="97" y="15" width="35" height="23" rx="5"/><rect x="137" y="15" width="35" height="23" rx="5"/><rect x="177" y="15" width="35" height="23" rx="5"/><rect x="217" y="15" width="35" height="23" rx="5"/><rect x="257" y="15" width="35" height="23" rx="5"/><rect x="297" y="15" width="35" height="23" rx="5"/><rect x="337" y="15" width="35" height="23" rx="5"/><rect x="377" y="15" width="35" height="23" rx="5"/><rect x="417" y="15" width="35" height="23" rx="5"/><rect x="457" y="15" width="35" height="23" rx="5"/><rect x="497" y="15" width="118" height="23" rx="5"/>
+      <rect x="17" y="46" width="51" height="24" rx="5"/><rect x="74" y="46" width="35" height="24" rx="5"/><rect x="114" y="46" width="35" height="24" rx="5"/><rect x="154" y="46" width="35" height="24" rx="5"/><rect x="194" y="46" width="35" height="24" rx="5"/><rect x="234" y="46" width="35" height="24" rx="5"/><rect x="274" y="46" width="35" height="24" rx="5"/><rect x="314" y="46" width="35" height="24" rx="5"/><rect x="354" y="46" width="35" height="24" rx="5"/><rect x="394" y="46" width="35" height="24" rx="5"/><rect x="434" y="46" width="35" height="24" rx="5"/><rect x="474" y="46" width="141" height="24" rx="5"/>
+      <rect x="17" y="78" width="67" height="28" rx="6" fill="#8ac4e8"/><rect x="90" y="78" width="39" height="28" rx="6" fill="#8ac4e8"/><rect x="135" y="78" width="39" height="28" rx="6" fill="#8ac4e8"/><rect x="180" y="78" width="39" height="28" rx="6" fill="#8ac4e8"/><rect x="225" y="78" width="39" height="28" rx="6" fill="#8ac4e8"/><rect x="270" y="78" width="39" height="28" rx="6" fill="#8ac4e8"/><rect x="315" y="78" width="39" height="28" rx="6" fill="#8ac4e8"/><rect x="360" y="78" width="39" height="28" rx="6" fill="#8ac4e8"/><rect x="405" y="78" width="39" height="28" rx="6" fill="#8ac4e8"/><rect x="450" y="78" width="39" height="28" rx="6" fill="#8ac4e8"/><rect x="495" y="78" width="120" height="28" rx="6"/>
+      <rect x="17" y="114" width="77" height="17" rx="5"/><rect x="100" y="114" width="47" height="17" rx="5"/><rect x="153" y="114" width="47" height="17" rx="5"/><rect x="206" y="114" width="214" height="17" rx="5"/><rect x="426" y="114" width="47" height="17" rx="5"/><rect x="479" y="114" width="47" height="17" rx="5"/><rect x="532" y="114" width="83" height="17" rx="5"/>
+    </g>
+    <g fill="#38566f" font-family="Arial,sans-serif" font-size="11" font-weight="700"><text x="100" y="96">A</text><text x="145" y="96">S</text><text x="190" y="96">D</text><text x="235" y="96">F</text><text x="280" y="96">J</text><text x="325" y="96">K</text><text x="370" y="96">L</text><text x="415" y="96">;</text></g>
+  </g>
+
+  <!-- Hands entering Urdu text on both devices -->
+  <path d="M0 784c50-37 111-47 172-29l90 27c25 8 35 27 25 44-8 14-24 18-47 10l-87-28-153 61z" fill="url(#blue)"/>
+  <path d="M206 786c17-17 37-22 56-15 15 5 25 15 42 17l48 6c20 2 27 15 20 27-6 12-19 16-38 13l-69-9c-32-4-52-18-59-39z" fill="#c98d6d"/>
+  <path d="M1302 767c62-41 129-48 199-25 39 13 74 34 99 61v97h-326l-41-62c-11-27 20-55 69-71z" fill="url(#blue)"/>
+  <path d="M1296 762c-25-6-48 0-62 12-12 11-8 23 6 31l50 27c21 11 46 12 69 3l47-20c15-7 17-20 4-30-17-12-41-14-61-6l-39 16z" fill="#d39a79"/>
+</svg>

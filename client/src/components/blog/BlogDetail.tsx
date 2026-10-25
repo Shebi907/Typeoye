@@ -139,7 +139,9 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                 borderColor: 'var(--color-border)',
                 aspectRatio: post.slug === 'urdu-phonetic-keyboard-layout'
                   ? undefined
-                  : post.slug === 'how-to-type-urdu-online-english-keyboard' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard'
+                  : post.slug === 'how-to-type-urdu-mobile-pc-guide'
+                    ? '3 / 2'
+                    : post.slug === 'how-to-type-urdu-online-english-keyboard' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard'
                     ? '16 / 9'
                     : '16 / 8',
               }}
@@ -185,6 +187,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                       {section.guide === 'ms-word-faqs' && <MsWordFaqs />}
                       {section.guide === 'english-typing-links' && <EnglishTypingLinks />}
                       {section.guide === 'typing-accuracy-faqs' && <TypingAccuracyFaqs />}
+                      {section.guide === 'urdu-kaise-faqs' && <UrduKaiseFaqs />}
                     </section>
 
                     {index === pullQuoteIndex && post.pullQuote && (
@@ -505,6 +508,26 @@ function TypingAccuracyFaqs() {
     ['How do I reduce typing errors without slowing down permanently?', 'Slow down long enough to practise the correct finger movement, identify repeated mistakes, and work on the problem keys. Increase pace gradually after the movement becomes more reliable.'],
     ['What is a typing accuracy test useful for?', 'It provides feedback on a particular passage or session. Compare similar practice rounds and review the errors, rather than treating one score as a permanent measure of your ability.'],
     ['Should I focus on speed or accuracy first?', 'Build a comfortable, accurate rhythm first. If a faster pace causes frequent errors, return to the clean pace and practise the difficult transitions before increasing speed again.'],
+  ];
+  return (
+    <div className="mt-6 space-y-5">
+      {faqs.map(([question, answer]) => (
+        <div key={question}>
+          <h3 className="text-base font-bold" style={{ color: 'var(--color-text-primary)' }}>{question}</h3>
+          <p className="mt-1 text-[1.0625rem] leading-[1.75]" style={{ color: 'var(--color-text-secondary)' }}>{answer}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function UrduKaiseFaqs() {
+  const faqs = [
+    ['How do I type Urdu on a Windows PC?', 'Add an Urdu language or keyboard under Settings > Time & language > Language & region, then select its layout from the taskbar or with Windows + Space. Choose a layout that matches how you want to type.'],
+    ['How do I type Urdu on Android or iPhone?', 'Add Urdu in your keyboard settings. Gboard on Android lets you add Urdu under Languages and choose a layout; iPhone has Urdu keyboard options under Settings > General > Keyboard > Keyboards. Switch with the keyboard’s language key.'],
+    ['What is the difference between phonetic and standard Urdu typing?', 'Phonetic typing maps English key sounds to Urdu characters. A standard Urdu layout assigns Urdu characters to fixed key positions that you learn. Both produce Urdu script, but the key positions and input behavior differ.'],
+    ['Will every Roman Urdu word convert automatically?', 'No. A phonetic map follows its own key assignments, and a standard layout types the character on the selected key. Roman Urdu transliteration and phonetic key mapping are different input methods.'],
+    ['Why is my Urdu text going in the wrong direction in Word?', 'Set the paragraph direction to right-to-left, then choose right alignment separately if needed. Right alignment alone does not change the paragraph reading direction.'],
   ];
   return (
     <div className="mt-6 space-y-5">

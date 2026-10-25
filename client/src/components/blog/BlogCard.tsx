@@ -28,11 +28,11 @@ export function BlogCard({ post, variant = 'horizontal' }: BlogCardProps) {
           'relative block shrink-0 overflow-hidden',
           horizontal
             ? cn(
-                post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' ? 'aspect-[16/9]' : 'aspect-[16/10]',
+                post.slug === 'how-to-type-urdu-mobile-pc-guide' ? 'aspect-[3/2]' : post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' ? 'aspect-[16/9]' : 'aspect-[16/10]',
                 'sm:aspect-auto sm:w-56 sm:self-stretch md:w-60 lg:w-72'
               )
             : cn(
-                post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' ? 'aspect-[16/9]' : 'aspect-[16/10]',
+                post.slug === 'how-to-type-urdu-mobile-pc-guide' ? 'aspect-[3/2]' : post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' ? 'aspect-[16/9]' : 'aspect-[16/10]',
                 'w-full'
               )
         )}

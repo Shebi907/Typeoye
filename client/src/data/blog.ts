@@ -4,7 +4,7 @@ export type BlogSort = 'latest' | 'oldest' | 'popular';
 export interface BlogSection {
   heading: string;
   body: string;
-  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs';
+  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs' | 'urdu-kaise-faqs';
 }
 
 export interface BlogPost {
@@ -53,7 +53,7 @@ export const CATEGORY_BADGE: Record<BlogCategory, string> = {
 /** Sidebar category post counts (keep in sync with POSTS). */
 export const CATEGORY_COUNTS: Record<BlogCategory, number> = {
   'Typing Tips': 5,
-  'Guides': 15,
+  'Guides': 16,
   'Practice': 3,
   'Productivity': 3,
   'News & Updates': 1,
@@ -447,6 +447,88 @@ export const POSTS: BlogPost[] = [
       {
         heading: 'A simple checklist for your next document',
         body: 'Before you finish, confirm that Windows is using the Urdu keyboard you intended, Word’s Urdu paragraphs are set to right-to-left, and those paragraphs are aligned as you want. Check that your font displays joined Urdu letters and that the document is saved as .docx. If you are sharing the file, reopen it or export a PDF to inspect how the text looks on another device. With these settings in place, you can keep English and Urdu paragraphs together in one document and switch between them as needed.',
+      },
+    ],
+  },
+  {
+    slug: 'how-to-type-urdu-mobile-pc-guide',
+    title: 'How to Type Urdu – Complete Guide for Mobile and PC',
+    category: 'Guides',
+    description: 'Learn how to type Urdu on Windows, Android, iPhone, and Microsoft Word, compare phonetic and standard keyboards, and practise online with useful examples.',
+    metaTitle: 'How to Type Urdu on Mobile and PC: Complete Guide | Typeoye',
+    metaDescription: 'Learn how to type Urdu on Windows, Android, iPhone, and Word. Compare phonetic and standard keyboards, fix common issues, and practise Urdu online.',
+    intro: 'Learning how to type Urdu on a phone or computer starts with choosing the right input method. You can type directly with a system Urdu keyboard, use a phonetic layout that maps familiar English keys to Urdu characters, or choose a mobile transliteration keyboard where available. This complete guide covers Windows PC, Microsoft Word, Android, and iPhone, with practical Urdu-script examples and a short daily practice plan.',
+    readTime: 9,
+    publishedAt: '2026-10-25',
+    popular: false,
+    image: '/assets/blog/how-to-type-urdu-mobile-pc-guide.png',
+    imageAlt: 'Urdu keyboard on a smartphone and Urdu text in a PC word processor',
+    moreTools: [
+      { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
+      { label: 'Urdu Practice', to: '/urdu-practice' },
+      { label: 'Urdu Learn', to: '/urdu-lessons' },
+      { label: 'Urdu Phonetic Keyboard Layout Guide', to: '/blog/urdu-phonetic-keyboard-layout' },
+      { label: 'Urdu Phonetic vs Standard Keyboard', to: '/blog/urdu-phonetic-vs-standard-keyboard' },
+      { label: 'How to Type Urdu Online Using an English Keyboard', to: '/blog/how-to-type-urdu-online-english-keyboard' },
+      { label: 'How to Type Urdu in MS Word', to: '/blog/how-to-type-urdu-in-ms-word' },
+    ],
+    pullQuote: 'Choose the Urdu keyboard or input method that suits your device, then check that the output is Urdu script before you share it.',
+    cta: {
+      heading: 'Start typing Urdu today',
+      blurb: 'Practise Urdu words, sentences, and longer passages with Typeoye’s free tools.',
+      label: 'Open Urdu Practice',
+      to: '/urdu-practice',
+    },
+    content: [
+      {
+        heading: 'How to type Urdu: choose an input method',
+        body: 'There are three common ways to enter Urdu. A standard Urdu keyboard places Urdu characters on keys you learn by position. A phonetic Urdu keyboard maps English key sounds to Urdu letters, so a familiar QWERTY keyboard can be used as input. A mobile transliteration keyboard lets you enter Roman Urdu and choose or convert it into Urdu script, depending on the keyboard and its settings. These methods can produce the same Urdu writing, but they do not use the same keys or behave the same way. Pick one method for the device and task in front of you. If you are learning for a course, test, or job, follow the layout required for that task rather than assuming every Urdu keyboard is phonetic.',
+      },
+      {
+        heading: 'Enable an Urdu keyboard on a Windows PC',
+        body: 'On Windows 11, open Start > Settings > Time & language > Language & region. Under Preferred languages, select Add a language, search for Urdu, choose the language option you need, then select Next and Install. Installing an Urdu display language is not required just to add a keyboard; keep Windows menus in English if that is more comfortable. If Urdu is already installed, open the three-dot menu beside it, select Language options, and check the installed keyboard list. Use Add a keyboard to choose an available Urdu layout. To switch input methods, select the language indicator on the taskbar or hold the Windows key and press Space until the Urdu layout is selected. Type a short test in a text field to confirm which layout is active before starting a longer document.',
+      },
+      {
+        heading: 'Use Urdu phonetic typing on a PC',
+        body: 'With phonetic typing, an English key is assigned to an Urdu sound or character. Type the sequence shown by that particular phonetic map; do not expect the keyboard to translate every casual Roman Urdu spelling automatically. In Typeoye’s current map, “slam” produces سلام, “ktab” produces کتاب, and “Ap ki ktab” produces آپ کی کتاب. Capital A uses the mapped Shift character. These examples illustrate that a phonetic layout follows its own key map, which may differ from another Urdu input method. You can use Typeoye’s Urdu Phonetic Keyboard Layout Guide to learn the exact supported keys. When a result looks unexpected, check the selected input method and compare each keystroke with its map.',
+      },
+      {
+        heading: 'Phonetic Urdu keyboard vs standard Urdu keyboard',
+        body: 'A phonetic layout is organised around sound associations: a person who knows English QWERTY may find the key positions easier to guess, although the mapping still needs practice. A standard Urdu layout assigns characters to fixed positions that are learned from a chart or keyboard labels; it does not transliterate Roman Urdu. Both layouts produce Urdu script, but the same physical key can output different characters on each. Some Windows language options provide a specific layout, while other phonetic input methods may need separate installation. Check the layout name and try sample keys before you begin. Typeoye’s comparison of Urdu phonetic and standard keyboards explains the practical differences in more detail.',
+      },
+      {
+        heading: 'Type Urdu in Microsoft Word',
+        body: 'First select the Urdu keyboard using the Windows taskbar language indicator or Windows + Space. In Word, place the cursor in the paragraph where you want Urdu and open Home > Paragraph. If available, choose Right-to-left Text Direction before typing. Right-to-left direction controls the reading order and insertion point; right alignment only places the paragraph at the right margin, so set alignment separately if needed. If the direction button is missing, enable an Urdu right-to-left editing language in Word’s File > Options > Language settings, then reopen Word if prompted. Select a Unicode font that supports Urdu shaping, such as an installed Urdu Nastaliq or Naskh font. Type a short sample such as “آپ کیسے ہیں؟” and check that letters join and punctuation appears sensibly. Keep English paragraphs left-to-right, and set the direction for each paragraph rather than changing the whole document unnecessarily.',
+      },
+      {
+        heading: 'Urdu typing on an Android mobile phone',
+        body: 'If you use Gboard, open any app where you can type, tap the text field, open Gboard Settings, choose Languages > Add keyboard, select Urdu, choose the layout shown for your device, and tap Done. You can also reach Languages through Android Settings > System > Keyboard > On-screen keyboard > Gboard, though manufacturer menu names can vary. To switch languages while typing, touch and hold the space bar or use the language key if it is enabled. Urdu QWERTY, Urdu-script, and transliteration choices may be presented differently across keyboards. With a transliteration option, typing a Roman Urdu word may suggest Urdu script; with a character layout, tap the Urdu letters directly. Check the preview and select the intended Urdu word, especially when several spellings sound alike.',
+      },
+      {
+        heading: 'Urdu typing on an iPhone',
+        body: 'On iPhone, open Settings > General > Keyboard > Keyboards > Add New Keyboard and choose Urdu. If your iOS version shows a layout choice, select the one you prefer, such as Urdu, Urdu QWERTY, or a transliteration option where available. In an app, tap the globe or emoji key to move between installed keyboards. The exact layout list and options can vary by iOS version and region. A QWERTY Urdu layout places Urdu characters on familiar Latin-key positions; a transliteration layout accepts Roman Urdu and offers Urdu-script output. Try a short phrase in Notes or Messages to confirm the output before composing a long message. This adds a keyboard without requiring you to change the iPhone’s display language.',
+      },
+      {
+        heading: 'Common Urdu typing problems and quick fixes',
+        body: 'If English letters appear when you expect Urdu, check the active keyboard indicator and switch to the Urdu input method. If the wrong Urdu characters appear, confirm whether the active keyboard is standard, phonetic, or transliteration; the same keystroke does not mean the same thing on every layout. If Urdu text begins on the wrong side in Word, set paragraph direction to right-to-left, then adjust alignment separately. If letters look disconnected or turn into boxes, try a Unicode-capable Urdu font and confirm that the text is Unicode rather than an older legacy encoding. When mixed Urdu and English text moves punctuation or numbers, select the affected paragraph and check its direction and cursor position. Test one short sentence in a new document or text field to identify whether the issue comes from the keyboard, app, or font.',
+      },
+      {
+        heading: 'A short daily Urdu typing practice routine',
+        body: 'Use ten minutes a day to become familiar with the layout you have chosen. Minutes 0–2: warm up with a few known Urdu letters or common words and confirm the correct keyboard is active. Minutes 2–5: practise a short set of words, checking the output against the Urdu spelling. Minutes 5–8: type two or three complete sentences with spaces and punctuation. Minutes 8–10: repeat the words or key combinations that caused errors and note one thing to practise tomorrow. When you have more time, take a timed Urdu typing accuracy test or type a longer paragraph. Build a steady pace before trying to go faster; accuracy, correct input method, and readable Urdu matter more than rushing through a passage.',
+      },
+      {
+        heading: 'Practise Urdu typing online with Typeoye',
+        body: 'Typeoye’s Urdu Typing Test is useful for a timed session where you can review your speed and accuracy, while Urdu Practice offers repeatable drills for characters, words, sentences, and longer passages. Use these pages to build a regular habit and get comfortable with Urdu-script text. Typeoye uses a phonetic map in its Urdu tools, so check the keyboard guide if a key produces a character you did not expect. Online practice is also convenient when you do not have a PC Urdu keyboard set up yet; for a Word document or phone message, select the suitable input method on that device.',
+        guide: 'urdu-typing-links',
+      },
+      {
+        heading: 'Frequently asked questions about Urdu typing',
+        body: 'These short answers cover PC, mobile, keyboard layouts, and online Urdu practice.',
+        guide: 'urdu-kaise-faqs',
+      },
+      {
+        heading: 'Choose a layout and keep practising',
+        body: 'The simplest setup is the one you can use consistently: enable Urdu on Windows, choose an Urdu keyboard on Android or iPhone, or use a phonetic method if you prefer English key sounds. Set right-to-left direction in Word, use a Unicode-capable Urdu font, and check that the final text is in Urdu script. Practise for a few minutes each day, review mistakes, and add speed gradually. For additional examples, visit Typeoye’s Urdu typing guides and tools linked with this article.',
       },
     ],
   },
