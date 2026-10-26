@@ -7,6 +7,9 @@ import { cn } from '../../utils/cn';
 import { RelatedArticles } from './RelatedArticles';
 import { UrduKeyboardGuide, UrduTypingLinks } from './UrduKeyboardGuide';
 import { UrduKeyboardLayoutGraphic } from './UrduKeyboardLayoutGraphic';
+import { UrduPracticePassages } from './UrduPracticePassages';
+import { UrduLearningExamples } from './UrduLearningExamples';
+import { BilingualTypingBenefits } from './BilingualTypingBenefits';
 
 interface BlogDetailProps {
   post: BlogPost;
@@ -143,7 +146,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                     ? '3 / 2'
                   : post.slug === 'free-typing-certificate-online' || post.slug === 'typing-certificate-validity-for-jobs'
                       ? '40 / 21'
-                    : post.slug === 'typing-certificate-wpm-requirements' || post.slug === 'how-to-type-urdu-online-english-keyboard' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' || post.slug === 'free-urdu-typing-website-type-practice-test-online'
+                    : post.slug === 'typing-certificate-wpm-requirements' || post.slug === 'how-to-type-urdu-online-english-keyboard' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' || post.slug === 'free-urdu-typing-website-type-practice-test-online' || post.slug === 'urdu-typing-test-paragraphs' || post.slug === 'how-long-to-learn-urdu-typing' || post.slug === 'benefits-of-urdu-and-english-typing'
                     ? '16 / 9'
                     : '16 / 8',
               }}
@@ -192,6 +195,9 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                       {section.guide === 'urdu-kaise-faqs' && <UrduKaiseFaqs />}
                       {section.guide === 'post-faqs' && post.faqs && <PostFaqs faqs={post.faqs} />}
                       {section.guide === 'certificate-steps' && <CertificateSteps />}
+                      {section.guide === 'urdu-practice-passages' && <UrduPracticePassages level={section.heading.startsWith('Beginner') ? 'beginner' : section.heading.startsWith('Intermediate') ? 'intermediate' : 'advanced'} />}
+                      {section.guide === 'urdu-learning-examples' && <UrduLearningExamples />}
+                      {section.guide === 'bilingual-typing-benefits' && <BilingualTypingBenefits />}
                     </section>
 
                     {index === pullQuoteIndex && post.pullQuote && (

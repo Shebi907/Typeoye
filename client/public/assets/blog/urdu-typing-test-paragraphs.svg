@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1672" height="941" viewBox="0 0 1672 941" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="84" y1="42" x2="1574" y2="906" gradientUnits="userSpaceOnUse"><stop stop-color="#F4F7FF"/><stop offset="1" stop-color="#F7F2FF"/></linearGradient>
+    <linearGradient id="brand" x1="169" y1="181" x2="381" y2="563" gradientUnits="userSpaceOnUse"><stop stop-color="#4361EE"/><stop offset="1" stop-color="#7C3AED"/></linearGradient>
+    <linearGradient id="screen" x1="724" y1="157" x2="1432" y2="627" gradientUnits="userSpaceOnUse"><stop stop-color="#182344"/><stop offset="1" stop-color="#25224F"/></linearGradient>
+    <filter id="shadow" x="539" y="91" width="1118" height="765" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feGaussianBlur stdDeviation="28"/></filter>
+  </defs>
+  <rect width="1672" height="941" rx="38" fill="url(#bg)"/>
+  <circle cx="1464" cy="158" r="150" fill="#4361EE" fill-opacity=".06"/><circle cx="1482" cy="779" r="212" fill="#7C3AED" fill-opacity=".05"/>
+  <path d="M74 100h250M74 124h175" stroke="#4361EE" stroke-opacity=".14" stroke-width="4" stroke-linecap="round"/>
+  <rect x="95" y="207" width="92" height="92" rx="26" fill="url(#brand)"/>
+  <path d="M122 253h38m-38 13h28m-28 13h33" stroke="white" stroke-width="5" stroke-linecap="round"/><path d="M125 236h32" stroke="white" stroke-width="5" stroke-linecap="round"/>
+  <text x="211" y="269" fill="#202A48" font-family="Arial, sans-serif" font-size="43" font-weight="700">Typeoye</text>
+  <text x="95" y="393" fill="#263458" font-family="Arial, sans-serif" font-size="50" font-weight="700">Urdu typing practice</text>
+  <text x="95" y="457" fill="#56627F" font-family="Arial, sans-serif" font-size="30">Passages for every level</text>
+  <rect x="95" y="515" width="227" height="56" rx="28" fill="#4361EE" fill-opacity=".1"/>
+  <text x="124" y="551" fill="#4361EE" font-family="Arial, sans-serif" font-size="23" font-weight="700">PRACTISE • IMPROVE</text>
+  <g filter="url(#shadow)" opacity=".18"><rect x="635" y="165" width="854" height="543" rx="32" fill="#24305B"/></g>
+  <rect x="599" y="126" width="866" height="540" rx="32" fill="#151B31"/>
+  <rect x="624" y="151" width="816" height="490" rx="19" fill="url(#screen)"/>
+  <circle cx="652" cy="177" r="6" fill="#FF6B81"/><circle cx="674" cy="177" r="6" fill="#FFC55C"/><circle cx="696" cy="177" r="6" fill="#5DD69A"/>
+  <rect x="665" y="212" width="730" height="373" rx="15" fill="#FFFFFF" fill-opacity=".06" stroke="#FFFFFF" stroke-opacity=".11"/>
+  <text x="1349" y="259" fill="#9DB1FF" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="end">URDU PRACTICE</text>
+  <path d="M711 290h612M763 325h560M720 360h603M781 395h542M720 430h603M789 465h534" stroke="#E9EDFF" stroke-opacity=".8" stroke-width="9" stroke-linecap="round"/>
+  <path d="M1100 500h223M964 535h359" stroke="#B9C5FF" stroke-opacity=".55" stroke-width="9" stroke-linecap="round"/>
+  <rect x="996" y="453" width="4" height="24" rx="2" fill="#A9B8FF"/>
+  <path d="M560 681h944l-100 111H660L560 681Z" fill="#DCE2F6"/><path d="M592 690h880l-69 78H661l-69-78Z" fill="#F9FAFF"/>
+  <g fill="#C9D1E8" stroke="#B8C2DD" stroke-width="1"><rect x="635" y="703" width="57" height="28" rx="6"/><rect x="701" y="703" width="57" height="28" rx="6"/><rect x="767" y="703" width="57" height="28" rx="6"/><rect x="833" y="703" width="57" height="28" rx="6"/><rect x="899" y="703" width="57" height="28" rx="6"/><rect x="965" y="703" width="57" height="28" rx="6"/><rect x="1031" y="703" width="57" height="28" rx="6"/><rect x="1097" y="703" width="57" height="28" rx="6"/><rect x="1163" y="703" width="57" height="28" rx="6"/><rect x="1229" y="703" width="57" height="28" rx="6"/><rect x="1295" y="703" width="57" height="28" rx="6"/><rect x="1361" y="703" width="57" height="28" rx="6"/>
+  <rect x="658" y="739" width="68" height="27" rx="6"/><rect x="735" y="739" width="68" height="27" rx="6"/><rect x="812" y="739" width="68" height="27" rx="6"/><rect x="889" y="739" width="68" height="27" rx="6"/><rect x="966" y="739" width="68" height="27" rx="6"/><rect x="1043" y="739" width="68" height="27" rx="6"/><rect x="1120" y="739" width="68" height="27" rx="6"/><rect x="1197" y="739" width="68" height="27" rx="6"/><rect x="1274" y="739" width="68" height="27" rx="6"/><rect x="1351" y="739" width="68" height="27" rx="6"/></g>
+  <rect x="842" y="779" width="370" height="22" rx="11" fill="#B8C2DD"/>
+  <rect x="146" y="676" width="327" height="170" rx="24" fill="white" stroke="#E4E8F4"/><circle cx="193" cy="726" r="15" fill="#4361EE" fill-opacity=".15"/><path d="m186 726 5 5 10-12" stroke="#4361EE" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><text x="221" y="733" fill="#34405E" font-family="Arial, sans-serif" font-size="22" font-weight="700">Steady practice</text><path d="M180 765h254M180 791h218M180 817h166" stroke="#CFD6E8" stroke-width="8" stroke-linecap="round"/>
+</svg>

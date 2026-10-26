@@ -4,7 +4,7 @@ export type BlogSort = 'latest' | 'oldest' | 'popular';
 export interface BlogSection {
   heading: string;
   body: string;
-  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs' | 'urdu-kaise-faqs' | 'post-faqs' | 'certificate-steps';
+  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs' | 'urdu-kaise-faqs' | 'post-faqs' | 'certificate-steps' | 'urdu-practice-passages' | 'urdu-learning-examples' | 'bilingual-typing-benefits';
 }
 
 export interface BlogPost {
@@ -55,9 +55,9 @@ export const CATEGORY_BADGE: Record<BlogCategory, string> = {
 /** Sidebar category post counts (keep in sync with POSTS). */
 export const CATEGORY_COUNTS: Record<BlogCategory, number> = {
   'Typing Tips': 6,
-  'Guides': 19,
+  'Guides': 20,
   'Practice': 3,
-  'Productivity': 3,
+  'Productivity': 4,
   'News & Updates': 1,
 };
 
@@ -70,6 +70,243 @@ export function formatDate(iso: string): string {
 }
 
 export const POSTS: BlogPost[] = [
+  {
+    slug: 'benefits-of-urdu-and-english-typing',
+    title: '10 Benefits of Urdu and English Typing: Jobs, Freelancing, and Daily Use',
+    category: 'Productivity',
+    description: 'Explore practical benefits of typing in Urdu and English for office tasks, freelancing, study, communication, and everyday digital work.',
+    metaTitle: '10 Benefits of Urdu and English Typing | Typeoye',
+    metaDescription: 'Discover the benefits of Urdu and English typing for work, study, freelancing, and daily life, plus a practical routine to improve both skills.',
+    intro: 'From preparing a school assignment to replying to a client, typing helps you get ideas into a useful form. Knowing both Urdu and English gives you more ways to work with people, documents, and services in the language that fits the task.',
+    readTime: 9,
+    publishedAt: '2026-10-26',
+    popular: false,
+    image: '/assets/blog/benefits-urdu-english-typing.png',
+    imageAlt: '10 benefits of Urdu and English typing for jobs, freelancing, and daily use',
+    moreTools: [
+      { label: 'English Typing Practice', to: '/practice' },
+      { label: 'English Typing Test', to: '/test' },
+      { label: 'Urdu Typing Practice', to: '/urdu-practice' },
+      { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
+      { label: 'Urdu Learn', to: '/urdu-lessons' },
+      { label: 'Urdu and English Keyboard Examples', to: '/blog/english-keyboard-urdu-typing-examples' },
+    ],
+    pullQuote: 'Being comfortable in both languages lets you choose the right words for the person, document, or task in front of you.',
+    cta: {
+      heading: 'Practise in the language you use today',
+      blurb: 'Use Typeoye’s English practice and Urdu tools to build accuracy at a comfortable pace.',
+      label: 'Try Urdu Practice',
+      to: '/urdu-practice',
+    },
+    faqs: [
+      { question: 'What are the benefits of learning Urdu and English typing?', answer: 'Typing both languages can help with documents, study, communication, and digital tasks that use Urdu or English. Which benefits matter most depends on your daily activities and work.' },
+      { question: 'Can typing skills help me get a job?', answer: 'Typing is useful in some office, data-entry, customer-support, and administrative tasks, and may be assessed in some roles. Employers also consider role-specific knowledge, experience, communication, and other requirements; typing alone does not guarantee employment.' },
+      { question: 'Can typing help with freelancing?', answer: 'It can make it easier to prepare messages, drafts, notes, and deliverables for suitable freelance work. Finding clients and earning income also depend on the service you offer, quality, reliability, and market demand.' },
+      { question: 'How much should I practise each day?', answer: 'Try a focused 15–20-minute routine that gives time to both languages. Short, regular sessions are easier to sustain; adjust the plan to your schedule and learning needs.' },
+      { question: 'How can I improve typing speed without losing accuracy?', answer: 'First practise clean keystrokes at a manageable pace. Review errors after each session and increase speed gradually only when you can keep the text accurate.' },
+      { question: 'Can I use an English keyboard to type Urdu?', answer: 'Yes. Typeoye’s Urdu tools use a phonetic map that assigns Urdu characters to English QWERTY key positions. Check the layout guide to learn the exact mappings and Shift layer.' },
+    ],
+    content: [
+      {
+        heading: 'Why Urdu and English typing are useful',
+        body: 'Many everyday tasks move between languages: a person may read an English form, write an Urdu application, and send a bilingual message in the same afternoon. Knowing how to type in both languages makes it easier to create and edit that material yourself. These skills can support education, office work, freelance services, and personal tasks, though the value depends on the work you do and does not guarantee a job or income.',
+      },
+      {
+        heading: '10 benefits of Urdu and English typing',
+        body: 'Here are practical ways typing in both languages can help at work, in education, and at home.',
+        guide: 'bilingual-typing-benefits',
+      },
+      {
+        heading: 'Urdu vs. English typing: when each is useful',
+        body: 'English typing is useful for many international messages, software interfaces, reports, web forms, and work documents. Urdu typing helps when the reader, institution, or purpose calls for Urdu, such as a local application, Urdu learning material, community announcement, or family message. Learning both lets you respond in the language that suits the audience. The keyboard input method can differ: Typeoye’s English practice uses English text, while its Urdu Learn, Urdu Practice, and Urdu Typing Test use Typeoye’s Urdu phonetic mapping on English-labeled QWERTY keys.',
+      },
+      {
+        heading: 'How typing skills may help with jobs and freelancing',
+        body: 'Typing skills for jobs may be useful in data entry, office assistance, document formatting, customer support, and administrative coordination. A bilingual worker may also prepare Urdu and English records or messages when that is part of the role. Typing skills for freelancing can support drafting, editing, preparing research notes, managing client communication, or creating language-specific content. These are examples of tasks, not job promises: hiring and freelance income depend on skill, service quality, experience, client needs, and other qualifications. Some employers may use their own typing assessment, so follow the exact instructions for the role.',
+      },
+      {
+        heading: 'Everyday uses for two-language typing',
+        body: 'You might type an Urdu application for a school or local office, edit an English résumé, write a message to a relative, prepare class notes, or fill out an online form. Students can draft assignments and organize research notes in the language required by a course. At home, typing can help keep recipes, lists, invitations, and personal records in a searchable digital form. Matching the language to the reader also makes the message easier to understand.',
+      },
+      {
+        heading: 'How to improve both typing skills',
+        body: 'Regular online typing practice gives you a convenient way to work on both languages. Focus on correct letters, spelling, spacing, and punctuation before trying to increase pace. Move gradually from familiar words to sentences and then longer text. For Urdu, learn the active phonetic layout rather than guessing key positions. Track the test’s displayed words per minute (WPM) and accuracy for similar sessions, and write down the errors you want to reduce. One of the benefits of typing practice is that it makes recurring weak spots easier to notice and work on. Speed scores from different tests may use different methods, so compare results within the same tool where possible.',
+      },
+      {
+        heading: 'A practical daily 15–20-minute routine',
+        body: 'Use 3 minutes to warm up with familiar English words, then spend 5 minutes typing a short English passage. Switch to Urdu for 3 minutes of key or word practice and 5 minutes copying an Urdu sentence or paragraph. Use the final 2 minutes to review errors in both languages and note one focus for tomorrow. If you have 20 minutes, add a 2-minute timed round in either language, alternating which one you test on different days. Keep the pace controlled and adjust the split if one language needs more attention.',
+      },
+      {
+        heading: 'Frequently asked questions about bilingual typing',
+        body: 'Answers about practical benefits, work, practice time, and improving speed and accuracy.',
+        guide: 'post-faqs',
+      },
+      {
+        heading: 'Build confidence through regular practice',
+        body: 'Typing in both languages is a practical digital skill that grows through use. Choose text you actually need to write, practise it accurately, and build up to longer tasks. Typeoye offers English Typing Practice and tests, along with Urdu Learn, Urdu Practice, and an Urdu Typing Test. Try a short session in each language and keep practising at a pace you can sustain.',
+      },
+    ],
+  },
+  {
+    slug: 'how-long-to-learn-urdu-typing',
+    title: 'How Long Does It Take to Learn Urdu Typing?',
+    category: 'Guides',
+    description: 'See realistic Urdu typing learning stages, what affects your timeline, and a practical 15–20-minute daily plan for building accuracy and speed.',
+    metaTitle: 'How Long Does It Take to Learn Urdu Typing? | Typeoye',
+    metaDescription: 'Find out how long it may take to learn Urdu typing, what affects progress, and how to practise phonetic typing with a practical daily plan.',
+    intro: 'People learn Urdu typing for school assignments, office documents, personal writing, and sometimes a job test. There is no single finish date: your timeline depends on the keyboard you use, your starting familiarity, and how regularly you practise.',
+    readTime: 9,
+    publishedAt: '2026-10-26',
+    popular: false,
+    image: '/assets/blog/how-long-to-learn-urdu-typing.png',
+    imageAlt: 'How long it takes to learn Urdu typing with regular practice',
+    moreTools: [
+      { label: 'Urdu Learn', to: '/urdu-lessons' },
+      { label: 'Urdu Typing Practice', to: '/urdu-practice' },
+      { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
+      { label: 'Urdu Phonetic Keyboard Layout Guide', to: '/blog/urdu-phonetic-keyboard-layout' },
+      { label: 'Urdu Typing for Beginners', to: '/blog/urdu-typing-for-beginners' },
+      { label: 'Improve Urdu Typing Speed and Accuracy', to: '/blog/improve-urdu-typing-speed-and-accuracy' },
+    ],
+    pullQuote: 'A realistic timeline is built from steady practice, accurate keystrokes, and gradual steps toward longer text.',
+    cta: {
+      heading: 'Start with a short Urdu practice session',
+      blurb: 'Learn key groups with Urdu Learn, practise text in Urdu Practice, and use the Urdu Typing Test when you want a timed check.',
+      label: 'Open Urdu Learn',
+      to: '/urdu-lessons',
+    },
+    faqs: [
+      { question: 'How long does it take to learn Urdu typing?', answer: 'It varies. With regular short sessions, some learners become familiar with basic keys in a couple of weeks, while comfortable paragraph typing and higher speed can take several weeks or months. Prior keyboard experience and practice consistency both matter.' },
+      { question: 'How many minutes a day should I practise?', answer: 'Try 15–20 focused minutes if that fits your schedule. A shorter daily session that you can repeat consistently is often more useful than an occasional long session.' },
+      { question: 'Can I type Urdu with an English keyboard?', answer: 'Yes. Typeoye’s Urdu tools use a phonetic map on familiar English QWERTY keys. Each key produces its mapped Urdu character; it does not automatically transliterate every Roman Urdu word.' },
+      { question: 'Should I practise speed or accuracy first?', answer: 'Start with correct key mappings and clean words. Add a short timed round after you can type the same sentences accurately at a comfortable pace.' },
+      { question: 'How can I improve Urdu typing speed?', answer: 'Practise often, repeat useful text, and increase difficulty gradually. Review recurring errors after each session so you improve a specific key or word instead of repeating the same mistake.' },
+      { question: 'Is there a required Urdu typing speed for every job test?', answer: 'No universal speed applies to every vacancy. Read the current official instructions for the particular post, including its speed, accuracy, software, layout, and timing rules if they are stated.' },
+    ],
+    content: [
+      {
+        heading: 'Why people learn Urdu typing',
+        body: 'Students may need to prepare assignments, notes, and applications in Urdu. Office workers may type letters, records, or reports, while other learners want to write messages and documents in their own language. Some job tests also include Urdu typing, but their formats and requirements vary. Whatever your reason, learning the keyboard gradually makes it easier to focus on the text instead of searching for every key.',
+      },
+      {
+        heading: 'How long does it take to learn Urdu typing?',
+        body: 'Think in stages rather than a guaranteed deadline. As a rough guide for someone practising for about 15–20 focused minutes most days: allow around 1–2 weeks to become familiar with the basic key groups and type simple words slowly; around 3–6 weeks to grow more comfortable with sentences and short paragraphs; and several weeks to a few months to make longer passages feel steadier and work toward a higher personal speed. These are planning ranges, not promises or fixed benchmarks. A person who already touch-types may move through early stages sooner, while a new typist or someone practising irregularly may need longer. Accuracy, confidence, and speed also develop at different rates.',
+      },
+      {
+        heading: 'How Typeoye’s Urdu phonetic keyboard works',
+        body: 'A phonetic keyboard uses familiar English QWERTY key positions to enter Urdu characters. Typeoye’s Urdu tools follow a direct mapping: for example, s produces س, k produces ک, and b produces ب. Shift selects the mapped character on the uppercase layer. This helps English keyboard users because the physical keys are familiar, but the output is Urdu script. The tool maps key presses; it does not guess a complete Urdu word from ordinary Roman Urdu spelling. Urdu Learn can type Urdu numerals on the number row, while Urdu Practice and the Urdu Typing Test keep those digits as 0–9. Punctuation also has Urdu mappings, including ، for comma, ۔ for period, and ؟ for question mark.',
+      },
+      {
+        heading: 'A practical daily 15–20-minute practice plan',
+        body: 'Keep the routine small enough to repeat. Spend 3 minutes warming up with familiar Urdu words and key combinations. Use 5 minutes to review a small group of key mappings or a guided Urdu Learn lesson. Spend 4 minutes typing short Urdu sentences, then 4 minutes copying a short paragraph. Use 2 minutes to review mistakes and note a key, spelling, or punctuation mark to revisit. If you have up to 20 minutes, add a 2-minute timed round using familiar text and compare it with your own earlier sessions. Keep the timed round controlled; it is practice, not a universal job-test benchmark.',
+      },
+      {
+        heading: 'Learning stages: from keys to complete paragraphs',
+        body: 'First, learn where common letters appear and practise them in small groups. Next, combine those letters into familiar words and notice how the mapped keys form Urdu spellings. When words feel less hesitant, move to short sentences with spaces and punctuation. Then copy paragraphs, where reading ahead and keeping a steady rhythm matter as much as finding each key. Finally, use occasional timed practice to observe your own speed and accuracy over time. Move forward when a stage feels manageable, and return to easier text whenever errors become frequent.',
+      },
+      {
+        heading: 'Common mistakes that slow progress',
+        body: 'Looking down at the keyboard for every key interrupts your rhythm; learn a few mappings at a time and gradually glance less often. Rushing before you know the layout can create repeated errors, so give accuracy priority. Irregular practice makes key positions harder to recall, so choose a routine you can sustain. Very unfamiliar or difficult text can overload a beginner; start with known words and increase difficulty in steps. When you make an error, pause to understand it instead of retyping the same incorrect sequence.',
+      },
+      {
+        heading: 'Tips to learn Urdu typing faster',
+        body: 'Practise at a consistent time and keep sessions focused. Learn key mappings in small groups, then use those keys in real words and sentences. Increase passage length gradually, and practise with the same input method you plan to use. Track a few simple details, such as the passage, session length, and recurring errors. Use a timed test occasionally to observe progress, but compare similar sessions rather than treating one result as a prediction. If a key remains difficult, isolate it in a short drill before returning to complete text.',
+      },
+      {
+        heading: 'Short Urdu typing practice examples',
+        body: 'Begin with familiar words, then copy each sentence and the short paragraph. Keep the text visible and focus on accurate spelling, word spaces, and punctuation.',
+        guide: 'urdu-learning-examples',
+      },
+      {
+        heading: 'Frequently asked questions about learning Urdu typing',
+        body: 'These quick answers cover learning time, daily practice, phonetic input, speed, and accuracy.',
+        guide: 'post-faqs',
+      },
+      {
+        heading: 'Build your Urdu typing habit',
+        body: 'Progress comes from returning to the keyboard, noticing what is becoming easier, and practising the next small challenge. Use Urdu Learn for guided lessons, Urdu Practice for words and passages, and the Urdu Typing Test for a timed check. Keep your expectations flexible and let your own practice record show how your skills are changing.',
+      },
+    ],
+  },
+  {
+    slug: 'urdu-typing-test-paragraphs',
+    title: 'Best Urdu Typing Test Paragraphs and Practice Text',
+    category: 'Practice',
+    description: 'Practise nine original Urdu passages for beginner, intermediate, and advanced typists, with practical advice for accuracy, speed, and timed tests.',
+    metaTitle: 'Urdu Typing Test Paragraphs: Practice Text | Typeoye',
+    metaDescription: 'Practise original Urdu typing test paragraphs at beginner, intermediate, and advanced levels. Improve accuracy and speed with a simple daily routine.',
+    intro: 'Typing complete Urdu paragraphs helps you practise letters, word spacing, punctuation, and reading rhythm together. Use these original passages at a comfortable pace, then repeat them and track the errors you want to fix.',
+    readTime: 9,
+    publishedAt: '2026-10-26',
+    popular: false,
+    image: '/assets/blog/best-urdu-typing-test-paragraphs.png',
+    imageAlt: 'Best Urdu typing test paragraphs and practice text for beginners and advanced learners',
+    moreTools: [
+      { label: 'Urdu Typing Practice', to: '/urdu-practice' },
+      { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
+      { label: 'Urdu Learn', to: '/urdu-lessons' },
+      { label: 'Urdu Typing Test for Government Jobs', to: '/blog/urdu-typing-test-government-jobs-pakistan' },
+      { label: 'Urdu Typing Test Practice for PPSC and FPSC', to: '/blog/urdu-typing-test-practice-ppsc-fpsc-pakistan' },
+      { label: 'Improve Urdu Typing Speed and Accuracy', to: '/blog/improve-urdu-typing-speed-and-accuracy' },
+    ],
+    pullQuote: 'A clean, repeatable rhythm is a stronger foundation for speed than rushing through a passage.',
+    cta: {
+      heading: 'Put a passage into practice',
+      blurb: 'Open Urdu Practice for a focused session, or use the Urdu Typing Test when you want a timed run.',
+      label: 'Start Urdu Practice',
+      to: '/urdu-practice',
+    },
+    faqs: [
+      { question: 'How should I use these Urdu typing test paragraphs?', answer: 'Choose a passage at your current level, type it once slowly while checking each word, then repeat it at a steady pace. Review mistakes before moving to a harder passage.' },
+      { question: 'How often should I practise Urdu typing?', answer: 'A short daily session is easier to sustain than occasional long sessions. Try 10–15 focused minutes and adjust the time to your schedule and comfort.' },
+      { question: 'Should I focus on speed or accuracy first?', answer: 'Build accurate keystrokes and a comfortable rhythm first. Increase pace in small steps only while you can still type the passage cleanly.' },
+      { question: 'How can I measure Urdu typing speed?', answer: 'Use a timed test that reports a result, and compare sessions using similar text and duration. Scoring methods can differ, so follow the measure shown by the test you use.' },
+      { question: 'Are these passages suitable for a government job typing test?', answer: 'They are general practice material for Urdu text entry. Check the official instructions for your particular vacancy, including the required layout, software, duration, speed, and accuracy rules.' },
+      { question: 'Can beginners type the advanced passages?', answer: 'Yes, but there is no need to rush. Start with the beginner passages, learn unfamiliar words, and move up when you can type your current level with a steady rhythm.' },
+    ],
+    content: [
+      {
+        heading: 'Why paragraph practice helps Urdu typing',
+        body: 'Single letters and words are useful for learning a keyboard, but a passage brings several skills together. You read ahead, find each Urdu character, separate words, follow punctuation, and keep a rhythm across complete sentences. These Urdu typing practice texts are original and progress from short, familiar sentences to longer ideas. Type them from the visible text, and repeat a passage to see whether the same spellings and key sequences become easier.',
+      },
+      {
+        heading: 'Beginner level: short and simple',
+        body: 'Start here if you are learning Urdu letters or still pause to find keys. Type each passage at an easy pace, paying attention to clear spaces between words and the full stop at the end.',
+        guide: 'urdu-practice-passages',
+      },
+      {
+        heading: 'Intermediate level: connected sentences',
+        body: 'These Urdu typing paragraphs for practice are longer and include more connected ideas and punctuation. Keep your eyes moving a few words ahead, but slow down whenever you need to check a word.',
+        guide: 'urdu-practice-passages',
+      },
+      {
+        heading: 'Advanced level: longer passages and varied sentences',
+        body: 'Use these longer Urdu typing test passages when common words feel comfortable. They include more detailed vocabulary and sentence structures. Focus on finishing each sentence accurately; a smooth pace matters more than a hurried start.',
+        guide: 'urdu-practice-passages',
+      },
+      {
+        heading: 'How to practise for a government job Urdu typing test',
+        body: 'First, read the official notice and any later instructions for your specific vacancy. Check whether Urdu typing is required, which keyboard layout or software to use, the test duration, and any stated speed or accuracy criteria. These details can vary by department and post, so do not treat one passage, online result, or speed target as a universal standard. Practise with the specified input method where possible, and use timed rounds only after you can type the text comfortably.',
+      },
+      {
+        heading: 'Improve speed, accuracy, and consistency',
+        body: 'Choose a pace at which you can distinguish similar-looking or familiar-sounding letters and notice missing spaces. After each run, identify recurring errors: a particular key, a spelling, punctuation, or losing your place. Practise that small problem area, then return to a full paragraph. For Urdu typing speed practice, repeat the same passage once or twice before trying new text; consistency across several runs is more useful feedback than one unusually fast result.',
+      },
+      {
+        heading: 'A practical daily 10–15-minute Urdu typing routine',
+        body: 'Spend two minutes warming up with familiar words and letter combinations. Use the next five minutes to type one passage that suits your level without rushing. Take two minutes to review mistakes and note one pattern to work on. Use the remaining one to six minutes to retype the difficult sentence or do one short timed run. Keep your routine comfortable, take a break if your hands feel strained, and record the date, passage, and what you improved.',
+      },
+      {
+        heading: 'Frequently asked questions about Urdu typing practice',
+        body: 'Answers to common questions about passage difficulty, speed, accuracy, and preparation.',
+        guide: 'post-faqs',
+      },
+      {
+        heading: 'Build your Urdu typing habit',
+        body: 'Save a passage that challenges you just enough, return to it tomorrow, and notice whether you can type it more smoothly. When you want guided practice, open Typeoye Urdu Practice; for a timed session, use the Urdu Typing Test. The aim is steady improvement through useful repetition, not a promised test result.',
+      },
+    ],
+  },
   {
     slug: 'english-keyboard-urdu-typing-examples',
     title: 'English Keyboard to Urdu Typing: Common Words and Examples',
