@@ -10,6 +10,10 @@ import { UrduKeyboardLayoutGraphic } from './UrduKeyboardLayoutGraphic';
 import { UrduPracticePassages } from './UrduPracticePassages';
 import { UrduLearningExamples } from './UrduLearningExamples';
 import { BilingualTypingBenefits } from './BilingualTypingBenefits';
+import { RomanUrduExamples } from './RomanUrduExamples';
+import { GoogleDocsUrduExamples } from './GoogleDocsUrduExamples';
+import TypingJobsResources from './TypingJobsResources';
+import { WindowsUrduKeyboardSources } from './WindowsUrduKeyboardSources';
 
 interface BlogDetailProps {
   post: BlogPost;
@@ -146,8 +150,10 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                     ? '3 / 2'
                   : post.slug === 'free-typing-certificate-online' || post.slug === 'typing-certificate-validity-for-jobs'
                       ? '40 / 21'
-                    : post.slug === 'typing-certificate-wpm-requirements' || post.slug === 'how-to-type-urdu-online-english-keyboard' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' || post.slug === 'free-urdu-typing-website-type-practice-test-online' || post.slug === 'urdu-typing-test-paragraphs' || post.slug === 'how-long-to-learn-urdu-typing' || post.slug === 'benefits-of-urdu-and-english-typing'
+                    : post.slug === 'typing-certificate-wpm-requirements' || post.slug === 'how-to-type-urdu-online-english-keyboard' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' || post.slug === 'free-urdu-typing-website-type-practice-test-online' || post.slug === 'urdu-typing-test-paragraphs' || post.slug === 'how-long-to-learn-urdu-typing' || post.slug === 'benefits-of-urdu-and-english-typing' || post.slug === 'roman-urdu-to-urdu-typing'
                     ? '16 / 9'
+                    : post.slug === 'urdu-typing-google-docs' || post.slug === 'practice-typing-with-your-own-text' || post.slug === 'typing-jobs-pakistan-worldwide' || post.slug === 'urdu-keyboard-download-windows'
+                      ? '16 / 9'
                     : '16 / 8',
               }}
             >
@@ -198,6 +204,10 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                       {section.guide === 'urdu-practice-passages' && <UrduPracticePassages level={section.heading.startsWith('Beginner') ? 'beginner' : section.heading.startsWith('Intermediate') ? 'intermediate' : 'advanced'} />}
                       {section.guide === 'urdu-learning-examples' && <UrduLearningExamples />}
                       {section.guide === 'bilingual-typing-benefits' && <BilingualTypingBenefits />}
+                      {section.guide === 'roman-urdu-examples' && <RomanUrduExamples />}
+                      {section.guide === 'google-docs-urdu-examples' && <GoogleDocsUrduExamples />}
+                      {section.guide === 'typing-jobs-resources' && <TypingJobsResources />}
+                      {section.guide === 'windows-urdu-keyboard-sources' && <WindowsUrduKeyboardSources />}
                     </section>
 
                     {index === pullQuoteIndex && post.pullQuote && (
@@ -590,3 +600,4 @@ function GovernmentOfficialExample() {
     <a href="https://www.fpsc.gov.pk/assets/media/2024-06-12-Syllabus-Combined-Ad-No-5-2023.pdf" target="_blank" rel="noreferrer" className="mt-2 inline-block font-semibold text-[var(--color-accent-text)] underline">View the FPSC syllabus (PDF)</a>
   </aside>;
 }
+
