@@ -148,6 +148,8 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                   ? undefined
                   : post.slug === 'how-to-type-urdu-mobile-pc-guide'
                     ? '3 / 2'
+                : (post.slug === 'online-typing-challenge-compete-friends-real-time' || post.slug === 'win-online-typing-challenge-tips-strategies')
+                  ? '16 / 9'
                   : post.slug === 'free-typing-certificate-online' || post.slug === 'typing-certificate-validity-for-jobs'
                       ? '40 / 21'
                     : post.slug === 'typing-certificate-wpm-requirements' || post.slug === 'how-to-type-urdu-online-english-keyboard' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' || post.slug === 'free-urdu-typing-website-type-practice-test-online' || post.slug === 'urdu-typing-test-paragraphs' || post.slug === 'how-long-to-learn-urdu-typing' || post.slug === 'benefits-of-urdu-and-english-typing' || post.slug === 'roman-urdu-to-urdu-typing'

@@ -201,7 +201,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.typeoye.com/blog/how-to-challenge-a-friend-typing-race</loc>
+    <loc>https://www.typeoye.com/blog/online-typing-challenge-compete-friends-real-time</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.typeoye.com/blog/win-online-typing-challenge-tips-strategies</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

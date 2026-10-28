@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { BlogDetail } from '../components/blog/BlogDetail';
@@ -91,6 +91,10 @@ export default function BlogPostPage() {
           }
       : null
   );
+
+  if (slug === 'how-to-challenge-a-friend-typing-race') {
+    return <Navigate to="/blog/online-typing-challenge-compete-friends-real-time" replace />;
+  }
 
   if (!post) {
     return (
