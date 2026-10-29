@@ -81,8 +81,8 @@ export const POSTS: BlogPost[] = [
     readTime: 12,
     publishedAt: '2026-10-29',
     popular: false,
-    image: '/assets/blog/stenotypist-test-preparation-pakistan.png',
-    imageAlt: 'Stenotypist test preparation guide for government jobs in Pakistan',
+    image: '/assets/blog/pitman-shorthand-alphabet-complete-stroke-guide.png',
+    imageAlt: 'Pitman shorthand alphabet complete stroke guide infographic',
     moreTools: [
       { label: 'English Typing Test', to: '/test' },
       { label: 'Typing Practice', to: '/practice' },
