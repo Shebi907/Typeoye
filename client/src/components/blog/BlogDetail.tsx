@@ -14,6 +14,7 @@ import { RomanUrduExamples } from './RomanUrduExamples';
 import { GoogleDocsUrduExamples } from './GoogleDocsUrduExamples';
 import TypingJobsResources from './TypingJobsResources';
 import { WindowsUrduKeyboardSources } from './WindowsUrduKeyboardSources';
+import { PitmanShorthandStrokeChart } from './PitmanShorthandStrokeChart';
 
 interface BlogDetailProps {
   post: BlogPost;
@@ -148,7 +149,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                   ? undefined
                   : post.slug === 'how-to-type-urdu-mobile-pc-guide'
                     ? '3 / 2'
-                : (post.slug === 'online-typing-challenge-compete-friends-real-time' || post.slug === 'win-online-typing-challenge-tips-strategies' || post.slug === 'improve-english-typing-speed-stenotypist-jobs' || post.slug === 'required-typing-speed-stenotypist-pakistan')
+                : (post.slug === 'online-typing-challenge-compete-friends-real-time' || post.slug === 'win-online-typing-challenge-tips-strategies' || post.slug === 'improve-english-typing-speed-stenotypist-jobs' || post.slug === 'required-typing-speed-stenotypist-pakistan' || post.slug === 'stenotypist-test-preparation-in-pakistan' || post.slug === 'pitman-shorthand-alphabet-stroke-guide')
                   ? '16 / 9'
                   : post.slug === 'free-typing-certificate-online' || post.slug === 'typing-certificate-validity-for-jobs'
                       ? '40 / 21'
@@ -167,7 +168,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                   alt={post.imageAlt}
                   className={cn(
                     'absolute inset-0 h-full w-full',
-                    post.slug === 'improve-english-typing-speed-stenotypist-jobs' || post.slug === 'required-typing-speed-stenotypist-pakistan' || post.slug === 'stenotypist-test-preparation-in-pakistan' ? 'object-contain bg-white' : 'object-cover'
+                    post.slug === 'improve-english-typing-speed-stenotypist-jobs' || post.slug === 'required-typing-speed-stenotypist-pakistan' || post.slug === 'stenotypist-test-preparation-in-pakistan' || post.slug === 'pitman-shorthand-alphabet-stroke-guide' ? 'object-contain bg-white' : 'object-cover'
                   )}
                 />
               )}
@@ -217,6 +218,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                       {section.guide === 'google-docs-urdu-examples' && <GoogleDocsUrduExamples />}
                       {section.guide === 'typing-jobs-resources' && <TypingJobsResources />}
                       {section.guide === 'windows-urdu-keyboard-sources' && <WindowsUrduKeyboardSources />}
+                      {section.guide === 'pitman-shorthand-stroke-chart' && <PitmanShorthandStrokeChart />}
                     </section>
 
                     {index === pullQuoteIndex && post.pullQuote && (

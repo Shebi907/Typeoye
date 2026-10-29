@@ -4,7 +4,7 @@ export type BlogSort = 'latest' | 'oldest' | 'popular';
 export interface BlogSection {
   heading: string;
   body: string;
-  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs' | 'urdu-kaise-faqs' | 'post-faqs' | 'certificate-steps' | 'urdu-practice-passages' | 'urdu-learning-examples' | 'bilingual-typing-benefits' | 'roman-urdu-examples' | 'google-docs-urdu-examples' | 'typing-jobs-resources' | 'windows-urdu-keyboard-sources';
+  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs' | 'urdu-kaise-faqs' | 'post-faqs' | 'certificate-steps' | 'urdu-practice-passages' | 'urdu-learning-examples' | 'bilingual-typing-benefits' | 'roman-urdu-examples' | 'google-docs-urdu-examples' | 'typing-jobs-resources' | 'windows-urdu-keyboard-sources' | 'pitman-shorthand-stroke-chart';
 }
 
 export interface BlogPost {
@@ -55,7 +55,7 @@ export const CATEGORY_BADGE: Record<BlogCategory, string> = {
 /** Sidebar category post counts (keep in sync with POSTS). */
 export const CATEGORY_COUNTS: Record<BlogCategory, number> = {
   'Typing Tips': 6,
-  'Guides': 28,
+  'Guides': 29,
   'Practice': 3,
   'Productivity': 4,
   'News & Updates': 1,
@@ -70,6 +70,94 @@ export function formatDate(iso: string): string {
 }
 
 export const POSTS: BlogPost[] = [
+  {
+    slug: 'pitman-shorthand-alphabet-stroke-guide',
+    title: 'Pitman Shorthand Alphabet: Complete Stroke Guide',
+    category: 'Guides',
+    description: 'Learn the Pitman shorthand alphabet, consonant strokes, light and heavy sounds, vowel signs, and beginner exercises for stenotypist preparation.',
+    metaTitle: 'Pitman Shorthand Alphabet: Complete Stroke Guide | Typeoye',
+    metaDescription: 'A beginner-friendly Pitman shorthand alphabet chart with consonant stroke sounds, directions, light and heavy forms, vowel signs, and practice tips for stenotypists in Pakistan.',
+    intro: 'Pitman shorthand can look like a page of unfamiliar marks at first, but its basic idea is orderly: strokes represent consonant sounds, while small vowel signs help show how those sounds form words. This guide introduces the Pitman shorthand alphabet and its basic New Era stroke forms. It is a learning overview, not a substitute for the exact edition or method named in a stenotypist job notice or course.',
+    readTime: 12,
+    publishedAt: '2026-10-29',
+    popular: false,
+    image: '/assets/blog/stenotypist-test-preparation-pakistan.png',
+    imageAlt: 'Stenotypist test preparation guide for government jobs in Pakistan',
+    moreTools: [
+      { label: 'English Typing Test', to: '/test' },
+      { label: 'Typing Practice', to: '/practice' },
+      { label: 'Stenotypist Test Preparation in Pakistan', to: '/blog/stenotypist-test-preparation-in-pakistan' },
+      { label: 'Required Typing Speed for a Stenotypist in Pakistan', to: '/blog/required-typing-speed-stenotypist-pakistan' },
+    ],
+    pullQuote: 'Learn each mark as a sound and a movement; English spelling alone cannot tell you which shorthand stroke to write.',
+    cta: {
+      heading: 'Build the typing skill that supports transcription',
+      blurb: 'Use Typeoye’s English typing test and practice sessions to build accuracy while you study shorthand.',
+      label: 'Open Typing Practice',
+      to: '/practice',
+    },
+    faqs: [
+      { question: 'Does each Pitman shorthand sign represent an English letter?', answer: 'No. Pitman is sound-based. A stroke represents a consonant sound, so one sound can have different spellings in ordinary English, and a letter can represent different sounds in different words.' },
+      { question: 'How many consonant strokes are in the Pitman shorthand alphabet?', answer: 'A commonly taught New Era reference has 24 consonant sounds represented by 26 basic strokes. R has two forms, and H has two forms; their use depends on the word and joining rules.' },
+      { question: 'What is the difference between light and heavy Pitman strokes?', answer: 'In paired consonants, the light stroke represents the unvoiced sound and its heavier counterpart represents the voiced sound, such as P/B or F/V. Thickness is meaningful and must stay distinct.' },
+      { question: 'Are Pitman vowels written as English vowel letters?', answer: 'No. Vowel sounds are shown with light or heavy dots and dashes placed at first, second, or third position alongside a consonant stroke. The sign represents a sound, not the printed vowel letter.' },
+      { question: 'Can I learn Pitman shorthand from a chart alone?', answer: 'A chart is a reference, not a full course. Learn stroke direction and thickness, vowel placement, joining, and reading together with a consistent textbook or teacher, then practise from checked exercises.' },
+      { question: 'Is Pitman shorthand useful for stenotypist test preparation in Pakistan?', answer: 'It can be useful when a course or vacancy requires Pitman shorthand. Recruitment rules differ, so check the exact shorthand system and practical test requirements in the relevant official advertisement and instructions.' },
+    ],
+    content: [
+      {
+        heading: 'Introduction to the Pitman Shorthand Alphabet',
+        body: 'Pitman shorthand is a writing system for recording speech with compact marks. Instead of writing every English letter, a learner uses a set of consonant strokes, vowel signs, and later abbreviating devices. In the New Era teaching reference used for the chart below, 24 consonant sounds are represented by 26 basic strokes because R and H each have alternative forms. Textbooks and historical editions may arrange or teach some details differently. Choose one course or edition and follow it consistently, especially if you are preparing for a stenotypist test.',
+      },
+      {
+        heading: 'How Pitman Shorthand Works: Sound-Based Writing',
+        body: 'Pitman shorthand is phonetic: it follows the sounds you hear, not simply the letters you see. For example, the initial sound in “phone” is /f/, even though it is spelled with PH, while “thin” and “then” begin with two different TH sounds. Pitman gives each of those sounds its own shorthand value. A stroke is therefore not an English alphabet letter dressed up as a symbol. A spoken word is analysed into sounds, represented with strokes and vowel signs, and joined into an outline according to the rules of the chosen edition.',
+      },
+      {
+        heading: 'Complete Consonant Stroke Chart',
+        body: 'Use this New Era beginner chart to learn each basic consonant stroke by its sound, name, general direction, and light or heavy weight. The IPA-style sound hints and sample words are pronunciation cues, not extra shorthand symbols. For curved forms, the arrow shows the standard isolated-stroke direction; some strokes may be reversed in joined outlines when the system’s joining rules allow it. Keep the start dot, direction, angle, length, and shading clear when copying a stroke.',
+        guide: 'pitman-shorthand-stroke-chart',
+      },
+      {
+        heading: 'Light and Heavy Strokes and Their Meaning',
+        body: 'In a paired consonant series, a light stroke records the unvoiced member and the same basic form made heavier records its voiced partner. Compare /p/ and /b/: place your fingers lightly on your throat and say “pin” then “bin”; the second begins with vocal-cord vibration. Similar pairs include T/D, CH/J, K/G, F/V, the two TH sounds, S/Z, and SH/ZH. Shading is not decoration or emphasis: it changes the sound. Make a clear contrast without pressing so hard that the stroke becomes clumsy. Many other consonants in the chart have a single light basic form; there are no thick upstrokes in the standard writing method.',
+      },
+      {
+        heading: 'Straight and Curved Strokes',
+        body: 'The consonant set uses straight strokes and curved strokes. Straight signs include the diagonal P/B and CH/J pairs, vertical T/D, and horizontal K/G. Curves provide other consonant sounds, while the M, N, and NG signs are horizontal curved forms. Direction matters: the common basic forms include downstrokes, upstrokes, and left-to-right horizontals. Some forms, such as L and SH, can be written in another direction when joining rules call for it. The chart is a basic alphabet reference, not a guide to every alternate direction or every joined outline.',
+      },
+      {
+        heading: 'How Vowel Sounds Are Represented with Dots and Dashes',
+        body: 'Vowels are small signs placed beside a consonant stroke: dots represent some vowel sounds and short dashes represent others. Each has a light short-vowel form and a heavy long-vowel form. A vowel may be placed at the beginning, middle, or end of a stroke; these are called first, second, and third place. For an upstroke or downstroke, a vowel before the consonant is placed on its left and a vowel after it on its right. For a horizontal stroke, a vowel before is placed above and a vowel after below. Position is counted from the point where the stroke begins. This is a basic placement introduction; a full course teaches the vowel scale, diphthongs, joining, and position writing in detail.',
+      },
+      {
+        heading: 'How to Read and Practice Pitman Strokes Correctly',
+        body: 'Read a stroke by identifying its shape, direction, and thickness before you guess the word. Then identify any vowel sign and its place. When several strokes join, read their consonant sounds in writing order and apply the vowel and joining rules from your textbook. Do not use ordinary English spelling as the only decoding key: the same sound may be spelled in different ways. Beginners should first name each stroke aloud as they write it, copy a clear model, then cover the key and test reading from memory. Use a consistent pen or pencil and keep stroke length and shading recognisable.',
+      },
+      {
+        heading: 'Beginner Practice Exercises',
+        body: 'Try this short sequence for 15–20 minutes. First, copy the light/heavy pairs P/B, T/D, CH/J, and K/G five times each, saying the sound name as you write. Second, make a voice contrast: say “fan/van,” “sip/zip,” and “thin/then,” then identify which member is light and which is heavy in the chart. Third, copy the curved and horizontal strokes separately, watching the arrow and keeping the line lengths consistent. Fourth, practise vowel placement on one straight stroke using a checked exercise from your chosen manual: mark first, second, and third place and say each vowel sound aloud. Finally, read yesterday’s page without looking at its key and circle any form you hesitate over. Do not invent a word outline to test yourself; use verified course examples.',
+      },
+      {
+        heading: 'Common Mistakes and Tips for Beginners',
+        body: 'A common mistake is matching shorthand to the English letter instead of the spoken sound. Others make light and heavy strokes look alike, reverse a stroke without a joining reason, or place vowels by visual guess rather than counting from the stroke’s start. Learners can also try to memorise advanced hooks and brief forms before the basic alphabet is secure. Practise a small set accurately, review it the next day, and use a single textbook edition. Pitman shorthand depends on sound, so pronunciation choices and the edition used by a class matter. If learning for an exam, follow the vocabulary, dictation system, and conventions specified by your teacher or official test instructions.',
+      },
+      {
+        heading: 'Brief Forms, Word Outlines, and Stenotypist Test Preparation in Pakistan',
+        body: 'After the basic strokes and vowel signs, Pitman courses introduce brief forms and other abbreviating devices for common words and sound groups. These are learned conventions; they are not a simple one-symbol-per-English-letter alphabet. A word outline may combine consonant strokes, vowel signs, and later devices such as hooks or circles. Learn each brief form from a reliable key rather than guessing it from the word’s spelling. For stenotypist test preparation in Pakistan, check whether a specific vacancy names Pitman or another shorthand system and whether it specifies a dictation speed, transcription time, or practical format. Those requirements can vary by recruiting body and advertisement. Typeoye’s English Typing Test and Typing Practice pages can help develop keyboard transcription accuracy alongside shorthand study, but they do not assess shorthand or replace official recruitment instructions.',
+        guide: 'english-typing-links',
+      },
+      {
+        heading: 'Keep Learning with a Consistent Method',
+        body: 'A dependable beginning comes from learning sounds, strokes, thickness, direction, and vowel placement as one connected system. Keep a small practice log: today’s stroke group, the errors you made, and the signs to review tomorrow. Read as well as write; the ability to recognise your own outlines is part of useful shorthand practice. Continue with a complete Pitman course for joining rules and brief forms, and check official vacancy notices for the system and test conditions relevant to your application.',
+      },
+      {
+        heading: 'Frequently Asked Questions (FAQ)',
+        body: 'Quick answers about Pitman sounds, stroke forms, vowels, and beginner learning.',
+        guide: 'post-faqs',
+      },
+    ],
+  },
   {
     slug: 'improve-english-typing-speed-stenotypist-jobs',
     title: 'How to Improve English Typing Speed for Stenotypist Jobs',
