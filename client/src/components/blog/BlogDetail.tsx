@@ -148,13 +148,13 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                   ? undefined
                   : post.slug === 'how-to-type-urdu-mobile-pc-guide'
                     ? '3 / 2'
-                : (post.slug === 'online-typing-challenge-compete-friends-real-time' || post.slug === 'win-online-typing-challenge-tips-strategies')
+                : (post.slug === 'online-typing-challenge-compete-friends-real-time' || post.slug === 'win-online-typing-challenge-tips-strategies' || post.slug === 'improve-english-typing-speed-stenotypist-jobs' || post.slug === 'required-typing-speed-stenotypist-pakistan')
                   ? '16 / 9'
                   : post.slug === 'free-typing-certificate-online' || post.slug === 'typing-certificate-validity-for-jobs'
                       ? '40 / 21'
                     : post.slug === 'typing-certificate-wpm-requirements' || post.slug === 'how-to-type-urdu-online-english-keyboard' || post.slug === 'urdu-typing-test-practice-ppsc-fpsc-pakistan' || post.slug === 'how-to-type-urdu-in-ms-word' || post.slug === 'improve-typing-accuracy-without-looking-at-keyboard' || post.slug === 'free-urdu-typing-website-type-practice-test-online' || post.slug === 'urdu-typing-test-paragraphs' || post.slug === 'how-long-to-learn-urdu-typing' || post.slug === 'benefits-of-urdu-and-english-typing' || post.slug === 'roman-urdu-to-urdu-typing'
                     ? '16 / 9'
-                    : post.slug === 'urdu-typing-google-docs' || post.slug === 'practice-typing-with-your-own-text' || post.slug === 'typing-jobs-pakistan-worldwide' || post.slug === 'urdu-keyboard-download-windows'
+                    : post.slug === 'urdu-typing-google-docs' || post.slug === 'practice-typing-with-your-own-text' || post.slug === 'typing-jobs-pakistan-worldwide' || post.slug === 'improve-english-typing-speed-stenotypist-jobs' || post.slug === 'urdu-keyboard-download-windows'
                       ? '16 / 9'
                     : '16 / 8',
               }}
@@ -162,7 +162,14 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
               {post.slug === 'urdu-phonetic-keyboard-layout' ? (
                 <UrduKeyboardLayoutGraphic className="absolute inset-0 min-w-[960px] sm:min-w-0" />
               ) : (
-                <img src={post.image} alt={post.imageAlt} className="absolute inset-0 h-full w-full object-cover" />
+                <img
+                  src={post.image}
+                  alt={post.imageAlt}
+                  className={cn(
+                    'absolute inset-0 h-full w-full',
+                    post.slug === 'improve-english-typing-speed-stenotypist-jobs' || post.slug === 'required-typing-speed-stenotypist-pakistan' || post.slug === 'stenotypist-test-preparation-in-pakistan' ? 'object-contain bg-white' : 'object-cover'
+                  )}
+                />
               )}
             </figure>
 

@@ -55,7 +55,7 @@ export const CATEGORY_BADGE: Record<BlogCategory, string> = {
 /** Sidebar category post counts (keep in sync with POSTS). */
 export const CATEGORY_COUNTS: Record<BlogCategory, number> = {
   'Typing Tips': 6,
-  'Guides': 25,
+  'Guides': 28,
   'Practice': 3,
   'Productivity': 4,
   'News & Updates': 1,
@@ -70,6 +70,252 @@ export function formatDate(iso: string): string {
 }
 
 export const POSTS: BlogPost[] = [
+  {
+    slug: 'improve-english-typing-speed-stenotypist-jobs',
+    title: 'How to Improve English Typing Speed for Stenotypist Jobs',
+    category: 'Guides',
+    description: 'Build English typing speed and accuracy for stenotypist jobs with practical drills, a 30-day plan, and vacancy-specific test preparation advice.',
+    metaTitle: 'Improve English Typing Speed for Stenotypist Jobs | Typeoye',
+    metaDescription: 'Learn how to improve English typing speed for stenotypist jobs with finger-placement tips, daily drills, timed paragraphs, and a practical 30-day plan.',
+    intro: 'If you are preparing for a stenotypist job in Pakistan, regular English typing practice can help you transcribe documents with greater control and confidence. Start by measuring your current speed and accuracy, then work on technique and common errors before adding more pace. The required speed and test format vary by department and recruitment advertisement, so use the official notice to set your final target.',
+    readTime: 12,
+    publishedAt: '2026-10-29',
+    popular: false,
+    image: '/assets/blog/improve-english-typing-speed-stenotypist-jobs.png',
+    imageAlt: 'Improve English typing speed for stenotypist job preparation',
+    moreTools: [
+      { label: 'English Typing Test', to: '/test' },
+      { label: 'Typing Practice', to: '/practice' },
+      { label: 'Required Typing Speed for a Stenotypist in Pakistan', to: '/blog/required-typing-speed-stenotypist-pakistan' },
+      { label: 'Stenotypist Test Preparation in Pakistan', to: '/blog/stenotypist-test-preparation-in-pakistan' },
+    ],
+    pullQuote: 'Build accuracy into your rhythm first; then add speed in small steps you can repeat.',
+    cta: {
+      heading: 'Practise and track your English typing',
+      blurb: 'Take a timed typing test, review your speed and accuracy, and use focused practice to work on the next step.',
+      label: 'Start an English Typing Test',
+      to: '/test',
+    },
+    faqs: [
+      { question: 'How can I improve English typing speed for stenotypist jobs?', answer: 'Measure your baseline, practise correct finger movement and accuracy drills every day, then add timed paragraphs gradually. Review repeated errors after each round instead of taking tests without analysis.' },
+      { question: 'What typing speed is required for a stenotypist job in Pakistan?', answer: 'Requirements vary by department, post, and recruitment advertisement. Check the current official notice and candidate instructions for the exact language, speed, accuracy rules, and test format.' },
+      { question: 'How many minutes should I practise typing daily?', answer: 'A focused 25–35 minute typing routine is a reasonable starting point for many candidates. Use shorter sessions if you are new to typing, and take breaks if your hands feel tired.' },
+      { question: 'Should I focus on WPM or accuracy first?', answer: 'Prioritize controlled, accurate typing first. Once your error rate is stable, increase pace in small steps while continuing to check both speed and accuracy.' },
+      { question: 'Can I use Typeoye for a stenotypist typing test?', answer: 'Typeoye’s English Typing Test and Typing Practice pages can help you practise and review your progress. They are practice tools and may not match a recruiting department’s software, scoring, or test conditions.' },
+      { question: 'Does the 30-day plan guarantee that I will reach the required speed?', answer: 'No. Progress depends on your starting point, practice quality, and consistency. The plan is a structured way to practise; use the official vacancy notice for the target and assessment rules.' },
+    ],
+    content: [
+      {
+        heading: 'Introduction: Why English Typing Speed Matters for Stenotypists',
+        body: 'Stenotypists may need to turn dictation or shorthand notes into letters, minutes, reports, and other records. Typing comfortably can help you finish that work on time, but speed alone is not enough: a wrong name, date, or number can change the meaning of a document. Regular practice helps develop a steady rhythm, stronger accuracy, and confidence under a timer. If a government vacancy includes a typing test, its current advertisement and candidate instructions define the required speed and test format. Requirements vary by department, post, and recruitment advertisement; no general guide can replace those official details.',
+      },
+      {
+        heading: 'Typing Skills Required for Stenotypist Jobs',
+        body: 'Useful skills include accurate English spelling, consistent spacing, capital letters, punctuation, and the ability to type names, dates, and figures carefully. You may also need to read ahead while listening or transcribing, keep formatting clear, and stay composed under time pressure. Some jobs assess typing separately from shorthand or dictation, while others describe a different practical test. Practise the skills mentioned in your vacancy notice, and do not assume shorthand speed and keyboard speed are the same measure.',
+      },
+      {
+        heading: 'How to Check Your Current Typing Speed and Accuracy',
+        body: 'Take a timed test using a passage and duration you can repeat later. WPM means words per minute: many typing tools estimate one standard word as five characters, including spaces. For example, 200 characters typed in one minute works out to about 40 WPM (200 ÷ 5). Accuracy describes how much of what you typed matched the passage under that tool’s scoring method. If 96 of 100 scored characters are correct, that is 96% accuracy. Tests may calculate errors differently, so compare scores within the same tool and read its scoring explanation. Take two or three baseline attempts on separate rounds, record WPM and accuracy, and note your common errors. An English typing test for stenotypist candidates gives you a repeatable practice check, though a recruitment test may use different software, timing, and scoring.',
+        guide: 'english-typing-links',
+      },
+      {
+        heading: 'Learn Proper Finger Placement and Touch Typing',
+        body: 'Place your left-hand fingers over A, S, D, and F, and your right-hand fingers over J, K, L, and the semicolon key. Let your thumbs rest lightly near the space bar. The small raised marks on F and J help you find the home row without looking down. Reach for other keys with the nearest comfortable finger, then return to the home row. Beginners should learn a small group of letters at a time and type slowly enough to choose the correct finger. If you already type with basic familiarity, notice which fingers you avoid or which keys make you pause, then practise those specific reaches. Keep shoulders loose and wrists comfortable; stop for a short break if you feel strain.',
+      },
+      {
+        heading: 'Daily Exercises to Improve Typing Speed',
+        body: 'Use short exercises with a clear goal. For a 5-minute home-row drill, type simple patterns such as “asdf jkl;” and familiar words that use those letters, keeping movements light. For a 5-minute weak-key drill, choose three keys that caused errors in your last session and type short words containing them—for example, “their,” “there,” and “three” for tricky letter sequences. For a 5-minute punctuation drill, type two or three sentences with capitals, commas, apostrophes, and full stops. Beginners can repeat each line slowly; more experienced typists can use a timer and aim for an even pace. This stenotypist typing practice works best when you review the errors afterward, rather than treating a single fast run as progress. Typeoye Typing Practice provides repeatable sessions for that routine.',
+      },
+      {
+        heading: 'How to Improve Typing Accuracy Before Increasing Speed',
+        body: 'Choose a pace where you can make deliberate keystrokes and read each word correctly. After a practice round, identify the errors you made most often: missed capitals, doubled letters, omitted spaces, or punctuation in the wrong place. Practise a few examples of that pattern slowly, then repeat the passage. Increase your pace a little only after the same kind of text feels controlled. Accuracy-first practice does not mean staying slow forever; it helps build reliable movements that can become faster. Track both WPM and accuracy so a speed gain does not hide a rise in mistakes.',
+      },
+      {
+        heading: 'Practice with Timed Paragraphs',
+        body: 'Once you can type short passages accurately, add timed paragraphs. Start with a short round, such as one or two minutes, and type continuously at a comfortable pace. Then try a longer passage to build concentration. Use realistic material with sentence capitals, commas, names, and numbers, but avoid text so difficult that you are constantly stopping to decode unfamiliar vocabulary. Read a few words ahead when possible, keep your hands relaxed, and follow the test’s rules for correcting mistakes. A timed practice session is useful rehearsal, but it may not reproduce the department’s keyboard, software, duration, or scoring method.',
+      },
+      {
+        heading: 'Common Typing Mistakes and How to Avoid Them',
+        body: 'Rushing the first few seconds often creates errors and breaks your rhythm, so begin at a controlled pace. Looking down for every key interrupts reading; use the F and J markers and learn the keyboard gradually. Pressing keys too hard can tire your hands; use light, even movements. Repeating full tests without reviewing results lets the same errors continue. Practising only easy text can leave punctuation and capitals underprepared, while choosing passages far above your level can make practice discouraging. Work on one difficulty at a time, and always verify a stenotypist job’s official speed and test rules instead of borrowing requirements from another vacancy.',
+      },
+      {
+        heading: 'A 30-Day English Typing Improvement Plan',
+        body: 'This plan is a practice framework, not a promise of a particular WPM result. On most days, spend about 25–35 minutes typing: 3 minutes warming up, 10 minutes on a focused drill, 5 minutes on an accuracy-first paragraph, 2 minutes reviewing errors, and 5–10 minutes on a timed round when appropriate. Days 1–3: take a baseline and learn home-row finger placement. Days 4–7: practise home-row and common letter combinations; record recurring errors. Days 8–14: add punctuation, capitals, and short timed paragraphs while keeping accuracy steady. Days 15–21: practise longer passages and add a second timed round on some days, with a brief break between rounds. Days 22–26: simulate the duration and rules stated in your official notice if they are available; otherwise vary the practice duration without assuming it is the exam format. Days 27–29: review your weakest keys and repeat a comparable test to check progress. Day 30: take one calm final practice session, compare it with your baseline, and set your next goal. Rest or shorten practice when tired, and adjust the plan to your starting skill and schedule.',
+      },
+      {
+        heading: 'Tips for Performing Well in a Stenotypist Typing Test',
+        body: 'Before the test, confirm the official instructions: required language, duration, speed or accuracy conditions, keyboard or software, correction policy, and reporting details. Practise on a similar keyboard if possible, arrive prepared, and use only permitted equipment. At the start, settle your hands and begin at a pace you can control. Keep reading ahead, maintain a steady rhythm, and correct errors only as the test rules allow. Do not panic over one missed word; return to the passage and continue. A Typeoye practice score is useful for tracking your own preparation, but only the recruiting authority can define and assess its requirement.',
+      },
+      {
+        heading: 'Frequently Asked Questions (FAQ)',
+        body: 'Answers to common questions about typing practice, WPM, accuracy, and stenotypist job requirements.',
+        guide: 'post-faqs',
+      },
+    ],
+  },
+  {
+    slug: 'required-typing-speed-stenotypist-pakistan',
+    title: 'What Is the Required Typing Speed for a Stenotypist in Pakistan?',
+    category: 'Guides',
+    description: 'Find out how to check stenotypist typing speed requirements in Pakistan, understand WPM and accuracy, and prepare for a PPSC or FPSC skill test.',
+    metaTitle: 'Required Typing Speed for Stenotypist in Pakistan | Typeoye',
+    metaDescription: 'Learn how stenotypist typing speed requirements vary by Pakistani job advertisement, how WPM and accuracy work, and how to practise for PPSC or FPSC recruitment.',
+    intro: 'There is no single typing speed that applies to every stenotypist vacancy in Pakistan. The required language, speed, accuracy rules, and test format depend on the department, post, and current recruitment advertisement. This guide shows you how to find the authoritative target, understand typing scores, and build a practical preparation routine without confusing typing with shorthand.',
+    readTime: 9,
+    publishedAt: '2026-10-29',
+    popular: false,
+    image: '/assets/blog/required-typing-speed-stenotypist-pakistan.png',
+    imageAlt: 'Required typing speed for stenotypist jobs in Pakistan',
+    moreTools: [
+      { label: 'English Typing Test', to: '/test' },
+      { label: 'Typing Practice', to: '/practice' },
+      { label: 'Stenotypist Test Preparation in Pakistan', to: '/blog/stenotypist-test-preparation-in-pakistan' },
+      { label: 'Typing Speed Tips', to: '/blog/typing-speed-tips' },
+    ],
+    pullQuote: 'Let the vacancy notice set the required speed; let consistent practice build your control and confidence.',
+    cta: {
+      heading: 'Check your typing speed, then practise',
+      blurb: 'Take a timed English typing test on Typeoye and use focused practice to work on your next improvement.',
+      label: 'Take the English Typing Test',
+      to: '/test',
+    },
+    faqs: [
+      { question: 'What is the required typing speed for a stenotypist in Pakistan?', answer: 'It depends on the recruiting department, post, and current advertisement. Check the official vacancy notice and candidate instructions for the required language, WPM, accuracy, test duration, and scoring rules.' },
+      { question: 'What is the PPSC stenotypist typing speed?', answer: 'There is no one PPSC typing speed that should be assumed for every post or recruitment cycle. Refer to the official advertisement and instructions for the specific vacancy or case.' },
+      { question: 'What is the FPSC stenotypist typing speed?', answer: 'FPSC requirements can depend on the advertised post and recruitment instructions. Confirm the stated speed and skill-test format in the applicable official notice; do not rely on a number from another post.' },
+      { question: 'Is stenotypist typing speed the same as shorthand speed?', answer: 'No. Typing speed measures typed text, commonly in words per minute. Shorthand speed measures how quickly spoken words can be recorded using shorthand or stenography. The vacancy may set separate requirements for each.' },
+      { question: 'How many WPM should I practise for a stenotypist test?', answer: 'Use the speed stated in your official advertisement as your target if it provides one. Before that, build a steady and accurate baseline, then increase your pace gradually. A practice target is not an official eligibility requirement.' },
+      { question: 'How can I practise for an English stenotypist typing test?', answer: 'Use short accuracy drills, review recurring errors, and add timed passages as your control improves. Typeoye’s English Typing Test and Typing Practice pages provide ways to check timed performance and build a regular practice habit.' },
+      { question: 'Does a Typeoye score prove I meet a government job requirement?', answer: 'No. Typeoye is a practice and self-checking tool. The recruiting authority decides the assessment format and result under the official vacancy rules.' },
+    ],
+    content: [
+      {
+        heading: 'Introduction: Why Typing Speed Matters for Stenotypists',
+        body: 'Stenotypists may need to turn spoken information or shorthand notes into clear documents under time pressure. Reliable typing helps with transcription, letters, minutes, and records, but speed is only one part of the job: errors can change names, dates, figures, or meaning. A recruitment notice may include a practical typing test to assess a specific skill. The precise target is set by that vacancy, so candidates should confirm it before choosing a practice goal. Typeoye’s related stenotypist test preparation guide covers the wider written test, shorthand, and interview preparation.',
+      },
+      {
+        heading: 'What Is a Stenotypist?',
+        body: 'A stenotypist is an office worker who records spoken information, often through shorthand or stenography, and prepares a typed transcript or other official documents. Duties differ by employer and post. Some roles may combine dictation and transcription with correspondence, record keeping, and routine office work. The job title alone does not tell you which skills will be tested: read the responsibilities and assessment details in the advertisement for the vacancy you want.',
+      },
+      {
+        heading: 'Required English Typing Speed for Stenotypist Jobs in Pakistan',
+        body: 'The required English typing speed for a stenotypist in Pakistan is not one fixed national figure. One department or post may specify a typing test and a target; another may use a different speed, language, time limit, error policy, or practical assessment. Some notices may not give a typing-speed figure in the same way. Treat a number as an official requirement only when it appears in the current official advertisement or later instructions for that vacancy. Check the exact post title, recruiting authority, language, WPM wording, test duration, accuracy or error rules, and any permitted correction method. If a detail is unclear, use the authority’s official contact or clarification channel. Online advice and old advertisements can help you practise, but they cannot establish the current requirement.',
+      },
+      {
+        heading: 'Typing Speed Requirements in PPSC and FPSC Recruitment',
+        body: 'Candidates searching for PPSC stenotypist typing speed or FPSC stenotypist typing speed should verify the individual advertisement, case details, syllabus, call letter, and candidate notices. PPSC and FPSC recruitment requirements are not interchangeable, and they can differ between posts and recruitment cycles. Do not carry a speed figure from a previous vacancy into a new application unless the current official instructions repeat it. Make a small checklist from the notice: required skill, language, stated speed, duration, accuracy or error criteria, test venue or software instructions, and documents to bring. If an official source does not state a speed, do not infer one from the job title or from a general preparation article.',
+      },
+      {
+        heading: 'Difference Between Typing Speed and Shorthand Speed',
+        body: 'Typing speed measures how quickly you enter text using a keyboard, usually expressed as words per minute (WPM). Shorthand speed measures how quickly you can record spoken words with a shorthand system or stenography method. A stenotypist vacancy may assess typing, shorthand, dictation, transcription, or a combination, with separate conditions for each. Practising keyboard WPM will not automatically raise shorthand speed, and a shorthand speed target should not be mistaken for typing WPM. Read the advertisement carefully to see which skill is required and how it will be assessed.',
+      },
+      {
+        heading: 'How WPM (Words Per Minute) Is Calculated',
+        body: 'WPM is a rate: the amount of text typed divided by the time taken. Many typing tools use a standard word length of five characters, often counting spaces, to make scores from different passages easier to compare. For example, if you type 250 characters in one minute, that is 50 standard words per minute (250 ÷ 5). A 50 WPM score does not mean every five-letter word was correct; the tool may report gross speed and accuracy separately or calculate a net score after errors. Scoring methods vary, so read the test’s own explanation and the recruitment authority’s rules. Accuracy is the share of typed characters or entries accepted as correct under a particular test’s method. For a simple example, if 95 out of 100 scored characters are correct, accuracy is 95%. A fast score with many errors may not satisfy an assessment that penalizes mistakes.',
+      },
+      {
+        heading: 'How to Improve Typing Speed and Accuracy',
+        body: 'Start at a pace where you can type correctly and keep a relaxed rhythm. Try three practical drills: (1) a five-minute common-word drill, focusing on smooth transitions rather than racing; (2) a weak-key drill, repeating short words that use letters or reaches you often mistype; and (3) a punctuation and capitalization drill using names, dates, commas, and full stops. After each round, note recurring mistakes and practise those patterns slowly before taking another timed passage. Keep your eyes on the text, use the same keyboard where possible, and increase speed in small steps only when accuracy remains steady. Use Typeoye’s English Typing Test for a timed check and Typing Practice for repeatable exercises. These tools support preparation; they do not certify that you have met a department’s test conditions.',
+        guide: 'english-typing-links',
+      },
+      {
+        heading: 'Daily Typing Practice Plan for Candidates',
+        body: 'A focused 30-minute routine is a manageable starting point. Warm up for 3 minutes with familiar text and relaxed finger movement. Spend 8 minutes on accuracy drills, including the keys or letter pairs that caused recent errors. Take a short stretch break, then type a 5-minute passage at a steady pace. Use 5 minutes to review the result and repeat only the troublesome words or punctuation. Finish with a 5-minute timed test or passage and record the date, duration, WPM, accuracy, and one focus for tomorrow. If the official test duration is known, include a longer mock round occasionally that follows the published format. On busy days, a short focused session is more useful than rushing through practice while tired.',
+      },
+      {
+        heading: 'Common Typing Test Mistakes',
+        body: 'Common mistakes include assuming a speed target from a different department, confusing shorthand speed with keyboard WPM, and practising for speed while ignoring accuracy. Candidates also lose rhythm by looking down at every key, pressing too hard, or starting too fast and tiring early. Taking repeated tests without reviewing errors makes it harder to correct habits. Practise punctuation and capital letters, check the official instructions on corrections and backspace, and avoid changing keyboard layouts at the last minute. Most importantly, verify the test rules and required speed from the official vacancy notice rather than relying on an unofficial summary.',
+      },
+      {
+        heading: 'Frequently Asked Questions (FAQ)',
+        body: 'Quick answers about stenotypist WPM, PPSC and FPSC requirements, shorthand, and typing practice.',
+        guide: 'post-faqs',
+      },
+    ],
+  },
+  {
+    slug: 'stenotypist-test-preparation-in-pakistan',
+    title: 'Stenotypist Test Preparation in Pakistan: Complete Guide',
+    category: 'Guides',
+    description: 'A practical guide to stenotypist job eligibility, shorthand, English typing, written tests, and interviews for candidates in Pakistan.',
+    metaTitle: 'Stenotypist Test Preparation in Pakistan: Complete Guide | Typeoye',
+    metaDescription: 'Prepare for a stenotypist test in Pakistan with practical typing, shorthand, dictation, written-test, and interview tips. Check each official PPSC or FPSC advertisement for exact requirements.',
+    intro: 'Preparing for a stenotypist vacancy means developing several skills together: accurate English typing, shorthand or stenography where required, subject knowledge, and calm performance under time pressure. This guide helps candidates plan that preparation for Pakistan’s public-sector recruitment process while keeping the official advertisement—not assumptions—the source for each post’s rules.',
+    readTime: 11,
+    publishedAt: '2026-10-29',
+    popular: false,
+    image: '/assets/blog/stenotypist-test-preparation-pakistan.png',
+    imageAlt: 'Stenotypist test preparation guide for government jobs in Pakistan',
+    moreTools: [
+      { label: 'English Typing Test', to: '/test' },
+      { label: 'Typing Practice', to: '/practice' },
+      { label: 'Typing Speed Tips', to: '/blog/typing-speed-tips' },
+      { label: 'Typing Tests for Job Interviews', to: '/blog/typing-test-job-interview' },
+    ],
+    pullQuote: 'Use the advertisement to set your target, then practise each skill in a repeatable routine.',
+    cta: {
+      heading: 'Build your English typing confidence',
+      blurb: 'Practise a short passage, review your accuracy, and take a timed test when you are ready.',
+      label: 'Practise English Typing',
+      to: '/practice',
+    },
+    faqs: [
+      { question: 'What qualification is required for a stenotypist job in Pakistan?', answer: 'It depends on the department and vacancy. Read the current official advertisement for the required education, age, domicile, experience, and any shorthand or computer certificates; do not assume one post’s criteria apply to another.' },
+      { question: 'What typing and shorthand speed do I need for a PPSC or FPSC stenotypist test?', answer: 'There is no single speed that applies to every post or recruitment cycle. Check the relevant PPSC, FPSC, or department advertisement and candidate instructions for the language, speed, dictation, transcription time, and assessment rules.' },
+      { question: 'Is shorthand compulsory for every stenotypist vacancy?', answer: 'Requirements vary. Some advertisements specify shorthand or stenography skill tests, while details can differ by role. Confirm the exact requirement in the official notice for the vacancy you are applying to.' },
+      { question: 'How can I improve English typing for a stenotypist skill test?', answer: 'Practise regularly with clean keystrokes, work on your most frequent errors, and add timed rounds after you can type accurately at a comfortable pace. Typeoye’s Practice page supports focused sessions, and its English Typing Test can help you review timed performance.' },
+      { question: 'How long should I practise each day?', answer: 'A focused 60–90 minute routine can be a practical starting point if your schedule allows: divide it between typing, shorthand or dictation, written-test study, and review. Adjust the time to your current ability and the test date, and take short breaks.' },
+      { question: 'Does passing a typing practice test guarantee selection?', answer: 'No. Online practice is for skill building and self-checking. Recruitment assessment, eligibility, shortlisting, and selection are determined by the relevant authority under its published rules.' },
+    ],
+    content: [
+      {
+        heading: 'What Is a Stenotypist?',
+        body: 'A stenotypist is an office professional who records spoken information quickly and accurately, often by taking shorthand or using a stenography method and then preparing a typed transcript. The exact mix of duties depends on the employer. A vacancy may call the role stenotypist, stenographer, or use another title, so read the job description rather than relying on the title alone. The work generally calls for concentration, language accuracy, confidentiality, and dependable computer skills.',
+      },
+      {
+        heading: 'Stenotypist Job Responsibilities in Pakistan',
+        body: 'Depending on the department, a stenotypist may take dictation during meetings or proceedings, transcribe notes into letters or reports, format official documents, maintain records, and manage correspondence. They may also handle routine office tasks and protect sensitive information. Before an assessment, note the responsibilities listed in the specific advertisement: a court, commission, ministry, or other office may emphasize different work and skills.',
+      },
+      {
+        heading: 'Eligibility Criteria and Educational Requirements',
+        body: 'There is no single eligibility checklist for every stenotypist post in Pakistan. Education level, age limits and relaxations, domicile, experience, typing or shorthand certificates, and other conditions are set by the recruiting department and can vary by post and advertisement. Check the official notice and any corrigendum or later candidate instructions. Confirm the closing date, required documents, application method, and whether a skill certificate is required before applying. Do not treat a coaching page or another department’s vacancy as authority for your eligibility.',
+      },
+      {
+        heading: 'Typing Speed and Shorthand Requirements',
+        body: 'Some vacancies publish a specific English typing speed, shorthand speed, dictation duration, transcription time, or minimum accuracy; others may describe a different practical assessment. These figures and test patterns vary by department and official job advertisement, so there is no safe universal number to memorise. Copy the exact requirement from your current notice into a checklist. Note the language, speed unit, duration, permitted equipment, error rules, and whether shorthand is tested separately. Practise toward that stated target, while remembering that Typeoye’s results are practice feedback and may not reproduce the department’s scoring method or software.',
+      },
+      {
+        heading: 'PPSC and FPSC Stenotypist Test Preparation',
+        body: 'For a PPSC stenotypist test or an FPSC stenotypist test, begin with the advertisement and the official syllabus or test instructions for the exact case or vacancy. Do not assume PPSC and FPSC use an identical written paper, skill test, sequence, or marking scheme. Make a one-page test map: eligibility, stages, subjects, skill requirements, dates, documents, and official source links. For any written portion, study only the subjects and topics listed in the applicable syllabus; review basic English grammar, vocabulary, comprehension, general knowledge, or job-related material only where the notice includes them. Schedule mock practice under the time conditions stated by the authority, and check official updates before test day.',
+      },
+      {
+        heading: 'English Typing Speed and Accuracy Improvement',
+        body: 'Build a controlled rhythm before trying to type faster. Start each session with a few minutes of familiar text, then practise a short passage while keeping your eyes on the prompt and your fingers near their home positions. Track both speed and accuracy; a fast run with repeated errors is not a dependable result. After each round, list your three most common errors—perhaps capitals, punctuation, repeated letters, or particular key reaches—and practise those deliberately. Increase pace in small steps only when you can maintain clean typing. Use Typeoye’s English Typing Test to check a timed passage and its Typing Practice page for repeatable drills. Compare similar sessions rather than treating one score as a guarantee of recruitment performance.',
+        guide: 'english-typing-links',
+      },
+      {
+        heading: 'Shorthand and Dictation Practice',
+        body: 'Shorthand is a skill built through regular listening, accurate outlines, and legible transcription. Follow the system and conventions specified by your course or the vacancy; methods are not interchangeable. Begin with short dictation at a speed you can record clearly. Mark words or phrases you missed, transcribe your notes soon after the exercise, and compare the result with the source if available. Repeat difficult phrases, then gradually increase duration or pace. Practise punctuation, names, figures, and unfamiliar vocabulary as separate challenges. Keep a notebook of outlines or sounds you repeatedly confuse. If the post does not require shorthand, devote that time to the actual advertised skill instead.',
+      },
+      {
+        heading: 'Written Test and Interview Preparation',
+        body: 'For the written test, make a topic checklist from the official syllabus and use short recall sessions: read a small topic, close the notes, write what you remember, then correct gaps. Practise multiple-choice or written questions only in the format relevant to your recruitment notice. For an interview, prepare a concise introduction, examples of careful document handling, and clear explanations of why you want the role. Review your application and the department’s public work. Practise answering calmly and honestly; do not claim software, language, or stenography skills you have not developed. Carry only the documents requested in the call letter and follow its reporting instructions.',
+      },
+      {
+        heading: 'Common Mistakes Candidates Should Avoid',
+        body: 'Avoid preparing from an old advertisement without checking whether the current vacancy has different conditions. Do not assume every PPSC or FPSC stenotypist test follows the same pattern, or that a speed listed for one department applies everywhere. Chasing speed while accuracy collapses, practising shorthand without transcribing notes, and taking repeated mock tests without reviewing errors all waste useful practice time. Do not neglect the written syllabus or interview because the practical test feels more urgent. Finally, verify dates, documents, and instructions from official notices rather than social media forwards.',
+      },
+      {
+        heading: 'Daily Study Plan for Stenotypist Candidates',
+        body: 'Use this flexible 75-minute plan on a typical preparation day; shorten or extend it to suit your schedule and the test format. Spend 5 minutes reviewing yesterday’s errors and warming up. Use 20 minutes for English typing: 10 minutes of accuracy-focused drills, a short break, then a timed passage and result review. Spend 25 minutes on shorthand or the required practical skill: 10 minutes of dictation, 10 minutes of transcription, and 5 minutes checking missed words. Study the advertised written-test topics for 20 minutes using active recall, then use the final 5 minutes to record results and choose tomorrow’s focus. Take a brief stretch or water break between blocks. On one or two days each week, replace a normal round with a longer mock session that follows the official format, if published. If shorthand is not required, reallocate that block to the skill or subject named in your advertisement.',
+      },
+      {
+        heading: 'Frequently Asked Questions (FAQ)',
+        body: 'Answers to common questions about eligibility, PPSC and FPSC tests, shorthand, typing practice, and preparation time.',
+        guide: 'post-faqs',
+      },
+    ],
+  },
   {
     slug: 'urdu-keyboard-download-windows',
     title: 'How to Download and Install an Urdu Keyboard on Windows: Complete Guide',
