@@ -6,6 +6,7 @@ const DEFAULT_OG_IMAGE = `${SITE_URL}/favicon.png`;
 interface UseSeoInput {
   title: string;
   description: string;
+  keywords?: string;
   canonicalPath?: string;
   /** Absolute URL used for og:image / twitter:image (defaults to the site favicon). */
   image?: string;
@@ -25,6 +26,7 @@ interface UseSeoInput {
 export function useSeo({
   title,
   description,
+  keywords,
   canonicalPath = '',
   image = DEFAULT_OG_IMAGE,
   type = 'website',
@@ -63,6 +65,7 @@ export function useSeo({
     };
 
     applyMeta('name', 'description', description);
+    if (keywords) applyMeta('name', 'keywords', keywords);
     applyMeta('property', 'og:title', title);
     applyMeta('property', 'og:description', description);
     applyMeta('property', 'og:url', canonicalHref);
@@ -101,5 +104,5 @@ export function useSeo({
         else robotsMeta.setAttribute('content', previousRobots);
       }
     };
-  }, [title, description, canonicalPath, image, type, robots]);
+  }, [title, description, keywords, canonicalPath, image, type, robots]);
 }

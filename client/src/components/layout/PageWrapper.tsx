@@ -15,6 +15,8 @@ interface PageWrapperProps {
   noHeader?: boolean;
   /** Optional icon rendered in a gradient badge next to the page title. */
   icon?: LucideIcon;
+  /** Let route-level SEO metadata own the document title. */
+  manageTitle?: boolean;
   /** Decorative corner dot-grid for prominent header sections (not typing screens). */
   dotGrid?: boolean;
   /** Left-align the header description to the title instead of centering the capped block. */
@@ -30,16 +32,18 @@ export function PageWrapper({
   fullWidth = false,
   noHeader = false,
   icon: Icon,
+  manageTitle = true,
   dotGrid = false,
   descriptionAlignLeft = false,
 }: PageWrapperProps) {
   useEffect(() => {
+    if (!manageTitle) return;
     if (title) {
       document.title = `${title} — Typeoye`;
     } else {
       document.title = 'Typeoye — Master the Keyboard';
     }
-  }, [title]);
+  }, [title, manageTitle]);
 
   return (
     <main
