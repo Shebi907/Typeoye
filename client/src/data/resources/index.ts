@@ -4,7 +4,6 @@ export const RESOURCE_PAGE_LINKS: ResourcePageLink[] = [
   { label: 'Keyboard Downloads', href: '/resources/keyboard-downloads' },
   { label: 'Keyboard Layouts', href: '/resources/keyboard-layouts' },
   { label: 'Keyboard Shortcuts', href: '/resources/keyboard-shortcuts' },
-  { label: 'Special Characters', href: '/resources/special-characters' },
 ];
 
 export const KEYBOARD_DOWNLOADS = [
@@ -32,22 +31,4 @@ export const KEYBOARD_SHORTCUTS = [
   { category: 'macOS', name: 'Paste', keys: 'Command + V', platforms: 'macOS', detail: 'Paste copied or cut text or an item.', source: 'Apple Support', url: 'https://support.apple.com/en-us/102650' },
   { category: 'Browser', name: 'Find on page', keys: 'Ctrl + F / Command + F', platforms: 'Most desktop browsers', detail: 'Find text on the current page. The modifier depends on your operating system.', source: 'Chrome Help', url: 'https://support.google.com/chrome/answer/157179?hl=en' },
   { category: 'Text editing', name: 'Undo', keys: 'Ctrl + Z / Command + Z', platforms: 'Windows / macOS', detail: 'Undo the most recent editing action in apps that support it.', source: 'Microsoft Support', url: 'https://support.microsoft.com/en-us/windows/keyboard-shortcuts-in-windows-dcc61a57-8ff0-cffe-9796-cb9706c75eec' },
-] as const;
-
-export const SPECIAL_CHARACTERS = [
-  { char: '،', name: 'Arabic comma', code: 'U+060C', category: 'Arabic & Urdu', note: 'Arabic-script punctuation.' },
-  { char: '؛', name: 'Arabic semicolon', code: 'U+061B', category: 'Arabic & Urdu', note: 'Arabic-script punctuation.' },
-  { char: '؟', name: 'Arabic question mark', code: 'U+061F', category: 'Arabic & Urdu', note: 'Arabic-script punctuation.' },
-  { char: '٫', name: 'Arabic decimal separator', code: 'U+066B', category: 'Arabic & Urdu', note: 'Used as a decimal separator in Arabic-script contexts.' },
-  { char: '۔', name: 'Arabic full stop', code: 'U+06D4', category: 'Arabic & Urdu', note: 'Urdu full stop.' },
-  { char: '€', name: 'Euro sign', code: 'U+20AC', category: 'Currency', note: 'Unicode currency symbol.' },
-  { char: '£', name: 'Pound sign', code: 'U+00A3', category: 'Currency', note: 'Unicode currency symbol.' },
-  { char: '¥', name: 'Yen sign', code: 'U+00A5', category: 'Currency', note: 'Unicode currency symbol.' },
-  { char: '©', name: 'Copyright sign', code: 'U+00A9', category: 'Technical', note: 'Commonly used to mark copyright.' },
-  { char: '°', name: 'Degree sign', code: 'U+00B0', category: 'Technical', note: 'Used with temperature and angle values.' },
-  { char: '×', name: 'Multiplication sign', code: 'U+00D7', category: 'Mathematics', note: 'Multiplication operator.' },
-  { char: '÷', name: 'Division sign', code: 'U+00F7', category: 'Mathematics', note: 'Division operator.' },
-  { char: '±', name: 'Plus-minus sign', code: 'U+00B1', category: 'Mathematics', note: 'Indicates plus or minus.' },
-  { char: '—', name: 'Em dash', code: 'U+2014', category: 'Punctuation', note: 'Long dash used as punctuation.' },
-  { char: '…', name: 'Horizontal ellipsis', code: 'U+2026', category: 'Punctuation', note: 'Ellipsis character.' },
 ] as const;

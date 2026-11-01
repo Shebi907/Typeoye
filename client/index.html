@@ -125,6 +125,7 @@
             el.setAttribute('content', content);
           }
           setMeta('name', 'description', meta.description);
+          if (meta.keywords) setMeta('name', 'keywords', meta.keywords);
           setMeta('property', 'og:title', meta.title);
           setMeta('property', 'og:description', meta.description);
           setMeta('name', 'twitter:title', meta.title);

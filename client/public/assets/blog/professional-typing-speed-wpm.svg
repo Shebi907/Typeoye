@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Professional typing speed and accuracy</title>
+  <desc id="desc">A clean editorial illustration of a keyboard with a measured 70 words per minute pace and a checked accuracy indicator.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eef2ff"/><stop offset="1" stop-color="#f7f2ff"/></linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4361ee"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>
+    <filter id="shadow" x="-.2" y="-.2" width="1.4" height="1.5"><feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#34406d" flood-opacity=".16"/></filter>
+  </defs>
+  <rect width="1600" height="900" rx="48" fill="url(#bg)"/>
+  <circle cx="1430" cy="125" r="210" fill="#c7d2fe" opacity=".42"/><circle cx="180" cy="800" r="245" fill="#ddd6fe" opacity=".5"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="120" y="170" fill="#5b5fc7" font-size="24" font-weight="700" letter-spacing="4">TYPING SKILLS</text>
+    <text x="120" y="270" fill="#17171f" font-size="64" font-weight="800">How fast do</text>
+    <text x="120" y="350" fill="#17171f" font-size="64" font-weight="800">professionals type?</text>
+    <text x="120" y="414" fill="#626579" font-size="28">Realistic WPM, accuracy &amp; practice</text>
+    <g filter="url(#shadow)">
+      <rect x="865" y="145" width="590" height="520" rx="38" fill="#fff"/>
+      <text x="925" y="218" fill="#74778b" font-size="21" font-weight="700" letter-spacing="2">A STEADY WORKING PACE</text>
+      <text x="915" y="380" fill="url(#accent)" font-size="145" font-weight="800">70</text>
+      <text x="1178" y="377" fill="#24263a" font-size="44" font-weight="700">WPM</text>
+      <rect x="925" y="420" width="470" height="14" rx="7" fill="#e7e9f5"/>
+      <rect x="925" y="420" width="340" height="14" rx="7" fill="url(#accent)"/>
+      <g fill="#f4f5fb" stroke="#dfe2ef" stroke-width="3">
+        <rect x="925" y="485" width="92" height="58" rx="12"/><rect x="1030" y="485" width="92" height="58" rx="12"/><rect x="1135" y="485" width="92" height="58" rx="12"/><rect x="1240" y="485" width="92" height="58" rx="12"/><rect x="1345" y="485" width="50" height="58" rx="12"/>
+        <rect x="950" y="557" width="92" height="58" rx="12"/><rect x="1055" y="557" width="92" height="58" rx="12"/><rect x="1160" y="557" width="92" height="58" rx="12"/><rect x="1265" y="557" width="130" height="58" rx="12"/>
+      </g>
+      <g fill="#a1a5b8" font-size="22" font-weight="700" text-anchor="middle"><text x="971" y="523">A</text><text x="1076" y="523">S</text><text x="1181" y="523">D</text><text x="1286" y="523">F</text><text x="1370" y="523">J</text><text x="996" y="595">Z</text><text x="1101" y="595">X</text><text x="1206" y="595">C</text><text x="1330" y="595">SPACE</text></g>
+    </g>
+    <g transform="translate(950 720)"><circle cx="28" cy="28" r="27" fill="url(#accent)"/><path d="m16 28 8 8 17-19" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><text x="76" y="24" fill="#25273a" font-size="26" font-weight="700">Accuracy counts, too</text><text x="76" y="59" fill="#6d7083" font-size="20">Measure control along with speed</text></g>
+  </g>
+</svg>

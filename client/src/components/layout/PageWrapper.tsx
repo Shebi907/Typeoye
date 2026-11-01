@@ -21,6 +21,8 @@ interface PageWrapperProps {
   dotGrid?: boolean;
   /** Left-align the header description to the title instead of centering the capped block. */
   descriptionAlignLeft?: boolean;
+  /** Use tighter title spacing on compact resource index pages. */
+  compactHeader?: boolean;
 }
 
 export function PageWrapper({
@@ -35,6 +37,7 @@ export function PageWrapper({
   manageTitle = true,
   dotGrid = false,
   descriptionAlignLeft = false,
+  compactHeader = false,
 }: PageWrapperProps) {
   useEffect(() => {
     if (!manageTitle) return;
@@ -54,12 +57,12 @@ export function PageWrapper({
       )}
     >
       {(title || description) && !noHeader && (
-        <div className="relative mb-8 flex items-start gap-4">
+        <div className={cn('relative flex items-start gap-3 sm:gap-4', compactHeader ? 'mb-5 sm:mb-6' : 'mb-8')}>
           {dotGrid && <span className="dot-grid dot-grid-tr" aria-hidden="true" />}
-          {Icon && <IconBadge icon={Icon} size={44} className="mt-0.5" />}
-          <div className="min-w-0 flex-1">
+          {Icon && <IconBadge icon={Icon} size={44} className="mt-0.5 shrink-0" />}
+          <div className="flex min-w-0 flex-1 flex-col items-start">
             {title && (
-              <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
+              <h1 className={cn('font-bold', compactHeader ? 'text-xl sm:text-2xl' : 'text-2xl')} style={{ color: 'var(--color-text-primary)' }}>
                 {title}
               </h1>
             )}

@@ -60,6 +60,9 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url><loc>https://www.typeoye.com/resources/keyboard-downloads</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.typeoye.com/resources/keyboard-layouts</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.typeoye.com/resources/keyboard-shortcuts</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url>
     <loc>https://www.typeoye.com/support</loc>
     <changefreq>monthly</changefreq>

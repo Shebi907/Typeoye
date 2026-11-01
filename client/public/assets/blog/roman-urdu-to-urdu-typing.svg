@@ -8,7 +8,7 @@
   </defs>
   <rect width="1200" height="675" rx="34" fill="url(#bg)"/>
   <circle cx="1060" cy="120" r="150" fill="#c7d2fe" opacity=".35"/><circle cx="112" cy="590" r="190" fill="#ddd6fe" opacity=".4"/>
-  <text x="76" y="93" font-family="Arial,sans-serif" font-size="23" font-weight="700" fill="#4361ee" letter-spacing="2">TYPEOYE  /  URDU TYPING GUIDE</text>
+  <text x="76" y="93" font-family="Arial,sans-serif" font-size="23" font-weight="700" fill="#4361ee" letter-spacing="2">Typeoye  /  URDU TYPING GUIDE</text>
   <text x="76" y="166" font-family="Arial,sans-serif" font-size="43" font-weight="750" fill="#172554">Roman Urdu to Urdu</text>
   <text x="76" y="218" font-family="Arial,sans-serif" font-size="43" font-weight="750" fill="#172554">Typing</text>
   <rect x="76" y="280" width="1048" height="270" rx="26" fill="#fff" filter="url(#shadow)"/>

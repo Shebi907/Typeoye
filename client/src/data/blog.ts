@@ -1,10 +1,15 @@
+import { AI_TOOL_POSTS } from './aiToolsBlog';
+import { EARNING_FREELANCING_POSTS } from './earningFreelancingBlog';
+import { PILLAR_GUIDE_POSTS } from './pillarGuidesBlog';
+
 export type BlogCategory = 'Typing Tips' | 'Guides' | 'Practice' | 'Productivity' | 'News & Updates';
 export type BlogSort = 'latest' | 'oldest' | 'popular';
 
 export interface BlogSection {
   heading: string;
   body: string;
-  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs' | 'urdu-kaise-faqs' | 'post-faqs' | 'certificate-steps' | 'urdu-practice-passages' | 'urdu-learning-examples' | 'bilingual-typing-benefits' | 'roman-urdu-examples' | 'google-docs-urdu-examples' | 'typing-jobs-resources' | 'windows-urdu-keyboard-sources' | 'pitman-shorthand-stroke-chart';
+  links?: Array<{ label: string; url: string }>;
+  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs' | 'urdu-kaise-faqs' | 'post-faqs' | 'certificate-steps' | 'urdu-practice-passages' | 'urdu-learning-examples' | 'bilingual-typing-benefits' | 'roman-urdu-examples' | 'google-docs-urdu-examples' | 'typing-jobs-resources' | 'windows-urdu-keyboard-sources' | 'pitman-shorthand-stroke-chart' | 'ai-presentation-tools-comparison' | 'ai-resume-tools-comparison' | 'ai-urdu-tools-comparison';
 }
 
 export interface BlogPost {
@@ -17,6 +22,8 @@ export interface BlogPost {
   metaTitle?: string;
   /** SEO meta description — falls back to `description` when omitted. */
   metaDescription?: string;
+  /** Optional search keywords exposed in the page metadata. */
+  metaKeywords?: string[];
   /** Key sentence surfaced as the mid-article pull-quote. */
   pullQuote?: string;
   /** Optional in-article closing CTA — falls back to the generic "Start Typing Test" block. */
@@ -55,7 +62,7 @@ export const CATEGORY_BADGE: Record<BlogCategory, string> = {
 /** Sidebar category post counts (keep in sync with POSTS). */
 export const CATEGORY_COUNTS: Record<BlogCategory, number> = {
   'Typing Tips': 6,
-  'Guides': 29,
+  'Guides': 45,
   'Practice': 3,
   'Productivity': 4,
   'News & Updates': 1,
@@ -70,6 +77,95 @@ export function formatDate(iso: string): string {
 }
 
 export const POSTS: BlogPost[] = [
+  {
+    slug: 'students-improve-english-typing-without-course',
+    title: 'How Students Can Improve English Typing Without a Typing Course',
+    category: 'Guides',
+    description: 'Learn how to improve English typing for free with a short daily routine, touch-typing basics, accuracy drills, and practical exam and assignment tips.',
+    metaTitle: 'Improve English Typing Without a Course: Student Guide | Typeoye',
+    metaDescription: 'Students can improve English typing for free with focused daily practice. Learn finger placement, typing accuracy, WPM tracking, and a 15–20 minute routine.',
+    metaKeywords: ['English typing practice', 'improve typing speed', 'typing practice for students', 'free typing practice', 'typing accuracy', 'typing without a course'],
+    intro: 'You do not need to enroll in a typing course to become more comfortable at the keyboard. Students can build English typing speed with free practice, a repeatable routine, and a few simple habits. Start with accuracy and finger placement, then gradually add timed practice for exams and assignments.',
+    readTime: 9,
+    publishedAt: '2026-10-31',
+    popular: false,
+    image: '/assets/blog/students-english-typing-practice.svg',
+    imageAlt: 'Student building English typing speed with a keyboard, short practice routine, and accuracy check.',
+    moreTools: [
+      { label: 'Check Your English Typing Speed', to: '/test' },
+      { label: 'Free Typing Practice', to: '/practice' },
+      { label: 'Practise with Your Own Assignment Text', to: '/blog/practice-typing-with-your-own-text' },
+    ],
+    pullQuote: 'Short, focused practice can fit between classes—and accuracy gives every minute a purpose.',
+    cta: {
+      heading: 'Start a free practice session',
+      blurb: 'Use a short drill to build a steady rhythm, then check your WPM and accuracy with a timed test.',
+      label: 'Open Typing Practice',
+      to: '/practice',
+    },
+    faqs: [
+      { question: 'Can I improve English typing without taking a course?', answer: 'Yes. Regular practice, comfortable finger placement, and reviewing your errors can help you build skill independently. Use free drills and timed tests to guide your sessions, and ask a teacher or experienced typist if you need feedback on technique.' },
+      { question: 'How many minutes should students practise typing each day?', answer: 'Try a focused 15–20 minute session on most days. If your schedule is busy, a shorter session is still useful when it has a clear goal and you review what slowed you down.' },
+      { question: 'Should beginners focus on WPM or typing accuracy first?', answer: 'Start with accurate, controlled keystrokes and learn where the keys are. Once you can type a familiar passage with fewer errors, gradually increase pace while continuing to track accuracy.' },
+      { question: 'How can I practise typing for an exam?', answer: 'Use practice passages that resemble the exam’s language, punctuation, and duration. Work on accuracy first, then add timed rounds. Follow your exam provider’s official instructions because scoring and correction rules can differ.' },
+      { question: 'Can I practise with text from my assignment?', answer: 'Yes, when you are allowed to use that text. Remove personal or confidential information before entering it into an online tool, and choose a short section so you can focus on typing rather than reading a long document.' },
+    ],
+    content: [
+      { heading: 'You can learn typing without enrolling in a course', body: 'A course can provide structure, but students can also build keyboard skill with free typing practice and a simple plan. Start by learning the key positions, practising at a controlled pace, and noticing which letters or punctuation marks cause errors. You can use a free online typing test to check a baseline and practice drills to repeat a skill. The important part is showing up consistently and making each session purposeful; a fast score is not required on day one.' },
+      { heading: 'Check your starting point and set a small goal', body: 'Take a short English typing test and record both WPM (words per minute) and typing accuracy. Treat the first score as a baseline, not a grade. Note what interrupted you: searching for keys, missed capitals, uneven spacing, or rushing through unfamiliar words. Choose one small goal for the next few sessions, such as finding the home row without looking down or reducing repeated spelling errors. Compare similar passages and test durations over time because different text can change your score.' },
+      { heading: 'Learn touch typing and comfortable finger placement', body: 'Place the fingers of your left hand lightly over A, S, D, and F, and your right hand over J, K, L, and the semicolon key. Rest your thumbs near the space bar. The raised marks on F and J help you return to the home row without looking. Reach for other keys with a comfortable finger and bring your hand back to its starting position. Beginners can learn a few keys at a time; slow, correct movement is more useful than forcing speed or pressing hard. Keep shoulders relaxed and wrists comfortable, and pause if you feel strain.' },
+      { heading: 'A practical 15–20 minute daily typing routine for students', body: 'Try this 18-minute routine on most study days. Minute 1–2: warm up with a familiar sentence, typing lightly and evenly. Minute 3–6: practise home-row reaches or a few keys that caused errors yesterday. Minute 7–11: type a short English paragraph, focusing on accuracy, capital letters, spaces, and punctuation. Minute 12–16: take a timed round at a comfortable pace; do not sacrifice accuracy to chase a high WPM. Minute 17–18: review the result, write down one repeated error, and choose tomorrow’s drill. If you have two extra minutes, repeat the trickiest sentence slowly. Keep the session manageable and take a short break if you feel tired.' },
+      { heading: 'Improve typing speed gradually while keeping accuracy', body: 'Once your fingers can find keys more reliably, work toward a smoother rhythm. Look slightly ahead in the sentence so you are ready for the next word, and keep your hands relaxed rather than striking keys with force. Practise common letter combinations and full sentences, not only repeated key strings. Increase your pace in small steps on familiar text, then check whether accuracy stayed steady. If errors rise sharply, return to a comfortable rhythm and drill the pattern that caused them. Progress is better measured across several comparable practice sessions than by one unusually fast attempt.' },
+      { heading: 'Prepare for exams and finish assignments with less friction', body: 'For a typing exam, practise the kind of material and duration described in the official instructions. Include capitals, commas, numbers, and commonly tested vocabulary, and learn whether the rules allow corrections. A practice test can help you become comfortable with a timer, but it may not use the same software or scoring. For assignments, build typing comfort with class notes or a paragraph you are allowed to use. Separate writing from speed drills: when drafting ideas, clarity matters more than WPM; use a short warm-up before a timed exercise. Do not paste private school records or other confidential information into an online practice field.' },
+      { heading: 'Common student typing mistakes to avoid', body: 'Racing before you know the keys can reinforce inaccurate movements. Looking down at every keystroke interrupts reading, so use the F and J markers and learn positions gradually. Practising only easy words can leave punctuation and capitals unfamiliar; add those once basic sentences feel comfortable. Taking a new test every day without reviewing errors makes it hard to know what to improve. Avoid comparing scores from very different passages, devices, or durations. Finally, do not practise through hand discomfort: adjust your posture, pause, and return when comfortable.' },
+      { heading: 'Keep building your English typing skills', body: 'Students can improve English typing without a course by practising regularly, learning consistent finger placement, and reviewing both WPM and typing accuracy. Start with a short routine that fits around schoolwork, then make one part a little more challenging as it becomes comfortable. Use Typeoye’s free Practice page for focused drills and the English Typing Test to check progress. A steady habit can make typing assignments and exam practice feel more familiar over time.' },
+      { heading: 'Frequently asked questions', body: 'Quick answers about free typing practice, student routines, accuracy, and exams.', guide: 'post-faqs' },
+    ],
+  },
+  {
+    slug: 'professional-typing-speed-wpm',
+    title: 'How Fast Do Professional Typists Really Type?',
+    category: 'Guides',
+    description: 'See realistic professional typing speed ranges, how WPM compares with average and beginner results, and how accuracy and practice shape performance.',
+    metaTitle: 'How Fast Do Professional Typists Type? Realistic WPM Ranges | Typeoye',
+    metaDescription: 'Learn realistic professional typing speed and average WPM ranges, why typing accuracy matters, and how focused practice can improve speed over time.',
+    metaKeywords: ['professional typing speed', 'average typing speed', 'WPM', 'typing accuracy', 'typing practice', 'words per minute'],
+    intro: 'Professional typists do not all type at one universal speed. The work, keyboard, text, and accuracy rules all affect the result. Here are realistic WPM ranges, what separates a beginner from an experienced typist, and practical ways to build speed without letting errors take over.',
+    readTime: 8,
+    publishedAt: '2026-10-31',
+    popular: false,
+    image: '/assets/blog/professional-typing-speed-wpm.svg',
+    imageAlt: 'Illustration showing a keyboard, a measured 70 WPM typing speed, and an accuracy check.',
+    moreTools: [
+      { label: 'Take a Typing Test', to: '/test' },
+      { label: 'Build a Typing Practice Routine', to: '/practice' },
+      { label: 'Improve Typing Accuracy', to: '/blog/improve-typing-accuracy-without-looking-at-keyboard' },
+    ],
+    pullQuote: 'A useful typing speed is one you can sustain accurately on the kind of text your work requires.',
+    cta: {
+      heading: 'Find your current typing pace',
+      blurb: 'Take a timed test, note both WPM and accuracy, then use focused practice to work on one improvement at a time.',
+      label: 'Take a Typing Test',
+      to: '/test',
+    },
+    faqs: [
+      { question: 'What is a good professional typing speed?', answer: 'There is no single standard for every job. A sustained 50–80 WPM is a practical range for many general keyboard-heavy roles, while some transcription tasks or job postings ask for a specific higher target. Follow the employer’s test rules and accuracy requirements.' },
+      { question: 'Is 40 WPM fast enough for professional work?', answer: 'It can be adequate for many office tasks, especially when the work involves thinking, editing, or switching between applications. Roles with timed transcription or data entry may require a higher verified speed, so check the actual job criteria.' },
+      { question: 'What is the average typing speed?', answer: 'Average depends on the sample and task. One large online study reported a mean near 52 WPM on its computer typing task, while many everyday typists fall around 35–45 WPM. These figures are reference points, not a pass-or-fail standard.' },
+      { question: 'Does typing accuracy matter more than WPM?', answer: 'Both matter. A high gross WPM score can be less useful if frequent errors require correction or make the final text unreliable. Track accuracy alongside speed and follow the scoring rules used by your test or workplace.' },
+      { question: 'How long does it take to improve typing speed?', answer: 'It varies with your starting point, practice frequency, and the kinds of text you type. Short, regular sessions with error review can build consistent progress, but no schedule guarantees a particular WPM by a fixed date.' },
+    ],
+    content: [
+      { heading: 'What does professional typing speed mean?', body: 'Professional typing speed is the pace a person can maintain while completing the real task accurately enough for the role. It may mean copying a passage, entering names and numbers, drafting emails, or transcribing recorded speech. A short typing test measures only one part of that work. Longer tasks also involve reading, decisions, corrections, formatting, and breaks, so a one-minute peak is not the same as an all-day working rate.' },
+      { heading: 'Realistic WPM ranges for beginners, average typists, and professionals', body: 'As a broad guide, a beginner who is still searching for keys may type around 15–30 WPM. Many everyday keyboard users land around 35–50 WPM, though the average changes with the population and test method. A steady 50–80 WPM is a useful professional range for many general typing-heavy tasks. Some experienced transcriptionists or data-entry workers aim higher when the text and conditions are familiar, but role requirements vary. In a large online study of university students, the higher-performing group averaged 80 WPM on sentence copying and the lower-performing group averaged 54 WPM; those groups were selected for comparison, not universal beginner and expert categories. Another large online benchmark reported an overall mean around 52 WPM. Treat these numbers as context, not a promise or a hiring rule.' },
+      { heading: 'How professionals compare with beginners', body: 'Experienced typists tend to know where keys are without looking down, use a more repeatable finger pattern, and recover from common mistakes with less disruption. That automatic movement leaves more attention available for reading, entering data, or planning the next phrase. Beginners often pause to locate keys, use fewer fingers, and lose rhythm after an error. The difference develops over time; a beginner does not need an unusual natural talent to make progress. Familiar text can also make both new and experienced typists appear faster than they are on unfamiliar material.' },
+      { heading: 'WPM is only useful beside typing accuracy', body: 'WPM usually estimates how many standard five-character words are typed per minute, but typing tests do not all calculate gross speed, net speed, and errors in exactly the same way. Accuracy tells you how much of the entered text matches the prompt under that tool’s scoring method. A fast burst with frequent mistakes may lead to more correction time and less dependable work. When you check progress, record WPM and accuracy together, use the same test and duration for comparisons, and read the scoring explanation. For a job test, use the employer’s specific accuracy and correction rules.' },
+      { heading: 'What affects professional typing speed?', body: 'Keyboard familiarity matters: changing to a different layout or unfamiliar laptop can interrupt a practiced movement pattern. The language, punctuation, names, numbers, and complexity of the text also change the pace. Copying a visible passage is usually different from composing original writing because composition involves choosing ideas and words. Fatigue, posture, interruptions, screen placement, and whether corrections are allowed can all influence a score. A result from a short, simple test therefore cannot predict every work task.' },
+      { heading: 'Practical typing practice for more speed and accuracy', body: 'Start with a baseline on a passage and duration you can repeat. Practise for 10–20 focused minutes on most days: warm up slowly, work on one weak key pattern or punctuation mark, then type a short paragraph while keeping your hands relaxed. Use a consistent finger position and look at the text rather than hunting for keys. After each round, review recurring errors and repeat a small drill before trying the passage again. Increase pace gradually only when you can keep accuracy steady. Typeoye’s Typing Test can help you track WPM and accuracy; the Practice page is useful for regular drills. Take breaks when your hands feel strained, and aim for consistent improvement rather than a dramatic one-day score.' },
+      { heading: 'Build a dependable working pace', body: 'A professional typist is not defined by one impressive number. The practical goal is a speed that fits the work, stays accurate, and holds up beyond a very short test. Measure your baseline, practise regularly on a familiar keyboard, and pay attention to errors as well as WPM. With a steady routine, you can build a faster and more reliable typing pace over time.' },
+      { heading: 'Frequently asked questions', body: 'Answers to common questions about professional typing speed, WPM, and improving through practice.', guide: 'post-faqs' },
+    ],
+  },
   {
     slug: 'pitman-shorthand-alphabet-stroke-guide',
     title: 'Pitman Shorthand Alphabet: Complete Stroke Guide',
@@ -1364,7 +1460,7 @@ export const POSTS: BlogPost[] = [
     publishedAt: '2026-10-25',
     popular: false,
     image: '/assets/blog/typeoye-urdu-typing-banner.png',
-    imageAlt: 'TypeOye Urdu typing website shown on a laptop with Urdu typing practice, speed, and accuracy test',
+    imageAlt: 'Typeoye Urdu typing website shown on a laptop with Urdu typing practice, speed, and accuracy test',
     moreTools: [
       { label: 'Urdu Typing Test', to: '/urdu-typing-test/setup' },
       { label: 'Urdu Practice', to: '/urdu-practice' },
@@ -1776,7 +1872,7 @@ export const POSTS: BlogPost[] = [
     readTime: 8,
     publishedAt: '2026-10-22',
     popular: false,
-    image: '/assets/blog/laptop-vs-desktop-keyboard.jpg',
+    image: '/assets/blog/urdu-phonetic-keyboard-layout-guide.jpg',
     imageAlt: 'Complete Typeoye Urdu phonetic keyboard layout with normal and Shift mappings on every character key',
     moreTools: [
       { label: 'Urdu Learn', to: '/urdu-lessons' },
@@ -2970,4 +3066,7 @@ export const POSTS: BlogPost[] = [
       },
     ],
   },
+  ...AI_TOOL_POSTS,
+  ...EARNING_FREELANCING_POSTS,
+  ...PILLAR_GUIDE_POSTS,
 ];

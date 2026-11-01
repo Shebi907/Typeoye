@@ -249,7 +249,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* WHY CHOOSE TYPEOYE */}
+      {/* WHY CHOOSE Typeoye */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
         <div className="rounded-[1.25rem] sm:rounded-[1.75rem] px-4 sm:px-6 py-12 sm:py-16 lg:py-20" style={{ backgroundColor: 'var(--color-accent-light)' }}>
           <h2

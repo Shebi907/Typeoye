@@ -3,6 +3,7 @@ import { POSTS } from './blog';
 export interface RouteSeoMeta {
   title: string;
   description: string;
+  keywords?: string;
 }
 
 const STATIC_ROUTES: Record<string, RouteSeoMeta> = {
@@ -45,6 +46,21 @@ const STATIC_ROUTES: Record<string, RouteSeoMeta> = {
   '/blog': {
     title: 'Typing Tips & Guides for Faster Typing | Typeoye',
     description: 'Practical typing tips and guides on touch typing, improving WPM, accuracy, practice routines, and typing tools, from the Typeoye team.',
+  },
+  '/resources/keyboard-downloads': {
+    title: 'Keyboard Downloads and Official Setup Guides | Typeoye',
+    description: 'Find verified keyboard setup instructions for Windows, macOS, Android, and iOS. Go to official providers for built-in language keyboards.',
+    keywords: 'keyboard downloads, language keyboard setup, keyboard for Windows, Gboard languages',
+  },
+  '/resources/keyboard-layouts': {
+    title: 'Keyboard Layouts for English and Urdu | Typeoye',
+    description: 'Explore accurate Windows English US, English UK and Typeoye Urdu Phonetic keyboard layouts. View complete key mappings and download printable charts.',
+    keywords: 'keyboard layouts, English US keyboard, English UK keyboard, Urdu phonetic keyboard, keyboard chart',
+  },
+  '/resources/keyboard-shortcuts': {
+    title: 'Keyboard Shortcuts PDF Library | Typeoye',
+    description: 'Explore keyboard shortcut guides for popular applications. View shortcut PDFs online or download them for quick reference.',
+    keywords: 'keyboard shortcuts PDF, Microsoft Word shortcuts, Excel shortcuts, PowerPoint shortcuts',
   },
   '/how-it-works': {
     title: 'How It Works | Typeoye',
@@ -188,6 +204,7 @@ const BLOG_POST_ROUTES: Record<string, RouteSeoMeta> = POSTS.reduce(
     acc[`/blog/${post.slug}`] = {
       title: post.metaTitle ?? `${post.title} | Typeoye Blog`,
       description: post.metaDescription ?? post.description,
+      ...(post.metaKeywords?.length ? { keywords: post.metaKeywords.join(', ') } : {}),
     };
     return acc;
   },

@@ -44,6 +44,9 @@ import {
   seedUrduLessonsHandler,
 } from '../controllers/urduLesson.admin.controller';
 import { authenticate, requireAdmin } from '../middleware/auth.middleware';
+import { adminKeyboardShortcutPdfs } from '../controllers/keyboardShortcutPdf.controller';
+import { keyboardShortcutMaxBytes } from '../config/keyboardShortcuts';
+import express from 'express';
 import { validate } from '../middleware/validate.middleware';
 
 
@@ -174,6 +177,13 @@ const settingsSchema = z.object({
 });
 
 // ── Admin routes ─────────────────────────────────────────────────────────────
+router.get('/keyboard-shortcuts', adminKeyboardShortcutPdfs.list);
+router.post('/keyboard-shortcuts', express.raw({ type: 'application/pdf', limit: keyboardShortcutMaxBytes() }), adminKeyboardShortcutPdfs.upload);
+router.get('/keyboard-shortcuts/:id/preview', adminKeyboardShortcutPdfs.preview);
+router.patch('/keyboard-shortcuts/:id', adminKeyboardShortcutPdfs.update);
+router.patch('/keyboard-shortcuts/:id/publish', adminKeyboardShortcutPdfs.setPublished);
+router.put('/keyboard-shortcuts/:id/file', express.raw({ type: 'application/pdf', limit: keyboardShortcutMaxBytes() }), adminKeyboardShortcutPdfs.replace);
+router.delete('/keyboard-shortcuts/:id', adminKeyboardShortcutPdfs.remove);
 router.get('/stats', getAdminStats);
 
 // Users

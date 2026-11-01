@@ -34,6 +34,7 @@ import certificateRoutes from './routes/certificate.routes';
 import contactRoutes from './routes/contact.routes';
 import challengeRoutes from './routes/challenge.routes';
 import urduContentRoutes from './routes/urduContent.routes';
+import resourceRoutes from './routes/resource.routes';
 
 export function createApp() {
   const app = express();
@@ -82,6 +83,7 @@ export function createApp() {
   app.use('/api/certificates', certificateRoutes);
   app.use('/api/contact', contactRoutes);
   app.use('/api/urdu-content', urduContentRoutes);
+  app.use('/api/resources', resourceRoutes);
 
   // Health check
   app.get('/api/health', (_req, res) => {

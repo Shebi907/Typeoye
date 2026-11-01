@@ -56,6 +56,8 @@ import AdminSettings from './pages/admin/AdminSettings';
 import AdminCertificateParagraphs from './pages/admin/AdminCertificateParagraphs';
 import AdminUrduContent from './pages/admin/AdminUrduContent';
 import AdminUrduLessons from './pages/admin/AdminUrduLessons';
+import AdminKeyboardShortcuts from './pages/admin/AdminKeyboardShortcuts';
+import Resources from './pages/Resources';
 
 /**
  * The Test page doubles as the certificate timed-test flow, distinguished only
@@ -130,6 +132,11 @@ export default function App() {
         <Route path="/urdu-lessons/:id" element={<UrduLessonPlayer />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/resources/keyboard-downloads" element={<Resources kind="keyboard-downloads" />} />
+        <Route path="/resources/keyboard-layouts" element={<Resources kind="keyboard-layouts" />} />
+        <Route path="/resources/keyboard-layouts/:layoutId" element={<Resources kind="keyboard-layouts" />} />
+        <Route path="/resources/keyboard-shortcuts/:shortcutSlug" element={<Resources kind="keyboard-shortcuts" />} />
+        <Route path="/resources/keyboard-shortcuts" element={<Resources kind="keyboard-shortcuts" />} />
         <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/support" element={<SupportCenter />} />
@@ -183,6 +190,7 @@ export default function App() {
             <Route path="achievements" element={<AdminAchievements />} />
             <Route path="certificate-paragraphs" element={<AdminCertificateParagraphs />} />
             <Route path="urdu-content" element={<AdminUrduContent />} />
+            <Route path="keyboard-shortcuts" element={<AdminKeyboardShortcuts />} />
             <Route path="settings" element={<AdminSettings />} />
           </Route>
 

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Free English typing practice for students</title>
+  <desc id="desc">An editorial illustration of a student desk, keyboard, daily practice timer, and accuracy checklist.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eef2ff"/><stop offset="1" stop-color="#f7f2ff"/></linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4361ee"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>
+    <filter id="shadow" x="-.2" y="-.2" width="1.4" height="1.5"><feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#34406d" flood-opacity=".16"/></filter>
+  </defs>
+  <rect width="1600" height="900" rx="48" fill="url(#bg)"/>
+  <circle cx="1430" cy="125" r="210" fill="#c7d2fe" opacity=".42"/><circle cx="180" cy="800" r="245" fill="#ddd6fe" opacity=".5"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="120" y="164" fill="#5b5fc7" font-size="24" font-weight="700" letter-spacing="4">STUDENT TYPING GUIDE</text>
+    <text x="120" y="265" fill="#17171f" font-size="61" font-weight="800">English typing,</text>
+    <text x="120" y="342" fill="#17171f" font-size="61" font-weight="800">one day at a time</text>
+    <text x="120" y="407" fill="#626579" font-size="27">Free practice. Steady progress.</text>
+    <g filter="url(#shadow)">
+      <rect x="865" y="125" width="590" height="535" rx="38" fill="#fff"/>
+      <text x="925" y="203" fill="#74778b" font-size="21" font-weight="700" letter-spacing="2">A SIMPLE DAILY PLAN</text>
+      <circle cx="1110" cy="365" r="116" fill="#f4f5fb" stroke="#e5e7f2" stroke-width="20"/>
+      <path d="M1110 249a116 116 0 1 1-103 63" fill="none" stroke="url(#accent)" stroke-width="20" stroke-linecap="round"/>
+      <text x="1110" y="368" fill="#24263a" font-size="64" font-weight="800" text-anchor="middle">18</text>
+      <text x="1110" y="405" fill="#777a8c" font-size="19" font-weight="700" text-anchor="middle">MINUTES</text>
+      <g transform="translate(925 515)">
+        <rect width="470" height="14" rx="7" fill="#e8e9f2"/><rect width="335" height="14" rx="7" fill="url(#accent)"/>
+        <g fill="#f4f5fb" stroke="#dfe2ef" stroke-width="3">
+          <rect x="0" y="40" width="75" height="50" rx="10"/><rect x="86" y="40" width="75" height="50" rx="10"/><rect x="172" y="40" width="75" height="50" rx="10"/><rect x="258" y="40" width="75" height="50" rx="10"/><rect x="344" y="40" width="126" height="50" rx="10"/>
+        </g>
+        <g fill="#a1a5b8" font-size="19" font-weight="700" text-anchor="middle"><text x="37" y="72">A</text><text x="123" y="72">S</text><text x="209" y="72">D</text><text x="295" y="72">F</text><text x="407" y="72">SPACE</text></g>
+      </g>
+    </g>
+    <g transform="translate(950 735)"><circle cx="28" cy="28" r="27" fill="url(#accent)"/><path d="m16 28 8 8 17-19" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><text x="76" y="24" fill="#25273a" font-size="26" font-weight="700">Accuracy first</text><text x="76" y="59" fill="#6d7083" font-size="20">Then build a smoother pace</text></g>
+  </g>
+</svg>

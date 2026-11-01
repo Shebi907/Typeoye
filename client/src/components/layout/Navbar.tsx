@@ -10,6 +10,7 @@ import { useSettingsStore } from '../../store/settingsStore';
 import { authService } from '../../services/auth.service';
 import { Avatar } from '../ui/Avatar';
 import { Spinner } from '../ui/Spinner';
+import { RESOURCE_PAGE_LINKS } from '../../data/resources';
 
 const navLinks = [
   { to: '/', label: 'Home' },
@@ -141,6 +142,8 @@ export function Navbar() {
           })}
 
           {gamesDropdownEnabled && <GamesDropdown />}
+
+          <NavDropdown label="Resources" options={RESOURCE_PAGE_LINKS.map(({ label, href }) => ({ label, href }))} />
 
           {/* Progress dropdown — signed-in users only, right after Games */}
           {isAuthenticated && <ProgressDropdown />}
@@ -339,6 +342,14 @@ export function Navbar() {
                 Typing Challenge
                 <span aria-hidden="true">›</span>
               </Link>
+              <div className="mt-2 border-t border-white/15 pt-2">
+                <span className="px-3 py-1 text-xs font-bold uppercase tracking-wide text-white/70">Resources</span>
+                {RESOURCE_PAGE_LINKS.map(({ label, href }) => (
+                  <Link key={href} to={href} className={`navbar-mobile-link${location.pathname.startsWith(href) ? ' navbar-mobile-link-active' : ''}`}>
+                    {label}<span aria-hidden="true">›</span>
+                  </Link>
+                ))}
+              </div>
               <span className="navbar-mobile-link navbar-mobile-link-soon" aria-disabled="true">
                 Random Match
                 <span className="text-[0.6rem] font-bold px-1.5 py-0.5 rounded bg-white/15">Soon</span>

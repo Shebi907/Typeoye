@@ -92,7 +92,7 @@ def main() -> None:
 <circle cx="111" cy="175" r="7" fill="#ff7d87"/><circle cx="137" cy="175" r="7" fill="#ffd166"/><circle cx="163" cy="175" r="7" fill="#65d6a6"/>
 <text x="800" y="182" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="600" fill="#fff">Phonetic typing · English input → Urdu output</text>
 <text x="175" y="234" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="1.2" fill="#737d96">TYPE THESE ENGLISH KEYS</text>
-<text x="900" y="234" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="1.2" fill="#737d96">TYPEOYE OUTPUT</text>
+<text x="900" y="234" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="1.2" fill="#737d96">Typeoye OUTPUT</text>
 {input_lines}
 <path d="M760 282h76m-15-13 15 13-15 13" fill="none" stroke="url(#brand)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
 <rect x="80" y="417" width="1440" height="438" rx="24" fill="#e9edf7" stroke="#d9dfed" stroke-width="2"/>

@@ -26,6 +26,7 @@ export default function BlogPostPage() {
       ? {
           title: post.metaTitle ?? `${post.title} | Typeoye Blog`,
           description: post.metaDescription ?? post.description,
+          keywords: post.metaKeywords?.join(', '),
           canonicalPath: `/blog/${post.slug}`,
           image: `${SITE_URL}${post.image}`,
           type: 'article',

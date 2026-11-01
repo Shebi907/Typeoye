@@ -43,6 +43,89 @@ function headingText(heading: string): string {
   return heading.replace(/^\d+\.\s+/, '').trim();
 }
 
+const AI_PRESENTATION_TOOL_ROWS = [
+  ['Gamma', 'Prompt, pasted text, or document', 'Free plan; AI credits are limited and do not refresh', 'Fast complete first drafts'],
+  ['Canva Magic Design', 'Prompt and optional media', 'Free plan has limited Magic Design uses; Pro assets may be watermarked or require payment', 'Beginners who want visual templates'],
+  ['Beautiful.ai', 'Prompt, outline, document, PDF, or link', '14-day Pro trial; credit card required and renews unless cancelled', 'Polished business decks'],
+  ['SlidesAI', 'Topic, notes, script, or supported documents', 'Free Basic plan has monthly credits and a 2,500-character input limit per presentation', 'Google Slides users and students'],
+  ['PowerPoint Copilot', 'Prompt or supported Word/PDF file, depending on license', 'No general free Copilot presentation feature; access depends on eligible Microsoft 365 license', 'Teams already working in PowerPoint'],
+];
+
+function AiPresentationToolsComparison() {
+  return (
+    <div className="mt-5 overflow-x-auto rounded-xl border" style={{ borderColor: 'var(--color-border)' }}>
+      <table className="w-full min-w-[760px] text-left text-sm">
+        <thead style={{ background: 'var(--color-surface-muted)' }}>
+          <tr>{['Tool', 'Input', 'Free access and main limit', 'Good fit'].map((label) => <th key={label} className="px-4 py-3 font-bold" style={{ color: 'var(--color-text-primary)' }}>{label}</th>)}</tr>
+        </thead>
+        <tbody>{AI_PRESENTATION_TOOL_ROWS.map(([tool, input, access, fit]) => (
+          <tr key={tool} className="border-t align-top" style={{ borderColor: 'var(--color-border)' }}>
+            <th scope="row" className="px-4 py-3 font-semibold" style={{ color: 'var(--color-text-primary)' }}>{tool}</th>
+            {[input, access, fit].map((value, index) => <td key={index} className="px-4 py-3 leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>{value}</td>)}
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>
+  );
+}
+
+const AI_RESUME_TOOL_ROWS = [
+  ['Kickresume', 'Resume and matching cover-letter builders; AI Writer can draft/tailor content', 'Free templates and downloads; AI Writer and advanced customization are paid', 'Students and beginners who want guided templates'],
+  ['Rezi', 'Resume writer/editor, keyword targeting, resume score, and cover-letter tools', 'Free: 1 resume, 3 PDF downloads, AI writing and cover-letter tools with limits', 'Fresh graduates targeting ATS-friendly applications'],
+  ['Teal', 'Resume versions, job tracker, matching, AI bullets, summaries, and cover letters', 'Free core builder and tracker; AI writing credits and advanced analysis are limited', 'Students and active job seekers tailoring many applications'],
+  ['Enhancv', 'Resume tailoring, summaries, bullet suggestions, ATS checks, and cover letters', '7-day starter access; branding and section limits; expanded tools are paid', 'Experienced professionals needing detailed feedback'],
+  ['Resume.io', 'Guided resume and cover-letter builder, templates, writing support', 'Free tier is limited to one resume/letter and TXT downloads; formatted exports are paid', 'Beginners who want a guided, quick draft'],
+  ['Canva', 'AI suggestions for resume and cover-letter text plus visual templates and editing', 'AI resume app is free to use; some Pro assets/features or AI uses may require upgrade', 'Visual roles and users comfortable reviewing ATS readability'],
+  ['ChatGPT', 'Drafts, rewrites, summaries, bullet ideas, and tailored cover-letter text', 'Free plan has usage limits; paid plans offer higher limits and additional features', 'Anyone wanting flexible drafting and feedback'],
+  ['Jobscan', 'ATS resume builder, job-description comparison, resume scans, cover-letter generator', 'Resume builder is free; premium AI summary/bullets and cover-letter features are paid or trial-limited', 'Applicants who want a job-description checklist'],
+  ['Claude', 'Drafts and edits resumes/letters; can create DOCX files and work with longer source documents', 'Free plan has usage limits; paid plans offer higher usage', 'Professionals refining detailed career histories or long documents'],
+];
+
+function AiResumeToolsComparison() {
+  return (
+    <div className="mt-5 overflow-x-auto rounded-xl border" style={{ borderColor: 'var(--color-border)' }}>
+      <table className="w-full min-w-[800px] text-left text-sm">
+        <thead style={{ background: 'var(--color-surface-muted)' }}>
+          <tr>{['Tool', 'Resume and letter features', 'Free access and main limit', 'Good fit'].map((label) => <th key={label} className="px-4 py-3 font-bold" style={{ color: 'var(--color-text-primary)' }}>{label}</th>)}</tr>
+        </thead>
+        <tbody>{AI_RESUME_TOOL_ROWS.map(([tool, features, access, fit]) => (
+          <tr key={tool} className="border-t align-top" style={{ borderColor: 'var(--color-border)' }}>
+            <th scope="row" className="px-4 py-3 font-semibold" style={{ color: 'var(--color-text-primary)' }}>{tool}</th>
+            {[features, access, fit].map((value, index) => <td key={index} className="px-4 py-3 leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>{value}</td>)}
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>
+  );
+}
+
+const AI_URDU_TOOL_ROWS = [
+  ['ChatGPT', 'Urdu text generation and editing; useful for drafts and iterative rewrites', 'Free access with changing usage limits; paid plans offer higher limits and additional features', 'General-purpose drafting, examples, and revision'],
+  ['Google Gemini', 'Urdu is listed among Gemini app languages; text generation and editing', 'Free access is available with feature/model limits; Google AI plans expand access and availability can vary', 'Drafting and revising Urdu text with follow-up instructions'],
+  ['Claude', 'Multilingual text generation; can draft, rewrite, and review Urdu script', 'Free plan has limited usage; paid plans add capacity and features', 'Longer drafts and careful structure; proofread Urdu idiom'],
+  ['Microsoft Copilot', 'Urdu is not on Microsoft’s currently validated text prompt/response language list; Urdu voice support is separate', 'Consumer chat has free access in supported regions; some Microsoft 365 features require eligible licenses', 'English-first workflow; try Urdu text only as an unvalidated option'],
+  ['Google Translate', 'Translate text to and from Urdu; useful for translation drafts, not a full article workflow', 'Consumer web/app translation is free; API products have separate terms and billing', 'Short translations and comparing phrasing'],
+];
+
+function AiUrduToolsComparison() {
+  return (
+    <div className="mt-5 overflow-x-auto rounded-xl border" style={{ borderColor: 'var(--color-border)' }}>
+      <table className="w-full min-w-[820px] text-left text-sm">
+        <thead style={{ background: 'var(--color-surface-muted)' }}>
+          <tr>{['Tool', 'Urdu writing role', 'Free access and limits', 'Useful for'].map((label) => <th key={label} className="px-4 py-3 font-bold" style={{ color: 'var(--color-text-primary)' }}>{label}</th>)}</tr>
+        </thead>
+        <tbody>{AI_URDU_TOOL_ROWS.map(([tool, role, access, fit]) => (
+          <tr key={tool} className="border-t align-top" style={{ borderColor: 'var(--color-border)' }}>
+            <th scope="row" className="px-4 py-3 font-semibold" style={{ color: 'var(--color-text-primary)' }}>{tool}</th>
+            {[role, access, fit].map((value, index) => <td key={index} className="px-4 py-3 leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>{value}</td>)}
+          </tr>
+        ))}</tbody>
+      </table>
+      <p className="px-4 py-3 text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>This is a feature and workflow comparison based on official documentation, not a controlled quality benchmark. No live outputs are attributed to these tools here. Urdu quality varies by prompt and passage.</p>
+    </div>
+  );
+}
+
 export function BlogDetail({ post, related }: BlogDetailProps) {
   const sections = post.content;
   const toolsLinks = post.moreTools ?? TOOLS_LINKS;
@@ -149,7 +232,11 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                   ? undefined
                   : post.slug === 'how-to-type-urdu-mobile-pc-guide'
                     ? '3 / 2'
-                : (post.slug === 'online-typing-challenge-compete-friends-real-time' || post.slug === 'win-online-typing-challenge-tips-strategies' || post.slug === 'improve-english-typing-speed-stenotypist-jobs' || post.slug === 'required-typing-speed-stenotypist-pakistan' || post.slug === 'stenotypist-test-preparation-in-pakistan' || post.slug === 'pitman-shorthand-alphabet-stroke-guide')
+                    : post.slug === 'find-legitimate-data-entry-jobs-online'
+                      ? '69 / 41'
+                      : post.slug === 'create-winning-upwork-profile' || post.slug === 'get-first-order-on-fiverr' || post.slug === 'start-freelancing-in-pakistan-beginners-guide' || post.slug === 'create-professional-presentations-using-ai' || post.slug === 'create-urdu-content-using-ai-tools' || post.slug === 'use-chatgpt-for-assignments-ethically' || post.slug === 'create-resume-cover-letter-using-ai'
+                      ? '16 / 9'
+                : (post.slug === 'how-to-install-arabic-keyboard-windows' || post.slug === 'typing-competition-challenge-yourself-other-players' || post.slug === 'what-is-a-typing-race-challenge-friends' || post.slug === 'online-typing-challenge-compete-friends-real-time' || post.slug === 'win-online-typing-challenge-tips-strategies' || post.slug === 'improve-english-typing-speed-stenotypist-jobs' || post.slug === 'required-typing-speed-stenotypist-pakistan' || post.slug === 'stenotypist-test-preparation-in-pakistan' || post.slug === 'pitman-shorthand-alphabet-stroke-guide')
                   ? '16 / 9'
                   : post.slug === 'free-typing-certificate-online' || post.slug === 'typing-certificate-validity-for-jobs'
                       ? '40 / 21'
@@ -168,7 +255,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                   alt={post.imageAlt}
                   className={cn(
                     'absolute inset-0 h-full w-full',
-                    post.slug === 'improve-english-typing-speed-stenotypist-jobs' || post.slug === 'required-typing-speed-stenotypist-pakistan' || post.slug === 'stenotypist-test-preparation-in-pakistan' || post.slug === 'pitman-shorthand-alphabet-stroke-guide' ? 'object-contain bg-white' : 'object-cover'
+                    post.slug === 'how-to-install-arabic-keyboard-windows' || post.slug === 'typing-competition-challenge-yourself-other-players' || post.slug === 'what-is-a-typing-race-challenge-friends' || post.slug === 'improve-english-typing-speed-stenotypist-jobs' || post.slug === 'required-typing-speed-stenotypist-pakistan' || post.slug === 'stenotypist-test-preparation-in-pakistan' || post.slug === 'pitman-shorthand-alphabet-stroke-guide' ? 'object-contain bg-white' : 'object-cover'
                   )}
                 />
               )}
@@ -195,6 +282,18 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                       <p className="mt-3 text-[1.0625rem] leading-[1.75]" style={{ color: 'var(--color-text-secondary)' }}>
                         {section.body}
                       </p>
+                      {section.links?.length ? (
+                        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold">
+                          {section.links.map((link) => (
+                            <a key={link.url} href={link.url} target="_blank" rel="noreferrer" className="underline" style={{ color: 'var(--color-accent-text)' }}>
+                              {link.label}
+                            </a>
+                          ))}
+                        </div>
+                      ) : null}
+                      {section.guide === 'ai-presentation-tools-comparison' && <AiPresentationToolsComparison />}
+                      {section.guide === 'ai-resume-tools-comparison' && <AiResumeToolsComparison />}
+                      {section.guide === 'ai-urdu-tools-comparison' && <AiUrduToolsComparison />}
                       {section.guide === 'urdu-keyboard-map' && <UrduKeyboardGuide />}
                       {section.guide === 'urdu-typing-links' && <UrduTypingLinks />}
                       {section.guide === 'urdu-layout-comparison' && <UrduLayoutComparison />}
