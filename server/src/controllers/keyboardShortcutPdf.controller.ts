@@ -130,7 +130,24 @@ async function ensureStorage(res: Response): Promise<string | null> {
   }
   try {
     await fs.promises.mkdir(dir, { recursive: true });
-    return dir;
+    const [resolvedDir, resolvedUploadsDir, dirStat, dirInfo] = await Promise.all([
+      fs.promises.realpath(dir),
+      fs.promises.realpath(path.resolve(process.cwd(), 'uploads')),
+      fs.promises.stat(dir),
+      fs.promises.lstat(dir),
+    ]);
+    const uploadsRoot = `${resolvedUploadsDir}${path.sep}`;
+    if (
+      !dirStat.isDirectory() ||
+      dirInfo.isSymbolicLink() ||
+      resolvedDir === resolvedUploadsDir ||
+      resolvedDir.startsWith(uploadsRoot)
+    ) {
+      sendError(res, 'PDF storage must be a real private directory outside the public uploads folder.', 503);
+      return null;
+    }
+    await fs.promises.access(resolvedDir, fs.constants.R_OK | fs.constants.W_OK);
+    return resolvedDir;
   } catch (err) {
     console.error('keyboard shortcut storage unavailable:', err);
     sendError(res, 'PDF storage is unavailable. Check the persistent storage configuration.', 503);
