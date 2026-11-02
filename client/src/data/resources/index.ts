@@ -1,9 +1,11 @@
-export type ResourcePageLink = { label: string; href: string };
+export const KEYBOARD_SHORTCUTS_ENABLED = false;
+
+export type ResourcePageLink = { label: string; href: string; locked?: boolean; statusMessage?: string };
 
 export const RESOURCE_PAGE_LINKS: ResourcePageLink[] = [
   { label: 'Keyboard Downloads', href: '/resources/keyboard-downloads' },
   { label: 'Keyboard Layouts', href: '/resources/keyboard-layouts' },
-  { label: 'Keyboard Shortcuts', href: '/resources/keyboard-shortcuts' },
+  { label: 'Keyboard Shortcuts', href: '/resources/keyboard-shortcuts', locked: !KEYBOARD_SHORTCUTS_ENABLED, statusMessage: 'Coming Soon' },
 ];
 
 export const KEYBOARD_DOWNLOADS = [

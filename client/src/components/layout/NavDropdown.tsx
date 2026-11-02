@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Lock } from "lucide-react";
 
-interface Option { label: string; href: string; }
+interface Option { label: string; href: string; locked?: boolean; statusMessage?: string; }
 
 interface NavDropdownProps { label: string; options: Option[]; }
 
@@ -13,6 +13,7 @@ function supportsHover(): boolean {
 export function NavDropdown({ label, options }: NavDropdownProps) {
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -86,6 +87,29 @@ export function NavDropdown({ label, options }: NavDropdownProps) {
           >
             {options.map((opt) => {
               const active = location.pathname === opt.href;
+              if (opt.locked) {
+                return (
+                  <div key={opt.href} className="relative">
+                    <button
+                      type="button"
+                      role="menuitem"
+                      aria-disabled="true"
+                      aria-label={`${opt.label}, ${opt.statusMessage ?? "Coming Soon"}`}
+                      title={opt.statusMessage ?? "Coming Soon"}
+                      onClick={() => setNotice(opt.href)}
+                      onMouseEnter={() => setNotice(opt.href)}
+                      onMouseLeave={() => setNotice(null)}
+                      onFocus={() => setNotice(opt.href)}
+                      onBlur={() => setNotice(null)}
+                      className="flex w-full cursor-not-allowed items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-400 hover:bg-slate-50"
+                    >
+                      <span>{opt.label}</span>
+                      <Lock size={14} aria-hidden="true" />
+                    </button>
+                    {notice === opt.href && <span role="tooltip" className="absolute right-2 top-0 z-50 -translate-y-full whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-xs font-medium text-white shadow">{opt.statusMessage ?? "Coming Soon"}</span>}
+                  </div>
+                );
+              }
               return (
                 <Link
                   key={opt.href}

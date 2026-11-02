@@ -1,7 +1,7 @@
 ﻿import React, { useLayoutEffect, useEffect, useState } from 'react';
 import { NavDropdown } from './NavDropdown';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Sun, Monitor, LogOut, User, ShieldCheck, Menu, X } from 'lucide-react';
+import { Sun, Monitor, LogOut, User, ShieldCheck, Menu, X, Lock } from 'lucide-react';
 import { Logo } from './Logo';
 import { ProgressDropdown } from './ProgressDropdown';
 import { GamesDropdown } from './GamesDropdown';
@@ -33,6 +33,7 @@ export function Navbar() {
   const location = useLocation();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileResourceNotice, setMobileResourceNotice] = useState<string | null>(null);
 
   // Close menus on navigation or Escape. Runs before paint so a just-closed
   // menu never overlays the destination page's first frame.
@@ -143,7 +144,7 @@ export function Navbar() {
 
           {gamesDropdownEnabled && <GamesDropdown />}
 
-          <NavDropdown label="Resources" options={RESOURCE_PAGE_LINKS.map(({ label, href }) => ({ label, href }))} />
+          <NavDropdown label="Resources" options={RESOURCE_PAGE_LINKS} />
 
           {/* Progress dropdown — signed-in users only, right after Games */}
           {isAuthenticated && <ProgressDropdown />}
@@ -344,7 +345,14 @@ export function Navbar() {
               </Link>
               <div className="mt-2 border-t border-white/15 pt-2">
                 <span className="px-3 py-1 text-xs font-bold uppercase tracking-wide text-white/70">Resources</span>
-                {RESOURCE_PAGE_LINKS.map(({ label, href }) => (
+                {RESOURCE_PAGE_LINKS.map(({ label, href, locked, statusMessage }) => locked ? (
+                  <span key={href} className="relative">
+                    <button type="button" aria-disabled="true" aria-label={`${label}, ${statusMessage ?? 'Coming Soon'}`} title={statusMessage ?? 'Coming Soon'} onClick={() => setMobileResourceNotice(href)} className="navbar-mobile-link flex w-full cursor-not-allowed items-center justify-between opacity-60">
+                      <span>{label}</span><span className="flex items-center gap-2"><Lock size={14} aria-hidden="true" /><span className="text-[0.6rem] font-bold">Coming Soon</span></span>
+                    </button>
+                    {mobileResourceNotice === href && <span role="status" className="ml-3 block px-3 pb-2 text-xs text-white/70">{statusMessage ?? 'Coming Soon'}</span>}
+                  </span>
+                ) : (
                   <Link key={href} to={href} className={`navbar-mobile-link${location.pathname.startsWith(href) ? ' navbar-mobile-link-active' : ''}`}>
                     {label}<span aria-hidden="true">›</span>
                   </Link>

@@ -4,7 +4,7 @@ import { ArrowLeft, Download, ExternalLink, FileText, Search, Keyboard, Download
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { useSeo } from '../hooks/useSeo';
 import KeyboardLayouts from './KeyboardLayouts';
-import { AVAILABLE_LAYOUTS, KEYBOARD_DOWNLOADS, RESOURCE_PAGE_LINKS } from '../data/resources';
+import { AVAILABLE_LAYOUTS, KEYBOARD_DOWNLOADS, RESOURCE_PAGE_LINKS, KEYBOARD_SHORTCUTS_ENABLED } from '../data/resources';
 import { KEYBOARD_SHORTCUT_PDF_CATEGORIES, formatPdfSize, type KeyboardShortcutPdf } from '../data/resources/keyboardShortcuts';
 import { checkPublishedShortcutPdf, getPublishedShortcutPdf, listPublishedShortcutPdfs, publicShortcutPdfUrl } from '../services/keyboardShortcutPdf.service';
 
@@ -227,6 +227,7 @@ export default function Resources({ kind }: { kind: Kind }) {
   const [shortcut, setShortcut] = useState<KeyboardShortcutPdf | undefined>(undefined);
   useEffect(() => {
     let active = true;
+    if (!KEYBOARD_SHORTCUTS_ENABLED) { setShortcut(undefined); return () => { active = false; }; }
     if (shortcutSlug) void getPublishedShortcutPdf(shortcutSlug).then(({ item }) => { if (active) setShortcut(item); }).catch(() => { if (active) setShortcut(undefined); });
     else setShortcut(undefined);
     return () => { active = false; };
@@ -240,6 +241,16 @@ export default function Resources({ kind }: { kind: Kind }) {
   const seoDescription = kind === 'keyboard-shortcuts' && !shortcutDetail ? description : shortcutDetail ? description : layoutDetail ? description : PAGE_INFO[kind].description;
   useSeo({ title: seoTitle, description: seoDescription, keywords: PAGE_INFO[kind].keywords, canonicalPath: layoutDetail || shortcutDetail ? window.location.pathname : `/resources/${kind}`, robots: shortcutDetail && (!shortcut || !shortcut.published) ? 'noindex, nofollow' : undefined });
   const headerIcon = kind === 'keyboard-layouts' ? Keyboard : kind === 'keyboard-downloads' ? DownloadCloud : Command;
+  if (kind === 'keyboard-shortcuts' && !KEYBOARD_SHORTCUTS_ENABLED) {
+    return <PageWrapper title="Keyboard Shortcuts" manageTitle={false} icon={headerIcon} descriptionAlignLeft compactHeader className="py-5 sm:py-6" description="Keyboard shortcut guides are coming soon." fullWidth>
+      <div className="mx-auto w-full max-w-3xl rounded-2xl border p-7 text-center sm:p-9" style={cardStyle}>
+        <span aria-hidden="true" className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-slate-100 text-slate-500"><Lock size={25} /></span>
+        <h2 className="mt-4 text-lg font-bold" style={{ color: 'var(--color-text-primary)' }}>Coming Soon</h2>
+        <p className="mx-auto mt-2 max-w-xl text-sm leading-6" style={{ color: 'var(--color-text-secondary)' }}>Keyboard Shortcuts resources will be available soon.</p>
+        <nav aria-label="Other resources" className="mt-5 flex flex-wrap justify-center gap-3">{RESOURCE_PAGE_LINKS.filter((link) => !link.locked).map((link) => <Link key={link.href} to={link.href} className="rounded-lg border px-3.5 py-2 text-sm font-semibold" style={{ ...cardStyle, color: 'var(--color-text-primary)' }}>{link.label}</Link>)}</nav>
+      </div>
+    </PageWrapper>;
+  }
   return <PageWrapper title={heading} manageTitle={false} icon={headerIcon} descriptionAlignLeft compactHeader className="py-5 sm:py-6" description={description} fullWidth>
     <div className={`mx-auto w-full ${kind === 'keyboard-layouts' || compactResourceIndex ? 'max-w-7xl' : 'max-w-6xl'}`}>
       <div className={`grid gap-8 ${kind === 'keyboard-layouts' || compactResourceIndex ? '' : 'lg:grid-cols-[minmax(0,1fr)_220px]'}`}>
