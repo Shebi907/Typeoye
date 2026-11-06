@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import fs from 'fs';
+import path from 'path';
 import { createServer } from 'http';
 import { connectDB } from './config/db';
 import { env } from './config/env';
@@ -84,6 +85,25 @@ export function createApp() {
   app.use('/api/contact', contactRoutes);
   app.use('/api/urdu-content', urduContentRoutes);
   app.use('/api/resources', resourceRoutes);
+
+  // ── Well-known plain-text files ──────────────────────────────────────────
+  // Serve ads.txt directly so Google AdSense validators always receive the
+  // plain-text file instead of the React SPA's index.html.  This matters
+  // when the Express server sits behind a reverse proxy that also hosts the
+  // frontend on the same domain (or as a fallback when the CDN misses).
+  app.get('/ads.txt', (_req, res) => {
+    const adsPath = path.resolve(__dirname, '../../client/dist/ads.txt');
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.sendFile(adsPath, (err) => {
+      if (err) {
+        // Fall back to an inline value so the endpoint never 404s
+        const inline = 'google.com, pub-2021787489750461, DIRECT, f08c47fec0942fa0';
+        res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+        res.status(200).send(inline);
+      }
+    });
+  });
 
   // Health check
   app.get('/api/health', (_req, res) => {
