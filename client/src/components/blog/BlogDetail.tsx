@@ -15,6 +15,7 @@ import { GoogleDocsUrduExamples } from './GoogleDocsUrduExamples';
 import TypingJobsResources from './TypingJobsResources';
 import { WindowsUrduKeyboardSources } from './WindowsUrduKeyboardSources';
 import { PitmanShorthandStrokeChart } from './PitmanShorthandStrokeChart';
+import { CssSubjectsTable, CssTimetableComparison, CssPreparationPlans, CssOfficialLinks } from './CssGuideComponents';
 
 interface BlogDetailProps {
   post: BlogPost;
@@ -232,7 +233,7 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                   ? undefined
                   : post.slug === 'how-to-type-urdu-mobile-pc-guide'
                     ? '3 / 2'
-                    : post.slug === 'find-legitimate-data-entry-jobs-online'
+                    : post.slug === 'css-preparation-for-beginners' ? '16 / 9' : post.slug === 'find-legitimate-data-entry-jobs-online'
                       ? '69 / 41'
                       : post.slug === 'create-winning-upwork-profile' || post.slug === 'get-first-order-on-fiverr' || post.slug === 'start-freelancing-in-pakistan-beginners-guide' || post.slug === 'create-professional-presentations-using-ai' || post.slug === 'create-urdu-content-using-ai-tools' || post.slug === 'use-chatgpt-for-assignments-ethically' || post.slug === 'create-resume-cover-letter-using-ai'
                       ? '16 / 9'
@@ -318,6 +319,10 @@ export function BlogDetail({ post, related }: BlogDetailProps) {
                       {section.guide === 'typing-jobs-resources' && <TypingJobsResources />}
                       {section.guide === 'windows-urdu-keyboard-sources' && <WindowsUrduKeyboardSources />}
                       {section.guide === 'pitman-shorthand-stroke-chart' && <PitmanShorthandStrokeChart />}
+                      {section.guide === 'css-subjects-table' && <CssSubjectsTable />}
+                      {section.guide === 'css-timetable-comparison' && <CssTimetableComparison />}
+                      {section.guide === 'css-preparation-plans' && <CssPreparationPlans />}
+                      {section.guide === 'css-official-links' && <CssOfficialLinks />}
                     </section>
 
                     {index === pullQuoteIndex && post.pullQuote && (

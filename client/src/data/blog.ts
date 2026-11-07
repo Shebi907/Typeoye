@@ -9,7 +9,7 @@ export interface BlogSection {
   heading: string;
   body: string;
   links?: Array<{ label: string; url: string }>;
-  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs' | 'urdu-kaise-faqs' | 'post-faqs' | 'certificate-steps' | 'urdu-practice-passages' | 'urdu-learning-examples' | 'bilingual-typing-benefits' | 'roman-urdu-examples' | 'google-docs-urdu-examples' | 'typing-jobs-resources' | 'windows-urdu-keyboard-sources' | 'pitman-shorthand-stroke-chart' | 'ai-presentation-tools-comparison' | 'ai-resume-tools-comparison' | 'ai-urdu-tools-comparison';
+  guide?: 'urdu-keyboard-map' | 'urdu-typing-links' | 'urdu-layout-comparison' | 'urdu-layout-examples' | 'urdu-keyboard-faqs' | 'urdu-word-examples' | 'gov-prep-plan' | 'gov-prep-mistakes' | 'gov-prep-faqs' | 'gov-official-example' | 'ms-word-faqs' | 'english-typing-links' | 'typing-accuracy-faqs' | 'urdu-kaise-faqs' | 'post-faqs' | 'certificate-steps' | 'urdu-practice-passages' | 'urdu-learning-examples' | 'bilingual-typing-benefits' | 'roman-urdu-examples' | 'google-docs-urdu-examples' | 'typing-jobs-resources' | 'windows-urdu-keyboard-sources' | 'pitman-shorthand-stroke-chart' | 'ai-presentation-tools-comparison' | 'ai-resume-tools-comparison' | 'ai-urdu-tools-comparison' | 'css-subjects-table' | 'css-timetable-comparison' | 'css-preparation-plans' | 'css-official-links';
 }
 
 export interface BlogPost {
@@ -62,7 +62,7 @@ export const CATEGORY_BADGE: Record<BlogCategory, string> = {
 /** Sidebar category post counts (keep in sync with POSTS). */
 export const CATEGORY_COUNTS: Record<BlogCategory, number> = {
   'Typing Tips': 6,
-  'Guides': 45,
+  'Guides': 47,
   'Practice': 3,
   'Productivity': 4,
   'News & Updates': 1,
@@ -3063,6 +3063,165 @@ export const POSTS: BlogPost[] = [
       {
         heading: 'Start learning Urdu typing today',
         body: 'Learning Urdu typing as a beginner comes down to a few simple habits: understand the phonetic layout, practise a little every day, start with letters and words before sentences, and correct mistakes instead of repeating them. Follow the seven-day plan, keep the keyboard layout guide nearby, and let accuracy lead. As your fingers grow used to the Urdu characters, speed follows on its own. When you are ready, open the Urdu Learn lessons, try an Urdu practice drill, or take a short Urdu typing test to record where you are starting from, then use the guide on improving Urdu typing speed and accuracy to build on that baseline.',
+      },
+    ],
+  },
+  {
+    slug: 'how-to-learn-english-speaking-at-home',
+    title: 'How to Learn English Speaking at Home: A Complete Beginner\'s Guide',
+    category: 'Guides' as const,
+    description: 'A practical, step-by-step guide for beginners who want to improve their English speaking skills at home � with daily routines, conversation examples, a 30-day challenge, and free resources.',
+    metaTitle: 'How to Learn English Speaking at Home | Typeoye',
+    metaDescription: 'Learn English speaking at home with proven tips, a daily practice routine, 30-day challenge, real conversation examples, and free resources for beginners.',
+    metaKeywords: [
+      'how to learn English speaking at home',
+      'improve English speaking',
+      'English speaking practice at home',
+      'learn English at home for beginners',
+      'daily English speaking practice',
+      'improve English communication skills',
+      'English speaking tips for beginners',
+    ],
+    intro: 'You do not need expensive classes or a foreign country to improve your English speaking skills. With a clear plan, consistent daily practice, and the right habits, you can build real confidence speaking English at home � even as a complete beginner.',
+    readTime: 13,
+    publishedAt: '2026-11-07',
+    popular: true,
+    image: '/assets/blog/how-to-learn-english-speaking-at-home.svg',
+    imageAlt: 'Beginner practising English speaking at home with a mirror, notebook, and audio resources',
+    moreTools: [
+      { label: 'English Typing Test', to: '/test' },
+      { label: 'English Typing Practice', to: '/practice' },
+      { label: 'English Learn (Lessons)', to: '/lessons' },
+      { label: 'How Students Can Improve English Typing', to: '/blog/students-improve-english-typing-without-course' },
+    ],
+    pullQuote: 'Speaking English well is not about being perfect � it is about being understood and improving a little every day.',
+    cta: {
+      heading: 'Strengthen your English skills with Typeoye',
+      blurb: 'Typing English every day helps you become more familiar with vocabulary, spelling, and sentence structure. Start a free practice session now.',
+      label: 'Start English Practice',
+      to: '/practice',
+    },
+    faqs: [
+      {
+        question: 'Can I really learn English speaking at home without a teacher?',
+        answer: 'Yes. Many confident English speakers improved at home by listening consistently, speaking out loud every day, and reviewing their mistakes. A teacher can give structured feedback, but daily self-practice at home builds the habit and confidence that formal lessons cannot always provide.',
+      },
+      {
+        question: 'How long does it take to improve English speaking?',
+        answer: 'It depends on how often you practise and how you practise. Most beginners notice a real difference in clarity and confidence within 30 to 60 days of daily, focused practice. Fluency takes longer, but steady improvement is visible much sooner.',
+      },
+      {
+        question: 'What is the best way to practise English speaking alone at home?',
+        answer: 'Speaking in front of a mirror, recording your voice, repeating sentences from videos or podcasts, and thinking in English throughout the day are among the most effective solo habits. Combining several of these produces faster results than any one method alone.',
+      },
+      {
+        question: 'How can I improve my English pronunciation at home?',
+        answer: 'Listen to native or fluent speakers carefully, then repeat the same sentence and compare your version. Focus on sounds that do not exist in Urdu, such as the difference between "v" and "w," or the "th" sound. Recording your voice and listening back helps you catch pronunciation issues you might not notice while speaking.',
+      },
+      {
+        question: 'Is it helpful to think in English instead of translating from Urdu?',
+        answer: 'Yes, and it is one of the most effective long-term habits. When you translate every sentence from Urdu, your speech becomes slow and unnatural. Thinking directly in English, even simple thoughts, trains your brain to produce English sentences more quickly and naturally over time.',
+      },
+      {
+        question: 'What English words should a beginner learn first?',
+        answer: 'Start with the 500 most common English words, which cover a large portion of everyday conversation. Focus on words you will actually use � greetings, common questions, action words, and everyday objects. Learn each word in a full sentence, not in isolation.',
+      },
+      {
+        question: 'Can watching English videos really improve my speaking?',
+        answer: 'Yes, but only if you engage actively. Watching without engagement is passive. The most effective technique is to pause after a sentence, repeat it out loud, and try to match the speaker\'s rhythm and pronunciation. This is called "shadowing" and it is widely used by language learners worldwide.',
+      },
+      {
+        question: 'How does English typing practice help my speaking?',
+        answer: 'English typing reinforces spelling, vocabulary, and sentence structure through repeated written exposure. While typing alone does not replace speaking practice, it helps you become more familiar with how English sentences are formed � and that familiarity supports clearer speaking over time. Tools like Typeoye let you practise with real English sentences every day.',
+      },
+      {
+        question: 'What free resources can I use to learn English speaking at home?',
+        answer: 'BBC Learning English, VOA Learning English, the British Council\'s LearnEnglish website, and YouTube channels like English with Lucy offer free, high-quality speaking and listening content. For vocabulary and reading, apps like Duolingo and Anki are free and well-structured for beginners.',
+      },
+    ],
+    content: [
+      {
+        heading: '1. Why English Speaking Is Important',
+        body: 'English is the most widely used language for international business, education, travel, and digital communication. In Pakistan, strong spoken English opens doors to better jobs, university admissions, online freelancing, and global opportunities. For students, it means performing better in interviews and academic presentations. For job seekers, it means standing out when applying to companies that work with international clients. For everyday people, it means being able to watch, read, understand, and participate in a world that communicates largely in English. The good news is that improving your English speaking does not require an expensive institute or a visa. It requires the right habits and consistent effort at home.',
+      },
+      {
+        heading: '2. Can You Learn English Speaking at Home?',
+        body: 'Absolutely � and millions of people have done it. Learning English speaking at home is not only possible, it has some real advantages over classroom-only study. At home, you can practise at your own pace without pressure or embarrassment. You can choose content that interests you. You can repeat the same sentence twenty times without anyone getting bored. You can practise at any hour that suits your schedule. The key difference between home learners who succeed and those who struggle is consistency. Sporadic effort produces slow results. Daily practice � even just 20 to 30 minutes � produces visible improvement within weeks. This guide gives you the structure to make that happen.',
+      },
+      {
+        heading: '3. How to Start Learning English Speaking as a Beginner',
+        body: 'Starting feels harder than it actually is. Here is a simple three-step approach for complete beginners. First, assess where you are. Try speaking a few sentences in English about your day, your family, or your job. Notice where you stop � is it vocabulary, pronunciation, grammar, or confidence? That gap is your starting point. Second, set one realistic goal. Not "become fluent in a month," but something specific: "I will learn and use five new English sentences every day this week." Small goals completed consistently build momentum. Third, choose your tools. You need something to listen to (a podcast, a YouTube channel, or the BBC), something to speak into (a mirror, a recorder, or a willing family member), and a notebook for vocabulary. These three things, used daily, are enough to get started.',
+      },
+      {
+        heading: '4. Practise Speaking in Front of a Mirror',
+        body: 'Standing in front of a mirror and speaking English out loud is one of the simplest and most effective home practices available to you. It removes the fear of a real audience while still forcing you to actually produce speech rather than just think about it. Start with five sentences about yourself: your name, your city, your job or studies, one hobby, and one goal. Speak slowly and clearly. Watch your face and mouth as you speak � this helps with pronunciation without needing a language teacher. Gradually increase the complexity: describe your morning routine, give your opinion on a topic, or tell a short story about something that happened to you. The mirror builds speaking confidence in a pressure-free environment, and that confidence transfers when you speak to real people.',
+      },
+      {
+        heading: '5. Learn and Use Daily English Sentences',
+        body: 'Vocabulary is easier to remember when it lives inside a sentence rather than as an isolated word. Instead of memorising "introduce," practise the full sentence: "Let me introduce myself. My name is Ahmed and I work in Karachi." Here are ten daily English sentences that beginners can start using immediately. "Could you please repeat that?" � for when you do not understand. "I am not sure, but I think..." � for giving an opinion carefully. "Can I ask you something?" � for starting a question politely. "That is a good point." � for agreeing in conversation. "I will get back to you on that." � for professional situations. "How was your day?" � for small talk. "I am still learning English, so please be patient." � for honesty with new speakers. "What do you mean by that?" � for clarification. "I really enjoyed that." � for expressing positive reactions. "Let me think about it." � for buying time before answering. Practise these sentences out loud every morning until they come automatically. Then add ten more from real conversations or videos.',
+      },
+      {
+        heading: '6. Listen to English Every Day',
+        body: 'Speaking improves when listening improves. Your brain cannot produce sentences it has never heard. Listening to English daily trains your ear to recognise natural rhythms, pronunciation patterns, common phrases, and vocabulary in context. For beginners, start with slow, clear English: BBC Learning English\'s "6 Minute English," VOA Learning English stories, or simple YouTube videos with subtitles. As you improve, move toward natural-speed content: TED Talks on topics you find interesting, podcasts about your profession or hobby, or YouTube channels where hosts speak clearly and confidently. The key rule is: do not just listen passively. After each sentence or short passage, pause and repeat what you heard. Try to match the speaker\'s rhythm, stress, and pronunciation. This technique is called shadowing and it dramatically accelerates both listening comprehension and speaking fluency.',
+      },
+      {
+        heading: '7. Think in English Instead of Translating',
+        body: 'Most Urdu-speaking learners describe their biggest speaking challenge the same way: "I know what I want to say in Urdu, but I cannot translate it fast enough." The solution is not to translate faster � it is to stop translating altogether. Begin by naming objects in English as you move through your day. The cup on your table, the chair you are sitting on, the sounds you hear outside. Then describe your actions: "I am making tea. I am walking to the kitchen. I am getting ready for work." Then form opinions in English: "This is a good film. The traffic is terrible today. I need to call my friend." These are small, low-pressure thoughts that begin rewiring your brain to generate English directly. It feels slow and awkward at first. That is completely normal. After two to three weeks of daily practice, the speed improves noticeably.',
+      },
+      {
+        heading: '8. Learn New Vocabulary and Use It in Sentences',
+        body: 'The vocabulary you can speak is smaller than the vocabulary you can read. Building spoken vocabulary means practising words out loud, in full sentences, repeatedly. Set a target of five new words per day. That is 150 words per month � enough to significantly expand your conversational range. Use a vocabulary notebook divided into topics: work vocabulary, travel vocabulary, family vocabulary, food vocabulary. For each new word, write one or two sentences you would actually say. Then practise those sentences out loud. Use an app like Anki to review words daily using spaced repetition, which is a scientifically backed method that makes vocabulary stick with less effort. When you encounter a new word in a video or article, do not just note it � use it in a spoken sentence before the day is over. Using a word once is worth more than writing it five times.',
+      },
+      {
+        heading: '9. Record Your Voice and Identify Mistakes',
+        body: 'Most people are surprised when they first hear their own recorded voice. You may notice pronunciation habits, repeated filler words, unnatural pauses, or grammatical patterns you were not aware of. Recording yourself is one of the most honest and effective forms of self-feedback available to a home learner. Use your phone or laptop to record yourself speaking for one to two minutes on any topic. Listen back and note specific issues: a sound you consistently mispronounce, a word you use too often, or a sentence structure that sounds unnatural. Work on one issue per recording session. Compare recordings from one week to the next to track your progress. Over time, your spoken English will become more accurate and natural � not because someone corrected you, but because you paid attention to yourself.',
+      },
+      {
+        heading: '10. Practise Conversations with Friends and Family',
+        body: 'Speaking alone is valuable, but real conversation teaches things that solo practice cannot � how to listen while thinking of a response, how to ask follow-up questions, how to handle unexpected topics, and how to recover gracefully when you do not know a word. If you have a family member or friend who also wants to improve, agree on a simple rule: for fifteen minutes every day, you will speak only in English. Start with easy topics: how was your day, what did you eat, what are your plans for tomorrow. Gradually introduce more complex conversations: an article you both read, an opinion on a current event, or a plan you are discussing. If nobody around you is willing to practise, consider language exchange apps where you can connect with English learners and native speakers who want to practise your language in return.',
+      },
+      {
+        heading: '11. Improve Your English Pronunciation',
+        body: 'Pronunciation does not have to be perfect to be understood, but clear pronunciation reduces misunderstandings and builds listener confidence. Focus on sounds that are genuinely different in English from their closest Urdu equivalents. The "th" sound in words like "this," "think," and "the" does not exist in Urdu � place your tongue lightly between your teeth and push air through. The "v" and "w" distinction matters: "vine" and "wine" are different words. The short "e" and "i" sounds: "bit" and "bet" are not the same. Word stress is also important. English stresses specific syllables, and stress in the wrong place can make a word unrecognisable. For example, "phoTOgraphy" and "PHOtograph" stress different syllables. Use an online dictionary like Cambridge or Merriam-Webster that provides audio pronunciation for every word. Listen, then repeat three times before moving on.',
+      },
+      {
+        heading: '12. Read English Content Aloud',
+        body: 'Reading silently is good for comprehension. Reading aloud is good for speaking. When you read a sentence aloud, you practise pronunciation, rhythm, breath control, and the natural flow of English sentences � all at once. Choose content that is slightly above your current comfort level, not so difficult that every sentence needs a dictionary. A good news article from BBC or Dawn English works well. A short story from a graded reader works even better for beginners. Read the sentence first with your eyes, then read it aloud at a natural pace. Notice punctuation: a comma means a slight pause, a full stop means a longer pause. Reading aloud for ten minutes a day builds the kind of spoken fluency that feels natural to listeners � and that smoothness carries directly into unscripted conversation.',
+      },
+      {
+        heading: '13. Watch English Videos and Repeat Sentences',
+        body: 'YouTube offers an enormous library of free English-language content. The technique that produces the best results for speaking improvement is called "listen and repeat" or shadowing. Play a short clip � a TED Talk, an interview, or a learning video. After every sentence, press pause and repeat the sentence out loud, trying to match the speaker\'s pronunciation, rhythm, and stress. Do not just mimic � understand what you are saying. This engages both comprehension and production at the same time. For beginners, start with YouTube channels designed for English learners: English with Lucy, BBC Learning English, and Learn English with TV Series. As you gain confidence, move to content made for native speakers on topics you enjoy. The goal is to absorb natural English patterns and reproduce them in your own speech.',
+      },
+      {
+        heading: '14. Daily English Speaking Practice Routine',
+        body: 'Consistency matters more than the length of each session. Here is a practical daily routine that fits into 30 minutes and covers all the key skills. Use this as a starting point and adjust based on what works for you.',
+        guide: 'english-speaking-daily-routine' as any,
+      },
+      {
+        heading: '15. Common English Speaking Mistakes Beginners Should Avoid',
+        body: 'Waiting until your English is "good enough" before speaking is the most common and costly mistake. Confidence comes from speaking, not from studying. Speaking only in Urdu with friends because English feels uncomfortable keeps the discomfort permanent. Using the wrong article � "a" vs "an" � matters, but obsessing over grammar during a conversation kills your flow. Mispronouncing common words like "comfortable" (three syllables: "COMF-ter-ble"), "vehicle" (VEE-uh-cul), and "Wednesday" (WENZ-day) can make you sound less confident than you are. Speaking too fast when nervous causes you to swallow sounds and lose clarity � slow down. Using filler words from Urdu mid-sentence interrupts the English flow. Saying "actually" and "basically" in every sentence sounds unnatural to English speakers. Avoid all of these by practising slowly, recording your voice, and speaking deliberately until good habits replace old ones.',
+      },
+      {
+        heading: '16. 30-Day English Speaking Improvement Challenge',
+        body: 'A structured challenge creates accountability and momentum. Here is a week-by-week plan designed for complete beginners. Week 1 � Foundation: Learn ten new English sentences per day and practise them in front of a mirror. Listen to BBC Learning English for fifteen minutes and repeat three sentences from each episode. Write five new vocabulary words in your notebook each evening and use them in spoken sentences. Record yourself speaking for one minute about your day. Week 2 � Building: Add pronunciation drills: practise the "th," "v," "w," and short vowel sounds daily. Watch one English video and shadow five sentences from it. Begin thinking in English during routine activities. Have one conversation per day in English with a family member or friend, even if it is short. Week 3 � Expanding: Read one English article aloud every day. Extend your recordings to two minutes and listen back for improvement. Start describing your opinions in English: what you think about a film, a topic, or a decision. Use five new words in spoken sentences every day. Week 4 � Consolidating: Hold one five-minute conversation in English daily. Watch a YouTube video without subtitles and test your comprehension. Record yourself telling a short story about your life and listen for natural flow. Review your Week 1 recording and compare it with your Week 4 recording. The improvement will motivate you to continue.',
+      },
+      {
+        heading: '17. Useful Daily English Conversation Examples',
+        body: 'Real conversations give you language in context. Here are three realistic everyday exchanges you can study and practise. Example 1 � Introducing yourself: "Hello, my name is Sara. I am from Lahore. I work as a teacher at a primary school. I have been learning English for about two months. I am still a beginner, but I try to practise every day." A reply: "That is great, Sara. Your English sounds clear already. What made you decide to learn English?" Sara: "I want to improve my career opportunities. Many good jobs require English communication skills." Example 2 � Asking for clarification: "Excuse me, could you say that again? I did not quite understand." The other person repeats. "Thank you. So you mean that the meeting is on Friday, not Thursday?" The other person confirms. "Perfect, I understand now. Thank you for your patience." Example 3 � Giving an opinion: "I think learning English at home is actually very effective if you are consistent. You can learn at your own speed and choose content that you enjoy. Of course, you also need to practise speaking with real people, but I believe the home practice builds a strong foundation." These examples show natural, polite English that beginners can study, adapt, and practise out loud until the patterns feel automatic.',
+      },
+      {
+        heading: '18. Free Resources and Tools to Practise English at Home',
+        body: 'You do not need to spend money to access excellent English learning resources. BBC Learning English (bbclearningenglish.com) offers free lessons, grammar guides, vocabulary videos, and the popular "6 Minute English" podcast. VOA Learning English (learningenglish.voanews.com) provides slow-speed news stories, grammar lessons, and American English pronunciation guides. British Council LearnEnglish (learnenglish.britishcouncil.org) has structured grammar and speaking exercises for all levels. YouTube channels worth bookmarking: English with Lucy for pronunciation and vocabulary, BBC Learning English for structured lessons, Learn English with TV Series for natural conversation. For vocabulary, Anki (a free app) uses spaced repetition to help new words stick faster. For speaking feedback, apps like ELSA Speak analyse your pronunciation and highlight problem sounds. For structured reading, Graded Readers are books written in simplified English and available at local bookshops and many libraries.',
+      },
+      {
+        heading: '19. How Typing English Can Support Your Learning',
+        body: 'Typing in English every day reinforces the vocabulary, spelling, and sentence structures you are trying to speak. When you type a word repeatedly, your brain encodes it more deeply � and that encoding supports recall during conversation. This is why practising English typing on a platform like Typeoye can complement your speaking practice. You read and produce real English sentences, build familiarity with common words and structures, and develop a physical relationship with the language through your fingers. Typeoye\'s English Practice lets you work with everyday English sentences at your own pace, while the English Typing Test measures your familiarity and accuracy with real text. Neither replaces speaking practice, but both reinforce the vocabulary and sentence knowledge that good speaking depends on.',
+        guide: 'english-typing-links',
+      },
+      {
+        heading: '20. Frequently asked questions',
+        body: 'Common questions about learning English speaking at home, improving pronunciation, daily practice, and free resources.',
+        guide: 'post-faqs',
       },
     ],
   },
